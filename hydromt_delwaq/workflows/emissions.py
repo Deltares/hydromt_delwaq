@@ -38,11 +38,11 @@ def gridarea(ds):
 
     """
 
-    realarea = gis_utils.reggrid_area(ds.rio.ycoords.values, ds.rio.xcoords.values)
+    realarea = gis_utils.reggrid_area(ds.raster.ycoords.values, ds.raster.xcoords.values)
     da_out = xr.DataArray(
         data=realarea.astype("float32"),
-        coords=ds.rio.coords,
-        dims=ds.rio.dims,
+        coords=ds.raster.coords,
+        dims=ds.raster.dims,
     )
 
     return da_out
@@ -82,13 +82,13 @@ def emission_raster(
     da_out : xarray.Dataset
         Dataset containing gridded emission map at model resolution.
     """
-    nodata = da.rio.nodata
+    nodata = da.raster.nodata
     if fillna_method == "zero":
         da = da.where(da.values != nodata).fillna(0)
     elif fillna_method == "value":
         da = da.where(da.values != nodata).fillna(fillna_value)
     else:
-        da = da.rio.interpolate_na(method="nearest")
+        da = da.raster.interpolate_na(method="nearest")
 
     if area_division:
         da_area = gridarea(da)
@@ -97,7 +97,7 @@ def emission_raster(
     logger.info(f"Deriving {da.name} using {method} resampling (nodata={nodata}).")
     # da = da.astype(np.float32)
 
-    da_out = da.rio.reproject_like(ds_like, method=method)
+    da_out = da.raster.reproject_like(ds_like, method=method)
     if area_division:
         da_area = gridarea(da_out)
         da_out = da_out * da_area
@@ -133,7 +133,7 @@ def emission_vector(
         Dataarray containing gridded emission map at model resolution.
     """
     if method == "value":
-        da_out = ds_like.rio.rasterize(
+        da_out = ds_like.raster.rasterize(
             gdf,
             col_name=col_name,
             nodata=0,
@@ -149,8 +149,8 @@ def emission_vector(
         )
         gdf["geometry"] = gdf.geometry.buffer(0)  # fix potential geometry errors
         msktn = ds_like[mask_name]
-        idx_valid = np.where(msktn.values.flatten() != msktn.rio.nodata)[0]
-        gdf_grid = ds_like.rio.vector_grid().loc[idx_valid]
+        idx_valid = np.where(msktn.values.flatten() != msktn.raster.nodata)[0]
+        gdf_grid = ds_like.raster.vector_grid().loc[idx_valid]
         gdf_grid["coverfrac"] = np.zeros(len(idx_valid))
         gdf_grid["area"] = gdf_grid.to_crs(
             3857
@@ -170,7 +170,7 @@ def emission_vector(
                     sharea_cell / gdf_grid.loc[idxs, "area"]
                 )
         # Create the rasterized coverage fraction map
-        da_out = ds_like.rio.rasterize(
+        da_out = ds_like.raster.rasterize(
             gdf_grid,
             col_name="coverfrac",
             nodata=0,
@@ -216,7 +216,7 @@ def admin(da, ds_like, source_name, fn_map, logger=logger):
     # define list of parameters for which output maps are created
     params = [p for p in df.columns if p.startswith("EM_")]
     # setup ds out
-    ds_out = xr.Dataset(coords=ds_like.rio.coords)
+    ds_out = xr.Dataset(coords=ds_like.raster.coords)
     # setup reclass method
     def reclass(x):
         return np.vectorize(d.get)(x, nodata)
@@ -228,7 +228,7 @@ def admin(da, ds_like, source_name, fn_map, logger=logger):
         values = df[param].values
         nodata = values[-1]  # NOTE values is set in last row
         d = dict(zip(keys, values))  # NOTE global param in reclass method
-        da = da.rio.interpolate_na(method="nearest")
+        da = da.raster.interpolate_na(method="nearest")
         logger.info(f"Deriving {param} using {method} resampling (nodata={nodata}).")
         da_param = xr.apply_ufunc(
             reclass, da, dask="parallelized", output_dtypes=[values.dtype]
@@ -237,11 +237,11 @@ def admin(da, ds_like, source_name, fn_map, logger=logger):
         if (
             param == "EM_ID"
         ):  # rename ID map to source_name (to avoid overwriting when several sources use this admin mapping function)
-            ds_out[source_name] = da_param.rio.reproject_like(
+            ds_out[source_name] = da_param.raster.reproject_like(
                 ds_like, method=method
             )  # then resample
         else:
-            ds_out[param] = da_param.rio.reproject_like(
+            ds_out[param] = da_param.raster.reproject_like(
                 ds_like, method=method
             )  # then resample
         # ds_out = ds_out.rename({"EM_ID":source_name})

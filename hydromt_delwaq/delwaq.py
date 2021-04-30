@@ -139,9 +139,9 @@ class DelwaqModel(Model):
         )
         ds_hydro["basins"] = self.hydromodel.staticmaps[self.hydromodel._MAPS["basins"]]
 
-        basins_mv = ds_hydro["basins"].rio.nodata
+        basins_mv = ds_hydro["basins"].raster.nodata
         ds_hydro["basmsk"] = xr.Variable(
-            dims=ds_hydro.rio.dims,
+            dims=ds_hydro.raster.dims,
             data=(ds_hydro["basins"] != basins_mv),
             attrs=dict(_FillValue=0),
         )
@@ -151,7 +151,7 @@ class DelwaqModel(Model):
         self.hydromaps.coords["mask"] = ds_hydro["basmsk"]
 
         # Build segment ID and add to hydromaps
-        ptid_mv = self.hydromaps["basins"].rio.nodata
+        ptid_mv = self.hydromaps["basins"].raster.nodata
         np_ptid = self.hydromaps["basins"].values.flatten()
         ptid = np_ptid[np_ptid != ptid_mv]
         ptid = np.arange(1, len(ptid) + 1)
@@ -222,7 +222,7 @@ class DelwaqModel(Model):
 
         ### Geometry data ###
         surface = emissions.gridarea(self.hydromodel.staticmaps)
-        surface.rio.set_nodata(np.nan)
+        surface.raster.set_nodata(np.nan)
         geom = surface.rename("surface").to_dataset()
         # For WQ type, add surface and manning to staticmaps
         if self.type == "WQ":
@@ -231,7 +231,7 @@ class DelwaqModel(Model):
             rivwth = self.hydromodel.staticmaps[self.hydromodel._MAPS["rivwth"]]
             rivmsk = self.hydromodel.staticmaps[self.hydromodel._MAPS["rivmsk"]]
             geom["surface"] = xr.where(rivmsk, rivlen * rivwth, geom["surface"])
-            geom["surface"].rio.set_nodata(np.nan)
+            geom["surface"].raster.set_nodata(np.nan)
             geom["manning"] = self.hydromodel.staticmaps["N"]
             self.set_staticmaps(geom)
         # For EM type build a pointer like object and add to self.geometry
@@ -333,7 +333,7 @@ class DelwaqModel(Model):
         """
         self.logger.info("Setting monitoring points and areas")
         monpoints = None
-        mv = self.hydromaps["ptid"].rio.nodata
+        mv = self.hydromaps["ptid"].raster.nodata
         # Read monitoring points source
         if source_name is not None:
             if source_name == "segments":
@@ -354,7 +354,7 @@ class DelwaqModel(Model):
                     )
                 else:
                     gdf["index"] = gdf.index.values
-                    monpoints = self.staticmaps.rio.rasterize(
+                    monpoints = self.staticmaps.raster.rasterize(
                         gdf, col_name="index", nodata=mv
                     )
             self.logger.info(f"Gauges locations read from {source_name}")
@@ -459,7 +459,7 @@ class DelwaqModel(Model):
         ds = self.data_catalog.get_rasterdataset(source_name, geom=self.region)
         # Add _FillValue to the data attributes
         for dvar in ds.data_vars.keys():
-            nodata = ds[dvar].rio.nodata
+            nodata = ds[dvar].raster.nodata
             if nodata is not None:
                 ds[dvar].attrs.update(_FillValue=nodata)
             else:
@@ -503,11 +503,11 @@ class DelwaqModel(Model):
                     volR = ds["levRiv"] * rivlen * rivwth
                     ds["vol"] = volL + volR.fillna(0) + 0.0001
                     ds["vol"].attrs.update(units="m3")
-                    ds["vol"].attrs.update(_FillValue=ds["levLand"].rio.nodata)
+                    ds["vol"].attrs.update(_FillValue=ds["levLand"].raster.nodata)
                 else:
                     ds["vol"] = ds["lev"] * self.staticmaps["surface"].values + 0.0001
                     ds["vol"].attrs.update(units="m3")
-                    ds["vol"].attrs.update(_FillValue=ds["lev"].rio.nodata)
+                    ds["vol"].attrs.update(_FillValue=ds["lev"].raster.nodata)
             else:
                 if "volLand" in ds.data_vars and "volRiv" in ds.data_vars:
                     attrs = ds["volLand"].attrs.copy()
@@ -546,10 +546,10 @@ class DelwaqModel(Model):
                 ds[dvar].attrs.update(unit="m3/s")
 
         ds.coords["mask"] = xr.DataArray(
-            dims=ds.rio.dims,
-            coords=ds.rio.coords,
+            dims=ds.raster.dims,
+            coords=ds.raster.coords,
             data=self.hydromaps["modelmap"].values,
-            attrs=dict(_FillValue=self.hydromaps["mask"].rio.nodata),
+            attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
         )
 
         self.set_forcing(ds)
@@ -706,7 +706,7 @@ class DelwaqModel(Model):
             else:
                 self.logger.info(f"Preparing '{source_i}' map.")
                 # process population maps
-                res = np.mean(np.abs(self.hydromaps.rio.res))
+                res = np.mean(np.abs(self.hydromaps.raster.res))
                 da = self.data_catalog.get_rasterdataset(
                     source_i, geom=self.region, buffer=2
                 )
@@ -846,7 +846,7 @@ class DelwaqModel(Model):
                 # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not ID:
                 # rename:
                 #   INDEXCOL: ID)\
-                ds_admin = self.hydromaps.rio.rasterize(
+                ds_admin = self.hydromaps.raster.rasterize(
                     gdf_org,
                     col_name="ID",
                     nodata=0,
@@ -913,7 +913,7 @@ class DelwaqModel(Model):
 
         # Filter data with mask
         for dvar in ds_out.data_vars:
-            nodata = ds_out[dvar].rio.nodata
+            nodata = ds_out[dvar].raster.nodata
             ds_out[dvar] = xr.where(ds_out["mask"], ds_out[dvar], nodata)
             ds_out[dvar].attrs.update(_FillValue=nodata)
 
@@ -929,7 +929,7 @@ class DelwaqModel(Model):
         for dvar in ds_out.data_vars:
             if dvar != "monpoints" and dvar != "monareas":
                 fname = join(self.root, "staticdata", dvar + ".dat")
-                # nodata = ds_out[dvar].rio.nodata
+                # nodata = ds_out[dvar].raster.nodata
                 data = ds_out[dvar].values.flatten()
                 mask = ds_out["mask"].values.flatten()
                 data = data[mask]
@@ -988,7 +988,7 @@ class DelwaqModel(Model):
         fns = glob.glob(join(self.root, "hydromodel", f"*.tif"))
         if len(fns) > 0:
             self._hydromaps = io.open_mfraster(fns, **kwargs)
-        if self._hydromaps.rio.crs is None and crs is not None:
+        if self._hydromaps.raster.crs is None and crs is not None:
             self.set_crs(crs)
 
     def write_hydromaps(self):
@@ -1010,7 +1010,7 @@ class DelwaqModel(Model):
                 self.logger.warning(f"No updated maps. Skipping writing to file.")
                 return
         self.logger.info("Writing (updated) staticmap files.")
-        ds_out.rio.to_mapstack(
+        ds_out.raster.to_mapstack(
             root=join(self.root, "hydromodel"),
             mask=True,
         )
@@ -1105,7 +1105,7 @@ class DelwaqModel(Model):
 
         # Filter data with mask
         for dvar in ds_out.data_vars:
-            # nodata = ds_out[dvar].rio.nodata
+            # nodata = ds_out[dvar].raster.nodata
             # Change the novalue outside of mask for julia compatibilty
             ds_out[dvar] = xr.where(ds_out["mask"], ds_out[dvar], -9999.0)
             ds_out[dvar].attrs.update(_FillValue=-9999.0)
@@ -1131,7 +1131,7 @@ class DelwaqModel(Model):
                 fname = join(self.root, "dynamicdata", "hydrology.bin")
                 datablock = []
                 for dvar in ["precip", "runPav", "runUnp", "infilt", "totflw"]:
-                    nodata = ds_out[dvar].rio.nodata
+                    nodata = ds_out[dvar].raster.nodata
                     data = ds_out[dvar].isel(time=i).values.flatten()
                     data = data[data != nodata]
                     datablock = np.append(datablock, data)
@@ -1147,7 +1147,7 @@ class DelwaqModel(Model):
                 flname = join(self.root, "dynamicdata", "flow.dat")
                 flowblock = []
                 for dvar in ["run", "inwater"]:
-                    nodata = ds_out[dvar].rio.nodata
+                    nodata = ds_out[dvar].raster.nodata
                     data = ds_out[dvar].isel(time=i).values.flatten()
                     data = data[data != nodata]
                     flowblock = np.append(flowblock, data)
@@ -1156,7 +1156,7 @@ class DelwaqModel(Model):
                 )
                 # volume
                 voname = join(self.root, "dynamicdata", "volume.dat")
-                nodata = ds_out["vol"].rio.nodata
+                nodata = ds_out["vol"].raster.nodata
                 data = ds_out["vol"].isel(time=i).values.flatten()
                 data = data[data != nodata]
                 self.dw_WriteSegmentOrExchangeData(
@@ -1200,7 +1200,7 @@ class DelwaqModel(Model):
         if "basins" in self.staticgeoms:
             gdf = self.staticgeoms["basins"]
         elif "basins" in self.hydromaps:
-            gdf = self.hydromaps["basins"].rio.vectorize()
+            gdf = self.hydromaps["basins"].raster.vectorize()
             gdf.crs = pyproj.CRS.from_user_input(self.crs)
             self.set_staticgeoms(gdf, name="basins")
         return gdf
@@ -1223,16 +1223,16 @@ class DelwaqModel(Model):
             self._hydromaps = data
         else:
             if name is not None and isinstance(data, xr.Dataset):
-                if len(data.rio.vars) == 1:
-                    data = data.rename_vars({data.rio.vars[0]: name})
+                if len(data.raster.vars) == 1:
+                    data = data.rename_vars({data.raster.vars[0]: name})
                 else:
                     raise ValueError(
                         "Name argument can not be used with multivariable DataSet"
                     )
             elif isinstance(data, np.ndarray):
-                if data.shape != self.hydromaps.rio.shape:
+                if data.shape != self.hydromaps.raster.shape:
                     raise ValueError("Shape of data and staticmaps do not match")
-                data = xr.DataArray(dims=self.hydromaps.rio.dims, data=data)
+                data = xr.DataArray(dims=self.hydromaps.raster.dims, data=data)
             if isinstance(data, xr.DataArray):
                 if data.name is None or name is not None:
                     if name is None:
@@ -1315,7 +1315,7 @@ class DelwaqModel(Model):
         ptid = self.hydromaps["ptid"].values.flatten()
         # Monitoring points
         if monpoints is not None:
-            mv = monpoints.rio.nodata
+            mv = monpoints.raster.nodata
             points = monpoints.values.flatten()
             id_points = ptid[points != mv]
             points = points[points != mv]
@@ -1349,7 +1349,7 @@ class DelwaqModel(Model):
 
         # Monitoring areas
         if monareas is not None:
-            mv = monareas.rio.nodata
+            mv = monareas.raster.nodata
             areas = monareas.values.flatten()
             id_areas = ptid[areas != mv]
             areas = areas[areas != mv]
@@ -1381,7 +1381,7 @@ class DelwaqModel(Model):
     def dw_WriteWaqGeom(self):
         """ Writes Delwaq netCDF geometry file (config/B3_waqgeom.nc). """
         ptid = self.hydromaps["ptid"].copy()
-        ptid_mv = ptid.rio.nodata
+        ptid_mv = ptid.raster.nodata
         # PCR cell id's start at 1, we need it zero based, and NaN set to -1
         ptid = xr.where(ptid == ptid_mv, -1, ptid - 1)
         np_ptid = ptid.values
@@ -1391,12 +1391,12 @@ class DelwaqModel(Model):
         nosegh = int(np.max(np_ptid)) + 1  # because of the zero based
         # Get LDD map
         np_ldd = self.hydromaps["ldd"].values
-        np_ldd[np_ldd == self.hydromaps["ldd"].rio.nodata] = 0
+        np_ldd[np_ldd == self.hydromaps["ldd"].raster.nodata] = 0
 
         # Get  grid coordinates
         res_x, res_y = self.res
-        xcoords = ptid.rio.xcoords.values
-        ycoords = ptid.rio.ycoords.values
+        xcoords = ptid.raster.xcoords.values
+        ycoords = ptid.raster.ycoords.values
         left = xcoords - res_x / 2.0
         right = xcoords + res_x / 2.0
         top = ycoords - res_y / 2.0
