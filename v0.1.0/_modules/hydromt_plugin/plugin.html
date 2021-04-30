@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>hydromt_plugin.plugin &mdash; hydromt_plugin  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> hydromt_plugin
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/components.html">Model components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/build_configuration.html">Model configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/attributes.html">Model attributes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/workflows.html">Workflows</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References &amp; Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_index.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hydromt_plugin</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>hydromt_plugin.plugin</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for hydromt_plugin.plugin</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Implement plugin model class&quot;&quot;&quot;</span>
+<span class="c1"># FIXME implement model class following model API</span>
+
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span><span class="p">,</span> <span class="n">basename</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">rasterio.warp</span> <span class="kn">import</span> <span class="n">transform_bounds</span>
+<span class="kn">import</span> <span class="nn">pyproj</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">box</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+
+<span class="kn">import</span> <span class="nn">hydromt</span>
+<span class="kn">from</span> <span class="nn">hydromt.models.model_api</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">hydromt</span> <span class="kn">import</span> <span class="n">gis_utils</span><span class="p">,</span> <span class="n">io</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PluginModel"><a class="viewcode-back" href="../../generated/hydromt_plugin.plugin.PluginModel.html#hydromt_plugin.plugin.PluginModel">[docs]</a><span class="k">class</span> <span class="nc">PluginModel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;General and basic API for models in HydroMT&quot;&quot;&quot;</span>
+
+    <span class="c1"># FIXME</span>
+    <span class="n">_NAME</span> <span class="o">=</span> <span class="s2">&quot;plugin&quot;</span>
+    <span class="n">_CONF</span> <span class="o">=</span> <span class="s2">&quot;testmodel.ini&quot;</span>
+    <span class="n">_GEOMS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gauges&quot;</span><span class="p">:</span> <span class="s2">&quot;obs&quot;</span><span class="p">}</span>
+    <span class="n">_MAPS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;elevtn&quot;</span><span class="p">:</span> <span class="s2">&quot;dem&quot;</span><span class="p">}</span>
+    <span class="n">_FOLDERS</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="PluginModel.__init__"><a class="viewcode-back" href="../../generated/hydromt_plugin.plugin.PluginModel.html#hydromt_plugin.plugin.PluginModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span>
+        <span class="n">config_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">data_libs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+        <span class="n">deltares_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+            <span class="n">config_fn</span><span class="o">=</span><span class="n">config_fn</span><span class="p">,</span>
+            <span class="n">data_libs</span><span class="o">=</span><span class="n">data_libs</span><span class="p">,</span>
+            <span class="n">deltares_data</span><span class="o">=</span><span class="n">deltares_data</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+    <span class="c1">## components</span>
+
+<div class="viewcode-block" id="PluginModel.setup_basemaps"><a class="viewcode-back" href="../../generated/hydromt_plugin.plugin.PluginModel.setup_basemaps.html#hydromt_plugin.plugin.PluginModel.setup_basemaps">[docs]</a>    <span class="k">def</span> <span class="nf">setup_basemaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;utm&quot;</span><span class="p">,</span> <span class="n">basemaps_fn</span><span class="o">=</span><span class="s2">&quot;merit_hydro&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Define model region and setup dem model layers.</span>
+
+<span class="sd">        Adds model layers:</span>
+
+<span class="sd">        * **dem** map: elevation [m+ref]</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        region : dict</span>
+<span class="sd">            Dictionary describing region of interest, e.g. {&#39;bbox&#39;: [xmin, ymin, xmax, ymax]}</span>
+<span class="sd">            See :py:meth:`~hydromt.cli.parse_region()` for all options</span>
+<span class="sd">        res : float</span>
+<span class="sd">            Model resolution [m], by default 100 m.</span>
+<span class="sd">        crs : str, int</span>
+<span class="sd">            Model Coordinate Reference System as epsg code, by default &#39;utm&#39; in which</span>
+<span class="sd">            case the region centroid UTM zone is used.</span>
+<span class="sd">        basemaps_fn : str</span>
+<span class="sd">            Path or data source name for hydrography raster data, by default &#39;hydro_merit&#39;.</span>
+
+<span class="sd">            * Required variables: [&#39;elevtn&#39;].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># read data (lazy!) and return dataset</span>
+        <span class="n">ds_org</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_catalog</span><span class="o">.</span><span class="n">get_rasterdataset</span><span class="p">(</span>
+            <span class="n">basemaps_fn</span><span class="p">,</span> <span class="n">single_var_as_array</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;elevtn&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">geom</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;geom&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">bbox</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bbox&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">geom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bbox</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Plugin model requires a &#39;bbox&#39; or &#39;geom&#39; region.&quot;</span><span class="p">)</span>
+        <span class="c1"># parse dst_crs. if &#39;utm&#39; the best utm zone is calculated based on bbox_epsg4326</span>
+        <span class="n">bbox_epsg4326</span> <span class="o">=</span> <span class="n">bbox</span> <span class="k">if</span> <span class="n">bbox</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">geom</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span><span class="o">.</span><span class="n">total_bounds</span>
+        <span class="n">dst_crs</span> <span class="o">=</span> <span class="n">gis_utils</span><span class="o">.</span><span class="n">parse_crs</span><span class="p">(</span><span class="n">crs</span><span class="p">,</span> <span class="n">bbox_epsg4326</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_config</span><span class="p">(</span><span class="s2">&quot;global.epsg&quot;</span><span class="p">,</span> <span class="n">dst_crs</span><span class="o">.</span><span class="n">to_epsg</span><span class="p">())</span>
+        <span class="c1"># transfrom bbox/geom to geom with destination CRS to deal with nonlinear</span>
+        <span class="c1"># transformations along domain edges when clipping</span>
+
+        <span class="k">if</span> <span class="n">geom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># to epsg required to be understood when writing GEOJSON</span>
+            <span class="n">dst_geom</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">dst_crs</span><span class="o">.</span><span class="n">to_epsg</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dst_bbox</span> <span class="o">=</span> <span class="n">transform_bounds</span><span class="p">(</span><span class="n">pyproj</span><span class="o">.</span><span class="n">CRS</span><span class="o">.</span><span class="n">from_epsg</span><span class="p">(</span><span class="mi">4326</span><span class="p">),</span> <span class="n">dst_crs</span><span class="p">,</span> <span class="o">*</span><span class="n">bbox</span><span class="p">)</span>
+            <span class="n">dst_geom</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="p">[</span><span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="n">dst_bbox</span><span class="p">)],</span> <span class="n">crs</span><span class="o">=</span><span class="n">dst_crs</span><span class="p">)</span>
+        <span class="c1"># reproject to destination CRS and clip to actual extent</span>
+        <span class="n">da_elv_org</span> <span class="o">=</span> <span class="n">ds_org</span><span class="p">[</span><span class="s2">&quot;elevtn&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">clip_geom</span><span class="p">(</span><span class="n">geom</span><span class="o">=</span><span class="n">dst_geom</span><span class="p">,</span> <span class="n">buffer</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">da_elv_proj</span> <span class="o">=</span> <span class="n">da_elv_org</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">reproject</span><span class="p">(</span>
+            <span class="n">dst_res</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">dst_crs</span><span class="o">=</span><span class="n">dst_crs</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;average&quot;</span>
+        <span class="p">)</span>
+        <span class="n">da_elv</span> <span class="o">=</span> <span class="n">da_elv_proj</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">clip_geom</span><span class="p">(</span><span class="n">dst_geom</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="n">res</span><span class="p">)</span>
+        <span class="c1"># set elevation map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_staticmaps</span><span class="p">(</span><span class="n">da_elv</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;elevtn&quot;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="PluginModel.setup_gauges"><a class="viewcode-back" href="../../generated/hydromt_plugin.plugin.PluginModel.setup_gauges.html#hydromt_plugin.plugin.PluginModel.setup_gauges">[docs]</a>    <span class="k">def</span> <span class="nf">setup_gauges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gauges_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Setup model observation point locations.</span>
+
+<span class="sd">        Adds model layers:</span>
+
+<span class="sd">        * **obs** geom: observation point locations</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------</span>
+<span class="sd">        gauges_fn: str, optional</span>
+<span class="sd">            Path to observation points geometry file.</span>
+<span class="sd">            See :py:meth:`~hydromt.open_vector`, for accepted files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">gauges_fn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_GEOMS</span><span class="p">[</span><span class="s2">&quot;gauges&quot;</span><span class="p">]</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">assert_gtype</span><span class="o">=</span><span class="s2">&quot;Point&quot;</span><span class="p">)</span>
+            <span class="n">gdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_catalog</span><span class="o">.</span><span class="n">get_geodataframe</span><span class="p">(</span>
+                <span class="n">gauges_fn</span><span class="p">,</span> <span class="n">geom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_staticgeoms</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_config</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.xy&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> set based on </span><span class="si">{</span><span class="n">gauges_fn</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1">## I/O</span>
+
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Method to read the complete model schematization and configuration from file.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reading model data from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_config</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_staticmaps</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_staticgeoms</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Method to write the complete model schematization and configuration to file.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing model data to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># if in r, r+ mode, only write updated components</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot write in read-only mode&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>  <span class="c1"># try to read default if not yet set</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_config</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_staticmaps</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_staticmaps</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_staticgeoms</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_staticgeoms</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forcing</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_staticgeoms</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">read_staticmaps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read staticmaps at &lt;root/?/&gt; and parse to xarray Dataset&quot;&quot;&quot;</span>
+        <span class="c1"># to read gdal raster files use: hydromt.open_mfraster()</span>
+        <span class="c1"># to read netcdf use: xarray.open_dataset()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">:</span>
+            <span class="c1"># start fresh in read-only mode</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_staticmaps</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_staticmaps</span><span class="p">(</span><span class="n">hydromt</span><span class="o">.</span><span class="n">open_mfraster</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;*.tif&quot;</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">write_staticmaps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write staticmaps at &lt;root/?/&gt; in model ready format&quot;&quot;&quot;</span>
+        <span class="c1"># to write to gdal raster files use: self.staticmaps.raster.to_mapstack()</span>
+        <span class="c1"># to write to netcdf use: self.staticmaps.to_netcdf()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Model opened in read-only mode&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">staticmaps</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">to_mapstack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">read_staticgeoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read staticgeoms at &lt;root/?/&gt; and parse to dict of geopandas&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">:</span>
+            <span class="c1"># start fresh in read-only mode</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_staticgeoms</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;*.xy&quot;</span><span class="p">)):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.xy&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">geom</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">open_vector</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;xy&quot;</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_staticgeoms</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">write_staticgeoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write staticmaps at &lt;root/?/&gt; in model ready format&quot;&quot;&quot;</span>
+        <span class="c1"># to write use self.staticgeoms[var].to_file()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Model opened in read-only mode&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">geom</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">staticgeoms</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">fn_out</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.xy&quot;</span><span class="p">)</span>
+            <span class="n">io</span><span class="o">.</span><span class="n">write_xy</span><span class="p">(</span><span class="n">fn_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">staticgeoms</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">read_forcing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read forcing at &lt;root/?/&gt; and parse to dict of xr.DataArray&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forcing</span>
+        <span class="c1"># raise NotImplementedError()</span>
+
+    <span class="k">def</span> <span class="nf">write_forcing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;write forcing at &lt;root/?/&gt; in model ready format&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+        <span class="c1"># raise NotImplementedError()</span>
+
+    <span class="k">def</span> <span class="nf">read_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read states at &lt;root/?/&gt; and parse to dict of xr.DataArray&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_states</span>
+        <span class="c1"># raise NotImplementedError()</span>
+
+    <span class="k">def</span> <span class="nf">write_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;write states at &lt;root/?/&gt; in model ready format&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+        <span class="c1"># raise NotImplementedError()</span>
+
+    <span class="k">def</span> <span class="nf">read_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read results at &lt;root/?/&gt; and parse to dict of xr.DataArray&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_results</span>
+        <span class="c1"># raise NotImplementedError()</span>
+
+    <span class="k">def</span> <span class="nf">write_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;write results at &lt;root/?/&gt; in model ready format&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+        <span class="c1"># raise NotImplementedError()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">crs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">CRS</span><span class="o">.</span><span class="n">from_epsg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;global.epsg&quot;</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="mi">4326</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Deltares.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
