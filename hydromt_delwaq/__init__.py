@@ -1,4 +1,4 @@
-"""hydroMT plugin for plugin models."""
+"""hydroMT plugin for DELWAQ models."""
 
 from os.path import dirname, join, abspath
 

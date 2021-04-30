@@ -1,5 +1,5 @@
-hydroMT-plugin: plugin plugin for hydroMT
-###########################################
+hydroMT-delwaq: DELWAQ plugin for hydroMT
+#########################################
 
 FIXME add badges with correct links
 
@@ -21,10 +21,11 @@ FIXME add badges with correct links
 hydroMT_ is a python package, developed by Deltares, to build and analysis hydro models.
 It provides a generic model api with attributes to access the model schematization,
 (dynamic) forcing data, results and states. This plugin provides an implementation 
-for the plugin model.
+for the DELWAQ_ model.
 
 
 .. _hydromt: https://deltares.github.io/hydromt
+.. _delwaq: https://oss.deltares.nl/web/delft3d/delwaq1/-/message_boards/category/205375
 
 
 Installation
@@ -35,7 +36,7 @@ FIXME installation guide
 Documentation
 -------------
 
-Learn more about hydroMT in its `online documentation <https://deltares.github.io/hydromt_plugin/>`_
+Learn more about the hydroMT_delwaq plugin in its `online documentation <https://deltares.github.io/hydromt_plugin/>`_
 
 Contributing
 ------------

@@ -1,0 +1,4 @@
+source_name,scale_method,fillna_method,fillna_value,area_division
+GHS-POP_2015,average,zero,,True
+GHS-SMOD_2015,nearest,zero,,False
+glw_cattle,average,zero,,True

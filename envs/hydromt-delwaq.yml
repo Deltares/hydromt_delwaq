@@ -1,4 +1,4 @@
-name: hydromt-plugin
+name: hydromt-delwaq
 
 channels:
   - conda-forge
@@ -38,4 +38,6 @@ dependencies:
   - sphinx_rtd_theme # docs
   - xarray
   - zarr
+  - pip:
+    - hydromt_wflow
 
