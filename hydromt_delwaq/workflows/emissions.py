@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import os
-from os.path import join
-import glob
-import math
 import numpy as np
 import pandas as pd
 import xarray as xr
-import warnings
 import logging
 
-# local imports
-from .. import gis_utils
+from hydromt import gis_utils
 
 
 logger = logging.getLogger(__name__)
@@ -38,7 +32,9 @@ def gridarea(ds):
 
     """
 
-    realarea = gis_utils.reggrid_area(ds.raster.ycoords.values, ds.raster.xcoords.values)
+    realarea = gis_utils.reggrid_area(
+        ds.raster.ycoords.values, ds.raster.xcoords.values
+    )
     da_out = xr.DataArray(
         data=realarea.astype("float32"),
         coords=ds.raster.coords,

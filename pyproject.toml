@@ -19,7 +19,7 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "Topic :: Scientific/Engineering :: Water Quality",
+    "Topic :: Scientific/Engineering :: Hydrology",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Programming Language :: Python :: 3",
 ]
@@ -43,7 +43,7 @@ Documentation = "https://deltares.github.io/hydromt_delwaq/"
 Source = "https://github.com/Deltares/hydromt_delwaq"
 
 [project.entry-points."hydromt.models"]
-plugin = "hydromt_delwaq.delwaq:DelwaqModel"
+delwaq = "hydromt_delwaq.delwaq:DelwaqModel"
 
 [tool.black]
 line-length = 88

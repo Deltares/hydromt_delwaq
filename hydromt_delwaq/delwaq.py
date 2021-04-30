@@ -17,7 +17,7 @@ from hydromt.models.model_api import Model
 from hydromt import workflows, flw, io
 
 
-from hydromt_wflow.models.wflow import WflowModel
+from hydromt_wflow.wflow import WflowModel
 
 from .workflows import emissions
 from . import DATADIR
@@ -40,6 +40,7 @@ class DelwaqModel(Model):
 
     _NAME = "delwaq"
     _CONF = "delwaq.inp"
+    _DATADIR = DATADIR
     _CF = dict()  # configreader kwargs
     _GEOMS = {}
     _MAPS = {
@@ -179,7 +180,9 @@ class DelwaqModel(Model):
         if self.type == "WQ":
             self.logger.info(f"Preparing pointer with surface runoff and inwater.")
             # Start with searching for the ID of the downstream cells
-            flwdir = flw.flwdir_from_da(self.hydromaps["ldd"], ftype="infer")
+            flwdir = flw.flwdir_from_da(
+                self.hydromaps["ldd"], ftype="infer", mask=(self.hydromaps["modelmap"])
+            )
             ptiddown = flwdir.downstream(self.hydromaps["ptid"]).astype(np.int32)
             # Add boundaries
             bd_id = []
@@ -958,7 +961,7 @@ class DelwaqModel(Model):
             self.set_staticgeoms(io.open_vector(fn), name=name)
 
     def write_staticgeoms(self):
-        """Write staticmaps at <root/staticgeoms> in model ready format """
+        """Write staticmaps at <root/staticgeoms> in model ready format"""
         # to write use self.staticgeoms[var].to_file()
         if not self._write:
             raise IOError("Model opened in read-only mode")
@@ -1016,7 +1019,7 @@ class DelwaqModel(Model):
         )
 
     def read_pointer(self):
-        """ Read Delwaq pointer file """
+        """Read Delwaq pointer file"""
         raise NotImplementedError()
 
     def write_pointer(self):
@@ -1040,7 +1043,7 @@ class DelwaqModel(Model):
             f.close()
 
     def read_geometry(self):
-        """ Read Delwaq pointer file """
+        """Read Delwaq pointer file"""
         raise NotImplementedError()
 
     def write_geometry(self):
@@ -1379,7 +1382,7 @@ class DelwaqModel(Model):
             exfile.close()
 
     def dw_WriteWaqGeom(self):
-        """ Writes Delwaq netCDF geometry file (config/B3_waqgeom.nc). """
+        """Writes Delwaq netCDF geometry file (config/B3_waqgeom.nc)."""
         ptid = self.hydromaps["ptid"].copy()
         ptid_mv = ptid.raster.nodata
         # PCR cell id's start at 1, we need it zero based, and NaN set to -1
