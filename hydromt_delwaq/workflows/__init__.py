@@ -2,3 +2,4 @@
 """HydroMT delwaq workflows"""
 
 from .emissions import *
+from .segments import *
