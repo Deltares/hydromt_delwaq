@@ -676,7 +676,9 @@ class DelwaqModel(Model):
 
     def setup_emission_mapping(self, source_name):
         """This component derives several emission maps based on administrative
-        boundaries. For several emission types administrative classes are
+        boundaries.
+
+        For several emission types administrative classes ('fid' column) are
         remapped to model parameter values based on lookup tables. The data is
         remapped at its original resolution and then resampled to the model
         resolution based using the average value, unless noted differently.
@@ -690,6 +692,8 @@ class DelwaqModel(Model):
         ----------
         source_name : {["gadm_level1", "gadm_level2", "gadm_level3"]}
             Name or list of names of data source in data_sources.yml file.
+
+            * Required variables: ['ID']
         """
         if source_name is None:
             self.logger.warning(
@@ -715,11 +719,11 @@ class DelwaqModel(Model):
                     source_i, geom=self.basins, dst_crs=self.crs
                 )
                 # Rasterize the GeoDataFrame to get the areas mask of administrative boundaries with their ids
-                gdf_org.ID = gdf_org.ID.astype(np.int32)
-                # make sure index_col always has name ID in source dataset (use rename in data_sources.yml or
-                # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not ID:
+                gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
+                # make sure index_col always has name fid in source dataset (use rename in data_sources.yml or
+                # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not fid:
                 # rename:
-                #   INDEXCOL: ID)\
+                #   INDEXCOL: fid)\
                 ds_admin = self.hydromaps.raster.rasterize(
                     gdf_org,
                     col_name="ID",
@@ -962,14 +966,14 @@ class DelwaqModel(Model):
             fpa.close()
 
     def read_forcing(self):
-        """Read and forcing at <root/?/> and parse to geopandas"""
+        """Read and forcing at <root/?/> and parse to dict of xr.DataArray"""
         if not self._write:
             # start fresh in read-only mode
             self._forcing = dict()
-        raise NotImplementedError()
+        # raise NotImplementedError()
 
-    def write_forcing(self):
-        """Write staticmaps at <root/staticdata> in NetCDF and binary format."""
+    def write_forcing(self, write_nc=False):
+        """Write staticmaps at <root/staticdata> in binary format and NetCDF (if write_nc is True)."""
         if not self._write:
             raise IOError("Model opened in read-only mode")
         if not self.forcing:
@@ -997,11 +1001,12 @@ class DelwaqModel(Model):
 
         self.logger.info("Writing dynamicmap files.")
         # Netcdf format
-        fname = join(self.root, "dynamicdata", "dynamicmaps.nc")
-        if os.path.isfile(fname):
-            ds_out.to_netcdf(path=fname, mode="a")
-        else:
-            ds_out.to_netcdf(path=fname)
+        if write_nc:
+            fname = join(self.root, "dynamicdata", "dynamicmaps.nc")
+            if os.path.isfile(fname):
+                ds_out.to_netcdf(path=fname, mode="a")
+            else:
+                ds_out.to_netcdf(path=fname)
 
         # Binary format
         timesteps = np.arange(0, len(ds_out.time.values))
@@ -1057,7 +1062,7 @@ class DelwaqModel(Model):
         if not self._write:
             # start fresh in read-only mode
             self._states = dict()
-        raise NotImplementedError()
+        # raise NotImplementedError()
 
     def write_states(self):
         """write states at <root/?/> in model ready format"""
@@ -1070,7 +1075,7 @@ class DelwaqModel(Model):
         if not self._write:
             # start fresh in read-only mode
             self._results = dict()
-        raise NotImplementedError()
+        # raise NotImplementedError()
 
     def write_results(self):
         """write results at <root/?/> in model ready format"""

@@ -14,11 +14,24 @@ from hydromt.cli.main import main as hydromt_cli
 TESTDATADIR = join(dirname(abspath(__file__)), "data")
 EXAMPLEDIR = join(dirname(abspath(__file__)), "..", "examples")
 
+_models = {
+    "EM": {
+        "example": "EM_piave",
+        "ini": "delwaq_build_EM.ini",
+    },
+    "WQ": {
+        "example": "WQ_piave",
+        "ini": "delwaq_build_WQ.ini",
+    },
+}
 
-def test_model_class():
+
+@pytest.mark.parametrize("model", list(_models.keys()))
+def test_model_class(model):
+    _model = _models[model]
     # read model in examples folder
-    root = join(EXAMPLEDIR, "plugin_test")
-    mod = MODELS.get("plugin")(root=root, mode="r")
+    root = join(EXAMPLEDIR, _model["example"])
+    mod = MODELS.get("delwaq")(root=root, mode="r")
     mod.read()
     # run test_model_api() method
     non_compliant_list = mod.test_model_api()
@@ -26,30 +39,33 @@ def test_model_class():
     # pass
 
 
-def test_model_build(tmpdir):
+@pytest.mark.parametrize("model", list(_models.keys()))
+def test_model_build(tmpdir, model):
     # test build method
     # compare results with model from examples folder
-    model = "plugin"
+    _model = _models[model]
     root = str(tmpdir.join(model))
-    config = join(EXAMPLEDIR, "model_build.ini")
-    region = "{'bbox': [11.70, 45.35, 12.95, 46.70]}"
+    config = join(EXAMPLEDIR, _model["ini"])
+    # wflow_path = join(EXAMPLEDIR, "wflow_piave")
+    # region = "{'wflow': '" + str(wflow_path) + "'}"
+    region = "{'wflow': '../examples/wflow_piave'}"
     # Build model
     r = CliRunner().invoke(
-        hydromt_cli, ["build", model, root, region, "-i", config, "-vv"]
+        hydromt_cli, ["build", "delwaq", root, region, "-i", config, "-vv"]
     )
     assert r.exit_code == 0
 
     # Compare with model from examples folder
-    root0 = join(EXAMPLEDIR, "plugin_test")
-    mod0 = MODELS.get(model)(root=root0, mode="r")
+    root0 = join(EXAMPLEDIR, _model["example"])
+    mod0 = MODELS.get("delwaq")(root=root0, mode="r")
     mod0.read()
-    mod1 = MODELS.get(model)(root=root, mode="r")
+    mod1 = MODELS.get("delwaq")(root=root, mode="r")
     mod1.read()
     # check maps
     invalid_maps = []
     if len(mod0._staticmaps) > 0:
         maps = mod0.staticmaps.raster.vars
-        assert np.all(mod0.crs == mod1.crs), f"map crs {name}"
+        assert np.all(mod0.crs == mod1.crs), f"map crs mismatch"
         for name in maps:
             map0 = mod0.staticmaps[name].fillna(0)
             map1 = mod1.staticmaps[name].fillna(0)
@@ -70,7 +86,3 @@ def test_model_build(tmpdir):
             ), f"geom columns {name}"
             assert geom0.crs == geom1.crs, f"geom crs {name}"
             assert np.all(geom0.geometry == geom1.geometry), f"geom {name}"
-    # check config
-    if mod0._config:
-        # flatten
-        assert mod0._config == mod1._config, f"config mismatch"
