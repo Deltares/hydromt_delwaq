@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import pandas as pd
 import xarray as xr
 import logging
 
@@ -97,10 +96,7 @@ def pointer(
         bd_id = []
         bd_type = []
         # Outlets are boundaries and ptiddown should be negative
-        import pdb
-
-        pdb.set_trace()
-        np_ldd = ds_hydro["ldd"].values.flatten()
+        np_ldd = ds_hydro["ldd"].values
         nb_out = len(np_ldd[np_ldd == 5])
         outid = np.arange(1, nb_out + 1) * -1
         ptiddown[np_ldd == 5] = outid
@@ -108,13 +104,9 @@ def pointer(
         lowerid = outid[-1]
         bd_id = np.append(bd_id, (outid * (-1)))
         bd_type = np.append(bd_type, np.repeat("Sfw2Outflow", len(outid)))
-        # Add ptiddown to hydromaps
-        np_ptiddown = ptiddown.reshape(
-            np.size(ds_hydro["basins"], 0),
-            np.size(ds_hydro["basins"], 1),
-        )
+        # Add ptiddown to xarray
         da_ptiddown = xr.DataArray(
-            data=np_ptiddown,
+            data=ptiddown,
             coords=ds_hydro.raster.coords,
             dims=ds_hydro.raster.dims,
             attrs=dict(_FillValue=ptid_mv),

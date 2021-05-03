@@ -270,19 +270,19 @@ class DelwaqModel(Model):
         """
         self.logger.info("Setting monitoring points and areas")
         monpoints = None
-        mv = self.hydromaps["ptid"].raster.nodata
+        mv = -999
         # Read monitoring points source
         if mon_points is not None:
             if mon_points == "segments":
                 monpoints = self.hydromaps["ptid"]
             else:
-                kwargs.update(geom=self.basins, dst_crs=self.crs, assert_gtype="Point")
-                if mon_points in self.data_catalog:
-                    gdf = self.data_catalog.get_geodataframe(mon_points, **kwargs)
-                else:  # read from path
-                    if str(mon_points).endswith(".csv"):
-                        kwargs.update(index_col=0)
-                    gdf = io.open_vector(mon_points, **kwargs)
+                kwargs = {}
+                if isfile(mon_points) and str(mon_points).endswith(".csv"):
+                    kwargs.update(crs=self.crs)
+                gdf = self.data_catalog.get_geodataframe(
+                    str(mon_points), geom=self.basins, assert_gtype="Point", **kwargs
+                )
+                gdf = gdf.to_crs(self.crs)
                 if gdf.index.size == 0:
                     self.logger.warning(
                         f"No {mon_points} gauge locations found within domain"
@@ -299,6 +299,11 @@ class DelwaqModel(Model):
             points = monpoints.values.flatten()
             points = points[points != mv]
             nb_points = len(points)
+            # Add to staticgeoms
+            # if first column has no name, give it a default name otherwise column is omitted when written to geojson
+            if gdf.index.name is None:
+                gdf.index.name = "fid"
+            self.set_staticgeoms(gdf, name="monpoints")
         else:
             self.logger.info("No monitoring points set in the config file, skipping")
             nb_points = 0
@@ -316,6 +321,9 @@ class DelwaqModel(Model):
             areas = monareas.values.flatten()
             areas = areas[areas != mv]
             nb_areas = len(np.unique(areas))
+            # Add to staticgeoms
+            gdf_areas = self.staticmaps["monareas"].raster.vectorize()
+            self.set_staticgeoms(gdf_areas, name="monareas")
         else:
             self.logger.info("No monitoring areas set in the config file, skipping")
             nb_areas = 0
