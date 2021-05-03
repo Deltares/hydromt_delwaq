@@ -3,13 +3,14 @@ requires = ["flit_core >=3.2.0,<3.3"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "hydromt_plugin"
+name = "hydromt_delwaq"
 authors = [
-    {name = "Dirk Eilander", email = "dirk.eilander@deltares.nl"},
     {name = "Hélène Boisgontier", email = "helene.boisgontier@deltares.nl"},
+    {name = "Sibren Loos", email = "sibren.loos@deltares.nl"},
 ]
 dependencies = [
     "hydromt",
+    "hydromt_wflow"
 ]
 requires-python = ">=3.8" # fix tests to support older versions
 readme = "README.rst"
@@ -38,11 +39,11 @@ doc = [
 ]
 
 [project.urls]
-Documentation = "https://deltares.github.io/hydromt_plugin/"
-Source = "https://github.com/Deltares/hydromt_plugin"
+Documentation = "https://deltares.github.io/hydromt_delwaq/"
+Source = "https://github.com/Deltares/hydromt_delwaq"
 
 [project.entry-points."hydromt.models"]
-plugin = "hydromt_plugin.plugin:PluginModel"
+delwaq = "hydromt_delwaq.delwaq:DelwaqModel"
 
 [tool.black]
 line-length = 88
