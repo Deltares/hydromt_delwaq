@@ -46,9 +46,11 @@ def test_model_build(tmpdir, model):
     _model = _models[model]
     root = str(tmpdir.join(model))
     config = join(EXAMPLEDIR, _model["ini"])
-    # wflow_path = join(EXAMPLEDIR, "wflow_piave")
-    # region = "{'wflow': '" + str(wflow_path) + "'}"
-    region = "{'wflow': '../examples/wflow_piave'}"
+    wflow_path = join(EXAMPLEDIR, "wflow_piave")
+    # Transform the path to be processed by CLI runner and json.load
+    wflow_path = str(wflow_path).replace("\\", "/")
+    region = "{'wflow': " + f"'{wflow_path}'" + "}"
+    # region = "{'wflow': '../examples/wflow_piave'}"
     # Build model
     r = CliRunner().invoke(
         hydromt_cli, ["build", "delwaq", root, region, "-i", config, "-vv"]

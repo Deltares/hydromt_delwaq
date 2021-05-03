@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=hydromt_plugin
+set SPHINXPROJ=hydromt_delwaq
 
 if "%1" == "" goto help
 

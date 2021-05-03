@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# hydromt_plugin documentation build configuration file, created by
+# hydromt_delwaq documentation build configuration file, created by
 # sphinx-quickstart on Wed Jul 24 15:19:00 2019.
 #
 # This file is execfile()d with the current directory set to its
@@ -19,19 +19,19 @@
 import os
 import sys
 import hydromt
-import hydromt_plugin
+import hydromt_delwaq
 
 here = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(here, "..")))
 
 # -- Project information -----------------------------------------------------
 
-project = "hydromt_plugin"
+project = "hydromt_delwaq"
 copyright = "Deltares"
-author = "Dirk Eilander"
+author = "Hélène Boisgontier"
 
 # The short version which is displayed
-version = hydromt_plugin.__version__
+version = hydromt_delwaq.__version__
 
 # -- General configuration ------------------------------------------------
 
@@ -125,7 +125,7 @@ html_context = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "hydromt_plugin_doc"
+htmlhelp_basename = "hydromt_delwaq_doc"
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -151,8 +151,8 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "hydromt_plugin.tex",
-        "HydroMT plugin plugin Documentation",
+        "hydromt_delwaq.tex",
+        "HydroMT DELWAQ plugin Documentation",
         [author],
         "manual",
     ),
@@ -164,7 +164,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, "hydromt_plugin", "HydroMT plugin Documentation", [author], 1)
+    (master_doc, "hydromt_delwaq", "HydroMT DELWAQ plugin Documentation", [author], 1)
 ]
 
 
@@ -176,11 +176,11 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "hydromt_plugin",
-        "HydroMT plugin Documentation",
+        "hydromt_delwaq",
+        "HydroMT DELWAQ plugin Documentation",
         author,
-        "HydroMT plugin",
-        "Build and analyze plugin models like a data-wizard.",
+        "HydroMT DELWAQ plugin",
+        "Build and analyze DELWAQ models like a data-wizard.",
         "Miscellaneous",
     ),
 ]
