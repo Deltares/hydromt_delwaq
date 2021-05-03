@@ -23,9 +23,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
         with:
-          environment-file: envs/hydromt-plugin.yml
+          environment-file: envs/hydromt-delwaq.yml
           python-version: ${{ matrix.python-version }}
-          activate-environment: hydromt-plugin
+          activate-environment: hydromt-delwaq
 
       - name: Conda info
         run: |
@@ -36,7 +36,7 @@ jobs:
         run: flit install
 
       - name: Test
-        run: python -m pytest --verbose --cov=hydromt_plugin --cov-report xml
+        run: python -m pytest --verbose --cov=hydromt_delwaq --cov-report xml
 
       - name: Check style
         run: black --check .
