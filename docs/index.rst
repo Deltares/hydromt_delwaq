@@ -1,15 +1,14 @@
-=======================
-HydroMT plugin: plugin
-=======================
-
-.. note::
-
-  This is a **template documentation** for HydroMT model plugin. 
+======================
+HydroMT plugin: DELWAQ
+======================
 
 `HydroMT <https://github.com/Deltares/hydromt>`_ is a python package, developed by Deltares, to build 
 and analyse environmental models. It provides a generic model api with attributes to access the model schematization, 
-(dynamic) forcing data, results and states. This plugin provides an implementation for the 
-plugin package.
+(dynamic) forcing data, results and states.
+
+This plugin provides an implementation for the `DELWAQ <https://oss.deltares.nl/web/delft3d/delwaq1>`_ water quality engine. 
+It details the different steps and explains how to use HydroMT to easily get started and work on your own DELWAQ model. WIth this plugin 
+you can interact with both classic **D-Water Quality** models as well as **D-Emission** models.
 
 For detailed information on HydroMT itself, you can visit the `core documentation <https://deltares.github.io/hydromt_plugin/latest/>`_.
 

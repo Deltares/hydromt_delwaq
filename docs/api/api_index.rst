@@ -2,7 +2,7 @@
 API reference
 =============
 
-This page provides an auto-generated summary of the hydroMT's plugin API for plugin model. 
+This page provides an auto-generated summary of the hydroMT's plugin API for DELWAQ. 
 For more details and examples, refer to the relevant chapters in the main part of the documentation.
 
 .. toctree::

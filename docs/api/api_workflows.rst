@@ -1,14 +1,25 @@
-.. currentmodule:: hydromt
+.. currentmodule:: hydromt_delwaq
 
 =========
 Workflows
 =========
 API documentation of model specific workflows.
 
-Workflow1
+Emissions
 =========
 
 .. autosummary::
    :toctree: ../generated/
 
-   workflows.new_workflow
+   workflows.emissions.emission_raster
+   workflows.emissions.emission_vector
+   workflows.emissions.admin
+
+Segments
+========
+
+.. autosummary::
+   :toctree: ../generated/
+
+   workflows.segments.hydromaps
+   workflows.segments.pointer

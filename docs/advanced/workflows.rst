@@ -1,7 +1,17 @@
+.. currentmodule:: hydromt_delwaq.workflows
+
 Workflows
 =========
 
-.. note::
+Several workflows were created for the wflow plugin. They are:
 
-  Document here any specific workflow(s) created for your model.
+.. autosummary::
+   :toctree: ../generated
+   :nosignatures:
+
+   emissions.emission_raster
+   emissions.emission_vector
+   emissions.admin
+   segments.hydromaps
+   segments.pointer
 
