@@ -41,7 +41,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Contributing" href="../contributing.html" />
-    <link rel="prev" title="plugin model" href="api_model.html" /> 
+    <link rel="prev" title="hydromt_delwaq.delwaq.DelwaqModel.dw_WriteWaqGeom" href="../generated/hydromt_delwaq.delwaq.DelwaqModel.dw_WriteWaqGeom.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -111,7 +111,17 @@
 <li class="toctree-l1 current"><a class="reference internal" href="api_index.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="api_model.html">Model</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Workflows</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#workflow1">Workflow1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#emissions">Emissions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.emission_raster.html">hydromt_delwaq.workflows.emissions.emission_raster</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.emission_vector.html">hydromt_delwaq.workflows.emissions.emission_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.admin.html">hydromt_delwaq.workflows.emissions.admin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#segments">Segments</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../generated/hydromt_delwaq.workflows.segments.hydromaps.html">hydromt_delwaq.workflows.segments.hydromaps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generated/hydromt_delwaq.workflows.segments.pointer.html">hydromt_delwaq.workflows.segments.pointer</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -214,14 +224,40 @@
 <div class="section" id="workflows">
 <h1>Workflows<a class="headerlink" href="#workflows" title="Permalink to this headline">¶</a></h1>
 <p>API documentation of model specific workflows.</p>
-<div class="section" id="workflow1">
-<h2>Workflow1<a class="headerlink" href="#workflow1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="emissions">
+<h2>Emissions<a class="headerlink" href="#emissions" title="Permalink to this headline">¶</a></h2>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.emission_raster.html#hydromt_delwaq.workflows.emissions.emission_raster" title="hydromt_delwaq.workflows.emissions.emission_raster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">workflows.emissions.emission_raster</span></code></a>(da, ds_like)</p></td>
+<td><p>Returns emission map.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.emission_vector.html#hydromt_delwaq.workflows.emissions.emission_vector" title="hydromt_delwaq.workflows.emissions.emission_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">workflows.emissions.emission_vector</span></code></a>(gdf, ds_like)</p></td>
+<td><p>Returns gridded emission data from vector.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.admin.html#hydromt_delwaq.workflows.emissions.admin" title="hydromt_delwaq.workflows.emissions.admin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">workflows.emissions.admin</span></code></a>(da, ds_like, …)</p></td>
+<td><p>Returns administrative boundaries map and related parameter maps.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="segments">
+<h2>Segments<a class="headerlink" href="#segments" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/hydromt_delwaq.workflows.segments.hydromaps.html#hydromt_delwaq.workflows.segments.hydromaps" title="hydromt_delwaq.workflows.segments.hydromaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">workflows.segments.hydromaps</span></code></a>(hydromodel[, …])</p></td>
+<td><p>Returns base information maps from hydromodel.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/hydromt_delwaq.workflows.segments.pointer.html#hydromt_delwaq.workflows.segments.pointer" title="hydromt_delwaq.workflows.segments.pointer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">workflows.segments.pointer</span></code></a>(ds_hydro[, …])</p></td>
+<td><p>Returns map with Delwaq segment ID.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -234,7 +270,7 @@
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="../contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="api_model.html" class="btn btn-neutral float-left" title="plugin model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../generated/hydromt_delwaq.delwaq.DelwaqModel.dw_WriteWaqGeom.html" class="btn btn-neutral float-left" title="hydromt_delwaq.delwaq.DelwaqModel.dw_WriteWaqGeom" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

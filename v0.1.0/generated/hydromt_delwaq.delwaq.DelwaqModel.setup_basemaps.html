@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Workflows &mdash; hydromt_delwaq  documentation</title>
+  <title>hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps &mdash; hydromt_delwaq  documentation</title>
   
 
   
@@ -40,8 +40,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="hydromt_delwaq.workflows.emissions.emission_raster" href="../generated/hydromt_delwaq.workflows.emissions.emission_raster.html" />
-    <link rel="prev" title="hydromt_delwaq.delwaq.DelwaqModel.hydromaps" href="../generated/hydromt_delwaq.delwaq.DelwaqModel.hydromaps.html" /> 
+    <link rel="next" title="hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring" href="hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring.html" />
+    <link rel="prev" title="hydromt_delwaq.delwaq.DelwaqModel.setup_config" href="hydromt_delwaq.delwaq.DelwaqModel.setup_config.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,21 +97,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 </ul>
 <p class="caption"><span class="caption-text">User Guide</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/components.html">Model components</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../user_guide/components.html">Model components</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_config.html">hydromt_delwaq.delwaq.DelwaqModel.setup_config</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring.html">hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing.html">hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster.html">hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector.html">hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_mapping.html">hydromt_delwaq.delwaq.DelwaqModel.setup_emission_mapping</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/build_configuration.html">Model configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/attributes.html">Model attributes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Advanced topics</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Workflows</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.emission_raster.html">hydromt_delwaq.workflows.emissions.emission_raster</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.emission_vector.html">hydromt_delwaq.workflows.emissions.emission_vector</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.admin.html">hydromt_delwaq.workflows.emissions.admin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../generated/hydromt_delwaq.workflows.segments.hydromaps.html">hydromt_delwaq.workflows.segments.hydromaps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../generated/hydromt_delwaq.workflows.segments.pointer.html">hydromt_delwaq.workflows.segments.pointer</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/workflows.html">Workflows</a></li>
 </ul>
 <p class="caption"><span class="caption-text">References &amp; Help</span></p>
 <ul>
@@ -166,13 +168,15 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Workflows</li>
+          <li><a href="../user_guide/components.html">Model components</a> &raquo;</li>
+        
+      <li>hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../_sources/advanced/workflows.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -209,32 +213,34 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="workflows">
-<h1>Workflows<a class="headerlink" href="#workflows" title="Permalink to this headline">¶</a></h1>
-<p>Several workflows were created for the wflow plugin. They are:</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.emission_raster.html#hydromt_delwaq.workflows.emissions.emission_raster" title="hydromt_delwaq.workflows.emissions.emission_raster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emissions.emission_raster</span></code></a></p></td>
-<td><p>Returns emission map.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.emission_vector.html#hydromt_delwaq.workflows.emissions.emission_vector" title="hydromt_delwaq.workflows.emissions.emission_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emissions.emission_vector</span></code></a></p></td>
-<td><p>Returns gridded emission data from vector.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../generated/hydromt_delwaq.workflows.emissions.admin.html#hydromt_delwaq.workflows.emissions.admin" title="hydromt_delwaq.workflows.emissions.admin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emissions.admin</span></code></a></p></td>
-<td><p>Returns administrative boundaries map and related parameter maps.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../generated/hydromt_delwaq.workflows.segments.hydromaps.html#hydromt_delwaq.workflows.segments.hydromaps" title="hydromt_delwaq.workflows.segments.hydromaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">segments.hydromaps</span></code></a></p></td>
-<td><p>Returns base information maps from hydromodel.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../generated/hydromt_delwaq.workflows.segments.pointer.html#hydromt_delwaq.workflows.segments.pointer" title="hydromt_delwaq.workflows.segments.pointer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">segments.pointer</span></code></a></p></td>
-<td><p>Returns map with Delwaq segment ID.</p></td>
-</tr>
-</tbody>
-</table>
+<div class="section" id="hydromt-delwaq-delwaq-delwaqmodel-setup-basemaps">
+<h1>hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps<a class="headerlink" href="#hydromt-delwaq-delwaq-delwaqmodel-setup-basemaps" title="Permalink to this headline">¶</a></h1>
+<dl class="py method">
+<dt id="hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps">
+<code class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></code><code class="sig-name descname"><span class="pre">setup_basemaps</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_soil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.setup_basemaps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup the delwaq model schematization using the hydromodel region and
+resolution.</p>
+<p>Maps used and derived from the hydromodel are stored in a specifichydromodel attribute. Depending on the global option <code class="docutils literal notranslate"><span class="pre">type</span></code>, build aone-substance D-Emission (“EM”) or D-Water Quality (“WQ”) case.        For a WQ case, the pointer will be created. No arguments are needed for this        function (<code class="docutils literal notranslate"><span class="pre">include_soil</span></code> will be supported later for subsurface transport of        substances).</p>
+<p>Adds model layers:</p>
+<ul class="simple">
+<li><p><strong>ldd</strong> hydromap: flow direction [-]</p></li>
+<li><p><strong>modelmap</strong> hydromap: mask map [bool]</p></li>
+<li><p><strong>ptid</strong> hydromap: unique ID of Delwaq segments [-]</p></li>
+<li><p><strong>streamorder</strong> map: Strahler stream order map. [-]</p></li>
+<li><p><strong>slope</strong> map: slope map [-]</p></li>
+<li><p><strong>pointer</strong> poi: delwaq pointer between segments</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>region</strong> (<em>dict</em>) – Dictionary describing region of interest.
+Currently supported format is {‘wflow’: ‘path/to/wflow_model’}</p></li>
+<li><p><strong>include_soil</strong> (<em>boolean</em>) – add a soil compartment for transport (default: False)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -243,8 +249,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../generated/hydromt_delwaq.workflows.emissions.emission_raster.html" class="btn btn-neutral float-right" title="hydromt_delwaq.workflows.emissions.emission_raster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="../generated/hydromt_delwaq.delwaq.DelwaqModel.hydromaps.html" class="btn btn-neutral float-left" title="hydromt_delwaq.delwaq.DelwaqModel.hydromaps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring.html" class="btn btn-neutral float-right" title="hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="hydromt_delwaq.delwaq.DelwaqModel.setup_config.html" class="btn btn-neutral float-left" title="hydromt_delwaq.delwaq.DelwaqModel.setup_config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
