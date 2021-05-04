@@ -929,7 +929,7 @@ class DelwaqModel(Model):
             f.close()
 
     def read_geometry(self):
-        """Read Delwaq pointer file"""
+        """Read Delwaq EM geometry file"""
         raise NotImplementedError()
 
     def write_geometry(self):

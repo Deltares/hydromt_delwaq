@@ -5,64 +5,71 @@ User install
 ------------
 
 HydroMT is available from pypi and conda-forge, but we recommend installing with conda.
-It is the same for the plugin plugin.
+It is the same for the delwaq plugin.
 
-To install HydroMT plugin plugin using conda do:
+To install HydroMT delwaq plugin using conda do:
 
 .. code-block:: console
 
-    $ conda install hydromt_plugin -c conda-forge
+    $ conda install hydromt_delwaq -c conda-forge
 
 To install a HydroMT environment with conda installed do:
 
 .. code-block:: console
 
-    $ conda create hydromt_plugin -n hydromt-plugin -c conda-forge
+    $ conda create hydromt_delwaq -n hydromt-delwaq -c conda-forge
 
-This will automatically install both HydroMT core library and dependencies as well as the model plugin.
+This will automatically install both HydroMT core library and dependencies as well as the delwaq plugin.
 
-.. note::
 
-  If your model plugin is not available via conda install, you can also use pip:
-  
-  .. code-block:: console
-  
-      $ pip install hydromt_plugin
+Alternatively, you can also install using pip.
+
+.. code-block:: console
+
+    $ pip install hydromt_delwaq
 
 
 Developper install
 ------------------
-If you want to download the plugin plugin directly from git to easily have access to the latest developmemts or 
+If you want to download the DELWAQ plugin directly from git to easily have access to the latest developmemts or 
 make changes to the code you can use the following steps.
 
-First, clone hydromt's plugin plugin ``git`` repo from
-`github <https://github.com/Deltares/hydromt_plugin>`_, then navigate into the 
+First, clone hydromt's delwaq plugin ``git`` repo from
+`github <https://github.com/Deltares/hydromt_delwaq>`_, then navigate into the 
 the code folder (where the envs folder and pyproject.toml are located):
 
 .. code-block:: console
 
-    $ git clone https://github.com/Deltares/hydromt_plugin.git
-    $ cd hydromt_plugin
+    $ git clone https://github.com/Deltares/hydromt_delwaq.git
+    $ cd hydromt_delwaq
 
-Then, make and activate a new hydromt-plugin conda environment based on the envs/hydromt-plugin.yml
+Then, make and activate a new hydromt-delwaq conda environment based on the envs/hydromt-delwaq.yml
 file contained in the repository:
 
 .. code-block:: console
 
-    $ conda env create -f envs/hydromt-plugin.yml
-    $ conda activate hydromt-plugin
+    $ conda env create -f envs/hydromt-delwaq.yml
+    $ conda activate hydromt-delwaq
 
-Finally, build and install hydromt_plugin using pip. If you wish to develop in hydromt_plugin, then 
-make an editable install of hydromt by adding ``-e`` after install:
+Finally, build and install hydromt_delwaq using pip.
 
 .. code-block:: console
 
     $ pip install .
 
-or for developpers:
+If you wish to make changes in hydromt_delwaq, you should make an editable install of hydromt. 
+This is possible using the `flit <https://flit.readthedocs.io/en/latest/>`_ package and install command.
+
+For Windows:
 
 .. code-block:: console
 
-    $ pip install -e .
+    $ flit install --pth-file
 
-For more information about how to contribute, see `HydroMT contributing guidelines <https://deltares.github.io/hydromt_plugin/latest/contributing.html>`_.
+For Linux:
+
+.. code-block:: console
+
+    $ flit install -s
+
+For more information about how to contribute, see `HydroMT contributing guidelines <https://hydromt.readthedocs.io/en/latest/contributing.html>`_.

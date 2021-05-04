@@ -1,26 +1,19 @@
 .. _model_components:
-.. currentmodule:: hydromt_plugin.plugin
+.. currentmodule:: hydromt_delwaq.delwaq
 
 Model components
 ================
 
-.. note::
-
-  Document here the different model components available and if they are links between the components (one component 
-  should be run before others or if updating this component then others should be updated as well).
-
-For plugin, the different components available for building or updating are:
+For DELWAQ, the different components available for building or updating are:
 
 .. autosummary::
    :toctree: ../generated/
    :nosignatures:
 
-   PluginModel.setup_config
-   PluginModel.setup_basemaps
-   PluginModel.setup_gauges
-
-
-.. warning::
-
-    In plugin, the order in which the components are listed in the ini file is important: setup_rivers should 
-    be run before setup_lakes.
+   ~DelwaqModel.setup_config
+   ~DelwaqModel.setup_basemaps
+   ~DelwaqModel.setup_monitoring
+   ~DelwaqModel.setup_hydrology_forcing
+   ~DelwaqModel.setup_emission_raster
+   ~DelwaqModel.setup_emission_vector
+   ~DelwaqModel.setup_emission_mapping
