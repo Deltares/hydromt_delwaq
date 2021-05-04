@@ -1,6 +1,5 @@
 wflow_output:
   path: ./wflow_piave/run_default/output.nc
-  chunks: { time: 1, lat: -1, lon: -1 }
   crs: 4326
   data_type: RasterDataset
   driver: netcdf

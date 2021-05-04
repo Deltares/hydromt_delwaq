@@ -167,7 +167,7 @@ By only modelling substances one-by-one, the generic D-Emissions version only co
 with fate and transport (no lateral flux between segments), there is then no need to define either a pointer or a boundary file. In essence, D-Emissions calculates the various emitted loads per wflow cell.
 
 To build an EM model with HydroMT you can use the :ref:`**build** command line <model_config>` to prepare all the different :ref:`**components* <model_components>` of your model.
-Below is an example ini file for the **Total Nitrogen (TN)** released by **households** example.
+Below is an example :download:`.ini file <../_static/delwaq_build_EM_TN.ini>` for the **Total Nitrogen (TN)** released by **households** example.
 
 As a reminder, for an EM model, the required hydrological data (from wflow_output in our example) is:
 
@@ -186,7 +186,7 @@ As a reminder, for an EM model, the required hydrological data (from wflow_outpu
 Editing the EM run information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In order to run the EM-Plugin of DELWAQ, an input file is used to set up all the relevant run information such as substances and processes to include, run time information, data and model parameters 
-to use etc. This is set up in a **.inp** file. A template of such a file, for an EM run, is shown below.
+to use etc. This is set up in a **.inp** file. A template of such a :download:`file <../_static/espace.inp>`, for an EM run, is shown below.
 
 The input file is separated into 10 input blocks each requiring different type of information. You can find more info on what is expected 
 where in the `Delwaq input file documentation <content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Input_File_Description.pdf>`_. In short, the ten blocks are:
@@ -326,7 +326,7 @@ a boundary (for precipitation the boundary is the atmosphere).
 Compared to D-Emission, lateral transport of the substance in the surface water between Delwaq segments is considered and a pointer file is then necessary.
 
 To build an WQ model with HydroMT you can use the :ref:`**build** command line <model_config>` to prepare all the different :ref:`**components* <model_components>` of your model.
-Below is an example ini file for the **Total Nitrogen (TN)** released by **households** example.
+Below is an example :download:`ini file <../_static/delwaq_build_WQ_TN.ini>` for the **Total Nitrogen (TN)** released by **households** example.
 
 As a reminder, for a WQ model, the required hydrological data (from wflow_output in our example) is:
 
@@ -345,7 +345,7 @@ As a reminder, for a WQ model, the required hydrological data (from wflow_output
 Editing the WQ run information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In order to run the WQ-Plugin of DELWAQ, an input file is used to set up all the relevant run information such as substances and processes to include, run time information, data and model parameters 
-to use etc. This is set up in a **.inp** file. A template of such a file, for an WQ run, is shown below.
+to use etc. This is set up in a **.inp** file. A template of such a :download:`file <../_static/delwaq.inp>`, for an WQ run, is shown below.
 
 The input file is separated into 10 input blocks each requiring different type of information. You can find more info on what is expected 
 where in the `Delwaq input file documentation <content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Input_File_Description.pdf>`_. In short, the ten blocks are:

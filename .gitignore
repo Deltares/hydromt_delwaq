@@ -76,6 +76,10 @@ target/
 
 # Jupyter Notebook /  examples
 .ipynb_checkpoints
+examples/EM_test_base
+examples/EM_test_full
+examples/WQ_test_base
+examples/WQ_test_full
 
 # pyenv
 .python-version
