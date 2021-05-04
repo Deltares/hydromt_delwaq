@@ -48,6 +48,8 @@ Documentation
 **Advanced topics**
 
 * :doc:`advanced/workflows`
+* :doc:`advanced/coupling_wflow`
+* :doc:`advanced/generic_delwaq`
 
 .. toctree::
    :maxdepth: 1
@@ -55,6 +57,8 @@ Documentation
    :caption: Advanced topics
 
    advanced/workflows
+   advanced/coupling_wflow
+   advanced/generic_delwaq
 
 **References & Help**
 
