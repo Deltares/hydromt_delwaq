@@ -1,21 +1,23 @@
 hydroMT-delwaq: DELWAQ plugin for hydroMT
 #########################################
 
-FIXME add badges with correct links
+.. image:: https://codecov.io/gh/Deltares/hydromt_delwaq/branch/main/graph/badge.svg?token=ss3EgmwHhH
+    :target: https://codecov.io/gh/Deltares/hydromt_delwaq
 
-.. note::
+.. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
+    :target: https://deltares.github.io/hydromt_delwaq/latest
+    :alt: Latest developers docs
 
-  This minimal branch from the hydromt_plugin plugin can be used as a **template** to easily 
-  implement new plugins for hydroMT. To implement a new model do:
-  
-  - replace all instances of `plugin` with the model name
-  - edit license (default GPLv3)
-  - edit model class (plugin.py) to be adapted for the new model
-  - check and fix git installation (including pyproject.toml) including entry point
-  - test "hydromt --models"
-  - edit installation guide 
-  - edit .github actions and envs/hydromt-plugin.yml environment
-  - edit template documentation
+.. image:: https://img.shields.io/badge/docs-stable-brightgreen.svg
+    :target: https://deltares.github.io/hydromt_delwaq/stable
+    :alt: Stable docs last release
+
+.. image:: https://pypip.in/v/hydromt_delwaq/badge.png
+    :target: https://pypi.org/project/hydromt_delwaq/
+    :alt: Latest PyPI version
+
+.. image:: https://mybinder.org/badge_logo.svg
+    :target: https://mybinder.org/v2/gh/Deltares/hydromt_delwaq/main?urlpath=lab/tree/examples
 
 
 hydroMT_ is a python package, developed by Deltares, to build and analysis hydro models.
@@ -31,12 +33,26 @@ for the DELWAQ_ model.
 Installation
 ------------
 
-FIXME installation guide
+hydroMT-delwaq is availble from pypi and we are working on adding a release from conda-forge (ongoing).
+
+To install hydromt_delwaq using pip do:
+
+.. code-block:: console
+
+  pip install hydromt_delwaq
+
+We recommend installing a hydromt-delwaq environment including the hydromt_delwaq package
+based on the environment.yml file. This environment will install all package dependencies 
+including the core of hydroMT_ as well as the `hydromt_wflow <https://github.com/Deltares/hydromt_wflow>`_ plugin.
+
+.. code-block:: console
+
+  conda env create -f environment.yml
 
 Documentation
 -------------
 
-Learn more about the hydroMT_delwaq plugin in its `online documentation <https://deltares.github.io/hydromt_plugin/>`_
+Learn more about the hydroMT_delwaq plugin in its `online documentation <https://deltares.github.io/hydromt_delwaq/>`_
 
 Contributing
 ------------
