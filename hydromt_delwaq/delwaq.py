@@ -898,7 +898,13 @@ class DelwaqModel(Model):
             else:
                 self.logger.warning(f"No updated maps. Skipping writing to file.")
                 return
-        self.logger.info("Writing (updated) staticmap files.")
+        self.logger.info("Writing hydromap files.")
+        # If needed convert dtype before writting (linux compliance)
+        for var in ds_out.raster.vars:
+            if ds_out[var].dtype == "int64":
+                ds_out[var] = ds_out[var].astype(np.int32)
+            elif ds_out[var].dtype == "float64":
+                ds_out[var] = ds_out[var].astype(np.float32)
         ds_out.raster.to_mapstack(
             root=join(self.root, "hydromodel"),
             mask=True,
