@@ -78,8 +78,15 @@ target/
 .ipynb_checkpoints
 examples/EM_test_base
 examples/EM_test_full
+examples/EM_piave_extended
 examples/WQ_test_base
 examples/WQ_test_full
+examples/WQ_piave_monitoring
+examples/delwaq_update_monitoring.ini
+examples/delwaq_update_emission_cattle.ini
+examples/delwaq_update_emission_local.ini
+examples/local_emission_sources.yml
+examples/EM_piave_extended.zip
 
 # pyenv
 .python-version

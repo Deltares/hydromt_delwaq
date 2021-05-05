@@ -609,7 +609,7 @@ class DelwaqModel(Model):
         )
         ds_emi = emissions.emission_raster(
             da=da,
-            ds_like=self.hydromaps,
+            ds_like=self.staticmaps,
             method=scale_method,
             fillna_method=fillna_method,
             fillna_value=fillna_value,
