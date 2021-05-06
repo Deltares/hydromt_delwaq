@@ -13,13 +13,13 @@ This plugin assists the modeller in:
 
 Water quality and emission, fate and transport of pollutants through the landscape, rivers and oceans is very much linked to the water movements. 
 For this reason, hydroMT strongly links DELWAQ modelbuilding to an underlying hydrology / hydraulic or hydrodynamic model. As of now, only the link 
-between :ref:`**Wflow and DELWAQ** <coupling_wflow>` is supported.
+between ** :ref:`Wflow and DELWAQ <coupling_wflow>` ** is supported.
 
 This plugin supports both:
 
--  emission models, `*D-Emission* <www.deltares.nl/en/software/module/D-Emissions/>`_ (also referred to as EM in hydroMT), 
+-  emission models, **`D-Emission <www.deltares.nl/en/software/module/D-Emissions/>`_ ** (also referred to as EM in hydroMT), 
    that predicts the quantity (fluxes) of substances being released from sources of pollutants to the surface waters (mass/time).
--  fate and transport models, `*D-Water Quality* <https://www.deltares.nl/en/software/module/d-water-quality/>`_ (also referred to as WQ in hydroMT), 
+-  fate and transport models, **`D-Water Quality <https://www.deltares.nl/en/software/module/d-water-quality/>`_ ** (also referred to as WQ in hydroMT), 
    that predicts the fate and transport of substances in the surface waters (concentrations in mass / volume).
 
-.. image:: img/D-Emissions.png
+.. image:: img/D-emissions.png
