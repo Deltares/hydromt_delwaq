@@ -313,7 +313,7 @@ class DelwaqModel(Model):
         if mon_areas == "subcatch" or mon_areas == "compartments":
             monareas = self.hydromaps["basins"]
             if mon_areas == "compartments":
-                monareas = xr.where(self.hydromaps["modelmap"], 1, mv)
+                monareas = xr.where(self.hydromaps["modelmap"], 1, mv).astype(np.int32)
             # Add to staticmaps
             self.set_staticmaps(monareas.rename("monareas"))
             self.staticmaps["monareas"].attrs.update(_FillValue=mv)
@@ -609,7 +609,7 @@ class DelwaqModel(Model):
         )
         ds_emi = emissions.emission_raster(
             da=da,
-            ds_like=self.hydromaps,
+            ds_like=self.staticmaps,
             method=scale_method,
             fillna_method=fillna_method,
             fillna_value=fillna_value,
@@ -878,6 +878,7 @@ class DelwaqModel(Model):
             self._hydromaps = io.open_mfraster(fns, **kwargs)
         if self._hydromaps.raster.crs is None and crs is not None:
             self.set_crs(crs)
+        self._hydromaps["modelmap"] = self._hydromaps["modelmap"].astype(np.bool)
         self._hydromaps.coords["mask"] = self._hydromaps["modelmap"]
 
     def write_hydromaps(self):
@@ -898,7 +899,11 @@ class DelwaqModel(Model):
             else:
                 self.logger.warning(f"No updated maps. Skipping writing to file.")
                 return
-        self.logger.info("Writing (updated) staticmap files.")
+        self.logger.info("Writing hydromap files.")
+        # Convert bool dtype before writting
+        for var in ds_out.raster.vars:
+            if ds_out[var].dtype == "bool":
+                ds_out[var] = ds_out[var].astype(np.int32)
         ds_out.raster.to_mapstack(
             root=join(self.root, "hydromodel"),
             mask=True,

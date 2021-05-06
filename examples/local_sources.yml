@@ -1,6 +1,5 @@
 wflow_output:
   path: ./wflow_piave/run_default/output.nc
-  chunks: { time: 1, lat: -1, lon: -1 }
   crs: 4326
   data_type: RasterDataset
   driver: netcdf
@@ -22,8 +21,8 @@ wflow_output:
     inwint: inwaterInternal
     q_river: runRiv
     q_land: runLand
-    h_river: levRiv
-    h_land: levLand
+    vol_river: volRiv
+    vol_land: volLand
   units:
     precip: mm
     infilt: mm
@@ -34,5 +33,5 @@ wflow_output:
     inwaterInternal: m3/s
     runRiv: m3/s
     runLand: m3/s
-    levRiv: m
-    levLand: m
+    volRiv: m3
+    volLand: m3
