@@ -148,7 +148,7 @@ Then in D-Emissions, the substances can enter the catchment via different recept
 When substances reach the receptors, they can then undergo several processes such as burial or removal by treatment in a WWTP before reaching the final receptors of D-Emissions, 
 the surface waters and the soil. The full processes included the D-Emissions model are represented in the scheme below:
 
-.. image:: ../img/D-Emission-pathways.png
+.. image:: ../img/d-emission-pathways.png
 
 As modelling of several substances with multiple sources and processes can be complex, the D-Emissions model has been designed to model
 each substance one-by-one. This implies that in order to model several substances, the D-Emissions model needs to be run several times.
@@ -166,7 +166,7 @@ a boundary (for precipitation the boundary is the atmosphere).
 By only modelling substances one-by-one, the generic D-Emissions version only considers one environment layer which is the **emission or substance layer**. As D-Emissions does not deal 
 with fate and transport (no lateral flux between segments), there is then no need to define either a pointer or a boundary file. In essence, D-Emissions calculates the various emitted loads per wflow cell.
 
-To build an EM model with HydroMT you can use the :ref:`**build** command line <model_config>` to prepare all the different :ref:`**components* <model_components>` of your model.
+To build an EM model with HydroMT you can use the ** :ref:`build command line <model_config>` ** to prepare all the different ** :ref:`components <model_components>` ** of your model.
 Below is an example :download:`.ini file <../_static/delwaq_build_EM_TN.ini>` for the **Total Nitrogen (TN)** released by **households** example.
 
 As a reminder, for an EM model, the required hydrological data (from wflow_output in our example) is:
@@ -325,7 +325,7 @@ a boundary (for precipitation the boundary is the atmosphere).
 
 Compared to D-Emission, lateral transport of the substance in the surface water between Delwaq segments is considered and a pointer file is then necessary.
 
-To build an WQ model with HydroMT you can use the :ref:`**build** command line <model_config>` to prepare all the different :ref:`**components* <model_components>` of your model.
+To build an WQ model with HydroMT you can use the ** :ref:`build command line <model_config>` ** to prepare all the different ** :ref:`components <model_components>` ** of your model.
 Below is an example :download:`ini file <../_static/delwaq_build_WQ_TN.ini>` for the **Total Nitrogen (TN)** released by **households** example.
 
 As a reminder, for a WQ model, the required hydrological data (from wflow_output in our example) is:

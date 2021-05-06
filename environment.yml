@@ -40,5 +40,5 @@ dependencies:
   - zarr
   - pip:
     - hydromt_wflow
-    - git+https://github.com/Deltares/hydromt_delwaq.git
+    - hydromt_delwaq
 
