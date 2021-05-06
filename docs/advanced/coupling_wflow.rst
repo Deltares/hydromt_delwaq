@@ -71,9 +71,9 @@ In order to prepare hydrological fluxes for Delwaq from wflow, Wflow should be r
 -  vertical.excesswaterpath (infiltration excess runoff on paved areas)
 -  vertical.excesswatersoil (infiltration excess runoff on unpaved areas)
 -  lateral.river.q_av and lateral.land.q_av (runoff in the river and land kinematic wave)
--  lateral.river.h_av and lateral.land.h_av (water level in the river and water level on the land)
--  lateral.river.qlat, lateral.land.qlat and lateral.land.to_river (qlat river/land is the sum of all fluxes reaching the kinematic wave of the river/land surface water. As 
-   qlat also contains an internal flux between the land and river water, the part of land runoff that reaches the river lateral.land.to_river, we will need to substract 
+-  lateral.river.volume and lateral.land.volume (kinematic wave volume in the river and on the land)
+-  lateral.river.inwater, lateral.land.inwater and lateral.land.to_river (inwater river/land is the sum of all fluxes reaching the kinematic wave of the river/land surface water. As 
+   inwater also contains an internal flux between the land and river water, the part of land runoff that reaches the river lateral.land.to_river, we will need to substract 
    it to not count it twice, see Figure below).
 
 .. image:: ../img/wflow_balances.png

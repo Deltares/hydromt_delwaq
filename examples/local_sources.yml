@@ -21,8 +21,8 @@ wflow_output:
     inwint: inwaterInternal
     q_river: runRiv
     q_land: runLand
-    h_river: levRiv
-    h_land: levLand
+    vol_river: volRiv
+    vol_land: volLand
   units:
     precip: mm
     infilt: mm
@@ -33,5 +33,5 @@ wflow_output:
     inwaterInternal: m3/s
     runRiv: m3/s
     runLand: m3/s
-    levRiv: m
-    levLand: m
+    volRiv: m3
+    volLand: m3
