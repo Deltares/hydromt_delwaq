@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.1.1.dev
+                0.1.2.dev
               </div>
             
           
@@ -395,7 +395,7 @@ The sources and their emission releases are then quantified or initialized based
 </ul>
 <p>When substances reach the receptors, they can then undergo several processes such as burial or removal by treatment in a WWTP before reaching the final receptors of D-Emissions,
 the surface waters and the soil. The full processes included the D-Emissions model are represented in the scheme below:</p>
-<img alt="img/D-Emission-pathways.png" src="img/D-Emission-pathways.png" />
+<img alt="../_images/d-emission-pathways.png" src="../_images/d-emission-pathways.png" />
 <p>As modelling of several substances with multiple sources and processes can be complex, the D-Emissions model has been designed to model
 each substance one-by-one. This implies that in order to model several substances, the D-Emissions model needs to be run several times.</p>
 <p>For the rest of this topic, we focus on one substance <strong>Total Nitrogen (TN)</strong> released by one source: <strong>households</strong>.</p>
@@ -409,7 +409,7 @@ This means that external flows into / out of a segment (for example precipitatio
 a boundary (for precipitation the boundary is the atmosphere).</p>
 <p>By only modelling substances one-by-one, the generic D-Emissions version only considers one environment layer which is the <strong>emission or substance layer</strong>. As D-Emissions does not deal
 with fate and transport (no lateral flux between segments), there is then no need to define either a pointer or a boundary file. In essence, D-Emissions calculates the various emitted loads per wflow cell.</p>
-<p>To build an EM model with HydroMT you can use the <a class="reference internal" href="../user_guide/build_configuration.html#model-config"><span class="std std-ref">**build** command line</span></a> to prepare all the different <a class="reference internal" href="../user_guide/components.html#model-components"><span class="std std-ref">**components*</span></a> of your model.
+<p>To build an EM model with HydroMT you can use the ** <a class="reference internal" href="../user_guide/build_configuration.html#model-config"><span class="std std-ref">build command line</span></a> ** to prepare all the different ** <a class="reference internal" href="../user_guide/components.html#model-components"><span class="std std-ref">components</span></a> ** of your model.
 Below is an example <a class="reference download internal" download="" href="../_downloads/383c1568a092014b7f08cfec3b77265a/delwaq_build_EM_TN.ini"><code class="xref download docutils literal notranslate"><span class="pre">.ini</span> <span class="pre">file</span></code></a> for the <strong>Total Nitrogen (TN)</strong> released by <strong>households</strong> example.</p>
 <p>As a reminder, for an EM model, the required hydrological data (from wflow_output in our example) is:</p>
 <ul class="simple">
@@ -777,7 +777,7 @@ of lateral flows between segments (eg discharge), but also the direction of vert
 This means that external flows into / out of a segment (for example precipitation from the atmosphere) are defined in the pointer as flows between a segment and
 a boundary (for precipitation the boundary is the atmosphere).</p>
 <p>Compared to D-Emission, lateral transport of the substance in the surface water between Delwaq segments is considered and a pointer file is then necessary.</p>
-<p>To build an WQ model with HydroMT you can use the <a class="reference internal" href="../user_guide/build_configuration.html#model-config"><span class="std std-ref">**build** command line</span></a> to prepare all the different <a class="reference internal" href="../user_guide/components.html#model-components"><span class="std std-ref">**components*</span></a> of your model.
+<p>To build an WQ model with HydroMT you can use the ** <a class="reference internal" href="../user_guide/build_configuration.html#model-config"><span class="std std-ref">build command line</span></a> ** to prepare all the different ** <a class="reference internal" href="../user_guide/components.html#model-components"><span class="std std-ref">components</span></a> ** of your model.
 Below is an example <a class="reference download internal" download="" href="../_downloads/9e3f17f7f1db681967e42209610e9e28/delwaq_build_WQ_TN.ini"><code class="xref download docutils literal notranslate"><span class="pre">ini</span> <span class="pre">file</span></code></a> for the <strong>Total Nitrogen (TN)</strong> released by <strong>households</strong> example.</p>
 <p>As a reminder, for a WQ model, the required hydrological data (from wflow_output in our example) is:</p>
 <ul class="simple">
