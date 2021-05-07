@@ -40,5 +40,5 @@ dependencies:
   - zarr
   - pip:
     - hydromt_wflow
-    - hydromt_delwaq
+    - hydromt_delwaq>=0.1.1
 
