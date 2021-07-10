@@ -1320,6 +1320,8 @@ class DelwaqModel(Model):
         nodes_z = []
         net_links = []
         elem_nodes = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.int)
+        face_x_bnd = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.double)
+        face_y_bnd = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.double)
         flow_links = np.zeros((n_flow_link, n_flow_link_pts), dtype=np.int)
         flow_link_type = np.repeat(2, n_flow_link)
         flow_link_x = np.zeros((n_flow_link), dtype=np.float)
@@ -1376,7 +1378,7 @@ class DelwaqModel(Model):
 
         # Cell corners
         UL, UR, LR, LL = 0, 1, 2, 3
-
+        
         # Process all cells from upper-left to lower-right
         for i in range(m):
             for j in range(n):
@@ -1491,7 +1493,19 @@ class DelwaqModel(Model):
         nodes_y = np.array(nodes_y)
         nodes_z = np.array(nodes_z)
         net_links = np.array(net_links)
-
+        
+        # Proces all cells to derive mesh_face_x_bnd and mesh_face_y_bnd
+        for bnd in range(0,n_net_elem):
+            #UL, UR, LR, LL = 0, 1, 2, 3
+            face_x_bnd[bnd,UL] = nodes_x[elem_nodes[bnd][UL]]
+            face_x_bnd[bnd,UR] = nodes_x[elem_nodes[bnd][UR]]
+            face_x_bnd[bnd,LR] = nodes_x[elem_nodes[bnd][LR]]
+            face_x_bnd[bnd,LL] = nodes_x[elem_nodes[bnd][LL]]
+            face_y_bnd[bnd,UL] = nodes_y[elem_nodes[bnd][UL]]
+            face_y_bnd[bnd,UR] = nodes_y[elem_nodes[bnd][UR]]
+            face_y_bnd[bnd,LR] = nodes_y[elem_nodes[bnd][LR]]
+            face_y_bnd[bnd,LL] = nodes_y[elem_nodes[bnd][LL]]
+        
         # Update dimensions
         n_net_node = nodes_x.shape[0]
         n_net_link = net_links.shape[0]
@@ -1507,19 +1521,24 @@ class DelwaqModel(Model):
         )
 
         # Create xr dataset
+        # TODO: mesh_face_x and mesh_face_y now based on LR node, correct?
+        # TODO: add mesh_edge* to dataset
         ds_out = xr.Dataset(
             data_vars=dict(
                 mesh=(["dim"], [-2147483647]),
                 # projected_coordinate_system=(["dim"], [-2147483647]),
-                NetNode_x=(["nNetNode"], nodes_x),
-                NetNode_y=(["nNetNode"], nodes_y),
-                NetNode_z=(["nNetNode"], nodes_z),
+                # NetNode_x=(["nNetNode"], nodes_x),
+                # NetNode_y=(["nNetNode"], nodes_y),
+                # NetNode_z=(["nNetNode"], nodes_z),
                 mesh_node_x=(["nNetNode"], nodes_x),
                 mesh_node_y=(["nNetNode"], nodes_y),
-                mesh_face_x=(["nNetElem"], nodes_x_all),
-                mesh_face_y=(["nNetElem"], nodes_y_all),
+                mesh_node_z=(["nNetNode"], nodes_z),
+                mesh_face_x=(["nmesh_face"], nodes_x_all),
+                mesh_face_y=(["nmesh_face"], nodes_y_all),
                 NetLink=(["nNetLink", "nNetLinkPts"], (net_links + 1)),
-                NetElemNode=(["nNetElem", "nNetElemMaxNode"], (elem_nodes + 1)),
+                mesh_face_nodes=(["nmesh_face", "max_mesh_face_nodes"], (elem_nodes + 1)),
+                mesh_face_x_bnd=(["nmesh_face", "max_mesh_face_nodes"], (face_x_bnd)),
+                mesh_face_y_bnd=(["nmesh_face", "max_mesh_face_nodes"], (face_y_bnd)),
                 FlowLink=(["nFlowLink", "nFlowLinkPts"], (flow_links + 1)),
                 FlowLinkType=(["nFlowLink"], flow_link_type),
                 FlowLink_xu=(["nFlowLink"], flow_link_x),
@@ -1551,10 +1570,10 @@ class DelwaqModel(Model):
                 cf_role="mesh_topology",
                 topology_dimension=2,
                 node_coordinates="NetNode_x NetNode_y",
-                face_node_connectivity="NetElemNode",
+                face_node_connectivity="mesh_face_nodes",
                 edge_node_connectivity="NetLink",
                 edge_face_connectivity="FlowLink",
-                face_dimension="nNetElem",
+                face_dimension="nmesh_face",
                 edge_dimension="nNetLink",
                 node_dimension="nNetNode",
                 face_coordinates="mesh_face_x mesh_face_y",
@@ -1572,33 +1591,33 @@ class DelwaqModel(Model):
                 value="value is equal to EPSG code",
             )
         )
-        ds_out["NetNode_x"].attrs.update(
-            dict(
-                units="degrees_east",
-                standard_name="longitude",
-                long_name="longitude",
-                mesh="mesh",
-                location="node",
-            )
-        )
-        ds_out["NetNode_y"].attrs.update(
-            dict(
-                units="degrees_north",
-                standard_name="latitude",
-                long_name="latitude",
-                mesh="mesh",
-                location="node",
-            )
-        )
-        ds_out["NetNode_z"].attrs.update(
-            dict(
-                units="m",
-                positive="up",
-                standard_name="sea_floor_depth",
-                long_name="Bottom level at net nodes (flow element's corners)",
-                coordinates="NetNode_x NetNode_y",
-            )
-        )
+        # ds_out["NetNode_x"].attrs.update(
+        #     dict(
+        #         units="degrees_east",
+        #         standard_name="longitude",
+        #         long_name="longitude",
+        #         mesh="mesh",
+        #         location="node",
+        #     )
+        # )
+        # ds_out["NetNode_y"].attrs.update(
+        #     dict(
+        #         units="degrees_north",
+        #         standard_name="latitude",
+        #         long_name="latitude",
+        #         mesh="mesh",
+        #         location="node",
+        #     )
+        # )
+        # ds_out["NetNode_z"].attrs.update(
+        #     dict(
+        #         units="m",
+        #         positive="up",
+        #         standard_name="sea_floor_depth",
+        #         long_name="Bottom level at net nodes (flow element's corners)",
+        #         coordinates="NetNode_x NetNode_y",
+        #     )
+        # )
         ds_out["mesh_node_x"].attrs.update(
             dict(
                 units="degrees_east",
@@ -1641,13 +1660,33 @@ class DelwaqModel(Model):
                 start_index=1,
             )
         )
-        ds_out["NetElemNode"].attrs.update(
-            dict(
-                long_name="Net element defined by nodes",
-                start_index=1,
-                _FillValue=0,
-            )
+        ds_out["mesh_face_nodes"].attrs.update(
+            dict(long_name="Mapping from every face to its corner nodes (counterclockwise)", 
+                 cf_role = "face_node_connectivity",
+                 mesh = "mesh",
+                 location="face",
+                 start_index=1, 
+                 _FillValue=0,
+			)
         )
+        ds_out["mesh_face_x_bnd"].attrs.update(
+            dict(units = "m",
+                 standard_name="projection_x_coordinate",
+                 long_name="x-coordinate bounds of 2D mesh face (i.e. corner coordinates)", 
+                 mesh = "mesh",
+                 location="face",
+                 start_index=1,
+			)
+        )  
+        ds_out["mesh_face_y_bnd"].attrs.update(
+            dict(units = "m",
+                 standard_name="projection_y_coordinate",
+                 long_name="y-coordinate bounds of 2D mesh face (i.e. corner coordinates)", 
+                 mesh = "mesh",
+                 location="face",
+                 start_index=1, 
+			)
+        )        
         ds_out["FlowLink"].attrs.update(
             dict(
                 long_name="link/interface between two flow elements",
