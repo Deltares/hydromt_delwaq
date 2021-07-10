@@ -30,12 +30,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -494,7 +495,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-hydroMT model plugins: wflow, wflow_sediment, delwaq
+hydroMT model plugins: delwaq, wflow, wflow_sediment
 
 </pre></div></div>
 </div>
@@ -572,23 +573,23 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-05-07 14:00:27,109 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base/hydromt.log.
-2021-05-07 14:00:27,109 - build - log - INFO - HydroMT version: 0.4.0
-2021-05-07 14:00:27,109 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base.
-2021-05-07 14:00:27,109 - build - main - INFO - User settings:
-2021-05-07 14:00:27,109 - build - cli_utils - INFO - global.mtype: WQ
-2021-05-07 14:00:27,110 - build - model_api - DEBUG - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2021-05-07 14:00:27,110 - build - model_api - DEBUG - setup_basemaps.include_soil: False
-2021-05-07 14:00:27,110 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7fb7787de280&gt;}
-2021-05-07 14:00:27,110 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2021-05-07 14:00:27,113 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
-2021-05-07 14:00:27,113 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
-2021-05-07 14:00:28,061 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base
-2021-05-07 14:00:28,070 - build - delwaq - INFO - Writing staticmap files.
-2021-05-07 14:00:28,080 - build - delwaq - INFO - Writing model config to file.
-2021-05-07 14:00:28,080 - build - delwaq - INFO - Writing hydromap files.
-2021-05-07 14:00:28,121 - build - delwaq - INFO - Writting pointer file in root/config
-2021-05-07 14:00:28,139 - build - delwaq - WARNING - Warning: no dynamic map, skipping write_dynamicmaps.
+2021-07-10 20:33:23,572 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base/hydromt.log.
+2021-07-10 20:33:23,572 - build - log - INFO - HydroMT version: 0.4.0
+2021-07-10 20:33:23,572 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base.
+2021-07-10 20:33:23,572 - build - main - INFO - User settings:
+2021-07-10 20:33:23,572 - build - cli_utils - INFO - global.mtype: WQ
+2021-07-10 20:33:23,573 - build - model_api - DEBUG - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2021-07-10 20:33:23,573 - build - model_api - DEBUG - setup_basemaps.include_soil: False
+2021-07-10 20:33:23,573 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f9c0760b550&gt;}
+2021-07-10 20:33:23,573 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2021-07-10 20:33:23,576 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
+2021-07-10 20:33:23,576 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
+2021-07-10 20:33:24,455 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base
+2021-07-10 20:33:24,463 - build - delwaq - INFO - Writing staticmap files.
+2021-07-10 20:33:24,471 - build - delwaq - INFO - Writing model config to file.
+2021-07-10 20:33:24,472 - build - delwaq - INFO - Writing hydromap files.
+2021-07-10 20:33:24,509 - build - delwaq - INFO - Writting pointer file in root/config
+2021-07-10 20:33:24,523 - build - delwaq - WARNING - Warning: no dynamic map, skipping write_dynamicmaps.
 
 </pre></div></div>
 </div>
@@ -679,55 +680,55 @@ add_volume_offset = true                 # add a one-timestep offset to the volu
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-05-07 14:00:30,495 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full/hydromt.log.
-2021-05-07 14:00:30,495 - build - log - INFO - HydroMT version: 0.4.0
-2021-05-07 14:00:30,495 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full.
-2021-05-07 14:00:30,495 - build - main - INFO - User settings:
-2021-05-07 14:00:30,496 - build - cli_utils - INFO - global.mtype: WQ
-2021-05-07 14:00:30,496 - build - cli_utils - INFO - global.data_libs: [PosixPath(&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_sources.yml&#39;)]
-2021-05-07 14:00:30,496 - build - cli_utils - INFO - setup_basemaps.include_soil: False
-2021-05-07 14:00:30,496 - build - cli_utils - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
-2021-05-07 14:00:30,496 - build - cli_utils - INFO - setup_monitoring.mon_areas: compartments
-2021-05-07 14:00:30,496 - build - cli_utils - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
-2021-05-07 14:00:30,496 - build - cli_utils - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2021-05-07 14:00:30,496 - build - cli_utils - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2021-05-07 14:00:30,496 - build - cli_utils - INFO - setup_hydrology_forcing.timestepsecs: 86400
-2021-05-07 14:00:30,496 - build - cli_utils - INFO - setup_hydrology_forcing.add_volume_offset: true
-2021-05-07 14:00:30,501 - build - model_api - DEBUG - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2021-05-07 14:00:30,501 - build - model_api - DEBUG - setup_basemaps.include_soil: False
-2021-05-07 14:00:30,502 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7ff9e933eb20&gt;}
-2021-05-07 14:00:30,502 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2021-05-07 14:00:30,504 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
-2021-05-07 14:00:30,505 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
-2021-05-07 14:00:31,447 - build - model_api - DEBUG - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
-2021-05-07 14:00:31,448 - build - model_api - DEBUG - setup_monitoring.mon_areas: compartments
-2021-05-07 14:00:31,448 - build - delwaq - INFO - Setting monitoring points and areas
-2021-05-07 14:00:31,477 - build - data_adapter - INFO - DataCatalog: Getting gauges GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
-2021-05-07 14:00:31,529 - build - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
-2021-05-07 14:00:31,553 - build - model_api - DEBUG - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
-2021-05-07 14:00:31,553 - build - model_api - DEBUG - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2021-05-07 14:00:31,553 - build - model_api - DEBUG - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2021-05-07 14:00:31,553 - build - model_api - DEBUG - setup_hydrology_forcing.timestepsecs: 86400
-2021-05-07 14:00:31,553 - build - model_api - DEBUG - setup_hydrology_forcing.add_volume_offset: true
-2021-05-07 14:00:31,553 - build - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
-2021-05-07 14:00:31,564 - build - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/run_default/output.nc
-2021-05-07 14:00:31,597 - build - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2021-05-07 14:00:31,765 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full
-2021-05-07 14:00:31,778 - build - delwaq - INFO - Writing staticmap files.
-2021-05-07 14:00:31,791 - build - delwaq - INFO - Writing model staticgeom to file.
-2021-05-07 14:00:31,826 - build - delwaq - INFO - Writing model config to file.
-2021-05-07 14:00:31,826 - build - delwaq - INFO - Writing hydromap files.
-2021-05-07 14:00:31,867 - build - delwaq - INFO - Writting pointer file in root/config
-2021-05-07 14:00:31,898 - build - delwaq - INFO - Writing dynamicmap files.
-2021-05-07 14:00:31,898 - build - delwaq - INFO - Writting dynamic data for timestep 1/8
-2021-05-07 14:00:31,921 - build - delwaq - INFO - Writting dynamic data for timestep 2/8
-2021-05-07 14:00:31,942 - build - delwaq - INFO - Writting dynamic data for timestep 3/8
-2021-05-07 14:00:31,963 - build - delwaq - INFO - Writting dynamic data for timestep 4/8
-2021-05-07 14:00:31,983 - build - delwaq - INFO - Writting dynamic data for timestep 5/8
-2021-05-07 14:00:32,003 - build - delwaq - INFO - Writting dynamic data for timestep 6/8
-2021-05-07 14:00:32,026 - build - delwaq - INFO - Writting dynamic data for timestep 7/8
-2021-05-07 14:00:32,049 - build - delwaq - INFO - Writting dynamic data for timestep 8/8
-2021-05-07 14:00:32,070 - build - delwaq - INFO - Writting waqgeom.nc file
+2021-07-10 20:33:26,515 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full/hydromt.log.
+2021-07-10 20:33:26,515 - build - log - INFO - HydroMT version: 0.4.0
+2021-07-10 20:33:26,515 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full.
+2021-07-10 20:33:26,515 - build - main - INFO - User settings:
+2021-07-10 20:33:26,516 - build - cli_utils - INFO - global.mtype: WQ
+2021-07-10 20:33:26,516 - build - cli_utils - INFO - global.data_libs: [PosixPath(&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_sources.yml&#39;)]
+2021-07-10 20:33:26,516 - build - cli_utils - INFO - setup_basemaps.include_soil: False
+2021-07-10 20:33:26,516 - build - cli_utils - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
+2021-07-10 20:33:26,516 - build - cli_utils - INFO - setup_monitoring.mon_areas: compartments
+2021-07-10 20:33:26,516 - build - cli_utils - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
+2021-07-10 20:33:26,516 - build - cli_utils - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2021-07-10 20:33:26,516 - build - cli_utils - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2021-07-10 20:33:26,516 - build - cli_utils - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2021-07-10 20:33:26,516 - build - cli_utils - INFO - setup_hydrology_forcing.add_volume_offset: true
+2021-07-10 20:33:26,520 - build - model_api - DEBUG - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2021-07-10 20:33:26,520 - build - model_api - DEBUG - setup_basemaps.include_soil: False
+2021-07-10 20:33:26,520 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f43f9564790&gt;}
+2021-07-10 20:33:26,520 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2021-07-10 20:33:26,523 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
+2021-07-10 20:33:26,523 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
+2021-07-10 20:33:27,417 - build - model_api - DEBUG - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
+2021-07-10 20:33:27,417 - build - model_api - DEBUG - setup_monitoring.mon_areas: compartments
+2021-07-10 20:33:27,417 - build - delwaq - INFO - Setting monitoring points and areas
+2021-07-10 20:33:27,443 - build - data_adapter - INFO - DataCatalog: Getting gauges GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
+2021-07-10 20:33:27,488 - build - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
+2021-07-10 20:33:27,509 - build - model_api - DEBUG - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
+2021-07-10 20:33:27,509 - build - model_api - DEBUG - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2021-07-10 20:33:27,509 - build - model_api - DEBUG - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2021-07-10 20:33:27,509 - build - model_api - DEBUG - setup_hydrology_forcing.timestepsecs: 86400
+2021-07-10 20:33:27,509 - build - model_api - DEBUG - setup_hydrology_forcing.add_volume_offset: true
+2021-07-10 20:33:27,509 - build - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
+2021-07-10 20:33:27,518 - build - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/run_default/output.nc
+2021-07-10 20:33:27,547 - build - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2021-07-10 20:33:27,625 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full
+2021-07-10 20:33:27,637 - build - delwaq - INFO - Writing staticmap files.
+2021-07-10 20:33:27,649 - build - delwaq - INFO - Writing model staticgeom to file.
+2021-07-10 20:33:27,680 - build - delwaq - INFO - Writing model config to file.
+2021-07-10 20:33:27,680 - build - delwaq - INFO - Writing hydromap files.
+2021-07-10 20:33:27,718 - build - delwaq - INFO - Writting pointer file in root/config
+2021-07-10 20:33:27,748 - build - delwaq - INFO - Writing dynamicmap files.
+2021-07-10 20:33:27,748 - build - delwaq - INFO - Writting dynamic data for timestep 1/8
+2021-07-10 20:33:27,773 - build - delwaq - INFO - Writting dynamic data for timestep 2/8
+2021-07-10 20:33:27,789 - build - delwaq - INFO - Writting dynamic data for timestep 3/8
+2021-07-10 20:33:27,807 - build - delwaq - INFO - Writting dynamic data for timestep 4/8
+2021-07-10 20:33:27,826 - build - delwaq - INFO - Writting dynamic data for timestep 5/8
+2021-07-10 20:33:27,844 - build - delwaq - INFO - Writting dynamic data for timestep 6/8
+2021-07-10 20:33:27,862 - build - delwaq - INFO - Writting dynamic data for timestep 7/8
+2021-07-10 20:33:27,881 - build - delwaq - INFO - Writting dynamic data for timestep 8/8
+2021-07-10 20:33:27,898 - build - delwaq - INFO - Writting waqgeom.nc file
 
 </pre></div></div>
 </div>
@@ -765,45 +766,45 @@ add_volume_offset = true                 # add a one-timestep offset to the volu
 <div class="highlight"><pre>
 WQ_test_full
  - hydromt.log
+WQ_test_full/staticdata
+ - manning.dat
+ - staticmaps.nc
+ - streamorder.dat
+ - slope.dat
+ - surface.dat
+WQ_test_full/staticgeoms
+ - monareas.geojson
+ - basins.geojson
+ - monpoints.geojson
+WQ_test_full/hydromodel
+ - modelmap.tif
+ - ldd.tif
+ - rivwth.tif
+ - ptiddown.tif
+ - basins.tif
+ - ptid.tif
+ - rivlen.tif
+WQ_test_full/config
+ - B3_waqgeom.nc
+ - B2_sysclock.inc
+ - B3_nrofseg.inc
+ - B2_outputtimes.inc
+ - B3_attributes.inc
+ - B2_timers.inc
+ - B4_pointer.inc
+ - B2_timers_only.inc
+ - B1_timestamp.inc
+ - B2_stations.inc
+ - B2_nrofmon.inc
+ - B5_boundlist.inc
+ - B4_pointer.poi
+ - B2_monareas.inc
+ - B2_stations-balance.inc
+ - B4_nrofexch.inc
 WQ_test_full/fews
 WQ_test_full/dynamicdata
  - flow.dat
  - volume.dat
-WQ_test_full/staticgeoms
- - monpoints.geojson
- - monareas.geojson
- - basins.geojson
-WQ_test_full/staticdata
- - staticmaps.nc
- - surface.dat
- - slope.dat
- - manning.dat
- - streamorder.dat
-WQ_test_full/hydromodel
- - ptiddown.tif
- - rivwth.tif
- - ldd.tif
- - ptid.tif
- - basins.tif
- - modelmap.tif
- - rivlen.tif
-WQ_test_full/config
- - B4_nrofexch.inc
- - B2_nrofmon.inc
- - B2_stations.inc
- - B5_boundlist.inc
- - B1_timestamp.inc
- - B2_stations-balance.inc
- - B2_monareas.inc
- - B2_timers.inc
- - B2_outputtimes.inc
- - B3_attributes.inc
- - B4_pointer.poi
- - B3_nrofseg.inc
- - B3_waqgeom.nc
- - B2_sysclock.inc
- - B2_timers_only.inc
- - B4_pointer.inc
 </pre></div></div>
 </div>
 <p>You can see that we didn’t create any emission data here. In some cases, you may require some additional GIS data in order to run a WQ model, for example, when you do not need to run the D-Emissions model beforehand, but include point sources that emit pollutants into the surface water directly. When this is the case, you can still use the various [setup_emission_*] components of hydroMT_delwaq.</p>

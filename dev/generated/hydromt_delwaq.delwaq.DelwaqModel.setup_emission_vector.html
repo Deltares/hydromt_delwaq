@@ -30,6 +30,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
@@ -218,8 +219,8 @@
 <div class="section" id="hydromt-delwaq-delwaq-delwaqmodel-setup-emission-vector">
 <h1>hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector<a class="headerlink" href="#hydromt-delwaq-delwaq-delwaqmodel-setup-emission-vector" title="Permalink to this headline">¶</a></h1>
 <dl class="py method">
-<dt id="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector">
-<code class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></code><code class="sig-name descname"><span class="pre">setup_emission_vector</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emission_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col2raster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rasterize_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'value'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.setup_emission_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector">
+<span class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></span><span class="sig-name descname"><span class="pre">setup_emission_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emission_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col2raster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rasterize_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'value'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.setup_emission_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setup emission map from vector data.</p>
 <p>Adds model layer:</p>
 <ul class="simple">
@@ -228,7 +229,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>emission_fn</strong> (<em>{'GDP_world'...}</em>) – Name of raster emission map source.</p></li>
+<li><p><strong>emission_fn</strong> (<em>{'GDP_world'</em><em>...</em><em>}</em>) – Name of raster emission map source.</p></li>
 <li><p><strong>col2raster</strong> (<em>str</em>) – Name of the column from the vector file to rasterize.
 Can be left empty if the selected method is set to “fraction”.</p></li>
 <li><p><strong>rasterize_method</strong> (<em>str</em>) – Method to rasterize the vector data. Either {“value”, “fraction”}.

@@ -30,6 +30,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
@@ -218,8 +219,8 @@
 <div class="section" id="hydromt-delwaq-delwaq-delwaqmodel-setup-emission-raster">
 <h1>hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster<a class="headerlink" href="#hydromt-delwaq-delwaq-delwaqmodel-setup-emission-raster" title="Permalink to this headline">¶</a></h1>
 <dl class="py method">
-<dt id="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster">
-<code class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></code><code class="sig-name descname"><span class="pre">setup_emission_raster</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emission_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillna_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zero'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillna_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">area_division</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.setup_emission_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster">
+<span class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></span><span class="sig-name descname"><span class="pre">setup_emission_raster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emission_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillna_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zero'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillna_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">area_division</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.setup_emission_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setup one or several emission map from raster data.</p>
 <p>Adds model layer:</p>
 <ul class="simple">
@@ -228,7 +229,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>emission_fn</strong> (<em>{'GHS-POP_2015'...}</em>) – Name of raster emission map source.</p></li>
+<li><p><strong>emission_fn</strong> (<em>{'GHS-POP_2015'</em><em>...</em><em>}</em>) – Name of raster emission map source.</p></li>
 <li><p><strong>scale_method</strong> (<em>str {'nearest'</em><em>, </em><em>'average'</em><em>, </em><em>'mode'}</em>) – Method for resampling</p></li>
 <li><p><strong>fillna_method</strong> (<em>str {'nearest'</em><em>, </em><em>'zero'</em><em>, </em><em>'value'}</em>) – Method to fill NaN values. Either nearest neighbour, zeros or user defined value.</p></li>
 <li><p><strong>fillna_value</strong> (<em>float</em>) – If fillna_method is set to ‘value’, NaNs in the emission maps will be replaced by this value.</p></li>

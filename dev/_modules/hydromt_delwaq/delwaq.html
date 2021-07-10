@@ -30,6 +30,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
@@ -1499,6 +1500,8 @@
         <span class="n">nodes_z</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">net_links</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">elem_nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_net_elem</span><span class="p">,</span> <span class="n">n_net_elem_max_node</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="n">face_x_bnd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_net_elem</span><span class="p">,</span> <span class="n">n_net_elem_max_node</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+        <span class="n">face_y_bnd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_net_elem</span><span class="p">,</span> <span class="n">n_net_elem_max_node</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
         <span class="n">flow_links</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_flow_link</span><span class="p">,</span> <span class="n">n_flow_link_pts</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
         <span class="n">flow_link_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_flow_link</span><span class="p">)</span>
         <span class="n">flow_link_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_flow_link</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
@@ -1555,7 +1558,7 @@
 
         <span class="c1"># Cell corners</span>
         <span class="n">UL</span><span class="p">,</span> <span class="n">UR</span><span class="p">,</span> <span class="n">LR</span><span class="p">,</span> <span class="n">LL</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
-
+        
         <span class="c1"># Process all cells from upper-left to lower-right</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
@@ -1670,7 +1673,19 @@
         <span class="n">nodes_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nodes_y</span><span class="p">)</span>
         <span class="n">nodes_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nodes_z</span><span class="p">)</span>
         <span class="n">net_links</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">net_links</span><span class="p">)</span>
-
+        
+        <span class="c1"># Proces all cells to derive mesh_face_x_bnd and mesh_face_y_bnd</span>
+        <span class="k">for</span> <span class="n">bnd</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n_net_elem</span><span class="p">):</span>
+            <span class="c1">#UL, UR, LR, LL = 0, 1, 2, 3</span>
+            <span class="n">face_x_bnd</span><span class="p">[</span><span class="n">bnd</span><span class="p">,</span><span class="n">UL</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodes_x</span><span class="p">[</span><span class="n">elem_nodes</span><span class="p">[</span><span class="n">bnd</span><span class="p">][</span><span class="n">UL</span><span class="p">]]</span>
+            <span class="n">face_x_bnd</span><span class="p">[</span><span class="n">bnd</span><span class="p">,</span><span class="n">UR</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodes_x</span><span class="p">[</span><span class="n">elem_nodes</span><span class="p">[</span><span class="n">bnd</span><span class="p">][</span><span class="n">UR</span><span class="p">]]</span>
+            <span class="n">face_x_bnd</span><span class="p">[</span><span class="n">bnd</span><span class="p">,</span><span class="n">LR</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodes_x</span><span class="p">[</span><span class="n">elem_nodes</span><span class="p">[</span><span class="n">bnd</span><span class="p">][</span><span class="n">LR</span><span class="p">]]</span>
+            <span class="n">face_x_bnd</span><span class="p">[</span><span class="n">bnd</span><span class="p">,</span><span class="n">LL</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodes_x</span><span class="p">[</span><span class="n">elem_nodes</span><span class="p">[</span><span class="n">bnd</span><span class="p">][</span><span class="n">LL</span><span class="p">]]</span>
+            <span class="n">face_y_bnd</span><span class="p">[</span><span class="n">bnd</span><span class="p">,</span><span class="n">UL</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodes_y</span><span class="p">[</span><span class="n">elem_nodes</span><span class="p">[</span><span class="n">bnd</span><span class="p">][</span><span class="n">UL</span><span class="p">]]</span>
+            <span class="n">face_y_bnd</span><span class="p">[</span><span class="n">bnd</span><span class="p">,</span><span class="n">UR</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodes_y</span><span class="p">[</span><span class="n">elem_nodes</span><span class="p">[</span><span class="n">bnd</span><span class="p">][</span><span class="n">UR</span><span class="p">]]</span>
+            <span class="n">face_y_bnd</span><span class="p">[</span><span class="n">bnd</span><span class="p">,</span><span class="n">LR</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodes_y</span><span class="p">[</span><span class="n">elem_nodes</span><span class="p">[</span><span class="n">bnd</span><span class="p">][</span><span class="n">LR</span><span class="p">]]</span>
+            <span class="n">face_y_bnd</span><span class="p">[</span><span class="n">bnd</span><span class="p">,</span><span class="n">LL</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodes_y</span><span class="p">[</span><span class="n">elem_nodes</span><span class="p">[</span><span class="n">bnd</span><span class="p">][</span><span class="n">LL</span><span class="p">]]</span>
+        
         <span class="c1"># Update dimensions</span>
         <span class="n">n_net_node</span> <span class="o">=</span> <span class="n">nodes_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">n_net_link</span> <span class="o">=</span> <span class="n">net_links</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1686,19 +1701,24 @@
         <span class="p">)</span>
 
         <span class="c1"># Create xr dataset</span>
+        <span class="c1"># TODO: mesh_face_x and mesh_face_y now based on LR node, correct?</span>
+        <span class="c1"># TODO: add mesh_edge* to dataset</span>
         <span class="n">ds_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span>
             <span class="n">data_vars</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
                 <span class="n">mesh</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;dim&quot;</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2147483647</span><span class="p">]),</span>
                 <span class="c1"># projected_coordinate_system=([&quot;dim&quot;], [-2147483647]),</span>
-                <span class="n">NetNode_x</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nNetNode&quot;</span><span class="p">],</span> <span class="n">nodes_x</span><span class="p">),</span>
-                <span class="n">NetNode_y</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nNetNode&quot;</span><span class="p">],</span> <span class="n">nodes_y</span><span class="p">),</span>
-                <span class="n">NetNode_z</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nNetNode&quot;</span><span class="p">],</span> <span class="n">nodes_z</span><span class="p">),</span>
+                <span class="c1"># NetNode_x=([&quot;nNetNode&quot;], nodes_x),</span>
+                <span class="c1"># NetNode_y=([&quot;nNetNode&quot;], nodes_y),</span>
+                <span class="c1"># NetNode_z=([&quot;nNetNode&quot;], nodes_z),</span>
                 <span class="n">mesh_node_x</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nNetNode&quot;</span><span class="p">],</span> <span class="n">nodes_x</span><span class="p">),</span>
                 <span class="n">mesh_node_y</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nNetNode&quot;</span><span class="p">],</span> <span class="n">nodes_y</span><span class="p">),</span>
-                <span class="n">mesh_face_x</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nNetElem&quot;</span><span class="p">],</span> <span class="n">nodes_x_all</span><span class="p">),</span>
-                <span class="n">mesh_face_y</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nNetElem&quot;</span><span class="p">],</span> <span class="n">nodes_y_all</span><span class="p">),</span>
+                <span class="n">mesh_node_z</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nNetNode&quot;</span><span class="p">],</span> <span class="n">nodes_z</span><span class="p">),</span>
+                <span class="n">mesh_face_x</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nmesh_face&quot;</span><span class="p">],</span> <span class="n">nodes_x_all</span><span class="p">),</span>
+                <span class="n">mesh_face_y</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nmesh_face&quot;</span><span class="p">],</span> <span class="n">nodes_y_all</span><span class="p">),</span>
                 <span class="n">NetLink</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nNetLink&quot;</span><span class="p">,</span> <span class="s2">&quot;nNetLinkPts&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">net_links</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
-                <span class="n">NetElemNode</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nNetElem&quot;</span><span class="p">,</span> <span class="s2">&quot;nNetElemMaxNode&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">elem_nodes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+                <span class="n">mesh_face_nodes</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nmesh_face&quot;</span><span class="p">,</span> <span class="s2">&quot;max_mesh_face_nodes&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">elem_nodes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+                <span class="n">mesh_face_x_bnd</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nmesh_face&quot;</span><span class="p">,</span> <span class="s2">&quot;max_mesh_face_nodes&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">face_x_bnd</span><span class="p">)),</span>
+                <span class="n">mesh_face_y_bnd</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nmesh_face&quot;</span><span class="p">,</span> <span class="s2">&quot;max_mesh_face_nodes&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">face_y_bnd</span><span class="p">)),</span>
                 <span class="n">FlowLink</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nFlowLink&quot;</span><span class="p">,</span> <span class="s2">&quot;nFlowLinkPts&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">flow_links</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
                 <span class="n">FlowLinkType</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nFlowLink&quot;</span><span class="p">],</span> <span class="n">flow_link_type</span><span class="p">),</span>
                 <span class="n">FlowLink_xu</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;nFlowLink&quot;</span><span class="p">],</span> <span class="n">flow_link_x</span><span class="p">),</span>
@@ -1730,10 +1750,10 @@
                 <span class="n">cf_role</span><span class="o">=</span><span class="s2">&quot;mesh_topology&quot;</span><span class="p">,</span>
                 <span class="n">topology_dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                 <span class="n">node_coordinates</span><span class="o">=</span><span class="s2">&quot;NetNode_x NetNode_y&quot;</span><span class="p">,</span>
-                <span class="n">face_node_connectivity</span><span class="o">=</span><span class="s2">&quot;NetElemNode&quot;</span><span class="p">,</span>
+                <span class="n">face_node_connectivity</span><span class="o">=</span><span class="s2">&quot;mesh_face_nodes&quot;</span><span class="p">,</span>
                 <span class="n">edge_node_connectivity</span><span class="o">=</span><span class="s2">&quot;NetLink&quot;</span><span class="p">,</span>
                 <span class="n">edge_face_connectivity</span><span class="o">=</span><span class="s2">&quot;FlowLink&quot;</span><span class="p">,</span>
-                <span class="n">face_dimension</span><span class="o">=</span><span class="s2">&quot;nNetElem&quot;</span><span class="p">,</span>
+                <span class="n">face_dimension</span><span class="o">=</span><span class="s2">&quot;nmesh_face&quot;</span><span class="p">,</span>
                 <span class="n">edge_dimension</span><span class="o">=</span><span class="s2">&quot;nNetLink&quot;</span><span class="p">,</span>
                 <span class="n">node_dimension</span><span class="o">=</span><span class="s2">&quot;nNetNode&quot;</span><span class="p">,</span>
                 <span class="n">face_coordinates</span><span class="o">=</span><span class="s2">&quot;mesh_face_x mesh_face_y&quot;</span><span class="p">,</span>
@@ -1751,33 +1771,33 @@
                 <span class="n">value</span><span class="o">=</span><span class="s2">&quot;value is equal to EPSG code&quot;</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
-        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;NetNode_x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-            <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">units</span><span class="o">=</span><span class="s2">&quot;degrees_east&quot;</span><span class="p">,</span>
-                <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
-                <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
-                <span class="n">mesh</span><span class="o">=</span><span class="s2">&quot;mesh&quot;</span><span class="p">,</span>
-                <span class="n">location</span><span class="o">=</span><span class="s2">&quot;node&quot;</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;NetNode_y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-            <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">units</span><span class="o">=</span><span class="s2">&quot;degrees_north&quot;</span><span class="p">,</span>
-                <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
-                <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
-                <span class="n">mesh</span><span class="o">=</span><span class="s2">&quot;mesh&quot;</span><span class="p">,</span>
-                <span class="n">location</span><span class="o">=</span><span class="s2">&quot;node&quot;</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;NetNode_z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-            <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span>
-                <span class="n">positive</span><span class="o">=</span><span class="s2">&quot;up&quot;</span><span class="p">,</span>
-                <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;sea_floor_depth&quot;</span><span class="p">,</span>
-                <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;Bottom level at net nodes (flow element&#39;s corners)&quot;</span><span class="p">,</span>
-                <span class="n">coordinates</span><span class="o">=</span><span class="s2">&quot;NetNode_x NetNode_y&quot;</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
+        <span class="c1"># ds_out[&quot;NetNode_x&quot;].attrs.update(</span>
+        <span class="c1">#     dict(</span>
+        <span class="c1">#         units=&quot;degrees_east&quot;,</span>
+        <span class="c1">#         standard_name=&quot;longitude&quot;,</span>
+        <span class="c1">#         long_name=&quot;longitude&quot;,</span>
+        <span class="c1">#         mesh=&quot;mesh&quot;,</span>
+        <span class="c1">#         location=&quot;node&quot;,</span>
+        <span class="c1">#     )</span>
+        <span class="c1"># )</span>
+        <span class="c1"># ds_out[&quot;NetNode_y&quot;].attrs.update(</span>
+        <span class="c1">#     dict(</span>
+        <span class="c1">#         units=&quot;degrees_north&quot;,</span>
+        <span class="c1">#         standard_name=&quot;latitude&quot;,</span>
+        <span class="c1">#         long_name=&quot;latitude&quot;,</span>
+        <span class="c1">#         mesh=&quot;mesh&quot;,</span>
+        <span class="c1">#         location=&quot;node&quot;,</span>
+        <span class="c1">#     )</span>
+        <span class="c1"># )</span>
+        <span class="c1"># ds_out[&quot;NetNode_z&quot;].attrs.update(</span>
+        <span class="c1">#     dict(</span>
+        <span class="c1">#         units=&quot;m&quot;,</span>
+        <span class="c1">#         positive=&quot;up&quot;,</span>
+        <span class="c1">#         standard_name=&quot;sea_floor_depth&quot;,</span>
+        <span class="c1">#         long_name=&quot;Bottom level at net nodes (flow element&#39;s corners)&quot;,</span>
+        <span class="c1">#         coordinates=&quot;NetNode_x NetNode_y&quot;,</span>
+        <span class="c1">#     )</span>
+        <span class="c1"># )</span>
         <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;mesh_node_x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="nb">dict</span><span class="p">(</span>
                 <span class="n">units</span><span class="o">=</span><span class="s2">&quot;degrees_east&quot;</span><span class="p">,</span>
@@ -1820,13 +1840,33 @@
                 <span class="n">start_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
-        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;NetElemNode&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-            <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;Net element defined by nodes&quot;</span><span class="p">,</span>
-                <span class="n">start_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">_FillValue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;mesh_face_nodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;Mapping from every face to its corner nodes (counterclockwise)&quot;</span><span class="p">,</span> 
+                 <span class="n">cf_role</span> <span class="o">=</span> <span class="s2">&quot;face_node_connectivity&quot;</span><span class="p">,</span>
+                 <span class="n">mesh</span> <span class="o">=</span> <span class="s2">&quot;mesh&quot;</span><span class="p">,</span>
+                 <span class="n">location</span><span class="o">=</span><span class="s2">&quot;face&quot;</span><span class="p">,</span>
+                 <span class="n">start_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                 <span class="n">_FillValue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+			<span class="p">)</span>
         <span class="p">)</span>
+        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;mesh_face_x_bnd&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span>
+                 <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;projection_x_coordinate&quot;</span><span class="p">,</span>
+                 <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;x-coordinate bounds of 2D mesh face (i.e. corner coordinates)&quot;</span><span class="p">,</span> 
+                 <span class="n">mesh</span> <span class="o">=</span> <span class="s2">&quot;mesh&quot;</span><span class="p">,</span>
+                 <span class="n">location</span><span class="o">=</span><span class="s2">&quot;face&quot;</span><span class="p">,</span>
+                 <span class="n">start_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+			<span class="p">)</span>
+        <span class="p">)</span>  
+        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;mesh_face_y_bnd&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span>
+                 <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;projection_y_coordinate&quot;</span><span class="p">,</span>
+                 <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;y-coordinate bounds of 2D mesh face (i.e. corner coordinates)&quot;</span><span class="p">,</span> 
+                 <span class="n">mesh</span> <span class="o">=</span> <span class="s2">&quot;mesh&quot;</span><span class="p">,</span>
+                 <span class="n">location</span><span class="o">=</span><span class="s2">&quot;face&quot;</span><span class="p">,</span>
+                 <span class="n">start_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+			<span class="p">)</span>
+        <span class="p">)</span>        
         <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;FlowLink&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="nb">dict</span><span class="p">(</span>
                 <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;link/interface between two flow elements&quot;</span><span class="p">,</span>

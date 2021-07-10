@@ -30,12 +30,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -520,7 +521,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-05-07 14:00:46,226 - update_model_forcing - log - INFO - HydroMT version: 0.4.0
+2021-07-10 20:33:39,944 - update_model_forcing - log - INFO - HydroMT version: 0.4.0
 </pre></div></div>
 </div>
 </div>
@@ -596,33 +597,33 @@ output.lateral.land.to_river = &#34;inwint&#34;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-05-07 14:00:48,112 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/hydromt.log.
-2021-05-07 14:00:48,113 - update - log - INFO - HydroMT version: 0.4.0
-2021-05-07 14:00:48,113 - update - main - INFO - Updating wflow model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave (r+).
-2021-05-07 14:00:48,113 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
-2021-05-07 14:00:48,113 - update - main - INFO - User settings:
-2021-05-07 14:00:48,114 - update - cli_utils - INFO - setup_config.starttime: 2010-02-02T00:00:00
-2021-05-07 14:00:48,114 - update - cli_utils - INFO - setup_config.endtime: 2010-02-10T00:00:00
-2021-05-07 14:00:48,114 - update - cli_utils - INFO - setup_config.timestepsecs: 86400
-2021-05-07 14:00:48,114 - update - cli_utils - INFO - setup_config.output.vertical.precipitation: prec
-2021-05-07 14:00:48,114 - update - cli_utils - INFO - setup_config.output.vertical.actinfilt: inf
-2021-05-07 14:00:48,114 - update - cli_utils - INFO - setup_config.output.vertical.excesswatersoil: runUnp
-2021-05-07 14:00:48,114 - update - cli_utils - INFO - setup_config.output.vertical.excesswaterpath: runPav
-2021-05-07 14:00:48,114 - update - cli_utils - INFO - setup_config.output.lateral.river.q_av: q_river
-2021-05-07 14:00:48,114 - update - cli_utils - INFO - setup_config.output.lateral.river.volume: vol_river
-2021-05-07 14:00:48,114 - update - cli_utils - INFO - setup_config.output.lateral.river.inwater: inw_river
-2021-05-07 14:00:48,115 - update - cli_utils - INFO - setup_config.output.lateral.land.q_av: q_land
-2021-05-07 14:00:48,115 - update - cli_utils - INFO - setup_config.output.lateral.land.volume: vol_land
-2021-05-07 14:00:48,115 - update - cli_utils - INFO - setup_config.output.lateral.land.inwater: inw_land
-2021-05-07 14:00:48,115 - update - cli_utils - INFO - setup_config.output.lateral.land.to_river: inwint
-2021-05-07 14:00:48,115 - update - wflow - INFO - Reading model staticgeom files.
-2021-05-07 14:00:48,205 - update - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
-2021-05-07 14:00:48,205 - update - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
-2021-05-07 14:00:48,275 - update - model_api - DEBUG - Setting model config options.
-2021-05-07 14:00:48,275 - update - wflow - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
-2021-05-07 14:00:48,275 - update - model_api - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
-2021-05-07 14:00:48,276 - update - wflow - INFO - Write staticmaps to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
-2021-05-07 14:00:48,757 - update - wflow - INFO - Writing model staticgeom to file.
+2021-07-10 20:33:41,592 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/hydromt.log.
+2021-07-10 20:33:41,592 - update - log - INFO - HydroMT version: 0.4.0
+2021-07-10 20:33:41,593 - update - main - INFO - Updating wflow model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave (r+).
+2021-07-10 20:33:41,593 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
+2021-07-10 20:33:41,593 - update - main - INFO - User settings:
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.starttime: 2010-02-02T00:00:00
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.endtime: 2010-02-10T00:00:00
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.timestepsecs: 86400
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.vertical.precipitation: prec
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.vertical.actinfilt: inf
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.vertical.excesswatersoil: runUnp
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.vertical.excesswaterpath: runPav
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.lateral.river.q_av: q_river
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.lateral.river.volume: vol_river
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.lateral.river.inwater: inw_river
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.lateral.land.q_av: q_land
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.lateral.land.volume: vol_land
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.lateral.land.inwater: inw_land
+2021-07-10 20:33:41,594 - update - cli_utils - INFO - setup_config.output.lateral.land.to_river: inwint
+2021-07-10 20:33:41,595 - update - wflow - INFO - Reading model staticgeom files.
+2021-07-10 20:33:41,673 - update - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
+2021-07-10 20:33:41,673 - update - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
+2021-07-10 20:33:41,733 - update - model_api - DEBUG - Setting model config options.
+2021-07-10 20:33:41,733 - update - wflow - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
+2021-07-10 20:33:41,733 - update - model_api - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
+2021-07-10 20:33:41,734 - update - wflow - INFO - Write staticmaps to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
+2021-07-10 20:33:42,169 - update - wflow - INFO - Writing model staticgeom to file.
 
 </pre></div></div>
 </div>
@@ -867,43 +868,43 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-05-07 14:00:53,538 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/hydromt.log.
-2021-05-07 14:00:53,538 - update - log - INFO - HydroMT version: 0.4.0
-2021-05-07 14:00:53,538 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full (r+).
-2021-05-07 14:00:53,538 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
-2021-05-07 14:00:53,538 - update - main - INFO - Additional data sources: (&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_sources.yml&#39;,)
-2021-05-07 14:00:53,538 - update - main - INFO - User settings:
-2021-05-07 14:00:53,539 - update - cli_utils - INFO - global.mtype: EM
-2021-05-07 14:00:53,539 - update - cli_utils - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
-2021-05-07 14:00:53,539 - update - cli_utils - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2021-05-07 14:00:53,539 - update - cli_utils - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2021-05-07 14:00:53,539 - update - cli_utils - INFO - setup_hydrology_forcing.timestepsecs: 86400
-2021-05-07 14:00:53,539 - update - cli_utils - INFO - setup_hydrology_forcing.add_volume_offset: True
-2021-05-07 14:00:53,544 - update - delwaq - INFO - Reading model staticgeom files.
-2021-05-07 14:00:53,591 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/staticdata/staticmaps.nc
-2021-05-07 14:00:53,611 - update - model_api - DEBUG - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
-2021-05-07 14:00:53,611 - update - model_api - DEBUG - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2021-05-07 14:00:53,611 - update - model_api - DEBUG - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2021-05-07 14:00:53,611 - update - model_api - DEBUG - setup_hydrology_forcing.timestepsecs: 86400
-2021-05-07 14:00:53,611 - update - model_api - DEBUG - setup_hydrology_forcing.add_volume_offset: True
-2021-05-07 14:00:53,611 - update - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
-2021-05-07 14:00:53,621 - update - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/run_default/output.nc
-2021-05-07 14:00:53,655 - update - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2021-05-07 14:00:53,775 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
-2021-05-07 14:00:53,788 - update - delwaq - INFO - Writing staticmap files.
-2021-05-07 14:00:53,799 - update - delwaq - INFO - Writing model staticgeom to file.
-2021-05-07 14:00:53,814 - update - delwaq - INFO - Writing model config to file.
-2021-05-07 14:00:53,815 - update - delwaq - WARNING - No updated maps. Skipping writing to file.
-2021-05-07 14:00:53,837 - update - delwaq - INFO - Writing dynamicmap files.
-2021-05-07 14:00:53,837 - update - delwaq - INFO - Writting dynamic data for timestep 1/8
-2021-05-07 14:00:53,854 - update - delwaq - INFO - Writting dynamic data for timestep 2/8
-2021-05-07 14:00:53,873 - update - delwaq - INFO - Writting dynamic data for timestep 3/8
-2021-05-07 14:00:53,893 - update - delwaq - INFO - Writting dynamic data for timestep 4/8
-2021-05-07 14:00:53,911 - update - delwaq - INFO - Writting dynamic data for timestep 5/8
-2021-05-07 14:00:53,930 - update - delwaq - INFO - Writting dynamic data for timestep 6/8
-2021-05-07 14:00:53,952 - update - delwaq - INFO - Writting dynamic data for timestep 7/8
-2021-05-07 14:00:53,970 - update - delwaq - INFO - Writting dynamic data for timestep 8/8
-2021-05-07 14:00:53,989 - update - delwaq - INFO - Writting waqgeom.nc file
+2021-07-10 20:33:46,289 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/hydromt.log.
+2021-07-10 20:33:46,290 - update - log - INFO - HydroMT version: 0.4.0
+2021-07-10 20:33:46,290 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full (r+).
+2021-07-10 20:33:46,290 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
+2021-07-10 20:33:46,290 - update - main - INFO - Additional data sources: (&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_sources.yml&#39;,)
+2021-07-10 20:33:46,290 - update - main - INFO - User settings:
+2021-07-10 20:33:46,290 - update - cli_utils - INFO - global.mtype: EM
+2021-07-10 20:33:46,290 - update - cli_utils - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
+2021-07-10 20:33:46,291 - update - cli_utils - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2021-07-10 20:33:46,291 - update - cli_utils - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2021-07-10 20:33:46,291 - update - cli_utils - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2021-07-10 20:33:46,291 - update - cli_utils - INFO - setup_hydrology_forcing.add_volume_offset: True
+2021-07-10 20:33:46,295 - update - delwaq - INFO - Reading model staticgeom files.
+2021-07-10 20:33:46,338 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/staticdata/staticmaps.nc
+2021-07-10 20:33:46,356 - update - model_api - DEBUG - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
+2021-07-10 20:33:46,356 - update - model_api - DEBUG - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2021-07-10 20:33:46,356 - update - model_api - DEBUG - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2021-07-10 20:33:46,356 - update - model_api - DEBUG - setup_hydrology_forcing.timestepsecs: 86400
+2021-07-10 20:33:46,356 - update - model_api - DEBUG - setup_hydrology_forcing.add_volume_offset: True
+2021-07-10 20:33:46,356 - update - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
+2021-07-10 20:33:46,365 - update - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/run_default/output.nc
+2021-07-10 20:33:46,396 - update - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2021-07-10 20:33:46,512 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
+2021-07-10 20:33:46,525 - update - delwaq - INFO - Writing staticmap files.
+2021-07-10 20:33:46,536 - update - delwaq - INFO - Writing model staticgeom to file.
+2021-07-10 20:33:46,551 - update - delwaq - INFO - Writing model config to file.
+2021-07-10 20:33:46,552 - update - delwaq - WARNING - No updated maps. Skipping writing to file.
+2021-07-10 20:33:46,576 - update - delwaq - INFO - Writing dynamicmap files.
+2021-07-10 20:33:46,576 - update - delwaq - INFO - Writting dynamic data for timestep 1/8
+2021-07-10 20:33:46,597 - update - delwaq - INFO - Writting dynamic data for timestep 2/8
+2021-07-10 20:33:46,614 - update - delwaq - INFO - Writting dynamic data for timestep 3/8
+2021-07-10 20:33:46,630 - update - delwaq - INFO - Writting dynamic data for timestep 4/8
+2021-07-10 20:33:46,648 - update - delwaq - INFO - Writting dynamic data for timestep 5/8
+2021-07-10 20:33:46,665 - update - delwaq - INFO - Writting dynamic data for timestep 6/8
+2021-07-10 20:33:46,681 - update - delwaq - INFO - Writting dynamic data for timestep 7/8
+2021-07-10 20:33:46,698 - update - delwaq - INFO - Writting dynamic data for timestep 8/8
+2021-07-10 20:33:46,715 - update - delwaq - INFO - Writting waqgeom.nc file
 
 </pre></div></div>
 </div>
@@ -942,44 +943,44 @@ Options:
 <div class="highlight"><pre>
 EM_test_full
  - hydromt.log
-EM_test_full/fews
-EM_test_full/dynamicdata
- - hydrology.bin
+EM_test_full/staticdata
+ - GHS-SMOD_2015.dat
+ - GHS-POP_2015.dat
+ - GDP_world.dat
+ - staticmaps.nc
+ - streamorder.dat
+ - slope.dat
 EM_test_full/staticgeoms
  - monareas.geojson
  - basins.geojson
-EM_test_full/staticdata
- - GHS-POP_2015.dat
- - staticmaps.nc
- - GHS-SMOD_2015.dat
- - slope.dat
- - streamorder.dat
- - GDP_world.dat
 EM_test_full/hydromodel
- - rivwth.tif
- - ldd.tif
- - ptid.tif
- - basins.tif
  - modelmap.tif
+ - ldd.tif
+ - rivwth.tif
+ - basins.tif
+ - ptid.tif
  - rivlen.tif
 EM_test_full/config
- - B4_nrofexch.inc
- - B2_nrofmon.inc
- - B2_stations.inc
- - B5_boundlist.inc
- - B1_timestamp.inc
- - B7_geometry-parameters.inc
- - B2_monareas.inc
- - B2_timers.inc
- - B7_geometry.inc
- - B2_outputtimes.inc
- - B3_attributes.inc
- - B7_geometry.bin
- - B7_hydrology.inc
- - B3_nrofseg.inc
  - B3_waqgeom.nc
  - B2_sysclock.inc
+ - B3_nrofseg.inc
+ - B2_outputtimes.inc
+ - B3_attributes.inc
+ - B2_timers.inc
  - B2_timers_only.inc
+ - B7_geometry-parameters.inc
+ - B7_geometry.bin
+ - B1_timestamp.inc
+ - B2_stations.inc
+ - B2_nrofmon.inc
+ - B5_boundlist.inc
+ - B7_hydrology.inc
+ - B7_geometry.inc
+ - B2_monareas.inc
+ - B4_nrofexch.inc
+EM_test_full/fews
+EM_test_full/dynamicdata
+ - hydrology.bin
 </pre></div></div>
 </div>
 <p>You can have a look at some of these files:</p>
