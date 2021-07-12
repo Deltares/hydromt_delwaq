@@ -93,7 +93,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
@@ -116,19 +116,19 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">User Guide</span></p>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/components.html">Model components</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/build_configuration.html">Model configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/attributes.html">Model attributes</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Advanced topics</span></p>
+<p class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/workflows.html">Workflows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/coupling_wflow.html">Coupling with Wflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/generic_delwaq.html">HydroMT and DELWAQ settings</a></li>
 </ul>
-<p class="caption"><span class="caption-text">References &amp; Help</span></p>
+<p class="caption" role="heading"><span class="caption-text">References &amp; Help</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api_index.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
@@ -529,7 +529,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-07-10 20:32:55,635 - update_model_emission_local - log - INFO - HydroMT version: 0.4.0
+2021-07-12 16:00:42,586 - update_model_emission_local - log - INFO - HydroMT version: 0.4.0
 </pre></div></div>
 </div>
 </div>
@@ -900,36 +900,36 @@ rasterize_method = value
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-07-10 20:33:01,307 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/hydromt.log.
-2021-07-10 20:33:01,307 - update - log - INFO - HydroMT version: 0.4.0
-2021-07-10 20:33:01,307 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave (r).
-2021-07-10 20:33:01,307 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended
-2021-07-10 20:33:01,307 - update - main - INFO - Additional data sources: (&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_emission_sources.yml&#39;,)
-2021-07-10 20:33:01,307 - update - main - INFO - User settings:
-2021-07-10 20:33:01,307 - update - cli_utils - INFO - global.mtype: EM
-2021-07-10 20:33:01,307 - update - cli_utils - INFO - setup_emission_vector.emission_fn: EF_local
-2021-07-10 20:33:01,307 - update - cli_utils - INFO - setup_emission_vector.col2raster: EF
-2021-07-10 20:33:01,308 - update - cli_utils - INFO - setup_emission_vector.rasterize_method: value
-2021-07-10 20:33:01,310 - update - delwaq - INFO - Reading model staticgeom files.
-2021-07-10 20:33:01,412 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave/staticdata/staticmaps.nc
-2021-07-10 20:33:01,421 - update - delwaq - INFO - Model read
-2021-07-10 20:33:01,421 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/hydromodel.
-2021-07-10 20:33:01,421 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/staticdata.
-2021-07-10 20:33:01,421 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/staticgeoms.
-2021-07-10 20:33:01,421 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/config.
-2021-07-10 20:33:01,421 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/dynamicdata.
-2021-07-10 20:33:01,421 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/fews.
-2021-07-10 20:33:01,432 - update - model_api - DEBUG - setup_emission_vector.emission_fn: EF_local
-2021-07-10 20:33:01,432 - update - model_api - DEBUG - setup_emission_vector.col2raster: EF
-2021-07-10 20:33:01,432 - update - model_api - DEBUG - setup_emission_vector.rasterize_method: value
-2021-07-10 20:33:01,432 - update - delwaq - INFO - Preparing &#39;EF_local&#39; map.
-2021-07-10 20:33:01,432 - update - data_adapter - INFO - DataCatalog: Getting EF_local GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/examples_data/emission_factor.gpkg
-2021-07-10 20:33:01,572 - update - data_adapter - DEBUG - GeoDataFrame: Convert units for 2 columns.
-2021-07-10 20:33:01,650 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended
-2021-07-10 20:33:01,665 - update - delwaq - INFO - Writing staticmap files.
-2021-07-10 20:33:01,677 - update - delwaq - INFO - Writing model staticgeom to file.
-2021-07-10 20:33:01,692 - update - delwaq - INFO - Writing hydromap files.
-2021-07-10 20:33:01,758 - update - delwaq - WARNING - Warning: no dynamic map, skipping write_dynamicmaps.
+2021-07-12 16:00:48,130 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/hydromt.log.
+2021-07-12 16:00:48,130 - update - log - INFO - HydroMT version: 0.4.0
+2021-07-12 16:00:48,130 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave (r).
+2021-07-12 16:00:48,130 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended
+2021-07-12 16:00:48,130 - update - main - INFO - Additional data sources: (&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_emission_sources.yml&#39;,)
+2021-07-12 16:00:48,130 - update - main - INFO - User settings:
+2021-07-12 16:00:48,131 - update - cli_utils - INFO - global.mtype: EM
+2021-07-12 16:00:48,131 - update - cli_utils - INFO - setup_emission_vector.emission_fn: EF_local
+2021-07-12 16:00:48,131 - update - cli_utils - INFO - setup_emission_vector.col2raster: EF
+2021-07-12 16:00:48,131 - update - cli_utils - INFO - setup_emission_vector.rasterize_method: value
+2021-07-12 16:00:48,133 - update - delwaq - INFO - Reading model staticgeom files.
+2021-07-12 16:00:48,226 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave/staticdata/staticmaps.nc
+2021-07-12 16:00:48,234 - update - delwaq - INFO - Model read
+2021-07-12 16:00:48,234 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/hydromodel.
+2021-07-12 16:00:48,234 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/staticdata.
+2021-07-12 16:00:48,234 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/staticgeoms.
+2021-07-12 16:00:48,234 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/config.
+2021-07-12 16:00:48,234 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/dynamicdata.
+2021-07-12 16:00:48,234 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/fews.
+2021-07-12 16:00:48,244 - update - model_api - DEBUG - setup_emission_vector.emission_fn: EF_local
+2021-07-12 16:00:48,244 - update - model_api - DEBUG - setup_emission_vector.col2raster: EF
+2021-07-12 16:00:48,244 - update - model_api - DEBUG - setup_emission_vector.rasterize_method: value
+2021-07-12 16:00:48,244 - update - delwaq - INFO - Preparing &#39;EF_local&#39; map.
+2021-07-12 16:00:48,244 - update - data_adapter - INFO - DataCatalog: Getting EF_local GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/examples_data/emission_factor.gpkg
+2021-07-12 16:00:48,378 - update - data_adapter - DEBUG - GeoDataFrame: Convert units for 2 columns.
+2021-07-12 16:00:48,454 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended
+2021-07-12 16:00:48,468 - update - delwaq - INFO - Writing staticmap files.
+2021-07-12 16:00:48,480 - update - delwaq - INFO - Writing model staticgeom to file.
+2021-07-12 16:00:48,494 - update - delwaq - INFO - Writing hydromap files.
+2021-07-12 16:00:48,561 - update - delwaq - WARNING - Warning: no dynamic map, skipping write_dynamicmaps.
 
 </pre></div></div>
 </div>
