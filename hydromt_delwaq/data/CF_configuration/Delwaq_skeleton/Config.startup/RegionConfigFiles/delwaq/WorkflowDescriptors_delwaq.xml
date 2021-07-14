@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflowDescriptors xmlns="http://www.wldelft.nl/fews" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews http://fews.wldelft.nl/schemas/version1.0/workflowDescriptors.xsd" version="1.0">
+	<workflowDescriptor id="Delwaq_historic" name="D-Water Quality run (using WFlow Historical fluxes)" visible="true" forecast="true" autoApprove="true" allowApprove="true">
+		<cardinalTimeStep timeZone="GMT" unit="day"/>
+		<runExpiryTime unit="day" multiplier="10"/>
+	</workflowDescriptor>
+	<!--<rootNode>
+		<node name="Delwaq">
+			<workflowId>Delwaq_historic</workflowId>
+		</node>
+	</rootNode>-->
+</workflowDescriptors>

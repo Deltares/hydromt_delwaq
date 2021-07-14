@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generalAdapterRun xmlns="http://www.wldelft.nl/fews" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews http://fews.wldelft.nl/schemas/version1.0/generalAdapterRun.xsd">
+	<!-- create RIBASIM-CF configuartion for model -->
+	<general>
+		<piVersion>1.10</piVersion>
+		<rootDir>%REGION_HOME%\Preparation\newbasin</rootDir>
+		<workDir>%REGION_HOME%\Preparation\newbasin</workDir>
+		<exportDir>%ROOT_DIR%</exportDir>
+		<exportDataSetDir>%ROOT_DIR%</exportDataSetDir>
+		<importDir>%ROOT_DIR%</importDir>
+		<dumpFileDir>%REGION_HOME%\DumpFiles</dumpFileDir>
+		<dumpDir>%ROOT_DIR%</dumpDir>
+		<diagnosticFile>%ROOT_DIR%\diag.xml</diagnosticFile>
+	</general>
+	<activities>
+		<executeActivities>
+			<executeActivity>
+				<command>
+						<executable>$PYTHON_VENV_FOLDER$/Scripts/python.exe</executable>
+				</command>
+				<arguments>
+					<argument>$REGION_HOME$\Modules\bin\pyscripts\delwaq_cf_configurator.py</argument>
+					<argument>-ini_file_path</argument>
+					<argument>%WORK_DIR%\delwaq_cf_configurator.ini</argument>
+					<argument>-work_dir</argument>
+					<argument>%WORK_DIR%</argument>
+					<argument>-append_config</argument>
+					<argument>true</argument>
+				</arguments>
+				<logFile>
+					<file>%WORK_DIR%\delwaq_configurator.log</file>
+					<warningLinePattern>*WARN*</warningLinePattern>
+					<infoLinePattern>*INFO*</infoLinePattern>
+					<errorLinePattern>*ERROR*</errorLinePattern>
+					<debugLinePattern>*DEBUG*</debugLinePattern>
+				</logFile>
+				<timeOut>100000</timeOut>
+				<ignoreDiagnostics>true</ignoreDiagnostics>
+			</executeActivity>
+		</executeActivities>
+	</activities>
+</generalAdapterRun>

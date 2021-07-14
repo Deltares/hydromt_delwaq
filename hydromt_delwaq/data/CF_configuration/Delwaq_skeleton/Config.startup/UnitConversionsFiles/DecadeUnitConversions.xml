@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unitConversions xmlns="http://www.wldelft.nl/fews" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews http://fews.wldelft.nl/schemas/version1.0/unitConversions.xsd">
+	<!-- in alphabetical order -->
+	<!-- assumption decade=10days-->
+	<unitConversion>
+		<inputUnitType>m3/timestep</inputUnitType>
+		<outputUnitType>m3/s</outputUnitType>
+		<multiplier>1.1574074e-5</multiplier>
+		<incrementer>0</incrementer>
+	</unitConversion>
+	<unitConversion>
+		<inputUnitType>m3/dec</inputUnitType>
+		<outputUnitType>m3/s</outputUnitType>
+		<multiplier>1.1574e-6</multiplier>
+		<incrementer>0</incrementer>
+	</unitConversion>
+	<unitConversion>
+		<inputUnitType>mm/dec</inputUnitType>
+		<outputUnitType>mm</outputUnitType>
+		<multiplier>0.1</multiplier>
+		<incrementer>0</incrementer>
+	</unitConversion>
+</unitConversions>

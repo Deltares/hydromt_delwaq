@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grids xmlns="http://www.wldelft.nl/fews" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews http://fews.wldelft.nl/schemas/version1.0/grids.xsd">
+<irregular locationId="Delwaq_grid_$REGIONID$">
+    <netcdfFile>
+        <file>%REGION_HOME%/MapLayerFiles/B3_waqgeom_$REGIONID$.nc</file>
+        <meshTopologyVariableName>mesh</meshTopologyVariableName>
+        <staggerLocation>face</staggerLocation>
+    </netcdfFile>
+</irregular>
+</grids>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generalAdapterRun xmlns="http://www.wldelft.nl/fews" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews http://fews.wldelft.nl/schemas/version1.0/generalAdapterRun.xsd">
+	<!-- export Python environment -->
+	<general>
+		<rootDir>%REGION_HOME%</rootDir>
+		<workDir>%REGION_HOME%\Modules\delwaq</workDir>
+		<exportDir>%ROOT_DIR%</exportDir>
+		<exportDataSetDir>%ROOT_DIR%</exportDataSetDir>
+		<importDir>%ROOT_DIR%</importDir>
+		<dumpFileDir>%REGION_HOME%\DumpFiles</dumpFileDir>
+		<dumpDir>%ROOT_DIR%</dumpDir>
+		<diagnosticFile>%ROOT_DIR%\diag.xml</diagnosticFile>
+	</general>
+	<activities>
+		<exportActivities>
+			<exportDataSetActivity>
+				<moduleDataSetName>hydromt_delwaq</moduleDataSetName>
+			</exportDataSetActivity>
+			<exportDataSetActivity>
+				<moduleDataSetName>delwaq_bin</moduleDataSetName>
+			</exportDataSetActivity>
+			<exportDataSetActivity>
+				<moduleDataSetName>EM-Plugin</moduleDataSetName>
+			</exportDataSetActivity>
+			<exportDataSetActivity>
+				<moduleDataSetName>WQ-Plugin</moduleDataSetName>
+			</exportDataSetActivity>
+		</exportActivities>
+	</activities>
+</generalAdapterRun>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generalAdapterRun xmlns="http://www.wldelft.nl/fews" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews http://fews.wldelft.nl/schemas/version1.0/generalAdapterRun.xsd">
+	<general>
+		<description>Execute delwaq and import results</description>
+		<piVersion>1.10</piVersion>
+		<rootDir>%REGION_HOME%/Modules/</rootDir>
+		<workDir>%ROOT_DIR%/delwaq/$REGIONID$/work</workDir>
+		<exportDir>%WORK_DIR%</exportDir>
+		<exportDataSetDir>%ROOT_DIR%/delwaq/$REGIONID$</exportDataSetDir>
+		<exportIdMap>idmap_to_delwaq</exportIdMap>
+		<importDir>%ROOT_DIR%/delwaq/$REGIONID$/work</importDir>
+		<importIdMap>idmap_from_delwaq</importIdMap>
+		<dumpFileDir>%REGION_HOME%/DumpFiles</dumpFileDir>
+		<dumpDir>%WORK_DIR%</dumpDir>
+		<diagnosticFile>%ROOT_DIR%/delwaq/$REGIONID$/logs/postadapter_diag.xml</diagnosticFile>
+		<convertDatum>false</convertDatum>
+	</general>
+	<activities>
+		<startUpActivities>
+			<purgeActivity>
+				<filter>%ROOT_DIR%/delwaq/$REGIONID$/logs/*.xml</filter>
+			</purgeActivity>
+			<purgeActivity>
+				<filter>%ROOT_DIR%/delwaq/$REGIONID$/config/*.*</filter>
+			</purgeActivity>
+			<purgeActivity>
+				<filter>%ROOT_DIR%/delwaq/$REGIONID$/runinfo/*.*</filter>
+			</purgeActivity>
+		</startUpActivities>
+		<exportActivities>
+		<!--<exportActivities>-->
+			<!--<exportStateActivity>
+				<moduleInstanceId>Delwaq_$REGIONID$_GA</moduleInstanceId>
+				<stateExportDir>%ROOT_DIR%/instate</stateExportDir>
+				<stateConfigFile>%ROOT_DIR%/instate/state.xml</stateConfigFile>
+				<stateLocations type="file">
+					<stateLocation>
+						<readLocation>delwaq-initials.map</readLocation>
+						<writeLocation>delwaq-initials.map</writeLocation>
+					</stateLocation>
+				</stateLocations>
+				<stateSelection>
+					<warmState>
+						<stateSearchPeriod unit="day" start="-10" end="0"/>
+					</warmState>
+				</stateSelection>
+			</exportStateActivity>-->
+			<!-- all input data for delwaq, including dynamic data will be prepared by running wflow_delwaq.exe. no <exportNetcdfActivity>...</exportNetcdfActivity> export required-->
+			<exportRunFileActivity>
+				<exportFile>%WORK_DIR%/runinfo.xml</exportFile>
+				<properties>
+					<string key="delwaqVersion" value="5.05.00.5471"/>
+				</properties>
+			</exportRunFileActivity>
+		</exportActivities>
+		<executeActivities>
+			<executeActivity>
+				<description>Run WFlow-Delwaq coupling</description>
+				<command>
+					<executable>%ROOT_DIR%/bin_waq/modelbuilder/wflow_delwaq.exe</executable>
+				</command>
+				<arguments>
+					<argument>-C</argument>
+					<argument>$REGION_HOME$/modules/wflow/WFlow_$REGIONID$</argument>
+					<argument>-R</argument>
+					<argument>run_default</argument>
+					<argument>-c</argument>
+					<argument>wflow_sbm.ini</argument>
+					<argument>-S</argument>
+					<argument>inw</argument>
+					<argument>-D</argument>
+					<argument>%ROOT_DIR%</argument>
+					<argument>-d</argument>
+					<argument>True</argument>
+					<argument>-n</argument>
+					<argument>wflow2fews.nc</argument>
+					<argument>-F</argument>
+					<argument>True</argument>
+				</arguments>
+				<timeOut>120000</timeOut>
+				<ignoreDiagnostics>true</ignoreDiagnostics>
+			</executeActivity>
+			<executeActivity>
+				<description>Run Delwaq preprocessing</description>
+				<command>
+					<executable>%ROOT_DIR%/delwaq/bin/delwaq1.exe</executable>
+				</command>
+				<arguments>
+					<argument>delwaq.inp</argument>
+					<argument>-A</argument>
+					<argument>-np</argument>
+				</arguments>
+				<timeOut>600000000</timeOut>
+				<ignoreDiagnostics>true</ignoreDiagnostics>
+			</executeActivity>
+			<executeActivity>
+				<description>Run Delwaq calculation</description>
+				<command>
+					<executable>%ROOT_DIR%/delwaq/bin/delwaq2.exe</executable>
+				</command>
+				<arguments>
+					<argument>delwaq.inp</argument>
+				</arguments>
+				<timeOut>600000000</timeOut>
+				<ignoreDiagnostics>true</ignoreDiagnostics>
+			</executeActivity>
+		</executeActivities>
+		<importActivities>
+			<!--<importStateActivity>
+				<stateConfigFile>%WORK_DIR%/outstate/outstate.xml</stateConfigFile>
+			</importStateActivity>-->
+			<importNetcdfActivity>
+				<importFile>%ROOT_DIR%/EM-$REGIONID$/espace_map.nc</importFile>
+				<timeSeriesSets>
+					<timeSeriesSet>
+						<moduleInstanceId>$MODULE_INSTANCE_ID$</moduleInstanceId>
+						<valueType>grid</valueType>
+						<parameterId>Emis_Sfw</parameterId>
+						<locationId>Delwaq_grid_$REGIONID$</locationId>
+						<timeSeriesType>simulated historical</timeSeriesType>
+						<timeStep id="WFlow_timestep"/>
+						<readWriteMode>add originals</readWriteMode>
+					</timeSeriesSet>
+				</timeSeriesSets>
+			</importNetcdfActivity>
+			<importNetcdfActivity>
+				<importFile>%ROOT_DIR%/WQ-$REGIONID$/delwaq_map.nc</importFile>
+				<timeSeriesSets>
+					<timeSeriesSet>
+						<moduleInstanceId>$MODULE_INSTANCE_ID$</moduleInstanceId>
+						<valueType>grid</valueType>
+						<parameterId>cTR1</parameterId>
+						<locationId>Delwaq_grid_$REGIONID$</locationId>
+						<timeSeriesType>simulated historical</timeSeriesType>
+						<timeStep id="WFlow_timestep"/>
+						<readWriteMode>add originals</readWriteMode>
+					</timeSeriesSet>
+				</timeSeriesSets>
+			</importNetcdfActivity>
+		</importActivities>
+	</activities>
+</generalAdapterRun>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<explorer xmlns="http://www.wldelft.nl/fews" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xsi:schemaLocation="http://www.wldelft.nl/fews http://fews.wldelft.nl/schemas/version1.0/explorer.xsd">
+	<systemInformation>
+		<systemCaption>$EXPLORER_SYSTEMCAPTION$</systemCaption>
+		<appendVersionInformationToSystemCaption>true</appendVersionInformationToSystemCaption>
+		<systemHelpFile>$DOCUMENTS_CF_FOLDER$\1_Help.pdf</systemHelpFile>
+	</systemInformation>
+	<globalDatum>MSL</globalDatum>
+	<map>
+		<geoDatum>WGS 1984</geoDatum>
+		<projection>mercator</projection>
+		<defaultExtent id="Deltares">
+			<left>4.3</left>
+			<right>4.45</right>
+			<top>52.03</top>
+			<bottom>51.97</bottom>
+		</defaultExtent>
+		<extraExtent id="World">
+			<left>0</left>
+			<right>100</right>
+			<top>0</top>
+			<bottom>45</bottom>
+		</extraExtent>
+		<scaleBarVisible>true</scaleBarVisible>
+		<northArrowVisible>true</northArrowVisible>
+		<labelsVisible>true</labelsVisible>
+		<backgroundColor>light sky blue</backgroundColor>
+		<openStreetMapLayer id="Osm">
+			<url>http://tile.openstreetmap.org</url>
+			<visible>true</visible>
+			<cacheDir>%REGION_HOME%/MapCache/OsmTiles</cacheDir>
+		</openStreetMapLayer>
+		<layer id="Satellite">
+			<className>nl.wldelft.libx.openmap.GenericTileServerLayer</className>
+			<visible>false</visible>
+			<properties>
+				<string key="tileUrlPattern" value="http://h%RIGHT(QUAD_KEY,1)%.ortho.tiles.virtualearth.net/tiles/h%QUAD_KEY%.jpeg?g=1"/>
+				<string key="cacheDir" value="%REGION_HOME%/MapCache/Satellite_Cache"/>
+				<int key="minZoomLevel" value="2"/>
+				<int key="maxZoomLevel" value="17"/>
+				<int key="topZoomLevel" value="19"/>
+				<int key="tileSize" value="256"/>
+			</properties>
+		</layer>
+	</map>
+	<explorerTasks>
+		<explorerTask name="Network Design">
+			<pluginPanelClass>nl.wldelft.network.view.main.TopologyEditorMainPanel</pluginPanelClass>
+			<pluginPanelFactoryMethod>createPanel</pluginPanelFactoryMethod>
+			<pluginPanelFactoryMethodArguments>%REGION_HOME%\Preparation\newbasin\network</pluginPanelFactoryMethodArguments>
+			<pluginPanelBinDir>%REGION_HOME%\bin</pluginPanelBinDir>
+			<toolbarTask>true</toolbarTask>
+			<menubarTask>true</menubarTask>
+			<accelerator>ctrl E</accelerator>
+			<loadAtStartup>true</loadAtStartup>
+		</explorerTask>
+		<explorerTask name="Documents">
+			<mnemonic>o</mnemonic>
+			<taskClass>nl.wldelft.fews.gui.plugin.information.ForecasterAidDocumentPanel</taskClass>
+			<toolbarTask>true</toolbarTask>
+			<menubarTask>true</menubarTask>
+			<loadAtStartup>true</loadAtStartup>
+		</explorerTask>
+		<explorerTask name="Manual and Log files">
+			<predefinedDisplay>documents</predefinedDisplay>
+			<toolbarTask>false</toolbarTask>
+			<menubarTask>false</menubarTask>
+			<toolWindow>true</toolWindow>
+			<loadAtStartup>true</loadAtStartup>
+		</explorerTask>
+		<explorerTask name="Tasks">
+			<predefinedDisplay>topology tree</predefinedDisplay>
+			<toolbarTask>false</toolbarTask>
+			<menubarTask>false</menubarTask>
+			<toolWindow>true</toolWindow>
+			<loadAtStartup>true</loadAtStartup>
+		</explorerTask>
+		<explorerTask name="Model data overview">
+			<mnemonic>O</mnemonic>
+			<predefinedDisplay>tabular config files display</predefinedDisplay>
+			<toolbarTask>true</toolbarTask>
+			<menubarTask>true</menubarTask>
+			<loadAtStartup>false</loadAtStartup>
+		</explorerTask>
+		<explorerTask name="Graphs">
+			<mnemonic>G</mnemonic>
+			<predefinedDisplay>time series dialog</predefinedDisplay>
+			<toolbarTask>true</toolbarTask>
+			<menubarTask>true</menubarTask>
+			<allowMultipleInstances>true</allowMultipleInstances>
+			<accelerator>ctrl D</accelerator>
+			<loadAtStartup>true</loadAtStartup>
+		</explorerTask>
+		<explorerTask name="Manual Workflows">
+			<mnemonic>W</mnemonic>
+			<displayConfigFileName>ManualForecastDisplay</displayConfigFileName>
+			<toolbarTask>true</toolbarTask>
+			<menubarTask>true</menubarTask>
+			<accelerator>ctrl T</accelerator>
+		</explorerTask>
+		<explorerTask name="SystemMonitor">
+			<mnemonic>S</mnemonic>
+			<displayConfigFileName>SystemMonitorDisplay</displayConfigFileName>
+			<toolbarTask>true</toolbarTask>
+			<menubarTask>true</menubarTask>
+			<accelerator>ctrl S</accelerator>
+		</explorerTask>
+		<explorerTask name="Manage Runs">
+			<mnemonic>a</mnemonic>
+			<predefinedDisplay>forecast management</predefinedDisplay>
+			<toolbarTask>true</toolbarTask>
+			<menubarTask>true</menubarTask>
+			<accelerator>ctrl F</accelerator>
+		</explorerTask>
+		<explorerTask name="separator">
+			<separator/>
+		</explorerTask>
+		<explorerTask name="Workflow Navigator">
+			<mnemonic>w</mnemonic>
+			<predefinedDisplay>workflow navigator</predefinedDisplay>
+			<toolbarTask>true</toolbarTask>
+			<menubarTask>true</menubarTask>
+			<accelerator>ctrl W</accelerator>
+		</explorerTask>
+		<explorerTask name="Timeseries Lister">
+			<mnemonic>L</mnemonic>
+			<predefinedDisplay>time series lister</predefinedDisplay>
+			<toolbarTask>true</toolbarTask>
+			<menubarTask>true</menubarTask>
+			<accelerator>ctrl L</accelerator>
+		</explorerTask>
+		<explorerTask name="Browser">
+			<mnemonic>b</mnemonic>
+			<predefinedDisplay>web browser</predefinedDisplay>
+			<toolbarTask>false</toolbarTask>
+			<menubarTask>true</menubarTask>
+			<accelerator>ctrl B</accelerator>
+			<loadAtStartup>true</loadAtStartup>
+		</explorerTask>
+		<explorerTask name="separator">
+			<separator/>
+		</explorerTask>
+	</explorerTasks>
+	<statusBarConfig>
+		<dateTimeFormat>HH:mm</dateTimeFormat>
+		<timeGMT>true</timeGMT>
+		<timeCurrent>true</timeCurrent>
+		<timeLastRefresh>true</timeLastRefresh>
+		<statusOfSystem>true</statusOfSystem>
+		<mouseCoordinates>true</mouseCoordinates>
+		<userName>true</userName>
+	</statusBarConfig>
+	<dateTime>
+		<timeZoneOffset>+01:00</timeZoneOffset>
+		<dateTimeFormat>dd-MM-yyyy HH:mm:ss</dateTimeFormat>
+		<cardinalTimeStep unit="hour" multiplier="1" timeZone="GMT"/>
+	</dateTime>
+	<panelSizes>
+		<loggingPanelSize>5</loggingPanelSize>
+		<listsPanelSize>22</listsPanelSize>
+		<filterListSize>29</filterListSize>
+		<locationListSize>45</locationListSize>
+		<parameterListSize>25</parameterListSize>
+		<forecastListSize>5</forecastListSize>
+	</panelSizes>
+	<panelHeaderLabels>
+		<filterPanelHeader>Datasource</filterPanelHeader>
+		<locationPanelHeader>Locations</locationPanelHeader>
+		<parameterPanelHeader>Parameters</parameterPanelHeader>
+		<forecastPanelHeader>Simulations</forecastPanelHeader>
+	</panelHeaderLabels>
+	<notification enabled="true"/>
+</explorer>

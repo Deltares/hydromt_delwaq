@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topologyGroup xmlns="http://www.wldelft.nl/fews" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wldelft.nl/fews http://fews.wldelft.nl/schemas/version1.0/topologyGroup.xsd">
+	<group id="Delwaq">
+		<nodes id="Delwaq_Runs" name="Delwaq Model Runs">
+			<node id="Import_Delwaq" name="Import Delwaq model results">
+				<workflowId>Delwaq_$REGIONID$</workflowId>
+				<localRun>true</localRun>
+				<showRunApprovedForecastButton>true</showRunApprovedForecastButton>
+			</node>
+		</nodes>
+	</group>
+</topologyGroup>
