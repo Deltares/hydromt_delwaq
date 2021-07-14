@@ -1,0 +1,1 @@
+#Description of the skeleton config setup
