@@ -344,6 +344,7 @@ class DelwaqModel(Model):
         endtime,
         timestepsecs,
         add_volume_offset=True,
+        volume_correction=False,
         **kwargs,
     ):
         """Setup Delwaq hydrological fluxes.
@@ -389,6 +390,9 @@ class DelwaqModel(Model):
             Delwaq needs water volumes at the beginning of the timestep.
             In some models, like wflow, volumes are written at the end of the timestep and therefore
             an offset of one timestep needs to be added for consistency.
+        volume_correction: bool, optional
+            Corrects the volume values to avoid water balance errors. Assumes the flows are correct
+            and recalculates volumes accordingly: dV = sum(qin - qout).
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
@@ -402,6 +406,10 @@ class DelwaqModel(Model):
         # TODO when forcing workflow is ready nice clipping/resampling can be added
         # Normally region extent is by default exactly the same as hydromodel
         ds = self.data_catalog.get_rasterdataset(hydro_forcing_fn, geom=self.region)
+
+        # align forcing file with hydromaps
+        ds = ds.raster.reproject_like(self.hydromaps)
+
         # Add _FillValue to the data attributes
         for dvar in ds.data_vars.keys():
             nodata = ds[dvar].raster.nodata
@@ -437,16 +445,16 @@ class DelwaqModel(Model):
             # If needed, compute volume from level using surface
             if "vol" not in ds.data_vars and "volRiv" not in ds.data_vars:
                 if "levLand" in ds.data_vars and "levRiv" in ds.data_vars:
-                    surface = emissions.gridarea(self.hydromaps)
-                    volL = ds["levLand"] * surface.values
-                    rivlen = self.hydromaps["rivlen"].values
-                    rivwth = self.hydromaps["rivwth"].values
+                    surface = emissions.gridarea(ds)
+                    volL = ds["levLand"] * surface
+                    rivlen = self.hydromaps["rivlen"]
+                    rivwth = self.hydromaps["rivwth"]
                     volR = ds["levRiv"] * rivlen * rivwth
                     ds["vol"] = volL + volR.fillna(0) + 0.0001
                     ds["vol"].attrs.update(units="m3")
                     ds["vol"].attrs.update(_FillValue=ds["levLand"].raster.nodata)
                 else:
-                    ds["vol"] = ds["lev"] * self.staticmaps["surface"].values + 0.0001
+                    ds["vol"] = ds["lev"] * self.staticmaps["surface"] + 0.0001
                     ds["vol"].attrs.update(units="m3")
                     ds["vol"].attrs.update(_FillValue=ds["lev"].raster.nodata)
             else:
@@ -472,6 +480,29 @@ class DelwaqModel(Model):
             times_offset = times + times.freq
             vol = ds["vol"].copy()
             ds = ds.drop("vol")
+            # If needed correct the volume values to avoid water balance errors
+            if volume_correction:
+                self.logger.info(f"Correcting the volumes based on flows.")
+                vol_end = vol.rename("vol_river_end").copy()
+                # Volume at the beginning of the timestep
+                vol_begin = vol.rename("vol_river_begin").copy()
+                vol_begin["time"] = times_offset
+                # Runoff from upstream cells
+                flwdir = flw.flwdir_from_da(
+                    self.hydromaps[self._MAPS["flwdir"]], ftype="infer", mask=None
+                )
+                # Correct volumes
+                for t in range(len(ds["time"]) - 1):
+                    self.logger.debug(f"Correcting volume at t = {t}")
+                    qin = flwdir.upstream_sum(ds["run"][t, :, :])
+                    vol_end[t, :, :] = (
+                        vol_begin[t, :, :]
+                        + (qin + ds["inwater"][t, :, :] - ds["run"][t, :, :]) * 86400
+                    )
+                    # Update volume begin with new value
+                    if t < len(ds["time"]):
+                        vol_begin[t + 1, :, :] = vol_end[t, :, :]
+                vol = vol_end.rename("vol")
             vol["time"] = times_offset
             ds = ds.merge(vol)
         # Sell times to starttime and endtime
@@ -481,8 +512,8 @@ class DelwaqModel(Model):
         for dvar in ds.data_vars.keys():
             if ds[dvar].attrs.get("units") == "mm":
                 attrs = ds[dvar].attrs.copy()
-                surface = emissions.gridarea(self.hydromaps)
-                ds[dvar] = ds[dvar] * surface.values / (1000 * self.timestepsecs)
+                surface = emissions.gridarea(ds)
+                ds[dvar] = ds[dvar] * surface / (1000 * self.timestepsecs)
                 ds[dvar].attrs.update(attrs)  # set original attributes
                 ds[dvar].attrs.update(unit="m3/s")
 
