@@ -122,7 +122,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../api/api_index.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">What’s new</a></li>
 </ul>
 
             
@@ -220,7 +220,7 @@
 <h1>hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing<a class="headerlink" href="#hydromt-delwaq-delwaq-delwaqmodel-setup-hydrology-forcing" title="Permalink to this headline">¶</a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing">
-<span class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></span><span class="sig-name descname"><span class="pre">setup_hydrology_forcing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hydro_forcing_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestepsecs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_volume_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.setup_hydrology_forcing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></span><span class="sig-name descname"><span class="pre">setup_hydrology_forcing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hydro_forcing_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestepsecs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_volume_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume_correction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.setup_hydrology_forcing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setup Delwaq hydrological fluxes.</p>
 <p>Adds model layers:</p>
 <ul class="simple">
@@ -258,6 +258,8 @@
 <li><p><strong>add_volume_offset</strong> (<em>bool</em><em>, </em><em>optional</em>) – Delwaq needs water volumes at the beginning of the timestep.
 In some models, like wflow, volumes are written at the end of the timestep and therefore
 an offset of one timestep needs to be added for consistency.</p></li>
+<li><p><strong>volume_correction</strong> (<em>bool</em><em>, </em><em>optional</em>) – Corrects the volume values to avoid water balance errors. Assumes the flows are correct
+and recalculates volumes accordingly: dV = sum(qin - qout).</p></li>
 </ul>
 </dd>
 </dl>
