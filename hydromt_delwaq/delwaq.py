@@ -6,6 +6,7 @@ import glob
 import numpy as np
 import pandas as pd
 import xarray as xr
+import geopandas as gpd
 import pyproj
 import logging
 import struct
@@ -19,7 +20,7 @@ from hydromt import workflows, flw, io
 
 from hydromt_wflow.wflow import WflowModel
 
-from .workflows import emissions, segments
+from .workflows import emissions, segments, roads
 from . import DATADIR
 
 __all__ = ["DelwaqModel"]
@@ -402,6 +403,11 @@ class DelwaqModel(Model):
         # TODO when forcing workflow is ready nice clipping/resampling can be added
         # Normally region extent is by default exactly the same as hydromodel
         ds = self.data_catalog.get_rasterdataset(hydro_forcing_fn, geom=self.region)
+        # Check if latitude is from south to north
+        ys = ds.raster.ycoords
+        resy = np.mean(np.diff(ys.values))
+        if resy >= 0:
+            ds = ds.reindex({ds.raster.y_dim: ds[ds.raster.y_dim][::-1]})
         # Add _FillValue to the data attributes
         for dvar in ds.data_vars.keys():
             nodata = ds[dvar].raster.nodata
@@ -745,6 +751,147 @@ class DelwaqModel(Model):
                     k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars
                 }
                 self.set_staticmaps(ds_admin_maps.rename(rmdict))
+
+    def setup_roads(
+        self,
+        roads_fn,
+        highway_list,
+        country_list,
+        non_highway_list=None,
+        country_fn=None,
+    ):
+        """Setup roads statistics needed for emission modelling.
+
+        Adds model layers:
+
+        * **km_highway_country** map: emission data with for each grid cell the total km of highway for the country the grid cell is in [km highway/country]
+        * **km_other_country** map: emission data with for each grid cell the total km of non highway roads for the country the grid cell is in [km other road/country]
+        * **km_highway_cell** map: emission data containing highway length per cell [km highway/cell]
+        * **km_other_cell** map:
+        * **emission factor X** map: emission data from mapping file to classification
+
+        Parameters
+        ----------
+        roads_fn: str
+            Name of road data source in data_sources.yml file.
+
+            * Required variables: ['road_type']
+
+            * Optional variable: ['length', 'country_code']
+        highway_list: str or list of str
+            List of highway roads in the type variable of roads_fn.
+        non_highway_list: str or list of str, optional.
+            List of non highway roads in the type variable of roads_fn. If not provided takes every roads except the ones in highway_list.
+        country_list: str or list of str, optional.
+            List of countries for the model area in country_fn and optionnally in country_code variable of roads_fn.
+        country_fn: str, optional.
+            Name of country boundaries data source in data_sources.yml file.
+
+            * Required variables: ['country_code']
+
+        """
+        if roads_fn is None:
+            return
+        if roads_fn not in self.data_catalog:
+            self.logger.warning(f"Invalid source '{roads_fn}', skipping setup_roads.")
+            return
+        # Convert string to lists
+        if not isinstance(highway_list, list):
+            highway_list = [highway_list]
+        if not isinstance(country_list, list):
+            country_list = [country_list]
+
+        # Mask the road data with countries of interest
+        gdf_country = self.data_catalog.get_geodataframe(country_fn, dst_crs=self.crs)
+        gdf_country = gdf_country.astype({"country_code": "str"})
+        gdf_country = gdf_country.iloc[
+            np.isin(gdf_country["country_code"], country_list)
+        ]
+        # bbox = gdf_country.total_bounds
+
+        # Read the roads data and mask with country geom
+        gdf_roads = self.data_catalog.get_geodataframe(
+            roads_fn, dst_crs=self.crs, geom=gdf_country, variables=["road_type"]
+        )
+        # Make sure road type is str format
+        gdf_roads["road_type"] = gdf_roads["road_type"].astype(str)
+        # Get non_highway_list
+        if non_highway_list is None:
+            road_types = np.unique(gdf_roads["road_type"].values)
+            non_highway_list = road_types[~np.isin(road_types, highway_list)].tolist()
+        elif not isinstance(non_highway_list, list):
+            non_highway_list = [non_highway_list]
+
+        # Feature filter for highway and non-highway
+        feature_filter = {
+            "hwy": {"road_type": highway_list},
+            "nnhwy": {"road_type": non_highway_list},
+        }
+
+        ### Country statistics ###
+        # Loop over feature_filter
+        for name, colfilter in feature_filter.items():
+            self.logger.info(
+                f"Computing {name} roads statistics per country of interest"
+            )
+            # Filter gdf
+            colname = [k for k in colfilter.keys()][0]
+            subset_roads = gdf_roads.iloc[
+                np.isin(gdf_roads[colname], colfilter.get(colname))
+            ]
+            gdf_country = roads.zonal_stats(
+                gdf=subset_roads,
+                zones=gdf_country,
+                variables=["length"],
+                stats=["sum"],
+                method="sjoin",
+            )
+            gdf_country = gdf_country.rename(
+                columns={"length_sum": f"{name}_length_sum"}
+            )
+            # Convert from m to km
+            gdf_country[f"{name}_length_sum"] = gdf_country[f"{name}_length_sum"] / 1000
+
+            # Rasterize statistics
+            da_emi = emissions.emission_vector(
+                gdf=gdf_country,
+                ds_like=self.staticmaps,
+                col_name=f"{name}_length_sum",
+                method="value",
+                mask_name="mask",
+                logger=self.logger,
+            )
+            self.set_staticmaps(da_emi.rename(f"{name}_length_sum_country"))
+
+        ### Road statistics per segment ###
+        # Filter road gdf with model mask
+        mask = self.staticmaps["mask"].astype("int32").raster.vectorize()
+        gdf_roads = self.data_catalog.get_geodataframe(
+            roads_fn, dst_crs=self.crs, geom=mask, variables=["road_type"]
+        )
+        # Make sure road type is str format
+        gdf_roads["road_type"] = gdf_roads["road_type"].astype(str)
+
+        # Loop over feature_filter
+        for name, colfilter in feature_filter.items():
+            self.logger.info(f"Computing {name} roads statistics per segment")
+            # Filter gdf
+            colname = [k for k in colfilter.keys()][0]
+            subset_roads = gdf_roads.iloc[
+                np.isin(gdf_roads[colname], colfilter.get(colname))
+            ]
+            ds_roads = roads.zonal_stats_grid(
+                gdf=subset_roads,
+                ds_like=self.staticmaps,
+                variables=["length"],
+                stats=["sum"],
+                mask_name="mask",
+                method="overlay",
+            )
+            # Convert from m to km and rename
+            ds_roads[f"{name}_length"] = ds_roads["length_sum"] / 1000
+            ds_roads[f"{name}_length"].attrs.update(_FillValue=0)
+            self.set_staticmaps(ds_roads)
 
     # I/O
     def read(self):
