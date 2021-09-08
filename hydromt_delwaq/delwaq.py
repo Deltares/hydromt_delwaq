@@ -407,11 +407,11 @@ class DelwaqModel(Model):
         # TODO when forcing workflow is ready nice clipping/resampling can be added
         # Normally region extent is by default exactly the same as hydromodel
         ds = self.data_catalog.get_rasterdataset(hydro_forcing_fn, geom=self.region)
-#        # Check if latitude is from south to north
-#        ys = ds.raster.ycoords
-#        resy = np.mean(np.diff(ys.values))
-#        if resy >= 0:
-#            ds = ds.reindex({ds.raster.y_dim: ds[ds.raster.y_dim][::-1]})
+        #        # Check if latitude is from south to north
+        #        ys = ds.raster.ycoords
+        #        resy = np.mean(np.diff(ys.values))
+        #        if resy >= 0:
+        #            ds = ds.reindex({ds.raster.y_dim: ds[ds.raster.y_dim][::-1]})
 
         # align forcing file with hydromaps
         ds = ds.raster.reproject_like(self.hydromaps)

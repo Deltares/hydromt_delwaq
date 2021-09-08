@@ -10,7 +10,7 @@ from hydromt import flw
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["zonal_stats", "zonal_stats_grid", "intersect_with_grid"]
+__all__ = ["zonal_stats", "zonal_stats_grid"]
 
 
 def zonal_stats(gdf, zones, variables=[], stats=[], method="overlay"):
