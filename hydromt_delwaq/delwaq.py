@@ -346,7 +346,6 @@ class DelwaqModel(Model):
         endtime,
         timestepsecs,
         add_volume_offset=True,
-        volume_correction=False,
         **kwargs,
     ):
         """Setup Delwaq hydrological fluxes.
@@ -392,9 +391,6 @@ class DelwaqModel(Model):
             Delwaq needs water volumes at the beginning of the timestep.
             In some models, like wflow, volumes are written at the end of the timestep and therefore
             an offset of one timestep needs to be added for consistency.
-        volume_correction: bool, optional
-            Corrects the volume values to avoid water balance errors. Assumes the flows are correct
-            and recalculates volumes accordingly: dV = sum(qin - qout).
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
@@ -487,29 +483,6 @@ class DelwaqModel(Model):
             times_offset = times + times.freq
             vol = ds["vol"].copy()
             ds = ds.drop("vol")
-            # If needed correct the volume values to avoid water balance errors
-            if volume_correction:
-                self.logger.info(f"Correcting the volumes based on flows.")
-                vol_end = vol.rename("vol_river_end").copy()
-                # Volume at the beginning of the timestep
-                vol_begin = vol.rename("vol_river_begin").copy()
-                vol_begin["time"] = times_offset
-                # Runoff from upstream cells
-                flwdir = flw.flwdir_from_da(
-                    self.hydromaps[self._MAPS["flwdir"]], ftype="infer", mask=None
-                )
-                # Correct volumes
-                for t in range(len(ds["time"]) - 1):
-                    self.logger.debug(f"Correcting volume at t = {t}")
-                    qin = flwdir.upstream_sum(ds["run"][t, :, :])
-                    vol_end[t, :, :] = (
-                        vol_begin[t, :, :]
-                        + (qin + ds["inwater"][t, :, :] - ds["run"][t, :, :]) * 86400
-                    )
-                    # Update volume begin with new value
-                    if t < len(ds["time"]):
-                        vol_begin[t + 1, :, :] = vol_end[t, :, :]
-                vol = vol_end.rename("vol")
             vol["time"] = times_offset
             ds = ds.merge(vol)
         # Sell times to starttime and endtime
