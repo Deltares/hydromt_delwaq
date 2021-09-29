@@ -158,13 +158,14 @@ class DelwaqModel(Model):
             nrofseg, da_ptid = segments.pointer(self.hydromaps, build_pointer=False)
             self.set_hydromaps(da_ptid, name="ptid")
 
-        ### Initialise staticmaps with streamorder and slope ###
+        ### Initialise staticmaps with streamorder, river and slope ###
         ds_stat = (
             hydromodel.staticmaps[hydromodel._MAPS["strord"]]
             .rename("streamorder")
             .to_dataset()
         )
         ds_stat["slope"] = hydromodel.staticmaps[hydromodel._MAPS["lndslp"]]
+        ds_stat["river"] = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
         self.set_staticmaps(ds_stat)
         self.staticmaps.coords["mask"] = self.hydromaps["modelmap"]
 
