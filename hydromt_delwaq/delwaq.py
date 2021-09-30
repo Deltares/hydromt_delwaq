@@ -301,11 +301,12 @@ class DelwaqModel(Model):
             points = monpoints.values.flatten()
             points = points[points != mv]
             nb_points = len(points)
-            # Add to staticgeoms
-            # if first column has no name, give it a default name otherwise column is omitted when written to geojson
-            if gdf.index.name is None:
-                gdf.index.name = "fid"
-            self.set_staticgeoms(gdf, name="monpoints")
+            # Add to staticgeoms if mon_points is not segments
+            if mon_points != "segments":
+                # if first column has no name, give it a default name otherwise column is omitted when written to geojson
+                if gdf.index.name is None:
+                    gdf.index.name = "fid"
+                self.set_staticgeoms(gdf, name="monpoints")
         else:
             self.logger.info("No monitoring points set in the config file, skipping")
             nb_points = 0
