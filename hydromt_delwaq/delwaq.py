@@ -346,6 +346,7 @@ class DelwaqModel(Model):
         endtime,
         timestepsecs,
         add_volume_offset=True,
+        min_volume=0.1,
         **kwargs,
     ):
         """Setup Delwaq hydrological fluxes.
@@ -391,6 +392,8 @@ class DelwaqModel(Model):
             Delwaq needs water volumes at the beginning of the timestep.
             In some models, like wflow, volumes are written at the end of the timestep and therefore
             an offset of one timestep needs to be added for consistency.
+        min_volume : float, optional
+            Add a minimum value to all the volumes in Delwaq to avoid zeros. Default is 0.1m3.
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
@@ -453,22 +456,22 @@ class DelwaqModel(Model):
                     rivlen = self.hydromaps["rivlen"]
                     rivwth = self.hydromaps["rivwth"]
                     volR = ds["levRiv"] * rivlen * rivwth
-                    ds["vol"] = volL + volR.fillna(0) + 0.0001
+                    ds["vol"] = volL + volR.fillna(0) + min_volume
                     ds["vol"].attrs.update(units="m3")
                     ds["vol"].attrs.update(_FillValue=ds["levLand"].raster.nodata)
                 else:
-                    ds["vol"] = ds["lev"] * self.staticmaps["surface"] + 0.0001
+                    ds["vol"] = ds["lev"] * self.staticmaps["surface"] + min_volume
                     ds["vol"].attrs.update(units="m3")
                     ds["vol"].attrs.update(_FillValue=ds["lev"].raster.nodata)
             else:
                 if "volLand" in ds.data_vars and "volRiv" in ds.data_vars:
                     attrs = ds["volLand"].attrs.copy()
-                    ds["vol"] = ds["volRiv"].fillna(0) + ds["volLand"]
+                    ds["vol"] = ds["volRiv"].fillna(0) + ds["volLand"] + min_volume
                     ds["vol"].attrs.update(attrs)
                 else:
                     # In order to avoid zero volumes, a basic minimum value of 0.0001 m3 is added to all volumes
                     attrs = ds["vol"].attrs.copy()
-                    ds["vol"] = ds["vol"] + 0.0001
+                    ds["vol"] = ds["vol"] + min_volume
                     ds["vol"].attrs.update(attrs)
 
             # Select variables
