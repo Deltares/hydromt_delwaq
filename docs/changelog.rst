@@ -11,7 +11,13 @@ The format is based on `Keep a Changelog`_, and this project adheres to
 Added
 ^^^^^
 
-- Option to correct the water volumes to minimize water balances errors in setup_hydrology_forcing.
+- Option to add a minimum water volumes to avoid zero volume errrors in setup_hydrology_forcing.
+- Road network processing in setup_roads.
+
+Changed
+^^^^^^^
+
+- Rewrite and update of the setup_emission_mapping component.
 
 Fixed
 ^^^^^

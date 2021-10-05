@@ -689,7 +689,7 @@ class DelwaqModel(Model):
             )
         self.set_staticmaps(ds_emi.rename(emission_fn))
 
-    def setup_emission_mapping(self, source_name):
+    def setup_emission_mapping(self, region_fn, mapping_fn=None):
         """This component derives several emission maps based on administrative
         boundaries.
 
@@ -700,66 +700,66 @@ class DelwaqModel(Model):
 
         Adds model layers:
 
-        * **source_name** map: emission data with classification from source_name [-]
+        * **region_fn** map: emission data with classification from source_name [-]
         * **emission factor X** map: emission data from mapping file to classification
 
         Parameters
         ----------
-        source_name : {["gadm_level1", "gadm_level2", "gadm_level3"]}
+        region_fn : {["gadm_level1", "gadm_level2", "gadm_level3"]}
             Name or list of names of data source in data_sources.yml file.
 
             * Required variables: ['ID']
+        mapping_fn : str, optional
+            Path to the emission mapping file corresponding to region_fn.
         """
-        if source_name is None:
+        if region_fn is None:
             self.logger.warning(
                 "Source name set to None, skipping setup_emission_mapping."
             )
             return
-        # If unique source_name, convert to list
-        if isinstance(source_name, str):
-            source_name = [source_name]
-        for source_i in source_name:
-            if source_i not in self.data_catalog:
-                self.logger.warning(
-                    f"Invalid source '{source_i}', skipping setup_admin_bound."
-                    "\nCheck if {source_i} exists in data_sources.yml or local_sources.yml"
-                )
-            else:
-                self.logger.info(
-                    f"Preparing administrative boundaries related parameter maps for {source_i}."
-                )
-                fn_map = join(DATADIR, "admin_bound", f"{source_i}_mapping.csv")
-                # process emission factor maps
-                gdf_org = self.data_catalog.get_geodataframe(
-                    source_i, geom=self.basins, dst_crs=self.crs
-                )
-                # Rasterize the GeoDataFrame to get the areas mask of administrative boundaries with their ids
-                gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
-                # make sure index_col always has name fid in source dataset (use rename in data_sources.yml or
-                # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not fid:
-                # rename:
-                #   INDEXCOL: fid)\
-                ds_admin = self.hydromaps.raster.rasterize(
-                    gdf_org,
-                    col_name="ID",
-                    nodata=0,
-                    all_touched=True,
-                    dtype=None,
-                    sindex=False,
-                )
+        if region_fn not in self.data_catalog:
+            self.logger.warning(
+                f"Invalid source '{region_fn}', skipping setup_admin_bound."
+                "\nCheck if {source_i} exists in data_sources.yml or local_sources.yml"
+            )
+        else:
+            self.logger.info(
+                f"Preparing administrative boundaries related parameter maps for {region_fn}."
+            )
+            if mapping_fn is None:
+                self.logger.warning(f"Using default mapping file.")
+                mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
+            # process emission factor maps
+            gdf_org = self.data_catalog.get_geodataframe(
+                region_fn, geom=self.basins, dst_crs=self.crs
+            )
+            # Rasterize the GeoDataFrame to get the areas mask of administrative boundaries with their ids
+            gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
+            # make sure index_col always has name fid in source dataset (use rename in data_sources.yml or
+            # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not fid:
+            # rename:
+            #   INDEXCOL: fid)\
+            ds_admin = self.hydromaps.raster.rasterize(
+                gdf_org,
+                col_name="ID",
+                nodata=0,
+                all_touched=True,
+                dtype=None,
+                sindex=False,
+            )
 
-                # add admin_bound map
-                ds_admin_maps = emissions.admin(
-                    da=ds_admin,
-                    ds_like=self.staticmaps,
-                    source_name=source_i,
-                    fn_map=fn_map,
-                    logger=self.logger,
-                )
-                rmdict = {
-                    k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars
-                }
-                self.set_staticmaps(ds_admin_maps.rename(rmdict))
+            # add admin_bound map
+            ds_admin_maps = emissions.admin(
+                da=ds_admin,
+                ds_like=self.staticmaps,
+                source_name=region_fn,
+                fn_map=mapping_fn,
+                logger=self.logger,
+            )
+            rmdict = {
+                k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars
+            }
+            self.set_staticmaps(ds_admin_maps.rename(rmdict))
 
     def setup_roads(
         self,
