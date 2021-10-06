@@ -1,79 +1,40 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Update a DELWAQ model: forcing &mdash; hydromt_delwaq  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Plot DELWAQ data" href="plot_delwaq.html" />
     <link rel="prev" title="Adding new emission data: local" href="adding_local_emission.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../index.html" class="icon icon-home"> hydromt_delwaq
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                0.1.2.dev
+                0.1.3.dev
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -81,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
@@ -140,73 +90,31 @@
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">What’s new</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">hydromt_delwaq</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../index.html">Examples</a> &raquo;</li>
-        
       <li>Update a DELWAQ model: forcing</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../_sources/examples/examples/update_model_forcing.ipynb.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -477,14 +385,14 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="Update-a-DELWAQ-model:-forcing">
-<h1>Update a DELWAQ model: forcing<a class="headerlink" href="#Update-a-DELWAQ-model:-forcing" title="Permalink to this headline">¶</a></h1>
+<section id="Update-a-DELWAQ-model:-forcing">
+<h1>Update a DELWAQ model: forcing<a class="headerlink" href="#Update-a-DELWAQ-model:-forcing" title="Permalink to this headline"></a></h1>
 <p>Once you have a <strong>DELWAQ</strong> model, you may want to update your model in order to add new emission data, add sample locations, use different hydrological forcing data, create and run different scenarios etc.</p>
 <p>With HydroMT, you can easily read your model and update one or several components of your model using the <strong>update</strong> function of the command line interface (CLI). Here are the steps and some examples on how to <strong>update the model forcing</strong>.</p>
 <p>All lines in this notebook which starts with ! are executed from the command line. Within the notebook environment the logging messages are shown after completion. You can also copy these lines and paste them in your shell to get more feedback.</p>
 <p><em>This notebook supposes that you already run the</em><strong>delwaq build EM</strong><em>example notebook and that you have a</em><strong>EM_test_full</strong><em>D-Emissions model available in the examples folder.</em></p>
-<div class="section" id="Import-packages">
-<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
+<section id="Import-packages">
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline"></a></h2>
 <p>In this notebook, we will use some functions of HydroMT to visualize available data. Here are the libaries to import.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -521,12 +429,12 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-07-21 16:42:30,642 - update_model_forcing - log - INFO - HydroMT version: 0.4.0
+2021-10-06 06:33:16,143 - update_model_forcing - log - INFO - HydroMT version: 0.4.3
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="Hydrological-forcing-data-from-Wflow">
-<h2>Hydrological forcing data from Wflow<a class="headerlink" href="#Hydrological-forcing-data-from-Wflow" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="Hydrological-forcing-data-from-Wflow">
+<h2>Hydrological forcing data from Wflow<a class="headerlink" href="#Hydrological-forcing-data-from-Wflow" title="Permalink to this headline"></a></h2>
 <p>D-Emissions or D-Water Quality models can use meteo/hydrological input data from <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/">Wflow</a>. The steps to get these data available for your model are:</p>
 <ul class="simple">
 <li><p>List the required meteo/hydro fluxes in the <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/structure/#Config-and-TOML">Wflow TOML configuration file</a> in order to save them.</p></li>
@@ -535,8 +443,8 @@ div.rendered_html tbody tr:hover {
 <li><p>Run hydroMT (specifically the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing.html">setup_hydrology_forcing component</a>) to convert the wflow output to DELWAQ dynamic input.</p></li>
 </ul>
 <p>More information on the meteo/hydrological forcing link between Wflow and DELWAQ is available in <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/advanced/coupling_wflow.html#hydrological-forcing-from-wflow">docs(Wflow_outputs)</a>.</p>
-<div class="section" id="Selection-of-the-Wfow-outputs">
-<h3>Selection of the Wfow outputs<a class="headerlink" href="#Selection-of-the-Wfow-outputs" title="Permalink to this headline">¶</a></h3>
+<section id="Selection-of-the-Wfow-outputs">
+<h3>Selection of the Wfow outputs<a class="headerlink" href="#Selection-of-the-Wfow-outputs" title="Permalink to this headline"></a></h3>
 <p>For our D-Emissions model, we will use hydrological data from the <strong>wflow_piave</strong> hydrologic model. For a D-Emissions model, the required meteo/hydrological inputs are:</p>
 <ul class="simple">
 <li><p><strong>precipitation</strong></p></li>
@@ -597,33 +505,22 @@ output.lateral.land.to_river = &#34;inwint&#34;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-07-21 16:42:32,279 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/hydromt.log.
-2021-07-21 16:42:32,279 - update - log - INFO - HydroMT version: 0.4.0
-2021-07-21 16:42:32,279 - update - main - INFO - Updating wflow model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave (r+).
-2021-07-21 16:42:32,279 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
-2021-07-21 16:42:32,280 - update - main - INFO - User settings:
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.starttime: 2010-02-02T00:00:00
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.endtime: 2010-02-10T00:00:00
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.timestepsecs: 86400
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.vertical.precipitation: prec
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.vertical.actinfilt: inf
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.vertical.excesswatersoil: runUnp
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.vertical.excesswaterpath: runPav
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.lateral.river.q_av: q_river
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.lateral.river.volume: vol_river
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.lateral.river.inwater: inw_river
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.lateral.land.q_av: q_land
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.lateral.land.volume: vol_land
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.lateral.land.inwater: inw_land
-2021-07-21 16:42:32,281 - update - cli_utils - INFO - setup_config.output.lateral.land.to_river: inwint
-2021-07-21 16:42:32,282 - update - wflow - INFO - Reading model staticgeom files.
-2021-07-21 16:42:32,359 - update - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
-2021-07-21 16:42:32,359 - update - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
-2021-07-21 16:42:32,418 - update - model_api - DEBUG - Setting model config options.
-2021-07-21 16:42:32,418 - update - wflow - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
-2021-07-21 16:42:32,418 - update - model_api - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
-2021-07-21 16:42:32,419 - update - wflow - INFO - Write staticmaps to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
-2021-07-21 16:42:32,842 - update - wflow - INFO - Writing model staticgeom to file.
+2021-10-06 06:33:17,718 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/hydromt.log.
+2021-10-06 06:33:17,718 - update - log - INFO - HydroMT version: 0.4.3
+2021-10-06 06:33:17,718 - update - main - INFO - Updating wflow model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave (r+).
+2021-10-06 06:33:17,718 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
+2021-10-06 06:33:17,718 - update - main - INFO - User settings:
+2021-10-06 06:33:17,753 - update - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.3)
+2021-10-06 06:33:17,753 - update - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.3).
+2021-10-06 06:33:17,756 - update - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
+2021-10-06 06:33:17,756 - update - wflow - INFO - Reading model staticgeom files.
+2021-10-06 06:33:17,789 - update - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
+2021-10-06 06:33:17,851 - update - model_api - DEBUG - Setting model config options.
+2021-10-06 06:33:17,851 - update - wflow - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
+2021-10-06 06:33:17,851 - update - data_adapter - INFO - Adding sample data v0.0.5 from artifacts
+2021-10-06 06:33:17,960 - update - model_api - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
+2021-10-06 06:33:17,961 - update - wflow - INFO - Write staticmaps to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
+2021-10-06 06:33:18,403 - update - wflow - INFO - Writing model staticgeom to file.
 
 </pre></div></div>
 </div>
@@ -635,9 +532,9 @@ output.lateral.land.to_river = &#34;inwint&#34;
 <li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code>: give some extra verbosity (2 * v) to display feedback on screen. Now debug messages are provided.</p></li>
 </ul>
 <p>The next step would then be to run the wflow_piave model using our updated TOML configuration file.</p>
-</div>
-<div class="section" id="Available-hydrological-data-from-Wflow">
-<h3>Available hydrological data from Wflow<a class="headerlink" href="#Available-hydrological-data-from-Wflow" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="Available-hydrological-data-from-Wflow">
+<h3>Available hydrological data from Wflow<a class="headerlink" href="#Available-hydrological-data-from-Wflow" title="Permalink to this headline"></a></h3>
 <p>For our D-Emissions model, we will use hydrological data from the <strong>wflow_piave</strong> hydrologic model.</p>
 <p>The model was already run beforehand and the <strong>wflow_piave outputs</strong> are stored in the <em>wflow_piave/run_default/output.nc</em> in NetCDF format. Let’s have a look at the model outputs and see what data is available and for which periods.</p>
 <p>Note: You can also inspect the file using <a class="reference external" href="https://www.giss.nasa.gov/tools/panoply/">Panoply</a> or QGIS.</p>
@@ -679,9 +576,9 @@ Outputs available from 2010-02-02T00:00:00.000000000 to 2010-02-10T00:00:00.0000
 </pre></div></div>
 </div>
 <p>We recognize from above all the variables and names we set previously in the <strong>wflow_update.ini</strong> file. All the required varibales are present and available for 9 days in February 2010.</p>
-</div>
-<div class="section" id="Registering-the-wflow-outputs-as-a-hydroMT-data-source">
-<h3>Registering the wflow outputs as a hydroMT data source<a class="headerlink" href="#Registering-the-wflow-outputs-as-a-hydroMT-data-source" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="Registering-the-wflow-outputs-as-a-hydroMT-data-source">
+<h3>Registering the wflow outputs as a hydroMT data source<a class="headerlink" href="#Registering-the-wflow-outputs-as-a-hydroMT-data-source" title="Permalink to this headline"></a></h3>
 <p>As we are using hydrological forcing from a user defined run of the wflow model, the wflow output format and attributes can be different depending on the user settings. <strong>Wflow outputs are then considered as local or user data source</strong> and therefore need to be added to the HydroMT list of data sources using a <strong>local yaml library file</strong>.</p>
 <p>Below you can see the <strong>local_sources.yml</strong> file corresponding to our wflow outputs:</p>
 <div class="nbinput docutils container">
@@ -752,10 +649,10 @@ wflow_output:
 <li><p><strong>rename</strong>: list used to rename the varibales inside of the data to HydroMT compliant names. The format is “name_in_dataset: name_in_HydroMT”. Note that the names present in the NetCDF file are the ones set up in the wflow TOML file. The list of standard HydroMT names for Delwaq forcing variables are: time, precip, infilt, runPav, runUnp, inwater (or inwaterLand, inwaterRiv), inwaterInternal, run (or runLand, runRiv), lev (or levLand, levRiv), vol (or volLand, volRiv).</p></li>
 <li><p><strong>units</strong>: units of the variables in the data. Used by Delwaq only in order to convert from mm to m3/s and from m to m3 (requires complex unit conversion that just a multiplication or addition with a constant value).</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="Model-setup-configuration">
-<h2>Model setup configuration<a class="headerlink" href="#Model-setup-configuration" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="Model-setup-configuration">
+<h2>Model setup configuration<a class="headerlink" href="#Model-setup-configuration" title="Permalink to this headline"></a></h2>
 <p>As with building, you can prepare a hydroMT <strong>configuration file</strong> that includes every components and settings that you want to run during your update.</p>
 <p>The ini-file contains the model setup configuration and determines which components are updated and in which sequence and sets optional arguments for each component. This configuration is passed to hydromt using <code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path_to_ini_file&gt;</span></code>.</p>
 <p>Each header as shown between <code class="docutils literal notranslate"><span class="pre">[...]</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">[setup_hydrology_forcing]</span></code>) corresponds with a model component which are explained in the <a class="reference external" href="https://deltares.github.io/hydromt_wflow/latest/user_guide/wflow/components.html">docs(model_components)</a>.</p>
@@ -792,9 +689,9 @@ add_volume_offset = True                  # add a one-timestep offset to the vol
 <p>Here we can see that we will run <strong>setup_hydrology_forcing</strong> component to prepare daily hydrological forcing for 8 days in February 2010 using our <strong>wflow_output</strong>.</p>
 <p>Note that the <strong>add_volume_offset</strong> function is set to <em>True</em>. This is because Delwaq needs water volumes at the beginning of the timestep. In some models, like wflow, volumes are written at the end of the timestep and therefore an offset of one timestep needs to be added for consistency.</p>
 <p>You can find more information on the different components and their options in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/components.html">docs(model_components)</a>.</p>
-</div>
-<div class="section" id="hydroMT-CLI-update-interface">
-<h2>hydroMT CLI update interface<a class="headerlink" href="#hydroMT-CLI-update-interface" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="hydroMT-CLI-update-interface">
+<h2>hydroMT CLI update interface<a class="headerlink" href="#hydroMT-CLI-update-interface" title="Permalink to this headline"></a></h2>
 <p>Using the <code class="docutils literal notranslate"><span class="pre">hydroMT</span> <span class="pre">update</span></code> API, we can update one or several components of an already existing Delwaq model. Let’s get an overview of the available options:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -850,9 +747,9 @@ Options:
 
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="Update-wflow-forcing-layers">
-<h2>Update wflow forcing layers<a class="headerlink" href="#Update-wflow-forcing-layers" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="Update-wflow-forcing-layers">
+<h2>Update wflow forcing layers<a class="headerlink" href="#Update-wflow-forcing-layers" title="Permalink to this headline"></a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -868,44 +765,41 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-07-21 16:42:36,989 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/hydromt.log.
-2021-07-21 16:42:36,989 - update - log - INFO - HydroMT version: 0.4.0
-2021-07-21 16:42:36,989 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full (r+).
-2021-07-21 16:42:36,989 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
-2021-07-21 16:42:36,989 - update - main - INFO - Additional data sources: (&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_sources.yml&#39;,)
-2021-07-21 16:42:36,989 - update - main - INFO - User settings:
-2021-07-21 16:42:36,990 - update - cli_utils - INFO - global.mtype: EM
-2021-07-21 16:42:36,990 - update - cli_utils - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
-2021-07-21 16:42:36,990 - update - cli_utils - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2021-07-21 16:42:36,990 - update - cli_utils - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2021-07-21 16:42:36,990 - update - cli_utils - INFO - setup_hydrology_forcing.timestepsecs: 86400
-2021-07-21 16:42:36,990 - update - cli_utils - INFO - setup_hydrology_forcing.add_volume_offset: True
-2021-07-21 16:42:36,994 - update - delwaq - INFO - Reading model staticgeom files.
-2021-07-21 16:42:37,035 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/staticdata/staticmaps.nc
-2021-07-21 16:42:37,053 - update - model_api - DEBUG - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
-2021-07-21 16:42:37,053 - update - model_api - DEBUG - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2021-07-21 16:42:37,053 - update - model_api - DEBUG - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2021-07-21 16:42:37,053 - update - model_api - DEBUG - setup_hydrology_forcing.timestepsecs: 86400
-2021-07-21 16:42:37,053 - update - model_api - DEBUG - setup_hydrology_forcing.add_volume_offset: True
-2021-07-21 16:42:37,053 - update - model_api - DEBUG - setup_hydrology_forcing.volume_correction: False
-2021-07-21 16:42:37,053 - update - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
-2021-07-21 16:42:37,062 - update - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/run_default/output.nc
-2021-07-21 16:42:37,091 - update - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2021-07-21 16:42:37,212 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
-2021-07-21 16:42:37,224 - update - delwaq - INFO - Writing staticmap files.
-2021-07-21 16:42:37,235 - update - delwaq - INFO - Writing model staticgeom to file.
-2021-07-21 16:42:37,249 - update - delwaq - INFO - Writing model config to file.
-2021-07-21 16:42:37,249 - update - delwaq - WARNING - No updated maps. Skipping writing to file.
-2021-07-21 16:42:37,271 - update - delwaq - INFO - Writing dynamicmap files.
-2021-07-21 16:42:37,271 - update - delwaq - INFO - Writting dynamic data for timestep 1/8
-2021-07-21 16:42:37,288 - update - delwaq - INFO - Writting dynamic data for timestep 2/8
-2021-07-21 16:42:37,303 - update - delwaq - INFO - Writting dynamic data for timestep 3/8
-2021-07-21 16:42:37,318 - update - delwaq - INFO - Writting dynamic data for timestep 4/8
-2021-07-21 16:42:37,333 - update - delwaq - INFO - Writting dynamic data for timestep 5/8
-2021-07-21 16:42:37,348 - update - delwaq - INFO - Writting dynamic data for timestep 6/8
-2021-07-21 16:42:37,364 - update - delwaq - INFO - Writting dynamic data for timestep 7/8
-2021-07-21 16:42:37,379 - update - delwaq - INFO - Writting dynamic data for timestep 8/8
-2021-07-21 16:42:37,395 - update - delwaq - INFO - Writting waqgeom.nc file
+2021-10-06 06:33:22,278 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/hydromt.log.
+2021-10-06 06:33:22,279 - update - log - INFO - HydroMT version: 0.4.3
+2021-10-06 06:33:22,279 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full (r+).
+2021-10-06 06:33:22,279 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
+2021-10-06 06:33:22,279 - update - main - INFO - Additional data sources: (&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_sources.yml&#39;,)
+2021-10-06 06:33:22,279 - update - main - INFO - User settings:
+2021-10-06 06:33:22,314 - update - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
+2021-10-06 06:33:22,315 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2021-10-06 06:33:22,319 - update - delwaq - INFO - Reading model staticgeom files.
+2021-10-06 06:33:22,330 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/staticdata/staticmaps.nc
+2021-10-06 06:33:22,343 - update - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
+2021-10-06 06:33:22,344 - update - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2021-10-06 06:33:22,344 - update - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2021-10-06 06:33:22,344 - update - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2021-10-06 06:33:22,344 - update - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
+2021-10-06 06:33:22,344 - update - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
+2021-10-06 06:33:22,344 - update - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
+2021-10-06 06:33:22,347 - update - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/run_default/output.nc
+2021-10-06 06:33:22,371 - update - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2021-10-06 06:33:22,480 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/delwaq.inp
+2021-10-06 06:33:22,480 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
+2021-10-06 06:33:22,496 - update - delwaq - INFO - Writing staticmap files.
+2021-10-06 06:33:22,506 - update - delwaq - INFO - Writing model staticgeom to file.
+2021-10-06 06:33:22,519 - update - delwaq - INFO - Writing model config to file.
+2021-10-06 06:33:22,520 - update - delwaq - WARNING - No updated maps. Skipping writing to file.
+2021-10-06 06:33:22,543 - update - delwaq - INFO - Writing dynamicmap files.
+2021-10-06 06:33:22,543 - update - delwaq - INFO - Writting dynamic data for timestep 1/8
+2021-10-06 06:33:22,558 - update - delwaq - INFO - Writting dynamic data for timestep 2/8
+2021-10-06 06:33:22,573 - update - delwaq - INFO - Writting dynamic data for timestep 3/8
+2021-10-06 06:33:22,590 - update - delwaq - INFO - Writting dynamic data for timestep 4/8
+2021-10-06 06:33:22,604 - update - delwaq - INFO - Writting dynamic data for timestep 5/8
+2021-10-06 06:33:22,619 - update - delwaq - INFO - Writting dynamic data for timestep 6/8
+2021-10-06 06:33:22,633 - update - delwaq - INFO - Writting dynamic data for timestep 7/8
+2021-10-06 06:33:22,648 - update - delwaq - INFO - Writting dynamic data for timestep 8/8
+2021-10-06 06:33:22,663 - update - delwaq - INFO - Writting waqgeom.nc file
 
 </pre></div></div>
 </div>
@@ -917,9 +811,9 @@ Options:
 <li><p><code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">local_sources.yml</span></code>: local data library, here containing the hydrological outputs from wflow.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code>: give some extra verbosity (2 * v) to display feedback on screen. Now debug messages are provided.</p></li>
 </ul>
-</div>
-<div class="section" id="Visualization-of-the-outputs">
-<h2>Visualization of the outputs<a class="headerlink" href="#Visualization-of-the-outputs" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="Visualization-of-the-outputs">
+<h2>Visualization of the outputs<a class="headerlink" href="#Visualization-of-the-outputs" title="Permalink to this headline"></a></h2>
 <p>From the information above, you can see that the different forcing variables where updated. If you have a look at the output files, you can see that the hydrological data were added to the dynamicdata folder but also several information were added in the config folder.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
@@ -944,44 +838,45 @@ Options:
 <div class="highlight"><pre>
 EM_test_full
  - hydromt.log
-EM_test_full/staticdata
- - GHS-SMOD_2015.dat
- - GHS-POP_2015.dat
- - GDP_world.dat
- - staticmaps.nc
- - streamorder.dat
- - slope.dat
+EM_test_full/config
+ - B2_outputtimes.inc
+ - B5_boundlist.inc
+ - B2_sysclock.inc
+ - B2_nrofmon.inc
+ - B3_attributes.inc
+ - B7_geometry.inc
+ - B7_geometry-parameters.inc
+ - B2_stations.inc
+ - B2_timers_only.inc
+ - B7_geometry.bin
+ - B4_nrofexch.inc
+ - B3_nrofseg.inc
+ - B7_hydrology.inc
+ - B3_waqgeom.nc
+ - B1_timestamp.inc
+ - B2_timers.inc
+ - B2_monareas.inc
+EM_test_full/hydromodel
+ - ldd.tif
+ - rivwth.tif
+ - rivlen.tif
+ - basins.tif
+ - modelmap.tif
+ - ptid.tif
 EM_test_full/staticgeoms
  - monareas.geojson
  - basins.geojson
-EM_test_full/hydromodel
- - modelmap.tif
- - ldd.tif
- - rivwth.tif
- - basins.tif
- - ptid.tif
- - rivlen.tif
-EM_test_full/config
- - B3_waqgeom.nc
- - B2_sysclock.inc
- - B3_nrofseg.inc
- - B2_outputtimes.inc
- - B3_attributes.inc
- - B2_timers.inc
- - B2_timers_only.inc
- - B7_geometry-parameters.inc
- - B7_geometry.bin
- - B1_timestamp.inc
- - B2_stations.inc
- - B2_nrofmon.inc
- - B5_boundlist.inc
- - B7_hydrology.inc
- - B7_geometry.inc
- - B2_monareas.inc
- - B4_nrofexch.inc
 EM_test_full/fews
 EM_test_full/dynamicdata
  - hydrology.bin
+EM_test_full/staticdata
+ - ghs_smod_2015.dat
+ - streamorder.dat
+ - gdp_world.dat
+ - river.dat
+ - ghs_pop_2015.dat
+ - staticmaps.nc
+ - slope.dat
 </pre></div></div>
 </div>
 <p>You can have a look at some of these files:</p>
@@ -1038,55 +933,38 @@ Rainfall RunoffPav RunoffUnp Infiltr TotalFlow
 
 </pre></div></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="plot_delwaq.html" class="btn btn-neutral float-right" title="Plot DELWAQ data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="adding_local_emission.html" class="btn btn-neutral float-left" title="Adding new emission data: local" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plot_delwaq.html" class="btn btn-neutral float-right" title="Plot DELWAQ data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright Deltares.
-
-    </p>
+    <p>&#169; Copyright Deltares.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

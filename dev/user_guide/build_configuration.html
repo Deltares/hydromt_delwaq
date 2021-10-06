@@ -1,77 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Model configuration &mdash; hydromt_delwaq  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Model attributes" href="attributes.html" />
     <link rel="prev" title="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_mapping" href="../generated/hydromt_delwaq.delwaq.DelwaqModel.setup_emission_mapping.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> hydromt_delwaq
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                0.1.2.dev
+                0.1.3.dev
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -79,18 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
@@ -123,71 +73,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">What’s new</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">hydromt_delwaq</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Model configuration</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/user_guide/build_configuration.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS overrides for sphinx_rtd_theme */
@@ -212,13 +121,13 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="model-configuration">
-<span id="model-config"></span><h1>Model configuration<a class="headerlink" href="#model-configuration" title="Permalink to this headline">¶</a></h1>
+<section id="model-configuration">
+<span id="model-config"></span><h1>Model configuration<a class="headerlink" href="#model-configuration" title="Permalink to this headline"></a></h1>
 <p>This HydroMT plugin provides an implementation for DELWAQ in order to build, update or clip from
 command line. Specific details on the HydroMT CLI methods can be found in the
 <a class="reference external" href="https://deltares.github.io/hydromt_plugin/latest/user_guide/cli.html">core documentation</a></p>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
 <p>HydroMT can support the preparation of water quality models for <a class="reference external" href="https://oss.deltares.nl/web/delft3d/delwaq1/-/message_boards/category/205375">DELWAQ</a>.
 As a reminder, a full hydrology - water quality simulation is in general separated in three parts:</p>
 <ul class="simple">
@@ -229,9 +138,9 @@ the quantity (fluxes) of substances being released from sources of pollutants to
 that predicts the fate and transport of substances in the surface waters (concentrations in mass / volume).</p></li>
 </ul>
 <p>The Delwaq model class in HydroMT is able to prepare and interact both with EM or WQ types of Delwaq models.</p>
-</div>
-<div class="section" id="configuration-file">
-<h2>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="configuration-file">
+<h2>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline"></a></h2>
 <p>Settings to build or update a Delwaq model are managed in a configuration file. In this file,
 every option from each <a class="reference internal" href="components.html#model-components"><span class="std std-ref">model component</span></a> can be changed by the user
 in its corresponding section.</p>
@@ -262,9 +171,9 @@ to a model component with the same name.</p>
 <p>Below is an example of ini file that can be used to build a complete <strong>WQ model</strong>
 <code class="xref download docutils literal notranslate"><span class="pre">.ini</span> <span class="pre">file</span></code>. Each section corresponds
 to a model component with the same name.</p>
-</div>
-<div class="section" id="selecting-data">
-<h2>Selecting data<a class="headerlink" href="#selecting-data" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="selecting-data">
+<h2>Selecting data<a class="headerlink" href="#selecting-data" title="Permalink to this headline"></a></h2>
 <p>Data sources in HydroMT are provided in one of several yaml libraries. These libraries contain required
 information on the different data sources so that HydroMT can process them for the different models. There
 are three ways for the user to select which data libraries to use:</p>
@@ -280,9 +189,9 @@ to the build / update command line.</p></li>
 These user libraries can be added either in the command line using the <strong>-d</strong> option and path/to/yaml or in the <strong>ini file</strong>
 with the <strong>data_libs</strong> option in the [global] sections.</p></li>
 </ul>
-</div>
-<div class="section" id="building-a-model">
-<h2>Building a model<a class="headerlink" href="#building-a-model" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="building-a-model">
+<h2>Building a model<a class="headerlink" href="#building-a-model" title="Permalink to this headline"></a></h2>
 <p>This plugin allows to build a complete DELWAQ model from available data. Once the configuration and
 data libraries are set, you can build a model by using:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">activate hydromt-delwaq</span>
@@ -300,64 +209,47 @@ model for your case and then build delwaq.</p>
 <p class="admonition-title">Warning</p>
 <p>As of now, DELWAQ models can only be built on top of existing wflow models.</p>
 </div>
-</div>
-<div class="section" id="updating-a-model">
-<h2>Updating a model<a class="headerlink" href="#updating-a-model" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="updating-a-model">
+<h2>Updating a model<a class="headerlink" href="#updating-a-model" title="Permalink to this headline"></a></h2>
 <p>This plugin allows to update any components from a DELWAQ model. To do so, list the components to update in a configuration file,
 if needed edit your data library with new data sources required for the update and use the command:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">activate hydromt-delwaq</span>
 <span class="go">hydromt update delwaq path/to/model_to_update -o path/to/updated_model -i delwaq_update.ini -d data_sources.yml -vv</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="attributes.html" class="btn btn-neutral float-right" title="Model attributes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../generated/hydromt_delwaq.delwaq.DelwaqModel.setup_emission_mapping.html" class="btn btn-neutral float-left" title="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_mapping" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="attributes.html" class="btn btn-neutral float-right" title="Model attributes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright Deltares.
-
-    </p>
+    <p>&#169; Copyright Deltares.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
