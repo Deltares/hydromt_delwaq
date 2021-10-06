@@ -4,6 +4,7 @@ import pytest
 from os.path import join, dirname, abspath
 import numpy as np
 import pdb
+import warnings
 from click.testing import CliRunner
 
 import hydromt
