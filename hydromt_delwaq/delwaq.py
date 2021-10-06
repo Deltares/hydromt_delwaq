@@ -6,6 +6,7 @@ import glob
 import numpy as np
 import pandas as pd
 import xarray as xr
+import geopandas as gpd
 import pyproj
 import logging
 import struct
@@ -19,7 +20,7 @@ from hydromt import workflows, flw, io
 
 from hydromt_wflow.wflow import WflowModel
 
-from .workflows import emissions, segments
+from .workflows import emissions, segments, roads
 from . import DATADIR
 
 __all__ = ["DelwaqModel"]
@@ -157,13 +158,14 @@ class DelwaqModel(Model):
             nrofseg, da_ptid = segments.pointer(self.hydromaps, build_pointer=False)
             self.set_hydromaps(da_ptid, name="ptid")
 
-        ### Initialise staticmaps with streamorder and slope ###
+        ### Initialise staticmaps with streamorder, river and slope ###
         ds_stat = (
             hydromodel.staticmaps[hydromodel._MAPS["strord"]]
             .rename("streamorder")
             .to_dataset()
         )
         ds_stat["slope"] = hydromodel.staticmaps[hydromodel._MAPS["lndslp"]]
+        ds_stat["river"] = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
         self.set_staticmaps(ds_stat)
         self.staticmaps.coords["mask"] = self.hydromaps["modelmap"]
 
@@ -299,11 +301,12 @@ class DelwaqModel(Model):
             points = monpoints.values.flatten()
             points = points[points != mv]
             nb_points = len(points)
-            # Add to staticgeoms
-            # if first column has no name, give it a default name otherwise column is omitted when written to geojson
-            if gdf.index.name is None:
-                gdf.index.name = "fid"
-            self.set_staticgeoms(gdf, name="monpoints")
+            # Add to staticgeoms if mon_points is not segments
+            if mon_points != "segments":
+                # if first column has no name, give it a default name otherwise column is omitted when written to geojson
+                if gdf.index.name is None:
+                    gdf.index.name = "fid"
+                self.set_staticgeoms(gdf, name="monpoints")
         else:
             self.logger.info("No monitoring points set in the config file, skipping")
             nb_points = 0
@@ -344,7 +347,7 @@ class DelwaqModel(Model):
         endtime,
         timestepsecs,
         add_volume_offset=True,
-        volume_correction=False,
+        min_volume=0.1,
         **kwargs,
     ):
         """Setup Delwaq hydrological fluxes.
@@ -390,9 +393,8 @@ class DelwaqModel(Model):
             Delwaq needs water volumes at the beginning of the timestep.
             In some models, like wflow, volumes are written at the end of the timestep and therefore
             an offset of one timestep needs to be added for consistency.
-        volume_correction: bool, optional
-            Corrects the volume values to avoid water balance errors. Assumes the flows are correct
-            and recalculates volumes accordingly: dV = sum(qin - qout).
+        min_volume : float, optional
+            Add a minimum value to all the volumes in Delwaq to avoid zeros. Default is 0.1m3.
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
@@ -406,6 +408,11 @@ class DelwaqModel(Model):
         # TODO when forcing workflow is ready nice clipping/resampling can be added
         # Normally region extent is by default exactly the same as hydromodel
         ds = self.data_catalog.get_rasterdataset(hydro_forcing_fn, geom=self.region)
+        #        # Check if latitude is from south to north
+        #        ys = ds.raster.ycoords
+        #        resy = np.mean(np.diff(ys.values))
+        #        if resy >= 0:
+        #            ds = ds.reindex({ds.raster.y_dim: ds[ds.raster.y_dim][::-1]})
 
         # align forcing file with hydromaps
         ds = ds.raster.reproject_like(self.hydromaps)
@@ -450,22 +457,22 @@ class DelwaqModel(Model):
                     rivlen = self.hydromaps["rivlen"]
                     rivwth = self.hydromaps["rivwth"]
                     volR = ds["levRiv"] * rivlen * rivwth
-                    ds["vol"] = volL + volR.fillna(0) + 0.0001
+                    ds["vol"] = volL + volR.fillna(0) + min_volume
                     ds["vol"].attrs.update(units="m3")
                     ds["vol"].attrs.update(_FillValue=ds["levLand"].raster.nodata)
                 else:
-                    ds["vol"] = ds["lev"] * self.staticmaps["surface"] + 0.0001
+                    ds["vol"] = ds["lev"] * self.staticmaps["surface"] + min_volume
                     ds["vol"].attrs.update(units="m3")
                     ds["vol"].attrs.update(_FillValue=ds["lev"].raster.nodata)
             else:
                 if "volLand" in ds.data_vars and "volRiv" in ds.data_vars:
                     attrs = ds["volLand"].attrs.copy()
-                    ds["vol"] = ds["volRiv"].fillna(0) + ds["volLand"]
+                    ds["vol"] = ds["volRiv"].fillna(0) + ds["volLand"] + min_volume
                     ds["vol"].attrs.update(attrs)
                 else:
                     # In order to avoid zero volumes, a basic minimum value of 0.0001 m3 is added to all volumes
                     attrs = ds["vol"].attrs.copy()
-                    ds["vol"] = ds["vol"] + 0.0001
+                    ds["vol"] = ds["vol"] + min_volume
                     ds["vol"].attrs.update(attrs)
 
             # Select variables
@@ -480,29 +487,6 @@ class DelwaqModel(Model):
             times_offset = times + times.freq
             vol = ds["vol"].copy()
             ds = ds.drop("vol")
-            # If needed correct the volume values to avoid water balance errors
-            if volume_correction:
-                self.logger.info(f"Correcting the volumes based on flows.")
-                vol_end = vol.rename("vol_river_end").copy()
-                # Volume at the beginning of the timestep
-                vol_begin = vol.rename("vol_river_begin").copy()
-                vol_begin["time"] = times_offset
-                # Runoff from upstream cells
-                flwdir = flw.flwdir_from_da(
-                    self.hydromaps[self._MAPS["flwdir"]], ftype="infer", mask=None
-                )
-                # Correct volumes
-                for t in range(len(ds["time"]) - 1):
-                    self.logger.debug(f"Correcting volume at t = {t}")
-                    qin = flwdir.upstream_sum(ds["run"][t, :, :])
-                    vol_end[t, :, :] = (
-                        vol_begin[t, :, :]
-                        + (qin + ds["inwater"][t, :, :] - ds["run"][t, :, :]) * 86400
-                    )
-                    # Update volume begin with new value
-                    if t < len(ds["time"]):
-                        vol_begin[t + 1, :, :] = vol_end[t, :, :]
-                vol = vol_end.rename("vol")
             vol["time"] = times_offset
             ds = ds.merge(vol)
         # Sell times to starttime and endtime
@@ -705,7 +689,7 @@ class DelwaqModel(Model):
             )
         self.set_staticmaps(ds_emi.rename(emission_fn))
 
-    def setup_emission_mapping(self, source_name):
+    def setup_emission_mapping(self, region_fn, mapping_fn=None):
         """This component derives several emission maps based on administrative
         boundaries.
 
@@ -716,66 +700,207 @@ class DelwaqModel(Model):
 
         Adds model layers:
 
-        * **source_name** map: emission data with classification from source_name [-]
+        * **region_fn** map: emission data with classification from source_name [-]
         * **emission factor X** map: emission data from mapping file to classification
 
         Parameters
         ----------
-        source_name : {["gadm_level1", "gadm_level2", "gadm_level3"]}
+        region_fn : {["gadm_level1", "gadm_level2", "gadm_level3"]}
             Name or list of names of data source in data_sources.yml file.
 
             * Required variables: ['ID']
+        mapping_fn : str, optional
+            Path to the emission mapping file corresponding to region_fn.
         """
-        if source_name is None:
+        if region_fn is None:
             self.logger.warning(
                 "Source name set to None, skipping setup_emission_mapping."
             )
             return
-        # If unique source_name, convert to list
-        if isinstance(source_name, str):
-            source_name = [source_name]
-        for source_i in source_name:
-            if source_i not in self.data_catalog:
-                self.logger.warning(
-                    f"Invalid source '{source_i}', skipping setup_admin_bound."
-                    "\nCheck if {source_i} exists in data_sources.yml or local_sources.yml"
-                )
-            else:
-                self.logger.info(
-                    f"Preparing administrative boundaries related parameter maps for {source_i}."
-                )
-                fn_map = join(DATADIR, "admin_bound", f"{source_i}_mapping.csv")
-                # process emission factor maps
-                gdf_org = self.data_catalog.get_geodataframe(
-                    source_i, geom=self.basins, dst_crs=self.crs
-                )
-                # Rasterize the GeoDataFrame to get the areas mask of administrative boundaries with their ids
-                gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
-                # make sure index_col always has name fid in source dataset (use rename in data_sources.yml or
-                # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not fid:
-                # rename:
-                #   INDEXCOL: fid)\
-                ds_admin = self.hydromaps.raster.rasterize(
-                    gdf_org,
-                    col_name="ID",
-                    nodata=0,
-                    all_touched=True,
-                    dtype=None,
-                    sindex=False,
-                )
+        if region_fn not in self.data_catalog:
+            self.logger.warning(
+                f"Invalid source '{region_fn}', skipping setup_admin_bound."
+                "\nCheck if {source_i} exists in data_sources.yml or local_sources.yml"
+            )
+        else:
+            self.logger.info(
+                f"Preparing administrative boundaries related parameter maps for {region_fn}."
+            )
+            if mapping_fn is None:
+                self.logger.warning(f"Using default mapping file.")
+                mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
+            # process emission factor maps
+            gdf_org = self.data_catalog.get_geodataframe(
+                region_fn, geom=self.basins, dst_crs=self.crs
+            )
+            # Rasterize the GeoDataFrame to get the areas mask of administrative boundaries with their ids
+            gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
+            # make sure index_col always has name fid in source dataset (use rename in data_sources.yml or
+            # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not fid:
+            # rename:
+            #   INDEXCOL: fid)\
+            ds_admin = self.hydromaps.raster.rasterize(
+                gdf_org,
+                col_name="ID",
+                nodata=0,
+                all_touched=True,
+                dtype=None,
+                sindex=False,
+            )
 
-                # add admin_bound map
-                ds_admin_maps = emissions.admin(
-                    da=ds_admin,
-                    ds_like=self.staticmaps,
-                    source_name=source_i,
-                    fn_map=fn_map,
-                    logger=self.logger,
-                )
-                rmdict = {
-                    k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars
-                }
-                self.set_staticmaps(ds_admin_maps.rename(rmdict))
+            # add admin_bound map
+            ds_admin_maps = emissions.admin(
+                da=ds_admin,
+                ds_like=self.staticmaps,
+                source_name=region_fn,
+                fn_map=mapping_fn,
+                logger=self.logger,
+            )
+            rmdict = {
+                k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars
+            }
+            self.set_staticmaps(ds_admin_maps.rename(rmdict))
+
+    def setup_roads(
+        self,
+        roads_fn,
+        highway_list,
+        country_list,
+        non_highway_list=None,
+        country_fn=None,
+    ):
+        """Setup roads statistics needed for emission modelling.
+
+        Adds model layers:
+
+        * **km_highway_country** map: emission data with for each grid cell the total km of highway for the country the grid cell is in [km highway/country]
+        * **km_other_country** map: emission data with for each grid cell the total km of non highway roads for the country the grid cell is in [km other road/country]
+        * **km_highway_cell** map: emission data containing highway length per cell [km highway/cell]
+        * **km_other_cell** map:
+        * **emission factor X** map: emission data from mapping file to classification
+
+        Parameters
+        ----------
+        roads_fn: str
+            Name of road data source in data_sources.yml file.
+
+            * Required variables: ['road_type']
+
+            * Optional variable: ['length', 'country_code']
+        highway_list: str or list of str
+            List of highway roads in the type variable of roads_fn.
+        non_highway_list: str or list of str, optional.
+            List of non highway roads in the type variable of roads_fn. If not provided takes every roads except the ones in highway_list.
+        country_list: str or list of str, optional.
+            List of countries for the model area in country_fn and optionnally in country_code variable of roads_fn.
+        country_fn: str, optional.
+            Name of country boundaries data source in data_sources.yml file.
+
+            * Required variables: ['country_code']
+
+        """
+        if roads_fn is None:
+            return
+        if roads_fn not in self.data_catalog:
+            self.logger.warning(f"Invalid source '{roads_fn}', skipping setup_roads.")
+            return
+        # Convert string to lists
+        if not isinstance(highway_list, list):
+            highway_list = [highway_list]
+        if not isinstance(country_list, list):
+            country_list = [country_list]
+
+        # Mask the road data with countries of interest
+        gdf_country = self.data_catalog.get_geodataframe(country_fn, dst_crs=self.crs)
+        gdf_country = gdf_country.astype({"country_code": "str"})
+        gdf_country = gdf_country.iloc[
+            np.isin(gdf_country["country_code"], country_list)
+        ]
+        # bbox = gdf_country.total_bounds
+
+        # Read the roads data and mask with country geom
+        gdf_roads = self.data_catalog.get_geodataframe(
+            roads_fn, dst_crs=self.crs, geom=gdf_country, variables=["road_type"]
+        )
+        # Make sure road type is str format
+        gdf_roads["road_type"] = gdf_roads["road_type"].astype(str)
+        # Get non_highway_list
+        if non_highway_list is None:
+            road_types = np.unique(gdf_roads["road_type"].values)
+            non_highway_list = road_types[~np.isin(road_types, highway_list)].tolist()
+        elif not isinstance(non_highway_list, list):
+            non_highway_list = [non_highway_list]
+
+        # Feature filter for highway and non-highway
+        feature_filter = {
+            "hwy": {"road_type": highway_list},
+            "nnhwy": {"road_type": non_highway_list},
+        }
+
+        ### Country statistics ###
+        # Loop over feature_filter
+        for name, colfilter in feature_filter.items():
+            self.logger.info(
+                f"Computing {name} roads statistics per country of interest"
+            )
+            # Filter gdf
+            colname = [k for k in colfilter.keys()][0]
+            subset_roads = gdf_roads.iloc[
+                np.isin(gdf_roads[colname], colfilter.get(colname))
+            ]
+            gdf_country = roads.zonal_stats(
+                gdf=subset_roads,
+                zones=gdf_country,
+                variables=["length"],
+                stats=["sum"],
+                method="sjoin",
+            )
+            gdf_country = gdf_country.rename(
+                columns={"length_sum": f"{name}_length_sum"}
+            )
+            # Convert from m to km
+            gdf_country[f"{name}_length_sum"] = gdf_country[f"{name}_length_sum"] / 1000
+
+            # Rasterize statistics
+            da_emi = emissions.emission_vector(
+                gdf=gdf_country,
+                ds_like=self.staticmaps,
+                col_name=f"{name}_length_sum",
+                method="value",
+                mask_name="mask",
+                logger=self.logger,
+            )
+            self.set_staticmaps(da_emi.rename(f"{name}_length_sum_country"))
+
+        ### Road statistics per segment ###
+        # Filter road gdf with model mask
+        mask = self.staticmaps["mask"].astype("int32").raster.vectorize()
+        gdf_roads = self.data_catalog.get_geodataframe(
+            roads_fn, dst_crs=self.crs, geom=mask, variables=["road_type"]
+        )
+        # Make sure road type is str format
+        gdf_roads["road_type"] = gdf_roads["road_type"].astype(str)
+
+        # Loop over feature_filter
+        for name, colfilter in feature_filter.items():
+            self.logger.info(f"Computing {name} roads statistics per segment")
+            # Filter gdf
+            colname = [k for k in colfilter.keys()][0]
+            subset_roads = gdf_roads.iloc[
+                np.isin(gdf_roads[colname], colfilter.get(colname))
+            ]
+            ds_roads = roads.zonal_stats_grid(
+                gdf=subset_roads,
+                ds_like=self.staticmaps,
+                variables=["length"],
+                stats=["sum"],
+                mask_name="mask",
+                method="overlay",
+            )
+            # Convert from m to km and rename
+            ds_roads[f"{name}_length"] = ds_roads["length_sum"] / 1000
+            ds_roads[f"{name}_length"].attrs.update(_FillValue=0)
+            self.set_staticmaps(ds_roads)
 
     # I/O
     def read(self):
