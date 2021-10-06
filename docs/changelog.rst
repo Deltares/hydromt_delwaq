@@ -8,6 +8,10 @@ The format is based on `Keep a Changelog`_, and this project adheres to
 [Unreleased]
 ------------
 
+v0.1.2 (6 October 2021)
+-----------------------
+This release introduces a new component to prepare road related data and adds several fixes for computation of hydrological forcing.
+
 Added
 ^^^^^
 
@@ -24,11 +28,14 @@ Fixed
 
 - Fixed the waqgeom file for FEWS.
 - Reproject the hydrology forcing to the model grid to avoid inverted latitudes.
+- Fixes for volume computations.
+- Tests and examples linked to updates in the data catalog names.
 
 Documentation
 ^^^^^^^^^^^^^
 
 - Added changelog.
+- Update of the template after updae of sphinx_rtd_theme.
 
 v0.1.1 (6 May 2021)
 -------------------
