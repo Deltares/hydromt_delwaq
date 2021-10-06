@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding new emission data: local &mdash; hydromt_delwaq  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Update a DELWAQ model: forcing" href="update_model_forcing.html" />
+    <link rel="prev" title="Adding new emission data: global" href="adding_global_emission.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> hydromt_delwaq
+          </a>
+              <div class="version">
+                0.1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="build_EM_model.html">Build D-Emissions model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_WQ_model.html">Build D-Water Quality model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="update_model_monitoring.html">Update Delwaq model: monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adding_global_emission.html">Update Delwaq model: global emission</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Update Delwaq model: local emission</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Import-packages">Import packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hydroMT-CLI-update-interface">hydroMT CLI update interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Adding-local-data-to-the-model">Adding local data to the model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Preparing-the-configuration-file">Preparing the configuration file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Updating-the-model-with-the-local-data">Updating the model with the local data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Visualization-of-the-new-emission-map">Visualization of the new emission map</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="update_model_forcing.html">Update Delwaq model: forcing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_delwaq.html">Plot Delwaq model</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/components.html">Model components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/build_configuration.html">Model configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/attributes.html">Model attributes</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/workflows.html">Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/coupling_wflow.html">Coupling with Wflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/generic_delwaq.html">HydroMT and DELWAQ settings</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References &amp; Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_index.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">What’s new</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hydromt_delwaq</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+      <li>Adding new emission data: local</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples/examples/adding_local_emission.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Adding-new-emission-data:-local">
+<h1>Adding new emission data: local<a class="headerlink" href="#Adding-new-emission-data:-local" title="Permalink to this headline"></a></h1>
+<p>Once you have a <strong>DELWAQ</strong> model, you may want to update your model in order to add new emission data, add sample locations, use different hydrological forcing data, create and run different scenarios etc.</p>
+<p>With HydroMT, you can easily read your model and update one or several components of your model using the <strong>update</strong> function of the command line interface (CLI). Here are the steps and some examples on how to <strong>update and add local emission data to your model</strong>.</p>
+<p>All lines in this notebook which starts with ! are executed from the command line. Within the notebook environment the logging messages are shown after completion. You can also copy these lines and paste them in your shell to get more feedback.</p>
+<section id="Import-packages">
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline"></a></h2>
+<p>In this notebook, we will use some functions of HydroMT to prepare hydroMT configuration and library file and plot the new emission data of the updated model. Here are the libraries to import to realize these steps.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># for plotting</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">cartopy.io.img_tiles</span> <span class="k">as</span> <span class="nn">cimgt</span>
+<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="n">proj</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span> <span class="c1"># plot projection</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># import hydromt</span>
+<span class="kn">import</span> <span class="nn">hydromt</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># setup logging</span>
+<span class="kn">from</span>  <span class="nn">hydromt.log</span> <span class="kn">import</span> <span class="n">setuplog</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setuplog</span><span class="p">(</span><span class="s2">&quot;update_model_emission_local&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2021-10-06 06:26:09,959 - update_model_emission_local - log - INFO - HydroMT version: 0.4.3
+</pre></div></div>
+</div>
+</section>
+<section id="hydroMT-CLI-update-interface">
+<h2>hydroMT CLI update interface<a class="headerlink" href="#hydroMT-CLI-update-interface" title="Permalink to this headline"></a></h2>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">hydroMT</span> <span class="pre">update</span></code> API, we can update one or several components of an already existing DELWAQ model. Let’s get an overview of the available options:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Print the options available from the update command</span>
+<span class="o">!</span> hydromt update --help
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
+
+  Update a specific component of a model. Set an output directory to copy
+  the edited model to a new folder, otherwise maps are overwritten.
+
+  Example usage:
+  --------------
+
+  Update (overwrite) landuse-landcover maps in a wflow model
+  hydromt update wflow /path/to/model_root -c setup_lulcmaps --opt source_name=vito
+
+  Update reservoir maps based on default settings in a wflow model and write to new directory
+  hydromt update wflow /path/to/model_root -o /path/to/model_out -c setup_reservoirs
+
+Options:
+  -o, --model-out DIRECTORY  Output model folder. Maps in MODEL_ROOT are
+                             overwritten if left empty.
+
+  -c, --components TEXT      Model components from ini file to run
+  --opt TEXT                 Component specific keyword arguments, see the
+                             setup_&lt;component&gt; method of the specific model
+                             for more information about the arguments.
+
+  -i, --config PATH          Path to hydroMT configuration file, for the model
+                             specific implementation.
+
+  -d, --data PATH            File path to yml data sources file. See
+                             documentation for required yml file format.
+
+  --dd, --deltares-data      Parse default deltares data yml from
+                             https://github.com/DirkEilander/hydromt-
+                             artifacts/releases
+
+  -q, --quiet                Decrease verbosity.
+  -v, --verbose              Increase verbosity.
+  --help                     Show this message and exit.
+
+</pre></div></div>
+</div>
+</section>
+<section id="Adding-local-data-to-the-model">
+<h2>Adding local data to the model<a class="headerlink" href="#Adding-local-data-to-the-model" title="Permalink to this headline"></a></h2>
+<p>Using HydroMT, it is rather easy to add additional emission data using local data. Here we will see an example where we <strong>add a emission factor map</strong> from a local (dummy!) source stored in <em>examples_data/emission_factor.gpkg</em>.</p>
+<p>Compared to global data, that can be added directly to a delwaq model, we first need to <strong>add our local data the the HydroMT Data Catalog</strong> using a local yaml data library. The full steps and infomation to add data the HydroMT data library is available in the <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data.html">docs</a>.</p>
+<p>Here we will see the steps for our (dummy) emission factor source. And first see what the data looks like (you can also download and open it in QGIS instead of loading it with python).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#Let&#39;s read and quickly plot the data</span>
+<span class="n">emission_data</span> <span class="o">=</span> <span class="s1">&#39;examples_data/emission_factor.gpkg&#39;</span>
+<span class="c1">#Open with geopandas and plot</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">emission_data</span><span class="p">)</span>
+<span class="c1">#Content</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Content of the local emission_factor.gpkg file: &quot;</span><span class="p">)</span>
+<span class="n">gdf</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Content of the local emission_factor.gpkg file:
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>OBJECTID</th>
+      <th>ISO_3DIGIT</th>
+      <th>NAME</th>
+      <th>EF</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>19</td>
+      <td>AUT</td>
+      <td>Austria</td>
+      <td>1.500</td>
+      <td>MULTIPOLYGON (((15.01626 49.01902, 15.03378 49...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>22</td>
+      <td>BEL</td>
+      <td>Belgium</td>
+      <td>2.260</td>
+      <td>MULTIPOLYGON (((4.94299 51.44159, 4.94078 51.4...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>47</td>
+      <td>CHE</td>
+      <td>Switzerland</td>
+      <td>1.710</td>
+      <td>MULTIPOLYGON (((8.57693 47.81010, 8.59278 47.8...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>65</td>
+      <td>DEU</td>
+      <td>Germany</td>
+      <td>1.390</td>
+      <td>MULTIPOLYGON (((8.70214 47.71345, 8.71030 47.7...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>82</td>
+      <td>FRA</td>
+      <td>France</td>
+      <td>2.175</td>
+      <td>MULTIPOLYGON (((9.25835 41.34536, 9.25813 41.3...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>135</td>
+      <td>LIE</td>
+      <td>Liechtenstein</td>
+      <td>1.605</td>
+      <td>MULTIPOLYGON (((9.56471 47.17015, 9.57504 47.1...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>139</td>
+      <td>LUX</td>
+      <td>Luxembourg</td>
+      <td>2.260</td>
+      <td>MULTIPOLYGON (((6.02926 50.17731, 6.03060 50.1...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>171</td>
+      <td>NLD</td>
+      <td>Netherlands</td>
+      <td>1.410</td>
+      <td>MULTIPOLYGON (((3.51562 51.40709, 3.54988 51.4...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>117</td>
+      <td>ITA</td>
+      <td>Italy</td>
+      <td>2.175</td>
+      <td>MULTIPOLYGON (((12.53929 35.52953, 12.54022 35...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#coordinate system</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Coordinate system of the data: </span><span class="si">{</span><span class="n">gdf</span><span class="o">.</span><span class="n">crs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1">#Quick plot</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Coordinate system of the data: epsg:4326
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;AxesSubplot:&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_examples_adding_local_emission_14_2.png" src="../../_images/examples_examples_adding_local_emission_14_2.png" />
+</div>
+</div>
+<p>We can see that our data is a <strong>vector file</strong> with some European countries in EPSG <strong>4326</strong>, and that it contains our emission factors in the <strong>EF</strong> column. We now have information enough to add it to the HydroMT data sources by preparing a <strong>local_emission_sources.yml</strong>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Dictionary with all the required information on our emission_factor.gpkg file</span>
+<span class="n">data_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;EF_local&#39;</span><span class="p">:</span> <span class="p">{</span>                      <span class="c1"># user defined internal name of the local data source</span>
+        <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;examples_data/emission_factor.gpkg&#39;</span><span class="p">,</span> <span class="c1"># path to the local data</span>
+        <span class="s1">&#39;data_type&#39;</span><span class="p">:</span> <span class="s1">&#39;GeoDataFrame&#39;</span><span class="p">,</span>   <span class="c1"># hydroMT DataCatalog type &#39;GeoDataFrame&#39; for vector file</span>
+        <span class="s1">&#39;driver&#39;</span><span class="p">:</span> <span class="s1">&#39;vector&#39;</span><span class="p">,</span>            <span class="c1"># driver to read the file &#39;vector&#39; for vector file</span>
+        <span class="s1">&#39;crs&#39;</span><span class="p">:</span> <span class="mi">4326</span><span class="p">,</span>                   <span class="c1"># optional here but mentioned as en example</span>
+        <span class="s1">&#39;rename&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;COUNTRY&#39;</span><span class="p">,</span>         <span class="c1"># dummy here but can be used to rename some of the data columns</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;unit_mult&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;EF&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>                 <span class="c1"># dummy here (EF*1.0) but can be used to convert units (should be kg/d/EV)</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;unit_add&#39;</span><span class="p">:{</span>
+            <span class="s1">&#39;EF&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>                 <span class="c1"># dummy here (EF+0.0) but can be used to convert units (should be kg/d/EV)</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="p">{</span>                      <span class="c1"># additional information on the file (license, download link, DOI, author...)</span>
+            <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;socio econpmic&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;source_url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://github.com/Deltares/hydromt_delwaq/tree/main/examples/examples_data/emission_factor.gpkg&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;notes&#39;</span><span class="p">:</span> <span class="s1">&#39;Dummy emission factor data&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1"># Convert the dict to hydroMT yaml library format and save the file</span>
+<span class="n">fn_yml</span> <span class="o">=</span> <span class="s1">&#39;local_emission_sources.yml&#39;</span>
+<span class="n">data_catalog</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">DataCatalog</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+<span class="n">data_catalog</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data_dict</span><span class="p">)</span>
+<span class="n">data_catalog</span><span class="o">.</span><span class="n">to_yml</span><span class="p">(</span><span class="n">fn_yml</span><span class="p">)</span>
+
+<span class="c1">#Read the saved yml</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_yml</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+EF_local:
+  crs: 4326
+  data_type: GeoDataFrame
+  driver: vector
+  meta:
+    category: socio econpmic
+    notes: Dummy emission factor data
+    source_url: https://github.com/Deltares/hydromt_delwaq/tree/main/examples/examples_data/emission_factor.gpkg
+  path: examples_data/emission_factor.gpkg
+  rename:
+    NAME: COUNTRY
+  unit_add:
+    EF: 0.0
+  unit_mult:
+    EF: 1.0
+
+</pre></div></div>
+</div>
+<p>Our local data is now ready to be processed by HydroMT !</p>
+</section>
+<section id="Preparing-the-configuration-file">
+<h2>Preparing the configuration file<a class="headerlink" href="#Preparing-the-configuration-file" title="Permalink to this headline"></a></h2>
+<p>As our new <strong>EF_local</strong> data is a <strong>vector</strong> data, we will add it to our model using the <code class="docutils literal notranslate"><span class="pre">[setup_emission_vector]</span></code> component of hydroMT Delwaq.</p>
+<p>Let’s prepare a <strong>HydroMT configuration file</strong> with our options for preparing the EF_local grid. All available options are available in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector.html">docs(setup_emission_vector)</a>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Dictionnary with all the components and options we want to update</span>
+<span class="n">emission_vector_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;global&#39;</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;mtype&#39;</span><span class="p">:</span> <span class="s1">&#39;EM&#39;</span><span class="p">},</span>
+    <span class="s1">&#39;setup_emission_vector&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;emission_fn&#39;</span><span class="p">:</span> <span class="s1">&#39;EF_local&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;col2raster&#39;</span><span class="p">:</span> <span class="s1">&#39;EF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;rasterize_method&#39;</span><span class="p">:</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1"># Save it to a hydroMT ini file</span>
+<span class="n">fn_ini</span> <span class="o">=</span> <span class="s2">&quot;delwaq_update_emission_local.ini&quot;</span>
+<span class="n">hydromt</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">configwrite</span><span class="p">(</span><span class="n">fn_ini</span><span class="p">,</span> <span class="n">emission_vector_options</span><span class="p">)</span>
+
+<span class="c1"># Open the file and visualize the content</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_ini</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[global]
+mtype = EM
+
+[setup_emission_vector]
+emission_fn = EF_local
+col2raster = EF
+rasterize_method = value
+
+
+</pre></div></div>
+</div>
+<p>Some explanations about the option we chose here:</p>
+<ul class="simple">
+<li><p><strong>emission_fn</strong>: name of the emission factor data source in hydroMT Data Catalog. The one we choose when creating the <em>local_emission_sources.yml</em>.</p></li>
+<li><p><strong>col2raster</strong>: name of the column in the vector file that contains the emission factors values to rasterize to the model grid.</p></li>
+<li><p><strong>rasterize_method</strong>: method to rasterize the vector either <em>value</em> to rasterize the values in the ‘col2raster’ column, or <em>fraction</em> to rasterize the fraction of the model grid cell that is covered by the vector shapes (eg fraction of agricultural areas).</p></li>
+</ul>
+</section>
+<section id="Updating-the-model-with-the-local-data">
+<h2>Updating the model with the local data<a class="headerlink" href="#Updating-the-model-with-the-local-data" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
+<span class="o">!</span> hydromt update delwaq EM_piave -o ./EM_piave_extended -i delwaq_update_emission_local.ini -d local_emission_sources.yml -vv
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2021-10-06 06:26:15,490 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/hydromt.log.
+2021-10-06 06:26:15,491 - update - log - INFO - HydroMT version: 0.4.3
+2021-10-06 06:26:15,491 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave (r).
+2021-10-06 06:26:15,491 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended
+2021-10-06 06:26:15,491 - update - main - INFO - Additional data sources: (&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_emission_sources.yml&#39;,)
+2021-10-06 06:26:15,491 - update - main - INFO - User settings:
+2021-10-06 06:26:15,527 - update - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.2)
+2021-10-06 06:26:15,527 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.2).
+2021-10-06 06:26:15,529 - update - delwaq - INFO - Reading model staticgeom files.
+2021-10-06 06:26:15,593 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave/staticdata/staticmaps.nc
+2021-10-06 06:26:15,603 - update - delwaq - INFO - Model read
+2021-10-06 06:26:15,603 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/hydromodel.
+2021-10-06 06:26:15,603 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/staticdata.
+2021-10-06 06:26:15,603 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/staticgeoms.
+2021-10-06 06:26:15,603 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/config.
+2021-10-06 06:26:15,603 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/dynamicdata.
+2021-10-06 06:26:15,603 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/fews.
+2021-10-06 06:26:15,607 - update - model_api - INFO - setup_emission_vector.emission_fn: EF_local
+2021-10-06 06:26:15,607 - update - model_api - INFO - setup_emission_vector.col2raster: EF
+2021-10-06 06:26:15,607 - update - model_api - INFO - setup_emission_vector.rasterize_method: value
+2021-10-06 06:26:15,607 - update - delwaq - INFO - Preparing &#39;EF_local&#39; map.
+2021-10-06 06:26:15,607 - update - data_adapter - INFO - DataCatalog: Getting EF_local GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/examples_data/emission_factor.gpkg
+2021-10-06 06:26:15,608 - update - data_adapter - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
+2021-10-06 06:26:15,718 - update - data_adapter - DEBUG - GeoDataFrame: Convert units for 2 columns.
+2021-10-06 06:26:15,784 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended
+2021-10-06 06:26:15,801 - update - delwaq - INFO - Writing staticmap files.
+2021-10-06 06:26:15,814 - update - delwaq - INFO - Writing model staticgeom to file.
+2021-10-06 06:26:15,827 - update - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
+2021-10-06 06:26:15,828 - update - delwaq - INFO - Writing hydromap files.
+2021-10-06 06:26:15,897 - update - delwaq - WARNING - Warning: no dynamic map, skipping write_dynamicmaps.
+
+</pre></div></div>
+</div>
+<p>The example above means the following: run <strong>hydromt</strong> with:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">update</span> <span class="pre">delwaq</span></code>: i.e. update a delwaq model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EM_piave</span></code>: original model folder</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">./EM_piave_extended</span></code>: output updated model folder</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">delwaq_update_emission_local.ini</span></code>: hydroMT configuration file containing the components and options to update</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">local_emission_sources.yml</span></code>: hydroMT local data library file containing local data sources and their attributes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code>: give some extra verbosity (2 * v) to display feedback on screen. Now debug messages are provided.</p></li>
+</ul>
+</section>
+<section id="Visualization-of-the-new-emission-map">
+<h2>Visualization of the new emission map<a class="headerlink" href="#Visualization-of-the-new-emission-map" title="Permalink to this headline"></a></h2>
+<p>We can now plot our newly created emission factor map.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Load the original and updated model with hydromt</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;EM_piave_extended&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Edit the lines below to change the emission map and its colormap</span>
+<span class="n">emissionmap</span> <span class="o">=</span> <span class="s1">&#39;EF_local&#39;</span>
+<span class="n">colormap</span> <span class="o">=</span> <span class="s1">&#39;Reds&#39;</span>
+
+<span class="c1">#Load the emission map</span>
+<span class="n">da</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">staticmaps</span><span class="p">[</span><span class="n">emissionmap</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">mask_nodata</span><span class="p">()</span>
+<span class="n">da</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="n">emissionmap</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
+<span class="c1">#Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;seaborn-whitegrid&#39;</span><span class="p">)</span> <span class="c1"># set nice style</span>
+<span class="c1"># we assume the model maps are in the geographic CRS EPSG:4326</span>
+<span class="n">proj</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+<span class="c1"># adjust zoomlevel and figure size to your basis size &amp; aspect</span>
+<span class="n">zoom_level</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+<span class="c1"># initialize image with geoaxes</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+<span class="n">extent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">0.02</span><span class="p">)</span><span class="o">.</span><span class="n">total_bounds</span><span class="p">)[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_extent</span><span class="p">(</span><span class="n">extent</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+
+<span class="c1"># add sat background image</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">cimgt</span><span class="o">.</span><span class="n">QuadtreeTiles</span><span class="p">(),</span> <span class="n">zoom_level</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># add the country shape</span>
+<span class="n">country_shape</span> <span class="o">=</span> <span class="s1">&#39;examples_data/emission_factor.gpkg&#39;</span>
+<span class="c1">#Open with geopandas and plot</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">country_shape</span><span class="p">)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">transform</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">)</span>
+
+<span class="c1">## plot emission map</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colormap</span><span class="p">)</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+<span class="c1"># plot &#39;normal&#39; elevation</span>
+<span class="n">da</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">transform</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cbar_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">aspect</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">.8</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;latitude [degree north]&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;longitude [degree east]&quot;</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Delwaq emission map&quot;</span><span class="p">)</span>
+<span class="n">legend</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+    <span class="n">handles</span><span class="o">=</span><span class="p">[</span><span class="o">*</span><span class="n">ax</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()[</span><span class="mi">0</span><span class="p">]],</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Legend&quot;</span><span class="p">,</span>
+    <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">,</span>
+    <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_examples_adding_local_emission_28_0.png" src="../../_images/examples_examples_adding_local_emission_28_0.png" />
+</div>
+</div>
+<p>Our Delwaq model is completely located in Italy so our <strong>EF_local</strong> map here only has the same value for every grid cell.</p>
+<p>If you are using Binder, feel free to edit this notebook to try out with your own local data (you need to first upload your data in Binder using the upload button).</p>
+<p>Note that you can also download the models you created in Binder by first zipping them using the lines below and downloading the zipped model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Lines to zip a model folder</span>
+<span class="n">model_folder</span> <span class="o">=</span> <span class="s1">&#39;EM_piave_extended&#39;</span>
+
+<span class="c1">#Zipping</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">make_archive</span><span class="p">(</span><span class="n">model_folder</span><span class="p">,</span> <span class="s1">&#39;zip&#39;</span><span class="p">,</span> <span class="n">model_folder</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended.zip&#39;
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="adding_global_emission.html" class="btn btn-neutral float-left" title="Adding new emission data: global" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="update_model_forcing.html" class="btn btn-neutral float-right" title="Update a DELWAQ model: forcing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Deltares.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

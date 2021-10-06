@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hydromt_delwaq.workflows.emissions &mdash; hydromt_delwaq  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> hydromt_delwaq
+          </a>
+              <div class="version">
+                0.1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide/components.html">Model components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide/build_configuration.html">Model configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide/attributes.html">Model attributes</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced/workflows.html">Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced/coupling_wflow.html">Coupling with Wflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced/generic_delwaq.html">HydroMT and DELWAQ settings</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References &amp; Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_index.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">What’s new</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hydromt_delwaq</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>hydromt_delwaq.workflows.emissions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hydromt_delwaq.workflows.emissions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">hydromt</span> <span class="kn">import</span> <span class="n">gis_utils</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;emission_raster&quot;</span><span class="p">,</span> <span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="s2">&quot;emission_vector&quot;</span><span class="p">]</span>
+
+<span class="n">RESAMPLING</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;EM_level1&quot;</span><span class="p">:</span> <span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="s2">&quot;EM_fact_X&quot;</span><span class="p">:</span> <span class="s2">&quot;average&quot;</span><span class="p">}</span>
+<span class="n">DTYPES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;EM_level1&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">,</span> <span class="s2">&quot;EM_fact_X&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">gridarea</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a DataArray cointaining the area in m2 of the reference grid ds</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    da : xarray.DataArray or xarray.DataSet</span>
+<span class="sd">        DataArray containing reference grid.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    da_out : xarray.DataArray</span>
+<span class="sd">        DataArray containing area in m2 of the reference grid.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">realarea</span> <span class="o">=</span> <span class="n">gis_utils</span><span class="o">.</span><span class="n">reggrid_area</span><span class="p">(</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">ycoords</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">xcoords</span><span class="o">.</span><span class="n">values</span>
+    <span class="p">)</span>
+    <span class="n">da_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">realarea</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
+        <span class="n">coords</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span>
+        <span class="n">dims</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">da_out</span>
+
+
+<div class="viewcode-block" id="emission_raster"><a class="viewcode-back" href="../../../generated/hydromt_delwaq.workflows.emissions.emission_raster.html#hydromt_delwaq.workflows.emissions.emission_raster">[docs]</a><span class="k">def</span> <span class="nf">emission_raster</span><span class="p">(</span>
+    <span class="n">da</span><span class="p">,</span>
+    <span class="n">ds_like</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;average&quot;</span><span class="p">,</span>
+    <span class="n">fillna_method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
+    <span class="n">fillna_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">area_division</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns emission map.</span>
+
+<span class="sd">    The following emission maps are calculated:\</span>
+<span class="sd">    - da</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    da : xarray.DataArray</span>
+<span class="sd">        DataArray containing emission map.</span>
+<span class="sd">    ds_like : xarray.DataArray</span>
+<span class="sd">        Dataset at model resolution.</span>
+<span class="sd">    method : str {&#39;average&#39;, &#39;nearest&#39;, &#39;mode&#39;}</span>
+<span class="sd">        Method for resampling.</span>
+<span class="sd">    fillna_method : str {&#39;nearest&#39;, &#39;zero&#39;, &#39;value&#39;}</span>
+<span class="sd">        Method to fill NaN values.</span>
+<span class="sd">    fillna_value : float</span>
+<span class="sd">        If fillna_method is set to &#39;value&#39;, NaNs in the emission maps will be replaced by this value.</span>
+<span class="sd">    area_division : boolean</span>
+<span class="sd">        If needed do the resampling in count/m2 (True) instead of count (False)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    da_out : xarray.Dataset</span>
+<span class="sd">        Dataset containing gridded emission map at model resolution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nodata</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span>
+    <span class="k">if</span> <span class="n">fillna_method</span> <span class="o">==</span> <span class="s2">&quot;zero&quot;</span><span class="p">:</span>
+        <span class="n">da</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">values</span> <span class="o">!=</span> <span class="n">nodata</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">fillna_method</span> <span class="o">==</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span>
+        <span class="n">da</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">values</span> <span class="o">!=</span> <span class="n">nodata</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">fillna_value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">da</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">interpolate_na</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">area_division</span><span class="p">:</span>
+        <span class="n">da_area</span> <span class="o">=</span> <span class="n">gridarea</span><span class="p">(</span><span class="n">da</span><span class="p">)</span>
+        <span class="n">da</span> <span class="o">=</span> <span class="n">da</span> <span class="o">/</span> <span class="n">da_area</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Deriving </span><span class="si">{</span><span class="n">da</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> using </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> resampling (nodata=</span><span class="si">{</span><span class="n">nodata</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
+    <span class="c1"># da = da.astype(np.float32)</span>
+
+    <span class="n">da_out</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">reproject_like</span><span class="p">(</span><span class="n">ds_like</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">area_division</span><span class="p">:</span>
+        <span class="n">da_area</span> <span class="o">=</span> <span class="n">gridarea</span><span class="p">(</span><span class="n">da_out</span><span class="p">)</span>
+        <span class="n">da_out</span> <span class="o">=</span> <span class="n">da_out</span> <span class="o">*</span> <span class="n">da_area</span>
+    <span class="n">da_out</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_FillValue</span><span class="o">=</span><span class="n">nodata</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">da_out</span></div>
+
+
+<div class="viewcode-block" id="emission_vector"><a class="viewcode-back" href="../../../generated/hydromt_delwaq.workflows.emissions.emission_vector.html#hydromt_delwaq.workflows.emissions.emission_vector">[docs]</a><span class="k">def</span> <span class="nf">emission_vector</span><span class="p">(</span>
+    <span class="n">gdf</span><span class="p">,</span>
+    <span class="n">ds_like</span><span class="p">,</span>
+    <span class="n">col_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
+    <span class="n">mask_name</span><span class="o">=</span><span class="s2">&quot;basmsk&quot;</span><span class="p">,</span>
+    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns gridded emission data from vector.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gdf : geopandas.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame containing emission data.</span>
+<span class="sd">    ds_like : xarray.DataArray</span>
+<span class="sd">        Dataset at model resolution.</span>
+<span class="sd">    method : str {&#39;value&#39;, &#39;fraction&#39;}</span>
+<span class="sd">        Method for rasterizing.</span>
+<span class="sd">    mask_name : str</span>
+<span class="sd">        Name of a basin mask array in ds_like.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    da_out : xarray.Dataarray</span>
+<span class="sd">        Dataarray containing gridded emission map at model resolution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span>
+        <span class="n">da_out</span> <span class="o">=</span> <span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">rasterize</span><span class="p">(</span>
+            <span class="n">gdf</span><span class="p">,</span>
+            <span class="n">col_name</span><span class="o">=</span><span class="n">col_name</span><span class="p">,</span>
+            <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">all_touched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">sindex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;fraction&quot;</span><span class="p">:</span>
+        <span class="c1"># Using the vectors directly (long computation time but most accurate)</span>
+        <span class="c1"># Create vector grid (for calculating fraction and storage per grid cell)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Creating vector grid for calculating coverage fraction per grid cell&quot;</span>
+        <span class="p">)</span>
+        <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># fix potential geometry errors</span>
+        <span class="n">msktn</span> <span class="o">=</span> <span class="n">ds_like</span><span class="p">[</span><span class="n">mask_name</span><span class="p">]</span>
+        <span class="n">idx_valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">msktn</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">!=</span> <span class="n">msktn</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">gdf_grid</span> <span class="o">=</span> <span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">vector_grid</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_valid</span><span class="p">]</span>
+        <span class="n">gdf_grid</span><span class="p">[</span><span class="s2">&quot;coverfrac&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">idx_valid</span><span class="p">))</span>
+        <span class="n">gdf_grid</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_grid</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span>
+            <span class="mi">3857</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">area</span>  <span class="c1"># area calculation in projected crs</span>
+
+        <span class="c1"># Calculate fraction per (vector) grid cell</span>
+        <span class="c1"># Looping over each vector shape</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)):</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">gridded_shape</span> <span class="o">=</span> <span class="n">gdf_grid</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">shape</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+            <span class="n">gridded_shape</span> <span class="o">=</span> <span class="n">gridded_shape</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">gridded_shape</span><span class="o">.</span><span class="n">is_empty</span><span class="p">]</span>
+            <span class="n">idxs</span> <span class="o">=</span> <span class="n">gridded_shape</span><span class="o">.</span><span class="n">index</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">idxs</span><span class="p">):</span>
+                <span class="c1"># area calculation needs projected crs</span>
+                <span class="n">sharea_cell</span> <span class="o">=</span> <span class="n">gridded_shape</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">3857</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>
+                <span class="n">gdf_grid</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idxs</span><span class="p">,</span> <span class="s2">&quot;coverfrac&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="n">sharea_cell</span> <span class="o">/</span> <span class="n">gdf_grid</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idxs</span><span class="p">,</span> <span class="s2">&quot;area&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+        <span class="c1"># Create the rasterized coverage fraction map</span>
+        <span class="n">da_out</span> <span class="o">=</span> <span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">rasterize</span><span class="p">(</span>
+            <span class="n">gdf_grid</span><span class="p">,</span>
+            <span class="n">col_name</span><span class="o">=</span><span class="s2">&quot;coverfrac&quot;</span><span class="p">,</span>
+            <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">all_touched</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">sindex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">da_out</span></div>
+
+
+<div class="viewcode-block" id="admin"><a class="viewcode-back" href="../../../generated/hydromt_delwaq.workflows.emissions.admin.html#hydromt_delwaq.workflows.emissions.admin">[docs]</a><span class="k">def</span> <span class="nf">admin</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">ds_like</span><span class="p">,</span> <span class="n">source_name</span><span class="p">,</span> <span class="n">fn_map</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns administrative boundaries map and related parameter maps.</span>
+<span class="sd">    The parameter maps are prepared based on administrative boundaries and</span>
+<span class="sd">    mapping table as provided in the generic data folder of hydromt.</span>
+
+<span class="sd">    The following maps are calculated:\</span>
+<span class="sd">    - TODO</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    da : xarray.DataArray</span>
+<span class="sd">        DataArray containing Admin classes.</span>
+<span class="sd">    ds_like : xarray.DataArray</span>
+<span class="sd">        Dataset at model resolution.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ds_out : xarray.Dataset</span>
+<span class="sd">        Dataset containing gridded emission factor based maps</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># read csv with remapping values</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fn_map</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;[,;]&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPES</span><span class="p">)</span>
+    <span class="c1"># limit dtypes to avoid gdal errors downstream</span>
+    <span class="n">ddict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;float64&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="s2">&quot;int64&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">}</span>
+    <span class="n">dtypes</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">ddict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">}</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fn_map</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;[,;]&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtypes</span><span class="p">)</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+    <span class="c1"># include index_col as parameter (for output to map)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;EM_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">EM_ID</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">EM_ID</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="c1"># define list of parameters for which output maps are created</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;EM_&quot;</span><span class="p">)]</span>
+    <span class="c1"># setup ds out</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+    <span class="c1"># setup reclass method</span>
+    <span class="k">def</span> <span class="nf">reclass</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span> <span class="n">nodata</span><span class="p">)</span>
+
+    <span class="c1"># apply for each parameter</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="c1"># TODO change average into value with highest occurence</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">RESAMPLING</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="s2">&quot;average&quot;</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">nodata</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># NOTE values is set in last row</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>  <span class="c1"># NOTE global param in reclass method</span>
+        <span class="n">da</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">interpolate_na</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Deriving </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2"> using </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> resampling (nodata=</span><span class="si">{</span><span class="n">nodata</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
+        <span class="n">da_param</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">apply_ufunc</span><span class="p">(</span>
+            <span class="n">reclass</span><span class="p">,</span> <span class="n">da</span><span class="p">,</span> <span class="n">dask</span><span class="o">=</span><span class="s2">&quot;parallelized&quot;</span><span class="p">,</span> <span class="n">output_dtypes</span><span class="o">=</span><span class="p">[</span><span class="n">values</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">da_param</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_FillValue</span><span class="o">=</span><span class="n">nodata</span><span class="p">)</span>  <span class="c1"># first set new nodata values</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">param</span> <span class="o">==</span> <span class="s2">&quot;EM_ID&quot;</span>
+        <span class="p">):</span>  <span class="c1"># rename ID map to source_name (to avoid overwriting when several sources use this admin mapping function)</span>
+            <span class="n">ds_out</span><span class="p">[</span><span class="n">source_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">da_param</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">reproject_like</span><span class="p">(</span>
+                <span class="n">ds_like</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
+            <span class="p">)</span>  <span class="c1"># then resample</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ds_out</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="n">da_param</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">reproject_like</span><span class="p">(</span>
+                <span class="n">ds_like</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
+            <span class="p">)</span>  <span class="c1"># then resample</span>
+        <span class="c1"># ds_out = ds_out.rename({&quot;EM_ID&quot;:source_name})</span>
+
+    <span class="k">return</span> <span class="n">ds_out</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Deltares.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

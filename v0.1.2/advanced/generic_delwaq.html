@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HydroMT and DELWAQ settings &mdash; hydromt_delwaq  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API reference" href="../api/api_index.html" />
+    <link rel="prev" title="Coupling with Wflow" href="coupling_wflow.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> hydromt_delwaq
+          </a>
+              <div class="version">
+                0.1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/components.html">Model components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/build_configuration.html">Model configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/attributes.html">Model attributes</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coupling_wflow.html">Coupling with Wflow</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HydroMT and DELWAQ settings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#background-information">Background information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#emissions-modelling-with-d-emission">Emissions modelling with D-Emission</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#selection-of-substance-s-and-sources">Selection of substance(s) and sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-the-em-model-with-hydromt">Preparing the EM model with HydroMT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#editing-the-em-run-information">Editing the EM run information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-d-emission">Running D-Emission</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#water-quality-modelling-with-d-water-quality">Water quality modelling with D-Water Quality</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#selection-of-substance-s-and-processes">Selection of substance(s) and processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-the-wq-model-with-hydromt">Preparing the WQ model with HydroMT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#editing-the-wq-run-information">Editing the WQ run information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#link-with-the-outputs-from-d-emissions">Link with the outputs from D-Emissions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-d-water-quality">Running D-Water Quality</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References &amp; Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_index.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">What’s new</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">hydromt_delwaq</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>HydroMT and DELWAQ settings</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/advanced/generic_delwaq.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="hydromt-and-delwaq-settings">
+<span id="generic-delwaq"></span><h1>HydroMT and DELWAQ settings<a class="headerlink" href="#hydromt-and-delwaq-settings" title="Permalink to this headline"></a></h1>
+<p>HydroMT can help you prepare models for DELWAQ but is specifically suited for the generic version between D-Emission and D-Water Quality.
+In this advanced topic, we detailed what are the steps to best make use of HydroMT for this specific version of DELWAQ.</p>
+<p>For this case, we take a simplified example: <strong>Total Nitrogen (TN)</strong> released by <strong>households</strong>.</p>
+<section id="background-information">
+<h2>Background information<a class="headerlink" href="#background-information" title="Permalink to this headline"></a></h2>
+<p>Instead of using  a (previous) version of D-Emissions that can deal with multiple substances, a mew version dealing with single substances only has been introduced. This was done for two reasons:</p>
+<ol class="arabic simple">
+<li><p>It dramatically reduces the complexity of the code</p></li>
+<li><p>It significantly reduces the runtime per substance</p></li>
+</ol>
+<p>Moreover, the new D-Emissions version no longer allows/requires editing of the Processes Library Tables (proces.asc) by (expert) users, which proved too error prone in practice. As a consequence of the above, the combined use of D-Emissions and D-Water Quality now requires (in case of a multiple substance water quality simulation) the connection of multiple emission output files generated by individual D-Emissions runs (for each of the substances) to a single D-Water Quality simulation.</p>
+<p>The new single substance D-Emissions model writes its emission data into two files, always called:</p>
+<ul class="simple">
+<li><p>outdata_em.bin</p></li>
+<li><p>outdata_em.txt</p></li>
+</ul>
+<p>In the case that multiple D-Emissions model runs are carried out, e.g. for total nitrogen (TN) and total phosphorus (TP), it is up to the user to manage these files and avoid that the results for TP overwrite those for TN. This can easily be done in a batch script using the following commandlines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">copy</span> <span class="n">outdata_em</span><span class="o">.</span><span class="n">txt</span> <span class="o">%</span><span class="mi">1</span><span class="n">_em</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">copy</span> <span class="n">outdata_em</span><span class="o">.</span><span class="n">bin</span> <span class="o">%</span><span class="mi">1</span><span class="n">_em</span><span class="o">.</span><span class="n">bin</span>
+<span class="n">erase</span> <span class="n">outdata_em</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">erase</span> <span class="n">outdata_em</span><span class="o">.</span><span class="n">bin</span>
+
+<span class="c1">#where %1 matches the run-id equal to the input filename, %1.inp</span>
+</pre></div>
+</div>
+<p>D-Water Quality is equipped with a series of processes able to read these files and translate them into the appropriate state variables (e.g. NH4, NO3, PON1 etc. for TN; AAP,
+PO4, POP1 for TP). This allows D-Water Quality to simulate their fate in the surface water using standard processes from the library.</p>
+<p>This series of processes is called EM_xxx and is currently still embedded in an open processes library dll. This implies that they need to be manually merged into the D-Water Quality
+proc_def file. After correct functioning has been demonstrated, integration with the standard open source version of D-Water Quality is foreseen.</p>
+<p>Every individual EM_xxx process extracts by default its EM data from the following files, assumed to be present in the working directory:</p>
+<ul class="simple">
+<li><p>xxx_em.bin</p></li>
+<li><p>xxx_em.txt</p></li>
+</ul>
+<p>Alternatively, these filenames can be read from a file assumed to be present in the working directory:</p>
+<ul class="simple">
+<li><p>xxx_em.def</p></li>
+</ul>
+<p>The functionality to distribute the emission data over several state variables (also known as “USEFOR” functionality) is included in the EM_xxx process. Input can be provided by the
+user in the regular way.</p>
+<p>In order to connect a D-Water Quality simulation to one or more D-Emissions runs, the following steps need to be taken.</p>
+<p>Let XXX be the variable for which D-Emissions has calculated emissions. The user must:</p>
+<ul class="simple">
+<li><p>Ascertain that xxx_em.bin and xxx_em.txt (D-Emissions output files) are present in the run directory</p></li>
+<li><p><strong>OR</strong> Ascertain that xxx_em.def, a file holding references to xxx_em.bin and xxx_em.txt, is present in the run directory</p></li>
+<li><p>Activate the relevant process in block 7 of the input file:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CONSTANTS</span> <span class="n">Active_EM_xxx</span> <span class="n">DATA</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Optionally, include the relevant input items for this process.</p></li>
+</ul>
+<p>The table below lists the currently available options for xxx, and the equivalent definitions.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 39%" />
+<col style="width: 15%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>xxx</p></th>
+<th class="head"><p>EM files</p></th>
+<th class="head"><p>WQ process</p></th>
+<th class="head"><p>Input to WQ process</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BOD</p></td>
+<td><p>BOD_em.bin and BOD_em.txt OR
+BOD_em.def</p></td>
+<td><p>EM_BOD</p></td>
+<td><p>n.a. (all emissions to CBODu)</p></td>
+</tr>
+<tr class="row-odd"><td><p>TNI</p></td>
+<td><p>TNI_em.bin and TNI_em.txt OR
+TNI_em.def</p></td>
+<td><p>EM_TNI</p></td>
+<td><p>TNItoNH4, TNItoNO3, TNItoPON1,
+TNItoPON2, TNItoDON</p></td>
+</tr>
+<tr class="row-even"><td><p>TPH</p></td>
+<td><p>TPH_em.bin and TPH_em.txt OR
+TPH_em.def</p></td>
+<td><p>EM_TPH</p></td>
+<td><p>TPHtoPO4, TPHtoAAP, TPHtoPOP1,
+TPHtoPOP2, TPHtoDOP</p></td>
+</tr>
+<tr class="row-odd"><td><p>TSS</p></td>
+<td><p>TSS_em.bin and TSS_em.txt OR
+TSS_em.def</p></td>
+<td><p>EM_TSS</p></td>
+<td><p>TSStoIM1, TSStoIM2,
+TSStoIM3</p></td>
+</tr>
+<tr class="row-even"><td><p>COL</p></td>
+<td><p>COL_em.bin and COL_em.txt OR
+COL_em.def</p></td>
+<td><p>EM_COL</p></td>
+<td><p>COLtoEColi, COLtoFColi,
+COLtoTColi</p></td>
+</tr>
+<tr class="row-odd"><td><p>TRA</p></td>
+<td><p>TRA_em.bin and TRA_em.txt OR
+TRA_em.def</p></td>
+<td><p>EM_TRA</p></td>
+<td><p>n.a. (all emissions to cTR1)</p></td>
+</tr>
+</tbody>
+</table>
+<p>So, for illustration, to set up a model for nitrogen and phosphorus, the user has to provide:</p>
+<ul class="simple">
+<li><p>Input files TNI_em.bin and TNI_em.txt plus TPH_em.bin and TPH_em.txt.</p></li>
+<li><p>Alternatively, TNI_em.def and TPH_em.def, holding references to the above files.</p></li>
+<li><p>Activation of the relevant process in block 7 of the input file:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CONSTANTS</span> <span class="n">Active_EM_TNI</span> <span class="n">DATA</span> <span class="mi">1</span>
+<span class="n">CONSTANTS</span> <span class="n">Active_EM_TPH</span> <span class="n">DATA</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Definition of the “USEFOR” constants to subdivide total N and P over state variables, also in block 7 of the input file:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CONSTANTS</span> <span class="n">TNItoNH4</span> <span class="n">DATA</span> <span class="mf">0.2</span>
+<span class="n">CONSTANTS</span> <span class="n">TNItoNO3</span> <span class="n">DATA</span> <span class="mf">0.4</span>
+<span class="n">CONSTANTS</span> <span class="n">TNItoPON1</span> <span class="n">DATA</span> <span class="mf">0.4</span>
+
+<span class="n">CONSTANTS</span> <span class="n">TPHtoPO4</span> <span class="n">DATA</span> <span class="mf">0.5</span>
+<span class="n">CONSTANTS</span> <span class="n">TPHtoAAP</span> <span class="n">DATA</span> <span class="mf">0.4</span>
+<span class="n">CONSTANTS</span> <span class="n">TPHtoPOP1</span> <span class="n">DATA</span> <span class="mf">0.1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As a simplification, in this tutorial we will model our emitted domestic Nitrogen as a tracer <strong>TRA</strong> to avoid complexity of nutrients modelling and their processes.</p>
+</div>
+</section>
+<section id="emissions-modelling-with-d-emission">
+<h2>Emissions modelling with D-Emission<a class="headerlink" href="#emissions-modelling-with-d-emission" title="Permalink to this headline"></a></h2>
+<p>The first step in solving or mitigating many water quality and health problems, is to get a quantitative overview of the emissions of substances causing such problems.
+<a class="reference external" href="www.deltares.nl/en/software/module/D-Emissions/">D-Emissions</a> provides a perfect tool to assess the quantity and spatial distribution of the emitted substances in the catchment.
+Because it simulates the true cause-effect chain, it provides predictive power and allows for “what if” scenarios driven by policy projections and implemented measures.</p>
+<p>D-Emissions is a library of the Delwaq software which, in combination with rainfall-runoff and hydraulic modules (e.g. wflow), may form an integral catchment model.</p>
+<p>In this section, we will detail the full steps to prepare and run D-Emissions models:</p>
+<ul class="simple">
+<li><p>Choose the substance(s) of interest and their relevant sources (based on available data)</p></li>
+<li><p>Setup the EM model (from wflow) and emission data using HydroMT</p></li>
+<li><p>Edit the EM run info</p></li>
+<li><p>Run D-Emissions (EM-Plugin).</p></li>
+</ul>
+<section id="selection-of-substance-s-and-sources">
+<h3>Selection of substance(s) and sources<a class="headerlink" href="#selection-of-substance-s-and-sources" title="Permalink to this headline"></a></h3>
+<p>The very first part of preparing a water quality model is to define which substances and which emission sources you wish to include in the model.</p>
+<p>When a substance is chosen, the sources (or losses) the user wants to consider can be defined (e.g.: atmospheric deposition, domestic, agriculture…).
+The sources and their emission releases are then quantified or initialized based on available data. There are two types of sources in D-Emissions:</p>
+<ul class="simple">
+<li><p>Type A: direct substance release rates by the source (usually in g/day, e.g. atmospheric deposition)</p></li>
+<li><p>Type B: substance release rates based on a locator: for example a domestic source can be charaterized by the locator population (in cap) and its emission factor (in g/cap/day).</p></li>
+</ul>
+<p>Then in D-Emissions, the substances can enter the catchment via different receptors that are:</p>
+<ul class="simple">
+<li><p>Sewage system</p></li>
+<li><p>Paved areas</p></li>
+<li><p>Unpaved areas</p></li>
+<li><p>Stormwater system</p></li>
+<li><p>Surface waters directly</p></li>
+<li><p>Soil</p></li>
+</ul>
+<p>When substances reach the receptors, they can then undergo several processes such as burial or removal by treatment in a WWTP before reaching the final receptors of D-Emissions,
+the surface waters and the soil. The full processes included the D-Emissions model are represented in the scheme below:</p>
+<img alt="../_images/d-emission-pathways.png" src="../_images/d-emission-pathways.png" />
+<p>As modelling of several substances with multiple sources and processes can be complex, the D-Emissions model has been designed to model
+each substance one-by-one. This implies that in order to model several substances, the D-Emissions model needs to be run several times.</p>
+<p>For the rest of this topic, we focus on one substance <strong>Total Nitrogen (TN)</strong> released by one source: <strong>households</strong>.</p>
+</section>
+<section id="preparing-the-em-model-with-hydromt">
+<h3>Preparing the EM model with HydroMT<a class="headerlink" href="#preparing-the-em-model-with-hydromt" title="Permalink to this headline"></a></h3>
+<p>D-Emissions (Delwaq) is an unstructured model and composed of unordered segments. D-Emissions segments represent one environmental layer unit (eg open water, soil..).
+The direction of the flows in D-Emissions between each segment is defined in the pointer file. This pointer file defines not only the direction
+of lateral flows between segments (eg discharge), but also the direction of vertical flows (flows between the different layers/compartments of a single geographic cell).
+This means that external flows into / out of a segment (for example precipitation from the atmosphere) are defined in the pointer as flows between a segment and
+a boundary (for precipitation the boundary is the atmosphere).</p>
+<p>By only modelling substances one-by-one, the generic D-Emissions version only considers one environment layer which is the <strong>emission or substance layer</strong>. As D-Emissions does not deal
+with fate and transport (no lateral flux between segments), there is then no need to define either a pointer or a boundary file. In essence, D-Emissions calculates the various emitted loads per wflow cell.</p>
+<p>To build an EM model with HydroMT you can use the ** <a class="reference internal" href="../user_guide/build_configuration.html#model-config"><span class="std std-ref">build command line</span></a> ** to prepare all the different ** <a class="reference internal" href="../user_guide/components.html#model-components"><span class="std std-ref">components</span></a> ** of your model.
+Below is an example <a class="reference download internal" download="" href="../_downloads/383c1568a092014b7f08cfec3b77265a/delwaq_build_EM_TN.ini"><code class="xref download docutils literal notranslate"><span class="pre">.ini</span> <span class="pre">file</span></code></a> for the <strong>Total Nitrogen (TN)</strong> released by <strong>households</strong> example.</p>
+<p>As a reminder, for an EM model, the required hydrological data (from wflow_output in our example) is:</p>
+<ul class="simple">
+<li><p>precipitation</p></li>
+<li><p>the amount of the precipitation that infiltrates into the soil from unpaved areas</p></li>
+<li><p>the amount of the precipation that goes directly to surface runoff from paved areas</p></li>
+<li><p>the amount of the precipation that goes directly to surface runoff from unpaved areas</p></li>
+</ul>
+<div class="highlight-Ini notranslate"><div class="highlight"><pre><span></span><span class="k">[global]</span>
+<span class="na">mtype</span>             <span class="o">=</span> <span class="s">EM                    # type of Delwaq model [&#39;EM&#39;, &#39;WQ&#39;]</span>
+<span class="na">data_libs</span>         <span class="o">=</span> <span class="s">[local_sources.yml]                    # add optional paths to data yml files</span>
+
+<span class="k">[setup_basemaps]</span>
+<span class="na">include_soil</span>      <span class="o">=</span> <span class="s">False                 # add a soil compartment in addition to the surface waters</span>
+
+<span class="k">[setup_monitoring]</span>
+<span class="na">mon_points</span>        <span class="o">=</span> <span class="s">None                  # monitoring points [&#39;None&#39;, &#39;segments&#39;, &#39;path to station location&#39;, &#39;source in DataCatalog&#39;]</span>
+<span class="na">mon_areas</span>         <span class="o">=</span> <span class="s">compartments          # monitoring areas [&#39;None&#39;, &#39;compartments&#39;, &#39;subcatch&#39;]</span>
+
+<span class="k">[setup_hydrology_forcing]</span>
+<span class="na">hydro_forcing_fn</span>  <span class="o">=</span> <span class="s">wflow_output          # source name of the hydrological forcing in the yaml file</span>
+<span class="na">starttime</span>         <span class="o">=</span> <span class="s">2010-02-03 00:00:00   # start time of the Delwaq run</span>
+<span class="na">endtime</span>           <span class="o">=</span> <span class="s">2010-02-10 00:00:00   # end time of the Delwaq run</span>
+<span class="na">timestepsecs</span>      <span class="o">=</span> <span class="s">86400                 # model timestep in seconds</span>
+<span class="na">add_volume_offset</span> <span class="o">=</span> <span class="s">True                  # add a one-timestep offset to the volume data in the hydrological forcing file compared to the flows</span>
+
+<span class="k">[setup_emission_raster]</span>
+<span class="na">emission_fn</span>       <span class="o">=</span> <span class="s">GHS-POP_2015</span>
+<span class="na">scale_method</span>      <span class="o">=</span> <span class="s">average</span>
+<span class="na">fillna_method</span>     <span class="o">=</span> <span class="s">zero</span>
+<span class="na">area_division</span>     <span class="o">=</span> <span class="s">True</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this version of EM, the <em>the amount of the precipitation that **infiltrates*</em> into the soil from unpaved areas* is dealt with as a sink, since the WQ version does not yet contain a Soil compartment.</p>
+</div>
+</section>
+<section id="editing-the-em-run-information">
+<h3>Editing the EM run information<a class="headerlink" href="#editing-the-em-run-information" title="Permalink to this headline"></a></h3>
+<p>In order to run the EM-Plugin of DELWAQ, an input file is used to set up all the relevant run information such as substances and processes to include, run time information, data and model parameters
+to use etc. This is set up in a <strong>.inp</strong> file. A template of such a <a class="reference download internal" download="" href="../_downloads/331f1d77c3e1093eb11a307f0f868e8a/espace.inp"><code class="xref download docutils literal notranslate"><span class="pre">file</span></code></a>, for an EM run, is shown below.</p>
+<p>The input file is separated into 10 input blocks each requiring different type of information. You can find more info on what is expected
+where in the <a class="reference external" href="content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Input_File_Description.pdf">Delwaq input file documentation</a>. In short, the ten blocks are:</p>
+<ul class="simple">
+<li><p>B1: Identification, selected substances</p></li>
+<li><p>B2: Timers, integration, monitoring</p></li>
+<li><p>B3: Grid and values of the volumes</p></li>
+<li><p>B4: Hydrodynamic data</p></li>
+<li><p>B5: Open boundary conditions</p></li>
+<li><p>B6: Loads and withdrawals</p></li>
+<li><p>B7: Process steering</p></li>
+<li><p>B8: Initial conditions</p></li>
+<li><p>B9: Model output</p></li>
+<li><p>B10: Statistical output</p></li>
+</ul>
+<p>With hydroMT, different files were prepared containing information that can be directly linked and included in this input file. These are:</p>
+<ul class="simple">
+<li><p>The different files in the <em>config</em> folder: each filename has a prefix containing the block number it should be inserted in (ex: B1_timestamp.inc).</p></li>
+<li><p>Emission and other grid data stored in <em>staticdata</em> folder</p></li>
+<li><p>Time-dependant data such as hydrological fluxes stored in <em>dynamicdata</em> folder.</p></li>
+</ul>
+<p>Depending on their format (binary or ASCII), the files can be included in the input file using the following syntax.</p>
+<ul class="simple">
+<li><p>For ASCII files: keyword <strong>INCLUDE</strong> + path/to/ascii</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INCLUDE</span> <span class="s1">&#39;config\B1_timestamp.inc&#39;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>For binary files: keywords <strong>ALL BINARY_FILE</strong> + path/to/binary</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;dynamicdata\hydrology.bin&#39;</span>
+</pre></div>
+</div>
+<p>In the template below, all (mandatory) files produced by HydroMT have been added and linked. Some explanations on the specificities of the settings for
+the one-substance D-Emissions model:</p>
+<ul class="simple">
+<li><p>In block 1, you can see that in the one-substance D-Emissions model, instead of the substances (nitrogen, TSS…), we model the emission receptors compartments in a specific order.
+With this, emission modelling can be more generic, run time faster and there is no need to update the procdef tables for each D-Emissions model case.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="n">Nr</span>     <span class="n">Name</span>
+<span class="mi">1</span>       <span class="n">Sew</span>
+<span class="mi">2</span>       <span class="n">Pav</span>
+<span class="mi">3</span>       <span class="n">Unp</span>
+<span class="mi">4</span>       <span class="n">Stw</span>
+<span class="mi">5</span>       <span class="n">Sfw</span>
+<span class="mi">6</span>       <span class="n">Soi</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The different emission sources are defined in block 7. Currently, in the one-substance D-Emissions model, <strong>one type A source</strong> and <strong>three type B sources</strong> can be defined. All names
+respect a certain convention (EV_A01, EV_B01). The user should also define to which receptor (from block 1) the source emission goes to. Here is an example for a type B source :</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">source</span> <span class="n">Type</span> <span class="n">B01</span>
+<span class="n">PARAMETERS</span> <span class="n">EV_B01</span>        <span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;staticdata\GHS-POP_2015.dat&#39;</span> <span class="p">;</span> <span class="n">locator</span><span class="o">/</span><span class="n">EV</span> <span class="n">variable</span> <span class="nb">type</span> <span class="n">B</span>    <span class="p">(</span><span class="n">cap</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">EF_B01</span>           <span class="n">DATA</span> <span class="mf">2.2</span>          <span class="p">;</span> <span class="n">emission</span> <span class="n">factor</span>                                        <span class="p">(</span><span class="n">Kg</span><span class="o">/</span><span class="n">d</span><span class="o">/</span><span class="n">cap</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSew</span>         <span class="n">DATA</span> <span class="mf">1.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toPav</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toUnp</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSoi</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toStw</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSfw</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>All unused type A and/or B sources should still be listed in the input file with zero data:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">source</span> <span class="n">Types</span> <span class="n">NOT</span> <span class="n">USED</span>
+<span class="n">CONSTANTS</span>  <span class="n">EV_A01</span>        <span class="n">DATA</span> <span class="mf">0.</span>
+<span class="n">CONSTANTS</span>  <span class="n">EV_B02</span>        <span class="n">DATA</span> <span class="mf">0.</span>
+<span class="n">CONSTANTS</span>  <span class="n">EV_B03</span>        <span class="n">DATA</span> <span class="mf">0.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The unit of emission factor EF is kg/d/X, where X is the emission unit provided in the Emission Variable EV, e.g. capita for Population.
+Here the EF factor was set to a constant dummy value but you can use HydroMT to prepare and distribute ‘real’ values from local/global data.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">999</span> <span class="mi">80</span> <span class="s1">&#39;;&#39;</span>
+<span class="p">;</span><span class="n">DELWAQ_VERSION_4</span><span class="mf">.910</span>                        		<span class="p">;</span> <span class="n">Delwaq</span> <span class="n">version</span> <span class="n">number</span>
+<span class="p">;</span><span class="n">PRINT_OUTPUT_OPTION_2</span>                       		<span class="p">;</span> <span class="n">Debug</span> <span class="n">level</span>
+
+<span class="p">;</span> <span class="n">TEMPLATE</span> <span class="n">FILE</span> <span class="n">FOR</span> <span class="n">EMISSION</span> <span class="n">DISAGGREGATION</span>
+<span class="p">;</span> <span class="n">First</span> <span class="nb">input</span> <span class="n">block</span>
+<span class="s1">&#39;Demo Emission Model linked to WFLOW for TN&#39;</span>
+<span class="s1">&#39; &#39;</span>
+<span class="s1">&#39; &#39;</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B1_timestamp.inc&#39;</span>
+
+ <span class="mi">6</span>    <span class="mi">0</span>
+
+<span class="p">;</span><span class="n">Nr</span>      <span class="n">Name</span>        
+<span class="mi">1</span>       <span class="n">Sew</span>      <span class="p">;</span>   
+<span class="mi">2</span>       <span class="n">Pav</span>      <span class="p">;</span>    
+<span class="mi">3</span>       <span class="n">Unp</span>      <span class="p">;</span>   
+<span class="mi">4</span>       <span class="n">Stw</span>  
+<span class="mi">5</span>       <span class="n">Sfw</span>  
+<span class="mi">6</span>       <span class="n">Soi</span>  
+<span class="c1">#1;</span>
+
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Second</span> <span class="nb">input</span> <span class="n">block</span>
+  <span class="mi">1</span> <span class="s1">&#39;DDHHMMSS&#39;</span> <span class="s1">&#39;DDHHMMSS&#39;</span>  <span class="p">;</span> <span class="n">system</span> <span class="n">clock</span>
+<span class="p">;</span><span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_sysclock.inc&#39;</span>
+
+     <span class="mf">1.03</span>                      <span class="p">;</span> <span class="n">integration</span> <span class="n">option</span> 
+   <span class="n">BAL_NOLUMPPROCESSES</span>
+   <span class="n">BAL_NOLUMPLOADS</span>
+   <span class="n">BAL_NOLUMPTRANSPORT</span>
+   <span class="n">BAL_NOSUPPRESSSPACE</span>
+   <span class="n">BAL_NOSUPPRESSTIME</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_timers.inc&#39;</span>
+
+ <span class="mi">1</span>                                                 	<span class="p">;</span> <span class="n">Monitoring</span> <span class="n">areas</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_nrofmon.inc&#39;</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_monareas.inc&#39;</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_stations.inc&#39;</span>
+
+ <span class="mi">2</span>                                                 	<span class="p">;</span> <span class="n">No</span> <span class="n">monitoring</span> <span class="n">cross</span> <span class="n">areas</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_outputtimes.inc&#39;</span>
+
+<span class="c1">#2;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Third</span> <span class="nb">input</span> <span class="n">block</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B3_nrofseg.inc&#39;</span>
+
+
+      <span class="mi">2</span>                     <span class="p">;</span> <span class="n">grid</span> <span class="n">layout</span> <span class="ow">not</span> <span class="n">used</span>
+      
+<span class="p">;</span>      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">constant</span> <span class="nb">property</span> <span class="n">arrays</span>
+<span class="p">;</span>      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">time</span> <span class="n">varying</span> <span class="nb">property</span> <span class="n">arrays</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B3_attributes.inc&#39;</span>
+
+
+ 
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">volumes</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+      <span class="mi">2</span>                     <span class="p">;</span> <span class="n">constant</span> <span class="k">with</span> <span class="n">defaults</span>
+      <span class="mf">1.0</span>                   <span class="p">;</span> <span class="n">scale</span> <span class="n">factor</span>
+      <span class="mf">1.0</span>                   <span class="p">;</span> <span class="n">default</span> <span class="n">volume</span>
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">overrides</span>
+
+<span class="c1">#3;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Fourth</span> <span class="nb">input</span> <span class="n">block</span>
+<span class="p">;</span> 
+<span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">nr</span> <span class="n">of</span> <span class="n">exchanges</span>
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="c1"># of dispersion arrays</span>
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="c1"># of velocity arrays</span>
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">first</span> <span class="n">form</span> <span class="ow">is</span> <span class="n">used</span> <span class="k">for</span> <span class="nb">input</span>
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">exchange</span> <span class="n">pointers</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+
+ 
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">dispersions</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+     <span class="mf">1.0</span>      <span class="mf">1.0</span>     <span class="mf">1.0</span>   <span class="p">;</span> <span class="n">scale</span> <span class="n">factors</span> <span class="ow">in</span> <span class="mi">3</span> <span class="n">directions</span>
+     <span class="mf">0.0</span>      <span class="mf">0.0</span>     <span class="mf">0.0</span>   <span class="p">;</span> <span class="n">values</span> <span class="ow">in</span> <span class="mi">3</span> <span class="n">directions</span>
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">areas</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+      <span class="mi">2</span>                     <span class="p">;</span> <span class="n">constant</span><span class="p">,</span> <span class="n">defaults</span>
+     <span class="mf">1.0</span>      <span class="mf">1.0</span>           <span class="p">;</span> <span class="n">scale</span> <span class="ow">and</span> <span class="n">value</span>
+      <span class="mi">0</span>
+      
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">flows</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+      <span class="mi">2</span>                     <span class="p">;</span> <span class="n">constant</span><span class="p">,</span> <span class="n">defaults</span>
+     <span class="mf">1.0</span>      <span class="mf">0.0</span>           <span class="p">;</span> <span class="n">scale</span> <span class="ow">and</span> <span class="n">value</span>
+      <span class="mi">0</span>
+     
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">constant</span> <span class="n">length</span>
+     <span class="mf">1.0</span>                    <span class="p">;</span> <span class="n">scale</span> <span class="n">factor</span>
+     <span class="mf">1.0</span>      <span class="mf">1.0</span>     <span class="mf">1.0</span>   <span class="p">;</span> <span class="n">values</span> <span class="ow">in</span> <span class="mi">3</span> <span class="n">directions</span>
+
+<span class="c1">#4;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Fifth</span> <span class="nb">input</span> <span class="n">block</span><span class="p">,</span> <span class="n">water</span> <span class="n">quality</span> <span class="n">calculation</span>
+<span class="p">;</span><span class="n">INCLUDE</span> <span class="s1">&#39;config\B5_boundlist.inc&#39;</span>
+
+<span class="c1">#5;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Sixth</span> <span class="nb">input</span> <span class="n">block</span><span class="p">,</span> <span class="n">Dry</span> <span class="n">Waste</span> <span class="n">Loads</span> <span class="n">block</span>
+<span class="p">;</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">loads</span> <span class="p">(</span><span class="n">dummy</span> <span class="n">value</span><span class="p">)</span>
+<span class="mi">0</span>							<span class="p">;</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">loads</span>
+
+<span class="c1">#6;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Seventh</span> <span class="nb">input</span> <span class="n">block</span>
+
+
+<span class="n">CONSTANTS</span>  <span class="s1">&#39;Nothreads&#39;</span>       <span class="n">DATA</span>  <span class="mi">0</span>                  <span class="p">;</span> <span class="n">Multicore</span>
+<span class="n">CONSTANTS</span> <span class="n">Only_Active</span>        <span class="n">DATA</span>  <span class="mi">1</span>
+<span class="n">CONSTANTS</span> <span class="n">Active_EM_GSS</span>      <span class="n">DATA</span>  <span class="mi">1</span>
+
+<span class="p">;</span> <span class="n">geometry</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B7_geometry-parameters.inc&#39;</span>
+<span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;config\B7_geometry.bin&#39;</span>
+
+<span class="p">;</span> <span class="n">hydrology</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B7_hydrology.inc&#39;</span>
+<span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;dynamicdata\hydrology.bin&#39;</span>
+
+<span class="p">;</span> <span class="n">infrastructure</span>
+
+<span class="n">CONSTANTS</span>  <span class="n">SewLeakage</span>      <span class="n">DATA</span> <span class="mf">0.0</span>         <span class="p">;</span> <span class="n">sewer</span> <span class="n">leakage</span>                                          <span class="p">(</span><span class="o">%</span><span class="p">)</span>                 
+
+<span class="p">;</span> <span class="n">source</span> <span class="n">atmospheric</span> <span class="n">deposition</span>
+
+<span class="n">CONSTANTS</span>  <span class="n">EF_DDp</span>        <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">dry</span> <span class="n">deposition</span> <span class="n">rate</span>                                    <span class="p">(</span><span class="n">g</span><span class="o">/</span><span class="n">m2</span><span class="o">/</span><span class="n">d</span><span class="p">)</span>            
+<span class="n">CONSTANTS</span>  <span class="n">EF_WDp</span>        <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">wet</span> <span class="n">deposition</span> <span class="n">rate</span>                                    <span class="p">(</span><span class="n">g</span><span class="o">/</span><span class="n">m3</span><span class="p">)</span>              
+
+<span class="p">;</span> <span class="n">source</span> <span class="n">SEWAGE</span> <span class="p">(</span><span class="n">Type</span> <span class="n">B01</span><span class="p">)</span>
+
+<span class="n">PARAMETERS</span> <span class="n">EV_B01</span>        <span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;staticdata\GHS-POP_2015.dat&#39;</span> <span class="p">;</span> <span class="n">locator</span><span class="o">/</span><span class="n">EV</span> <span class="n">variable</span> <span class="nb">type</span> <span class="n">B</span>    <span class="p">(</span><span class="n">cap</span><span class="p">)</span>                
+<span class="n">CONSTANTS</span>  <span class="n">EF_B01</span>           <span class="n">DATA</span> <span class="mf">2.2</span>          <span class="p">;</span> <span class="n">emission</span> <span class="n">factor</span>                                        <span class="p">(</span><span class="n">Kg</span><span class="o">/</span><span class="n">d</span><span class="o">/</span><span class="n">cap</span><span class="p">)</span>           
+<span class="p">;</span> <span class="n">the</span> <span class="n">below</span> <span class="n">comes</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">supportive</span> <span class="n">project</span> <span class="n">specific</span> <span class="n">process</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSew</span>         <span class="n">DATA</span> <span class="mf">1.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>                 
+<span class="n">CONSTANTS</span>  <span class="n">B01toPav</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>                 
+<span class="n">CONSTANTS</span>  <span class="n">B01toUnp</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSoi</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toStw</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSfw</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>                     
+
+<span class="p">;</span> <span class="n">source</span> <span class="n">Types</span> <span class="n">NOT</span> <span class="n">USED</span>
+
+<span class="n">CONSTANTS</span>  <span class="n">EV_A01</span>        <span class="n">DATA</span> <span class="mf">0.</span>    
+<span class="n">CONSTANTS</span>  <span class="n">EV_B02</span>        <span class="n">DATA</span> <span class="mf">0.</span>    
+<span class="n">CONSTANTS</span>  <span class="n">EV_B03</span>        <span class="n">DATA</span> <span class="mf">0.</span>    
+
+<span class="p">;</span> <span class="n">fate</span> <span class="o">&amp;</span> <span class="n">transport</span>
+
+<span class="n">CONSTANTS</span>  <span class="n">DecPav</span>        <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">decay</span> <span class="n">rate</span> <span class="n">paved</span>                                       <span class="p">(</span><span class="o">/</span><span class="n">d</span><span class="p">)</span>                
+<span class="n">CONSTANTS</span>  <span class="n">DecUnp</span>        <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">decay</span> <span class="n">rate</span> <span class="n">unpaved</span>                                     <span class="p">(</span><span class="o">/</span><span class="n">d</span><span class="p">)</span>                
+<span class="n">CONSTANTS</span>  <span class="n">KdUnpa</span>        <span class="n">DATA</span> <span class="mf">0.5</span>          <span class="p">;</span> <span class="n">fraction</span> <span class="n">of</span> <span class="n">bound</span> <span class="n">vs</span> <span class="n">unbound</span>                           <span class="p">(</span><span class="o">-</span><span class="p">)</span>                 
+
+<span class="p">;</span> <span class="n">preprocessing</span>
+
+<span class="n">PARAMETERS</span> <span class="n">Streamordr</span> <span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;staticdata\streamorder.dat&#39;</span>
+
+<span class="c1">#7</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Eighth</span> <span class="nb">input</span> <span class="n">block</span>
+
+<span class="n">INITIALS</span>  <span class="n">Sew</span> <span class="n">Pav</span> <span class="n">Unp</span> <span class="n">Stw</span> <span class="n">Sfw</span> <span class="n">Soi</span>
+<span class="n">DEFAULTS</span>  <span class="mi">6</span><span class="o">*</span><span class="mf">0.0</span>
+
+ 
+<span class="c1">#8</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Ninth</span> <span class="nb">input</span> <span class="n">block</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">Conditions</span> <span class="n">follow</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">Monitor</span><span class="o">-</span><span class="n">file</span>
+ <span class="mi">0</span>                                           		<span class="p">;</span> <span class="n">Grid</span><span class="o">-</span><span class="n">file</span>
+ <span class="mi">1</span>                                                      <span class="p">;</span> <span class="n">His</span>
+ <span class="mi">1</span>                                                      <span class="p">;</span> <span class="n">Map</span>
+ 
+ <span class="p">;</span> <span class="n">Binary</span><span class="o">/</span><span class="n">Nefis</span> <span class="ow">and</span> <span class="n">History</span><span class="o">/</span><span class="n">Map</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">on</span>  <span class="n">binary</span> <span class="n">History</span> <span class="n">file</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">on</span>  <span class="n">binary</span> <span class="n">Map</span>     <span class="n">file</span>
+ <span class="mi">0</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">off</span> <span class="n">Nefis</span>  <span class="n">History</span> <span class="n">file</span>
+ <span class="mi">0</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">off</span> <span class="n">Nefis</span>  <span class="n">Map</span>     <span class="n">file</span>
+<span class="c1">#9</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Tenth</span> <span class="nb">input</span> <span class="n">block</span>
+
+<span class="c1">#10</span>
+</pre></div>
+</div>
+</section>
+<section id="running-d-emission">
+<h3>Running D-Emission<a class="headerlink" href="#running-d-emission" title="Permalink to this headline"></a></h3>
+<p>In order to run delwaq for D-Emissions, we need to include the EM-Plugin to the run. Delwaq is also run via command lines using two executables, one that reads and process all the information and data
+in the input file <strong>delwaq1.exe</strong>, and one that runs Delwaq with this data <strong>delwaq2.exe</strong>. The command line also include the path to the input file (<strong>espace.inp</strong>) and to
+specific libraries in the EM-Plugin (or D-Emissions plugin). Here is an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">erase</span> <span class="o">*.</span><span class="n">wrk</span>
+
+<span class="n">REM</span> <span class="n">Read</span> <span class="nb">input</span>
+<span class="o">..</span>\<span class="n">Delwaq</span>\<span class="nb">bin</span>\<span class="n">delwaq1</span><span class="o">.</span><span class="n">exe</span> <span class="n">espace</span><span class="o">.</span><span class="n">inp</span> <span class="o">-</span><span class="n">A</span> <span class="o">-</span><span class="n">p</span><span class="o">..</span>\<span class="n">EM</span><span class="o">-</span><span class="n">Plugin</span>\<span class="n">Tables</span>\<span class="n">proc_def</span>
+
+<span class="n">REM</span> <span class="n">Simulate</span>
+<span class="o">..</span>\<span class="n">Delwaq</span>\<span class="nb">bin</span>\<span class="n">delwaq2</span><span class="o">.</span><span class="n">exe</span> <span class="n">espace</span><span class="o">.</span><span class="n">inp</span> <span class="o">-</span><span class="n">openpb</span><span class="o">..</span>\<span class="n">EM</span><span class="o">-</span><span class="n">Plugin</span>\<span class="n">x64</span>\<span class="n">Release</span>\<span class="n">D3Dwaq_OpenPL</span><span class="o">.</span><span class="n">dll</span>
+<span class="n">pause</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="water-quality-modelling-with-d-water-quality">
+<h2>Water quality modelling with D-Water Quality<a class="headerlink" href="#water-quality-modelling-with-d-water-quality" title="Permalink to this headline"></a></h2>
+<p>The D-Water Quality module simulates the far- and mid-field water and sediment quality due to a variety of transport and water quality processes. To accommodate
+these, it includes several advection diffusion solvers and an extensive library of standardized process formulations with the user-selected substances. Default
+processes allow to simulate for instance the decay of BOD and nitrification, elementary growth of algae and nutrient cycling, exchange of substances with the
+atmosphere, adsorption and desorption of contaminant substances and the deposition and resuspension of particles and adsorbed substances to and from the bed.
+D-Water Quality is a module of the DELWAQ software which, in combination with rainfall-runoff and hydraulic modules (e.g. wflow), and the D-Emission module,
+may form an integral catchment model.</p>
+<p>In this section, we will detail the steps to run a D-Water Quality model using HydroMT and inputs from D-Emission:</p>
+<ul class="simple">
+<li><p>Choose the substance(s) of interest and their relevant processes in surface waters</p></li>
+<li><p>Setup the WQ model (from wflow) using HydroMT</p></li>
+<li><p>Edit the WQ run info</p></li>
+<li><p>Include the outputs from D-Emissions</p></li>
+<li><p>Run D-Water Quality (WQ-Plugin)</p></li>
+</ul>
+<section id="selection-of-substance-s-and-processes">
+<h3>Selection of substance(s) and processes<a class="headerlink" href="#selection-of-substance-s-and-processes" title="Permalink to this headline"></a></h3>
+<p>When setting-up D-Emission, we decided to model the substance Total Nitrogen (TN) emitted by households. As TN is a  quite complex substance with many processes
+and interactions with different forms of Nitrogen molecule, in the following tutorials, as a simplified example, we will model <strong>Total Nitrogen (TN)</strong> as a
+simple constant tracer cTR.</p>
+<dl class="simple">
+<dt>For more information on available processes per substances, see the Delwaq documentation:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Processes_Technical_Reference_Manual.pdf">content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Processes_Technical_Reference_Manual.pdf</a></p></li>
+<li><p><a class="reference external" href="content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Processes_Library_Tables.pdf">content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Processes_Library_Tables.pdf</a></p></li>
+<li><p><a class="reference external" href="content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Open_Proc_Lib_User_Manual.pdf">content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Open_Proc_Lib_User_Manual.pdf</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="preparing-the-wq-model-with-hydromt">
+<h3>Preparing the WQ model with HydroMT<a class="headerlink" href="#preparing-the-wq-model-with-hydromt" title="Permalink to this headline"></a></h3>
+<p>D-Water Quality (Delwaq) is an unstructured model and composed of unordered segments. D-Water Quality segments represent one environmental layer unit (eg open water, soil..).
+The direction of the flows in Delwaq between each segment is defined in the pointer file. This pointer file defines not only the direction
+of lateral flows between segments (eg discharge), but also the direction of vertical flows (flows between the different layers/compartments of a single geographic cell).
+This means that external flows into / out of a segment (for example precipitation from the atmosphere) are defined in the pointer as flows between a segment and
+a boundary (for precipitation the boundary is the atmosphere).</p>
+<p>Compared to D-Emission, lateral transport of the substance in the surface water between Delwaq segments is considered and a pointer file is then necessary.</p>
+<p>To build an WQ model with HydroMT you can use the ** <a class="reference internal" href="../user_guide/build_configuration.html#model-config"><span class="std std-ref">build command line</span></a> ** to prepare all the different ** <a class="reference internal" href="../user_guide/components.html#model-components"><span class="std std-ref">components</span></a> ** of your model.
+Below is an example <a class="reference download internal" download="" href="../_downloads/9e3f17f7f1db681967e42209610e9e28/delwaq_build_WQ_TN.ini"><code class="xref download docutils literal notranslate"><span class="pre">ini</span> <span class="pre">file</span></code></a> for the <strong>Total Nitrogen (TN)</strong> released by <strong>households</strong> example.</p>
+<p>As a reminder, for a WQ model, the required hydrological data (from wflow_output in our example) is:</p>
+<ul class="simple">
+<li><p>surface runoff</p></li>
+<li><p>surface water volumes</p></li>
+<li><p>total water entering the surface waters (e.g. precipitation, exfiltration from the soil, evaporation…) in order to close the surface water mass balance</p></li>
+</ul>
+<div class="highlight-Ini notranslate"><div class="highlight"><pre><span></span><span class="k">[global]</span>
+<span class="na">mtype</span>             <span class="o">=</span> <span class="s">WQ                   # type of Delwaq model [&#39;EM&#39;, &#39;WQ&#39;]</span>
+<span class="na">data_libs</span>         <span class="o">=</span> <span class="s">[&#39;local_sources.yml&#39;] # add optional paths to data yml files</span>
+
+<span class="k">[setup_basemaps]</span>
+<span class="na">include_soil</span>      <span class="o">=</span> <span class="s">False                # add a soil compartment in addition to the surface waters</span>
+
+<span class="k">[setup_monitoring]</span>
+<span class="na">mon_points</span>        <span class="o">=</span> <span class="s">segments             # monitoring points [&#39;None&#39;, &#39;segments&#39;, &#39;path to station location&#39;, &#39;source in DataCatalog&#39;]</span>
+<span class="na">mon_areas</span>         <span class="o">=</span> <span class="s">compartments         # monitoring areas [&#39;None&#39;, &#39;compartments&#39;, &#39;subcatch&#39;]</span>
+
+<span class="k">[setup_hydrology_forcing]</span>
+<span class="na">hydro_forcing_fn</span>  <span class="o">=</span> <span class="s">wflow_output         # source name of the hydrological forcing in the yaml file</span>
+<span class="na">starttime</span>         <span class="o">=</span> <span class="s">2010-02-03 00:00:00  # start time of the Delwaq run</span>
+<span class="na">endtime</span>           <span class="o">=</span> <span class="s">2010-02-10 00:00:00  # end time of the Delwaq run</span>
+<span class="na">timestepsecs</span>      <span class="o">=</span> <span class="s">86400                # model timestep in seconds</span>
+<span class="na">add_volume_offset</span> <span class="o">=</span> <span class="s">true                 # add a one-timestep offset to the volume data in the hydrological forcing file compared to the flows</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In some cases, you may require some additional GIS data in order to run a WQ model, for example, when you do not need to run the D-Emission model beforehand,
+but include point sources that emit pollutants into the surface water directly. When this is the case, you can still use the various [setup_emission_*] components of hydroMT_delwaq.</p>
+</div>
+</section>
+<section id="editing-the-wq-run-information">
+<h3>Editing the WQ run information<a class="headerlink" href="#editing-the-wq-run-information" title="Permalink to this headline"></a></h3>
+<p>In order to run the WQ-Plugin of DELWAQ, an input file is used to set up all the relevant run information such as substances and processes to include, run time information, data and model parameters
+to use etc. This is set up in a <strong>.inp</strong> file. A template of such a <a class="reference download internal" download="" href="../_downloads/470e60935a5444dd2f9aa45738a63b78/delwaq.inp"><code class="xref download docutils literal notranslate"><span class="pre">file</span></code></a>, for an WQ run, is shown below.</p>
+<p>The input file is separated into 10 input blocks each requiring different type of information. You can find more info on what is expected
+where in the <a class="reference external" href="content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Input_File_Description.pdf">Delwaq input file documentation</a>. In short, the ten blocks are:</p>
+<ul class="simple">
+<li><p>B1: Identification, selected substances</p></li>
+<li><p>B2: Timers, integration, monitoring</p></li>
+<li><p>B3: Grid and values of the volumes</p></li>
+<li><p>B4: Hydrodynamic data</p></li>
+<li><p>B5: Open boundary conditions</p></li>
+<li><p>B6: Loads and withdrawals</p></li>
+<li><p>B7: Process steering</p></li>
+<li><p>B8: Initial conditions</p></li>
+<li><p>B9: Model output</p></li>
+<li><p>B10: Statistical output</p></li>
+</ul>
+<p>With hydroMT, different files were prepared containing information that can be directly linked and included in this input file. These are:</p>
+<ul class="simple">
+<li><p>The different files in the <em>config</em> folder: each filename has a prefix containing the block number it should be inserted in (ex: B1_timestamp.inc).</p></li>
+<li><p>Emission and other grid data stored in <em>staticdata</em> folder</p></li>
+<li><p>Time-dependant data such as hydrological fluxes stored in <em>dynamicdata</em> folder.</p></li>
+</ul>
+<p>Depending on their format (binary or ASCII), the files can be included in the input file using the following syntax.</p>
+<ul class="simple">
+<li><p>For ASCII files: keyword <strong>INCLUDE</strong> + path/to/ascii</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INCLUDE</span> <span class="s1">&#39;config\B1_timestamp.inc&#39;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>For binary files: keywords <strong>ALL BINARY_FILE</strong> + path/to/binary</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;dynamicdata\hydrology.bin&#39;</span>
+</pre></div>
+</div>
+<p>In the template below, all (mandatory) files produced by HydroMT have been added and linked. Some explanations on the specificities of the settings for
+the D-Water Quality linked to one-substance D-Emissions models:</p>
+<ul class="simple">
+<li><p>In block 1, you can see that we are going to model TN as a tracer for simplification (less expert processes to define). The generic name for a tracer in Delwaq is <strong>cTR1</strong>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="n">Nr</span>      <span class="n">Name</span>
+<span class="mi">1</span>       <span class="n">cTR1</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The boundary conditions and initial concentrations of our substance <strong>cTR1</strong> needs to be defined in block 5 and 8 respectively and can be initialized with zero:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ITEM</span> <span class="n">BD_1</span>    <span class="n">CONCENTRATIONS</span> <span class="n">cTR1</span> <span class="n">DATA</span> <span class="mf">0.0</span>
+<span class="c1">#5</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INITIALS</span>  <span class="n">cTR1</span> <span class="n">DEFAULTS</span>  <span class="mf">0.0</span>
+<span class="c1">#8</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The link of our tracer <strong>TRA</strong> with D-Emissions output and to the relevant process is activated in block 7 of the input file (1st line), the 2nd line is added to map all of the emitted tracer <em>Tra</em> to a conservative tracer substance <em>cTR1</em> (Note: not used in this tutorial, but EM also supports to simulate a decayable tracer <em>dTR1</em>, which requires to also define decay rates):</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CONSTANTS</span> <span class="n">Active_EM_TRA</span> <span class="n">DATA</span> <span class="mi">1</span>
+<span class="n">CONSTANTS</span> <span class="n">TratocTR1</span>     <span class="n">DATA</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">999</span> <span class="mi">80</span> <span class="s1">&#39;;&#39;</span>
+<span class="p">;</span><span class="n">DELWAQ_VERSION_4</span><span class="mf">.910</span>                        		<span class="p">;</span> <span class="n">Delwaq</span> <span class="n">version</span> <span class="n">number</span>
+<span class="p">;</span><span class="n">PRINT_OUTPUT_OPTION_2</span>                       		<span class="p">;</span> <span class="n">Debug</span> <span class="n">level</span>
+
+<span class="p">;</span> <span class="n">TEMPLATE</span> <span class="n">FILE</span> <span class="n">FOR</span> <span class="n">EMISSION</span> <span class="n">DISAGGREGATION</span>
+<span class="p">;</span> <span class="n">First</span> <span class="nb">input</span> <span class="n">block</span>
+<span class="s1">&#39;Demo Emission Model linked to WFLOW &#39;</span>
+<span class="s1">&#39; &#39;</span>
+<span class="s1">&#39; &#39;</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B1_timestamp.inc&#39;</span>
+
+ <span class="mi">1</span>    <span class="mi">0</span>
+
+<span class="p">;</span><span class="n">Nr</span>      <span class="n">Name</span>        
+<span class="mi">1</span>       <span class="n">cTR1</span>      <span class="p">;</span>   
+<span class="c1">#1;</span>
+
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Second</span> <span class="nb">input</span> <span class="n">block</span>
+  <span class="mi">86400</span>  <span class="s1">&#39;DDHHMMSS&#39;</span> <span class="s1">&#39;DDHHMMSS&#39;</span>  <span class="p">;</span> <span class="n">system</span> <span class="n">clock</span>
+
+    <span class="mf">15.73</span>                      <span class="p">;</span> <span class="n">integration</span> <span class="n">option</span> 
+   <span class="n">BAL_NOLUMPPROCESSES</span>
+   <span class="n">BAL_NOLUMPLOADS</span>
+   <span class="n">BAL_NOLUMPTRANSPORT</span>
+   <span class="n">BAL_NOSUPPRESSSPACE</span>
+   <span class="n">BAL_NOSUPPRESSTIME</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_timers.inc&#39;</span>
+
+
+
+
+ <span class="mi">1</span>                                                 	<span class="p">;</span> <span class="n">Monitoring</span> <span class="n">areas</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_nrofmon.inc&#39;</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_stations.inc&#39;</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_monareas.inc&#39;</span>
+
+ <span class="mi">2</span>                                                 	<span class="p">;</span> <span class="n">No</span> <span class="n">monitoring</span> <span class="n">cross</span> <span class="n">areas</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_outputtimes.inc&#39;</span>
+
+
+
+<span class="c1">#2;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Third</span> <span class="nb">input</span> <span class="n">block</span>
+
+<span class="p">;</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">coordinates</span> <span class="n">file</span> <span class="o">-</span> <span class="n">conforming</span> <span class="n">to</span> <span class="n">UGRID</span> <span class="n">conventions</span>
+<span class="n">UGRID</span> <span class="s1">&#39;config\B3_waqgeom.nc&#39;</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B3_nrofseg.inc&#39;</span>
+
+
+      <span class="mi">2</span>                     <span class="p">;</span> <span class="n">grid</span> <span class="n">layout</span> <span class="ow">not</span> <span class="n">used</span>
+      
+<span class="p">;</span>      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">constant</span> <span class="nb">property</span> <span class="n">arrays</span>
+<span class="p">;</span>      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">time</span> <span class="n">varying</span> <span class="nb">property</span> <span class="n">arrays</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B3_attributes.inc&#39;</span>
+
+
+ 
+      <span class="o">-</span><span class="mi">2</span>                     <span class="p">;</span> <span class="n">volumes</span> <span class="ow">in</span> <span class="n">external</span> <span class="n">file</span>
+<span class="s1">&#39;dynamicdata</span><span class="se">\v</span><span class="s1">olume.dat&#39;</span>
+
+<span class="c1">#3;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Fourth</span> <span class="nb">input</span> <span class="n">block</span>
+<span class="p">;</span> 
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B4_nrofexch.inc&#39;</span>
+
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="c1"># of dispersion arrays</span>
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="c1"># of velocity arrays</span>
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">first</span> <span class="n">form</span> <span class="ow">is</span> <span class="n">used</span> <span class="k">for</span> <span class="nb">input</span>
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">exchange</span> <span class="n">pointers</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B4_pointer.inc&#39;</span>
+
+ 
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">dispersions</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+     <span class="mf">1.0</span>      <span class="mf">1.0</span>     <span class="mf">1.0</span>   <span class="p">;</span> <span class="n">scale</span> <span class="n">factors</span> <span class="ow">in</span> <span class="mi">3</span> <span class="n">directions</span>
+     <span class="mf">0.0</span>      <span class="mf">0.0</span>     <span class="mf">0.0</span>   <span class="p">;</span> <span class="n">values</span> <span class="ow">in</span> <span class="mi">3</span> <span class="n">directions</span>
+     
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">areas</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+      <span class="mi">2</span>                     <span class="p">;</span> <span class="n">constant</span><span class="p">,</span> <span class="n">defaults</span>
+     <span class="mf">1.0</span>      <span class="mf">1.0</span>           <span class="p">;</span> <span class="n">scale</span> <span class="ow">and</span> <span class="n">value</span>
+      <span class="mi">0</span>
+      
+     <span class="o">-</span><span class="mi">2</span>                     <span class="p">;</span> <span class="n">flows</span> <span class="ow">in</span> <span class="n">binary</span> <span class="n">file</span>
+<span class="s1">&#39;dynamicdata</span><span class="se">\f</span><span class="s1">low.dat&#39;</span>      
+     
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">constant</span> <span class="n">length</span>
+     <span class="mf">1.0</span>                    <span class="p">;</span> <span class="n">scale</span> <span class="n">factor</span>
+     <span class="mf">1.0</span>      <span class="mf">1.0</span>     <span class="mf">1.0</span>   <span class="p">;</span> <span class="n">values</span> <span class="ow">in</span> <span class="mi">3</span> <span class="n">directions</span>
+
+
+<span class="c1">#4;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Fifth</span> <span class="nb">input</span> <span class="n">block</span><span class="p">,</span> <span class="n">water</span> <span class="n">quality</span> <span class="n">calculation</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B5_boundlist.inc&#39;</span>
+
+<span class="mi">0</span>                     					<span class="p">;</span> <span class="n">no</span> <span class="n">Tatcher</span><span class="o">-</span><span class="n">Harleman</span> <span class="n">time</span> <span class="n">lags</span>
+
+<span class="n">ITEM</span> <span class="n">BD_1</span>    <span class="n">CONCENTRATIONS</span> <span class="n">cTR1</span> <span class="n">DATA</span> <span class="mf">0.0</span>
+
+
+
+<span class="c1">#5;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Sixth</span> <span class="nb">input</span> <span class="n">block</span><span class="p">,</span> <span class="n">Dry</span> <span class="n">Waste</span> <span class="n">Loads</span> <span class="n">block</span>
+<span class="p">;</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">loads</span> <span class="p">(</span><span class="n">dummy</span> <span class="n">value</span><span class="p">)</span>
+<span class="mi">0</span>							<span class="p">;</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">loads</span>
+
+<span class="c1">#6;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Seventh</span> <span class="nb">input</span> <span class="n">block</span>
+
+<span class="n">CONSTANTS</span>  <span class="s1">&#39;Nothreads&#39;</span>       <span class="n">DATA</span>  <span class="mi">1</span>                  <span class="p">;</span> <span class="n">Multicore</span>
+<span class="n">CONSTANTS</span> <span class="n">Only_Active</span>        <span class="n">DATA</span>  <span class="mi">1</span>
+<span class="n">CONSTANTS</span> <span class="n">Active_EM_TRA</span>      <span class="n">DATA</span>  <span class="mi">1</span>
+<span class="n">CONSTANTS</span> <span class="n">TratocTR1</span>           <span class="n">DATA</span>  <span class="mf">1.0</span>
+<span class="n">CONSTANTS</span> <span class="n">MaxIter</span>            <span class="n">DATA</span>  <span class="mi">100000</span>
+<span class="n">CONSTANTS</span> <span class="n">Tolerance</span>          <span class="n">DATA</span>  <span class="mf">1E-12</span>
+<span class="n">CONSTANTS</span> <span class="n">Dry_THresh</span>         <span class="n">DATA</span>  <span class="mf">0.0</span>
+<span class="n">CONSTANTS</span> <span class="s1">&#39;iteration report&#39;</span> <span class="n">DATA</span>  <span class="mf">0.0</span>
+
+<span class="p">;</span> <span class="n">geometry</span>
+
+<span class="n">PARAMETERS</span> <span class="n">Surf</span> <span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;staticdata\surface.dat&#39;</span>
+
+<span class="c1">#7</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Eighth</span> <span class="nb">input</span> <span class="n">block</span>
+
+<span class="n">INITIALS</span>  <span class="n">cTR1</span> <span class="n">DEFAULTS</span>  <span class="mf">0.0</span>
+
+ 
+<span class="c1">#8</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Ninth</span> <span class="nb">input</span> <span class="n">block</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">Conditions</span> <span class="n">follow</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">Monitor</span><span class="o">-</span><span class="n">file</span>
+ <span class="mi">0</span>                                           		<span class="p">;</span> <span class="n">Grid</span><span class="o">-</span><span class="n">file</span>
+ <span class="mi">1</span>                                                      <span class="p">;</span> <span class="n">His</span>
+ <span class="mi">1</span>                                                      <span class="p">;</span> <span class="n">Map</span>
+         
+ 
+ <span class="p">;</span> <span class="n">Binary</span><span class="o">/</span><span class="n">Nefis</span> <span class="ow">and</span> <span class="n">History</span><span class="o">/</span><span class="n">Map</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">on</span>  <span class="n">binary</span> <span class="n">History</span> <span class="n">file</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">on</span>  <span class="n">binary</span> <span class="n">Map</span>     <span class="n">file</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">off</span> <span class="n">Nefis</span>  <span class="n">History</span> <span class="n">file</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">off</span> <span class="n">Nefis</span>  <span class="n">Map</span>     <span class="n">file</span>
+<span class="c1">#9</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Tenth</span> <span class="nb">input</span> <span class="n">block</span>
+
+<span class="n">period</span> <span class="s1">&#39;year2018&#39;</span>
+   <span class="n">suffix</span>     <span class="s1">&#39; yr18&#39;</span>
+   <span class="n">start</span><span class="o">-</span><span class="n">time</span> <span class="s1">&#39;2017/12/31-00:00:00&#39;</span>
+   <span class="n">stop</span><span class="o">-</span><span class="n">time</span>  <span class="s1">&#39;2018/12/31-00:00:00&#39;</span>
+<span class="n">end</span><span class="o">-</span><span class="n">period</span>
+
+<span class="n">output</span><span class="o">-</span><span class="n">operation</span> <span class="s1">&#39;STADSC&#39;</span>
+   <span class="n">substance</span> <span class="s1">&#39;cTR1&#39;</span>
+   <span class="n">suffix</span>    <span class="s1">&#39;&#39;</span>
+<span class="n">end</span><span class="o">-</span><span class="n">output</span><span class="o">-</span><span class="n">operation</span>
+
+
+<span class="c1">#10</span>
+</pre></div>
+</div>
+</section>
+<section id="link-with-the-outputs-from-d-emissions">
+<h3>Link with the outputs from D-Emissions<a class="headerlink" href="#link-with-the-outputs-from-d-emissions" title="Permalink to this headline"></a></h3>
+<p>In the new D-Water Quality connection with the single-substance D-Emissions version, there are two ways to provide the outputs of the D-Emissions run to the WQ model for a tracer <strong>TRA</strong>:</p>
+<ul class="simple">
+<li><p>Copy the outputs of the D-Emissions model run <em>outdata_em.bin</em> and <em>outdata_em.txt</em> and paste them in the WQ model directory. Rename them following the tracer
+convention: <em>TRA_em.bin</em> and <em>TRA_em.txt</em>.</p></li>
+</ul>
+<p>OR</p>
+<ul class="simple">
+<li><p>Use a file named <em>TRA_em.def</em>, placed in the WQ model directory, that contains the (relative) paths to the D-Emissions results.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">outdata_em</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">outdata_em</span><span class="o">.</span><span class="n">bin</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Delwaq software is not case sensitive. Filenames can therefore either be TRA_em.def or tra_em.def etc.</p>
+</div>
+</section>
+<section id="running-d-water-quality">
+<h3>Running D-Water Quality<a class="headerlink" href="#running-d-water-quality" title="Permalink to this headline"></a></h3>
+<p>In order to run delwaq for D-Water Quality, we need to include the WQ-Plugin to the run. Delwaq is also run via command lines using two executables, one that reads and process all the information and data
+in the input file <strong>delwaq1.exe</strong>, and one that runs Delwaq with this data <strong>delwaq2.exe</strong>. The command line also include the path to the input file (<strong>delwaq.inp</strong>) and to</p>
+<blockquote>
+<div><p>specific libraries in the WQ-Plugin (or D-Water Quality plugin). You can also notice that there is no direct link to the outdata_em files either in the delwaq.inp or in the
+run-WQ-tra.bat files. This is why respecting the naming conventions of either xxx_em.bin and xxx_em.txt or xxx_em.def are mandatory.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">erase</span> <span class="o">*.</span><span class="n">wrk</span>
+
+<span class="n">REM</span> <span class="n">Read</span> <span class="nb">input</span>
+<span class="o">..</span>\<span class="n">Delwaq</span>\<span class="nb">bin</span>\<span class="n">delwaq1</span><span class="o">.</span><span class="n">exe</span> <span class="n">delwaq</span><span class="o">.</span><span class="n">inp</span> <span class="o">-</span><span class="n">A</span> <span class="o">-</span><span class="n">p</span><span class="o">..</span>\<span class="n">WQ</span><span class="o">-</span><span class="n">Plugin</span>\<span class="n">Tables</span><span class="o">-</span><span class="n">Integral</span>\<span class="n">proc_def</span>
+
+<span class="n">REM</span> <span class="n">Simulate</span>
+<span class="o">..</span>\<span class="n">Delwaq</span>\<span class="nb">bin</span>\<span class="n">delwaq2</span><span class="o">.</span><span class="n">exe</span> <span class="n">delwaq</span><span class="o">.</span><span class="n">inp</span> <span class="o">-</span><span class="n">openpb</span><span class="o">..</span>\<span class="n">WQ</span><span class="o">-</span><span class="n">Plugin</span>\<span class="n">x64</span>\<span class="n">Release</span>\<span class="n">D3Dwaq_OpenPL</span><span class="o">.</span><span class="n">dll</span>
+<span class="n">pause</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="coupling_wflow.html" class="btn btn-neutral float-left" title="Coupling with Wflow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api/api_index.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Deltares.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
