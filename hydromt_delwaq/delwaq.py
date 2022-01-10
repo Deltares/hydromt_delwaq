@@ -252,6 +252,13 @@ class DelwaqModel(Model):
                 )
         for option in lines_ini:
             self.set_config("B5_boundlist", option, lines_ini[option])
+        # B7_Surf
+        if self.type == "EM":
+            lines_ini = {
+                "l1": f"PARAMETERS Surf ALL DATA {nrofseg}*1.0",
+            }
+            for option in lines_ini:
+                self.set_config("B7_surf", option, lines_ini[option])
 
     def setup_monitoring(self, mon_points, mon_areas, **kwargs):
         """Setup Delwaq monitoring points and areas options.
@@ -398,7 +405,7 @@ class DelwaqModel(Model):
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
-                f"None or Invalid source '{hydro_forcing_fn}', skipping setup_dynamic."
+                f"None or Invalid source '{hydro_forcing_fn}', skipping setup_hydrology_forcing."
             )
             return
         self.logger.info(
@@ -578,6 +585,79 @@ class DelwaqModel(Model):
             }
             for option in lines_ini:
                 self.set_config("B7_hydrology", option, lines_ini[option])
+
+    def setup_sediment_forcing(
+        self,
+        sediment_fn,
+        starttime,
+        endtime,
+        particle_class=["IM1", "IM2", "IM3", "IM4", "IM5"],
+        **kwargs,
+    ):
+        """Setup Delwaq hydrological fluxes.
+
+        Adds model layers:
+
+        * **sediment.bin** dynmap: sediment particles from land erosion (fErodIM*) [g/timestep]
+        * **B7_sediment.inc** config: names of sediment fluxes included in sediment.bin
+
+        Parameters
+        ----------
+        sediment_fn : {'None', 'name in local_sources.yml'}
+            Either None, or name in a local or global data_sources.yml file. Can contain several
+            particule sizes (IM1, IM2 etc)
+
+            * Required variables: ['ErodIM*']
+        startime : str
+            Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
+        endtime : str
+            Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS
+        particle_class : str list, optional
+            List of particle classes to consider. By default 5 classes: ['IM1', 'IM2', 'IM3', 'IM4', 'IM5']
+        """
+        if sediment_fn not in self.data_catalog:
+            self.logger.warning(
+                f"None or Invalid source '{sediment_fn}', skipping setup_sediment_forcing."
+            )
+            return
+        self.logger.info(f"Setting dynamic data from sediment source {sediment_fn}.")
+
+        # read dynamic data
+        ds = self.data_catalog.get_rasterdataset(sediment_fn, geom=self.region)
+        # align forcing file with hydromaps
+        ds = ds.raster.reproject_like(self.hydromaps)
+
+        # Select time and particle classes
+        # Sell times to starttime and endtime
+        ds = ds.sel(time=slice(starttime, endtime))
+        sed_vars = [f"Erod{x}" for x in particle_class]
+        ds = ds[sed_vars]
+
+        # Add basin mask
+        ds.coords["mask"] = xr.DataArray(
+            dims=ds.raster.dims,
+            coords=ds.raster.coords,
+            data=self.hydromaps["modelmap"].values,
+            attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
+        )
+        # Add _FillValue to the data attributes
+        for dvar in ds.data_vars.keys():
+            nodata = ds[dvar].raster.nodata
+            if nodata is not None:
+                ds[dvar].attrs.update(_FillValue=nodata)
+            else:
+                ds[dvar].attrs.update(_FillValue=-9999.0)
+            # Fill with zeros inside mask and keep NaN outside
+            ds[dvar] = ds[dvar].fillna(0).where(ds["mask"], ds[dvar].raster.nodata)
+
+        self.set_forcing(ds)
+
+        lines_ini = {
+            "l1": "SEG_FUNCTIONS",
+            "l2": " ".join(str(x) for x in sed_vars),
+        }
+        for option in lines_ini:
+            self.set_config("B7_sediment", option, lines_ini[option])
 
     def setup_emission_raster(
         self,
@@ -1138,7 +1218,9 @@ class DelwaqModel(Model):
         if not self._write:
             raise IOError("Model opened in read-only mode")
         if not self.forcing:
-            self.logger.warning("Warning: no dynamic map, skipping write_dynamicmaps.")
+            self.logger.warning(
+                "Warning: no forcing available, skipping write_forcing."
+            )
             return
 
         # Go from dictionnary to xr.DataSet
@@ -1213,6 +1295,19 @@ class DelwaqModel(Model):
                 self.dw_WriteSegmentOrExchangeData(
                     timestepstamp[i], voname, data, 1, WriteAscii=False
                 )
+                # sediment
+                if "B7_sediment" in self.config:
+                    sedname = join(self.root, "dynamicdata", "sediment.dat")
+                    sed_vars = self.get_config("B7_sediment.l2").split(" ")
+                    sedblock = []
+                    for dvar in sed_vars:
+                        nodata = ds_out[dvar].raster.nodata
+                        data = ds_out[dvar].isel(time=i).values.flatten()
+                        data = data[data != nodata]
+                        sedblock = np.append(sedblock, data)
+                    self.dw_WriteSegmentOrExchangeData(
+                        timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
+                    )
 
         # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
         self.logger.info("Writting waqgeom.nc file")
