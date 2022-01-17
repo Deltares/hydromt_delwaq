@@ -149,8 +149,8 @@ INITIALS  cTR1 DEFAULTS  0.0
  ; Binary/Nefis and History/Map
  1                                           		; switch on  binary History file
  1                                           		; switch on  binary Map     file
- 0                                           		; switch off Nefis  History file
- 0                                           		; switch off Nefis  Map     file
+ 1                                           		; switch off Nefis  History file
+ 1                                           		; switch off Nefis  Map     file
 #9
 ;###############################################################################
 ; Tenth input block

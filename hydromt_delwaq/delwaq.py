@@ -1572,7 +1572,7 @@ class DelwaqModel(Model):
                 long_name="Delft3D FM aggregated mesh",
                 cf_role="mesh_topology",
                 topology_dimension=2,
-                node_coordinates="NetNode_x NetNode_y",
+                node_coordinates="mesh_node_x mesh_node_y",
                 face_node_connectivity="mesh_face_nodes",
                 edge_node_connectivity="NetLink",
                 edge_face_connectivity="FlowLink",

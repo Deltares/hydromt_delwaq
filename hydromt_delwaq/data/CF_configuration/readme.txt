@@ -59,6 +59,19 @@ Actions 15 oct 2021:
 	- test python script to generate complete config
 	- integrate in hydroMT (requires wflow_generator besides delwaq generator)
 	
+STEPS
+
+- finish c:\Users\loos_sb\REPOS\hydromt_delwaq\examples\DelwaqRun_piave\ 
+	=> hydromt should generate v0.06
+	=> delwaq should be able to write NC file
+- generation of Preparation\newbasin\ by hydromt build
+- 	plus provide input for Model\Preparation\newbasin\model_cf_configurator.ini
+- StartConfig (skeleton) available for each model
+- 	alternatively provide link to existing config (constraints of this config?)
+- Run hydroMT build FEWS (appends newbasin + StartConfig into FEWS application)
+- 	model_cf_configurator.py => model_generator needed for each model besides the general cf_utils
+
+Dashboard: dash python, flask
 	
 [15-10-2021 10:31] Sibren Loos
 Hoi Peter,
