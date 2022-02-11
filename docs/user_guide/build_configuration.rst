@@ -9,7 +9,7 @@ command line. Specific details on the HydroMT CLI methods can be found in the
 
 Introduction
 ------------
-HydroMT can support the preparation of water quality models for `DELWAQ <https://oss.deltares.nl/web/delft3d/delwaq1/-/message_boards/category/205375>`_. 
+HydroMT can support the preparation of water quality models for DELWAQ, which is part of the `Delft3D suite <https://oss.deltares.nl/web/delft3d/>`_. 
 As a reminder, a full hydrology - water quality simulation is in general separated in three parts:
 
 - the hydrological model, for example wflow_sbm, that predicts water movements through the catchments.
