@@ -1318,9 +1318,9 @@ class DelwaqModel(Model):
         nodes_x = []
         nodes_y = []
         nodes_z = []
-        net_links = [] #net_links=mesh_edges
+        net_links = []  # net_links=mesh_edges
         elem_nodes = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.int)
-        #elem_edges = np.empty((n_net_elem, n_net_elem_max_node))*np.nan
+        # elem_edges = np.empty((n_net_elem, n_net_elem_max_node))*np.nan
         face_x_bnd = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.double)
         face_y_bnd = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.double)
         flow_links = np.zeros((n_flow_link, n_flow_link_pts), dtype=np.int)
@@ -1383,7 +1383,7 @@ class DelwaqModel(Model):
         # Cell corners
         UL, UR, LR, LL = 0, 1, 2, 3
         # Cell edges
-        #upper, left, lower, right  = 0, 1, 2, 3
+        # upper, left, lower, right  = 0, 1, 2, 3
 
         # Process all cells from upper-left to lower-right
         for i in range(m):
@@ -1446,7 +1446,7 @@ class DelwaqModel(Model):
                     # add UL-UR link
                     net_links.append((elem_nodes[i_elem, UL], elem_nodes[i_elem, UR]))
                     # add upper edge
-                    #elem_edges[i_elem, upper] = int(len(net_links))
+                    # elem_edges[i_elem, upper] = int(len(net_links))
 
                 # LL node
                 if i_elem_left < 0:
@@ -1456,7 +1456,7 @@ class DelwaqModel(Model):
                     # add UL-LL link
                     net_links.append((elem_nodes[i_elem, UL], elem_nodes[i_elem, LL]))
                     # add left edge
-                    #elem_edges[i_elem, left] = int(len(net_links))
+                    # elem_edges[i_elem, left] = int(len(net_links))
                 else:
                     elem_nodes[i_elem, LL] = elem_nodes[i_elem_left, LR]
 
@@ -1468,11 +1468,11 @@ class DelwaqModel(Model):
                 # add LL-LR link
                 net_links.append((elem_nodes[i_elem, LL], elem_nodes[i_elem, LR]))
                 # add lower edge
-                #elem_edges[i_elem, lower] = int(len(net_links))
+                # elem_edges[i_elem, lower] = int(len(net_links))
                 # add UR-LR link
                 net_links.append((elem_nodes[i_elem, UR], elem_nodes[i_elem, LR]))
                 # add right edge
-                #elem_edges[i_elem, right] = int(len(net_links))
+                # elem_edges[i_elem, right] = int(len(net_links))
 
                 # Update flow links based on local drain direction
                 # TODO: diagonal flow links between cells that have only one node in common?
@@ -1523,15 +1523,15 @@ class DelwaqModel(Model):
         # Update dimensions
         n_net_node = nodes_x.shape[0]
         n_net_link = net_links.shape[0]
-        #print(elem_edges.shape[0])
-        #print(elem_edges)
+        # print(elem_edges.shape[0])
+        # print(elem_edges)
 
         edge_x_bnd = np.zeros((n_net_link, 2), dtype=np.double)
         edge_y_bnd = np.zeros((n_net_link, 2), dtype=np.double)
-        edge_faces = np.empty((n_net_link, 2))*np.nan
-        #mesh_edge_faces = np.empty((n_net_link, 2))*np.nan
-        
-		# Proces all edges to derive mesh_edge_x_bnd, mesh_edge_y_bnd, mesh_edge_x, mesh_edge_y, mesh_edge_faces, and mesh_edge_type
+        edge_faces = np.empty((n_net_link, 2)) * np.nan
+        # mesh_edge_faces = np.empty((n_net_link, 2))*np.nan
+
+        # Proces all edges to derive mesh_edge_x_bnd, mesh_edge_y_bnd, mesh_edge_x, mesh_edge_y, mesh_edge_faces, and mesh_edge_type
         edge_type = []
         skiplist = []
         progress5perc = 0
@@ -1543,31 +1543,36 @@ class DelwaqModel(Model):
             edge_y_bnd[bnd, 0] = nodes_y[net_links[bnd][0]]
             edge_y_bnd[bnd, 1] = nodes_y[net_links[bnd][1]]
             # x and y of edge (coordinate in the middle the two nodes connected to the edge)
-            edge_x.append(( edge_x_bnd[bnd, 0] + edge_x_bnd[bnd, 1] ) / 2.0)
-            edge_y.append(( edge_y_bnd[bnd, 0] + edge_y_bnd[bnd, 1] ) / 2.0)
+            edge_x.append((edge_x_bnd[bnd, 0] + edge_x_bnd[bnd, 1]) / 2.0)
+            edge_y.append((edge_y_bnd[bnd, 0] + edge_y_bnd[bnd, 1]) / 2.0)
             # check if option A can be speeded up, e.g. try to get option B working
             # faces on both sides of the edge
             count = 0
             progress_prev = progress5perc
-            progress5perc = int(((bnd+1)/n_net_link)*20)*5
+            progress5perc = int(((bnd + 1) / n_net_link) * 20) * 5
             if progress5perc > progress_prev:
                 progress_str = str(progress5perc)
                 self.logger.info(f"progress writing B3_waggeom.nc: {progress_str}%")
             for face in range(0, n_net_elem):
                 # loop over 4 nodes for each face
                 for node1 in range(0, 4):
-                    if (net_links[bnd][0] == elem_nodes[face][node1]):
-                        if (net_links[bnd][1] == elem_nodes[face][0]) | (net_links[bnd][1] == elem_nodes[face][1]) | (net_links[bnd][1] == elem_nodes[face][2]) | (net_links[bnd][1] == elem_nodes[face][3]):
+                    if net_links[bnd][0] == elem_nodes[face][node1]:
+                        if (
+                            (net_links[bnd][1] == elem_nodes[face][0])
+                            | (net_links[bnd][1] == elem_nodes[face][1])
+                            | (net_links[bnd][1] == elem_nodes[face][2])
+                            | (net_links[bnd][1] == elem_nodes[face][3])
+                        ):
                             edge_faces[bnd][count] = int(face)
                             count += 1
-            if np.isnan(edge_faces[bnd][1]): # edge is a boundary edge
+            if np.isnan(edge_faces[bnd][1]):  # edge is a boundary edge
                 edge_type.append(3)
-            else: # edge is an internal edge
+            else:  # edge is an internal edge
                 edge_type.append(1)
-            
+
             # faces on both sides of the edge (option B)
-            #cnt = 0
-            #for face in range(0, n_net_elem):
+            # cnt = 0
+            # for face in range(0, n_net_elem):
             #    # loop over 4 edges for each face
             #    for edge in range(0, 4):
             #        if elem_edges[face][edge] == bnd:
@@ -1589,19 +1594,28 @@ class DelwaqModel(Model):
         # TODO: mesh_face_x and mesh_face_y now based on LR node, correct?
         ds_out = xr.Dataset(
             data_vars=dict(
-                mesh2d=[-2147483647],#(["dim"], [-2147483647]),
-				mesh2d_edge_faces=(["nmesh2d_edge", "Two"], (edge_faces + 1)),
+                mesh2d=[-2147483647],  # (["dim"], [-2147483647]),
+                mesh2d_edge_faces=(["nmesh2d_edge", "Two"], (edge_faces + 1)),
                 mesh2d_edge_nodes=(["nmesh2d_edge", "Two"], (net_links + 1)),
-				mesh2d_edge_type=(["nmesh2d_edge"], edge_type),
-				mesh2d_edge_x=(["nmesh2d_edge"], edge_x),
+                mesh2d_edge_type=(["nmesh2d_edge"], edge_type),
+                mesh2d_edge_x=(["nmesh2d_edge"], edge_x),
                 mesh2d_edge_x_bnd=(["nmesh2d_edge", "Two"], (edge_x_bnd)),
-				mesh2d_edge_y=(["nmesh2d_edge"], edge_y),
+                mesh2d_edge_y=(["nmesh2d_edge"], edge_y),
                 mesh2d_edge_y_bnd=(["nmesh2d_edge", "Two"], (edge_y_bnd)),
-                mesh2d_face_nodes=(["nmesh2d_face", "max_nmesh2d_face_nodes"], (elem_nodes + 1)),
+                mesh2d_face_nodes=(
+                    ["nmesh2d_face", "max_nmesh2d_face_nodes"],
+                    (elem_nodes + 1),
+                ),
                 mesh2d_face_x=(["nmesh2d_face"], face_x),
-                mesh2d_face_x_bnd=(["nmesh2d_face", "max_nmesh2d_face_nodes"], (face_x_bnd)),
+                mesh2d_face_x_bnd=(
+                    ["nmesh2d_face", "max_nmesh2d_face_nodes"],
+                    (face_x_bnd),
+                ),
                 mesh2d_face_y=(["nmesh2d_face"], face_y),
-                mesh2d_face_y_bnd=(["nmesh2d_face", "max_nmesh2d_face_nodes"], (face_y_bnd)),
+                mesh2d_face_y_bnd=(
+                    ["nmesh2d_face", "max_nmesh2d_face_nodes"],
+                    (face_y_bnd),
+                ),
                 mesh2d_node_x=(["nmesh2d_node"], nodes_x),
                 mesh2d_node_y=(["nmesh2d_node"], nodes_y),
                 mesh2d_node_z=(["nmesh2d_node"], nodes_z),
@@ -1610,7 +1624,6 @@ class DelwaqModel(Model):
                 # FlowLinkType=(["nFlowLink"], flow_link_type),
                 # FlowLink_xu=(["nFlowLink"], flow_link_x),
                 # FlowLink_yu=(["nFlowLink"], flow_link_y),
-
             ),
             coords=dict(
                 # dim = [1],
@@ -1632,7 +1645,7 @@ class DelwaqModel(Model):
                 topology_dimension=2,
                 node_coordinates="mesh2d_node_x mesh2d_node_y",
                 node_dimension="nmesh2d_node",
-				max_face_nodes_dimension = "max_nmesh2d_face_nodes",
+                max_face_nodes_dimension="max_nmesh2d_face_nodes",
                 edge_node_connectivity="mesh2d_edge_nodes",
                 edge_dimension="nmesh2d_edge",
                 edge_coordinates="mesh2d_edge_x mesh2d_edge_y",
@@ -1645,193 +1658,193 @@ class DelwaqModel(Model):
         epsg_nb = int(self.crs.to_epsg())
         ds_out["mesh2d_edge_faces"].attrs.update(
             dict(
-                cf_role = "edge_face_connectivity",
-				long_name = "Mapping from every edge to the two faces that it separates",
-                #_FillValue = NaN,
-                #start_index=1,
+                cf_role="edge_face_connectivity",
+                long_name="Mapping from every edge to the two faces that it separates",
+                # _FillValue = NaN,
+                # start_index=1,
             )
         )
         ds_out["mesh2d_edge_nodes"].attrs.update(
             dict(
-                cf_role = "edge_node_connectivity",
-				mesh = "mesh2d",
-                location = "edge",
-				long_name = "Mapping from every edge to the two nodes that it connects",
-                #_FillValue = NaN,
-                #start_index=1,
+                cf_role="edge_node_connectivity",
+                mesh="mesh2d",
+                location="edge",
+                long_name="Mapping from every edge to the two nodes that it connects",
+                # _FillValue = NaN,
+                # start_index=1,
             )
         )
         ds_out["mesh2d_edge_type"].attrs.update(
             dict(
-				mesh = "mesh2d",
-                location = "edge",
-                coordinates = "mesh2d_edge_x mesh2d_edge_y",
-                cell_methods = "nmesh2d_edge: mean",
-                standard_name = "",
+                mesh="mesh2d",
+                location="edge",
+                coordinates="mesh2d_edge_x mesh2d_edge_y",
+                cell_methods="nmesh2d_edge: mean",
+                standard_name="",
                 long_name="edge type (relation between edge and flow geometry)",
-                units = "",
-                #_FillValue = NaN,
-                flag_values = [0, 1, 2, 3],
-                flag_meanings = "internal_closed internal boundary boundary_closed",
+                units="",
+                # _FillValue = NaN,
+                flag_values=[0, 1, 2, 3],
+                flag_meanings="internal_closed internal boundary boundary_closed",
             )
         )
         ds_out["mesh2d_edge_x"].attrs.update(
             dict(
                 units="degrees_east",
-                standard_name = "projection_x_coordinate",
-                long_name = "characteristic x-coordinate of the mesh edge (e.g. midpoint)",
-				mesh = "mesh2d",
-                location = "edge",
-				bounds = "mesh2d_edge_x_bnd",
+                standard_name="projection_x_coordinate",
+                long_name="characteristic x-coordinate of the mesh edge (e.g. midpoint)",
+                mesh="mesh2d",
+                location="edge",
+                bounds="mesh2d_edge_x_bnd",
             )
         )
         ds_out["mesh2d_edge_x_bnd"].attrs.update(
             dict(
-                units = "degrees_east",
-                standard_name = "projection_x_coordinate",
-                long_name = "x-coordinate bounds of 2D mesh edge (i.e. endpoint coordinates)",
-                mesh = "mesh2d",
-                location = "edge",
+                units="degrees_east",
+                standard_name="projection_x_coordinate",
+                long_name="x-coordinate bounds of 2D mesh edge (i.e. endpoint coordinates)",
+                mesh="mesh2d",
+                location="edge",
             )
         )
         ds_out["mesh2d_edge_y"].attrs.update(
             dict(
-                units = "degrees_north",
-                standard_name = "projection_y_coordinate",
-                long_name = "characteristic y-coordinate of the mesh edge (e.g. midpoint)",
-				mesh = "mesh2d",
-                location = "edge",
-				bounds = "mesh2d_edge_y_bnd",
+                units="degrees_north",
+                standard_name="projection_y_coordinate",
+                long_name="characteristic y-coordinate of the mesh edge (e.g. midpoint)",
+                mesh="mesh2d",
+                location="edge",
+                bounds="mesh2d_edge_y_bnd",
             )
         )
         ds_out["mesh2d_edge_y_bnd"].attrs.update(
             dict(
-                units = "degrees_north",
-                standard_name = "projection_y_coordinate",
-                long_name = "y-coordinate bounds of 2D mesh edge (i.e. endpoint coordinates)",
-                mesh = "mesh2d",
-                location = "edge",
+                units="degrees_north",
+                standard_name="projection_y_coordinate",
+                long_name="y-coordinate bounds of 2D mesh edge (i.e. endpoint coordinates)",
+                mesh="mesh2d",
+                location="edge",
             )
         )
         ds_out["mesh2d_face_nodes"].attrs.update(
             dict(
-                cf_role = "face_node_connectivity",
-                mesh = "mesh2d",
-                location = "face",
-                long_name = "Mapping from every face to its corner nodes (counterclockwise)",
-                _FillValue = 0,
+                cf_role="face_node_connectivity",
+                mesh="mesh2d",
+                location="face",
+                long_name="Mapping from every face to its corner nodes (counterclockwise)",
+                _FillValue=0,
             )
         )
         ds_out["mesh2d_face_x"].attrs.update(
             dict(
-                units = "degrees_east",
-                standard_name = "projection_x_coordinate",
-                long_name = "Characteristic x-coordinate of mesh face",
-                mesh = "mesh2d",
-                location = "face",
-                bounds = "mesh2d_face_x_bnd",
+                units="degrees_east",
+                standard_name="projection_x_coordinate",
+                long_name="Characteristic x-coordinate of mesh face",
+                mesh="mesh2d",
+                location="face",
+                bounds="mesh2d_face_x_bnd",
             )
         )
         ds_out["mesh2d_face_x_bnd"].attrs.update(
             dict(
-                units = "degrees_east",
-                standard_name = "projection_x_coordinate",
-                long_name = "x-coordinate bounds of 2D mesh face (i.e. corner coordinates)",
-                mesh = "mesh2d",
-                location = "face",
-                _FillValue = 0,
+                units="degrees_east",
+                standard_name="projection_x_coordinate",
+                long_name="x-coordinate bounds of 2D mesh face (i.e. corner coordinates)",
+                mesh="mesh2d",
+                location="face",
+                _FillValue=0,
             )
         )
         ds_out["mesh2d_face_y"].attrs.update(
             dict(
-                units = "degrees_north",
-                standard_name = "projection_y_coordinate",
-                long_name = "Characteristic y-coordinate of mesh face",
-                mesh = "mesh2d",
-                location = "face",
-                bounds = "mesh2d_face_y_bnd",
+                units="degrees_north",
+                standard_name="projection_y_coordinate",
+                long_name="Characteristic y-coordinate of mesh face",
+                mesh="mesh2d",
+                location="face",
+                bounds="mesh2d_face_y_bnd",
             )
         )
         ds_out["mesh2d_face_y_bnd"].attrs.update(
             dict(
-                units = "degrees_north",
-                standard_name = "projection_y_coordinate",
-                long_name = "y-coordinate bounds of 2D mesh face (i.e. corner coordinates)",
-                mesh = "mesh2d",
-                location = "face",
-                _FillValue = 0,
+                units="degrees_north",
+                standard_name="projection_y_coordinate",
+                long_name="y-coordinate bounds of 2D mesh face (i.e. corner coordinates)",
+                mesh="mesh2d",
+                location="face",
+                _FillValue=0,
             )
         )
         ds_out["mesh2d_node_x"].attrs.update(
             dict(
-                units = "degrees_east",
-                standard_name = "projection_x_coordinate",
-                long_name = "x-coordinate of mesh nodes",
-                mesh = "mesh2d",
-                location = "node",
+                units="degrees_east",
+                standard_name="projection_x_coordinate",
+                long_name="x-coordinate of mesh nodes",
+                mesh="mesh2d",
+                location="node",
             )
         )
         ds_out["mesh2d_node_y"].attrs.update(
             dict(
-                units = "degrees_north",
-                standard_name = "projection_y_coordinate",
-                long_name = "y-coordinate of mesh nodes",
-                mesh = "mesh2d",
-                location = "node",
+                units="degrees_north",
+                standard_name="projection_y_coordinate",
+                long_name="y-coordinate of mesh nodes",
+                mesh="mesh2d",
+                location="node",
             )
         )
         ds_out["mesh2d_node_z"].attrs.update(
             dict(
-                mesh = "mesh2d",
-                location = "node",
-                coordinates = "mesh2d_node_x mesh2d_node_y",
-                standard_name = "altitude",
-                long_name = "z-coordinate of mesh nodes",
-                units = "m",
-                grid_mapping = "",
+                mesh="mesh2d",
+                location="node",
+                coordinates="mesh2d_node_x mesh2d_node_y",
+                standard_name="altitude",
+                long_name="z-coordinate of mesh nodes",
+                units="m",
+                grid_mapping="",
             )
         )
         ds_out["projected_coordinate_system"].attrs.update(
             dict(
-                name = "Unknown projected",
-                epsg = epsg_nb,
-                grid_mapping_name = "Unknown projected",
-                longitude_of_prime_meridian = 0.0,
-                semi_major_axis = 6378137.0,
-                semi_minor_axis = 6356752.314245,
-                inverse_flattening = 298.257223563,
-                EPSG_code = f"{self.crs}",
-                value = "value is equal to EPSG code",
+                name="Unknown projected",
+                epsg=epsg_nb,
+                grid_mapping_name="Unknown projected",
+                longitude_of_prime_meridian=0.0,
+                semi_major_axis=6378137.0,
+                semi_minor_axis=6356752.314245,
+                inverse_flattening=298.257223563,
+                EPSG_code=f"{self.crs}",
+                value="value is equal to EPSG code",
             )
         )
-        #ds_out["FlowLink"].attrs.update(
+        # ds_out["FlowLink"].attrs.update(
         #    dict(
-		#		long_name="link/interface between two flow elements",
+        # 		long_name="link/interface between two flow elements",
         #        start_index=1,
         #    )
-        #)
-        #ds_out["FlowLinkType"].attrs.update(
+        # )
+        # ds_out["FlowLinkType"].attrs.update(
         #    dict(
         #        long_name="type of flowlink",
         #        valid_range=[1, 2],
         #        flag_values=[1, 2],
         #        flag_meanings="link_between_1D_flow_elements link_between_2D_flow_elements",
         #    )
-        #)
-        #ds_out["FlowLink_xu"].attrs.update(
+        # )
+        # ds_out["FlowLink_xu"].attrs.update(
         #    dict(
         #        units="degrees_east",
         #        standard_name="longitude",
         #        long_name="x-Coordinate of velocity point on flow link.",
         #    )
-        #)
-        #ds_out["FlowLink_yu"].attrs.update(
+        # )
+        # ds_out["FlowLink_yu"].attrs.update(
         #    dict(
         #        units="degrees_north",
         #        standard_name="latitude",
         #        long_name="y-Coordinate of velocity point on flow link.",
         #    )
-        #)
+        # )
 
         # Write the waqgeom.nc file
         fname = join(self.root, "config", "B3_waqgeom.nc")
