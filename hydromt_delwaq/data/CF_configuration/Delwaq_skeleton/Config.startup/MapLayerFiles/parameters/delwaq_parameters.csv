@@ -1,6 +1,0 @@
-INT_PARID;PAR_NAME;INT_UNIT;QUANTITY_GROUP;VALUE_RESOLUTION;DATA_TYPE
-Initial;Fraction of initial water;-;WaterFraction;0.001;instantaneous
-Area_1_1;Fraction of water from source 1_1;-;WaterFraction;0.001;instantaneous
-Emis_Sfw;ToSurfaceWater;kg/m3;Emission;0.000001;instantaneous
-cTR1;conservative tracer 1;mg/l;Tracer;0.001;instantaneous
-dTR1;decayable tracer 1;mg/l;Tracer;0.001;instantaneous
