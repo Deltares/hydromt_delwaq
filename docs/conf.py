@@ -89,7 +89,6 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-#html_theme = "sphinx_rtd_theme"
 html_theme = "pydata_sphinx_theme"
 autodoc_member_order = "bysource"  # overwrite default alphabetical sort
 autoclass_content = "both"
@@ -104,7 +103,28 @@ autoclass_content = "both"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-html_context = {}
+html_css_files = ["theme-deltares.css"]
+html_theme_options = {
+    "show_nav_level": 2,
+    "navbar_align": "content",
+    "use_edit_page_button": True,
+    "icon_links": [
+        {
+            "name": "Deltares",
+            "url": "https://deltares.nl/en/",
+            "icon": "_static/deltares-white.svg",
+            "type": "local",
+        },
+    ],
+}
+
+html_context = {
+    "github_url": "https://github.com",  # or your GitHub Enterprise interprise
+    "github_user": "Deltares",
+    "github_repo": "hydromt_delwaq",
+    "github_version": "new_docs",  # FIXME
+    "doc_path": "docs",
+}
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
