@@ -1,4 +1,4 @@
-hydroMT-delwaq: DELWAQ plugin for hydroMT
+HydroMT-delwaq: DELWAQ plugin for HydroMT
 #########################################
 
 .. image:: https://codecov.io/gh/Deltares/hydromt_delwaq/branch/main/graph/badge.svg?token=ss3EgmwHhH
@@ -20,15 +20,15 @@ hydroMT-delwaq: DELWAQ plugin for hydroMT
     :target: https://mybinder.org/v2/gh/Deltares/hydromt_delwaq/main?urlpath=lab/tree/examples
 
 
-hydroMT_ is a python package, developed by Deltares, to build and analysis hydro models.
-It provides a generic model api with attributes to access the model schematization,
-(dynamic) forcing data, results and states. This plugin provides an implementation 
-for the DELWAQ_ model.
+`HydroMT <https://github.com/Deltares/hydromt>`_ is a python package, developed by Deltares, to build 
+and analyse environmental models. It provides a generic model api with attributes to access the model schematization, 
+(dynamic) forcing data, results and states.
 
+This plugin provides an implementation for the `DELWAQ <https://oss.deltares.nl/web/delft3d/delwaq1>`_ water quality engine. 
+It details the different steps and explains how to use HydroMT to easily get started and work on your own DELWAQ model. WIth this plugin 
+you can interact with both classic **D-Water Quality** models as well as **D-Emission** models.
 
-.. _hydromt: https://deltares.github.io/hydromt
-.. _delwaq: https://oss.deltares.nl/web/delft3d/delwaq1/-/message_boards/category/205375
-
+For detailed information on HydroMT itself, you can visit the `core documentation <https://deltares.github.io/hydromt_plugin/latest/>`_.
 
 Installation
 ------------

@@ -1,5 +1,7 @@
-Introduction
-============
+.. _intro_getting_started:
+
+Getting Started
+===============
 
 With the **hydromt_delwaq plugin**, users can easily benefit from the rich set of tools of the 
 `HydroMT package <https://github.com/Deltares/hydromt>`_ to build and update 
@@ -20,4 +22,28 @@ This plugin supports both:
 - emission models, ** `D-Emission <www.deltares.nl/en/software/module/D-Emissions/>`_ ** (also referred to as EM in hydroMT), that predicts the quantity (fluxes) of substances being released from sources of pollutants to the surface waters (mass/time).
 - fate and transport models, ** `D-Water Quality <https://www.deltares.nl/en/software/module/d-water-quality/>`_ ** (also referred to as WQ in hydroMT), that predicts the fate and transport of substances in the surface waters (concentrations in mass / volume).
 
-.. image:: img/D-emissions.png
+.. image:: ../img/D-emissions.png
+
+Content
+-------
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   :caption: Getting Started
+
+   installation.rst
+   ../examples/index.rst
+
+License
+-------
+
+Copyright (c) 2021, Deltares
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
+License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You can find the full terms of the GNU General Public License at <https://www.gnu.org/licenses/>.
