@@ -5,8 +5,6 @@ User Guide
 
 TEXT
 
-Content
--------
 
 .. toctree::
    :maxdepth: 1

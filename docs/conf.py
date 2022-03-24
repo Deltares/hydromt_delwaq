@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(here, "..")))
 
 # -- Project information -----------------------------------------------------
 
-project = "hydromt_delwaq"
+project = "HydroMT delwaq"
 copyright = "Deltares"
 author = "Hélène Boisgontier"
 
@@ -109,6 +109,18 @@ html_theme_options = {
     "navbar_align": "content",
     "use_edit_page_button": True,
     "icon_links": [
+        {
+            "name": "HydroMT core",
+            "url": "https://deltares.github.io/hydromt/preview/index.html",
+            "icon": "_static/HydroMT.jpg",
+            "type": "local",
+        },
+        {
+            "name": "BlueEarth",
+            "url": "https://blueearth.deltares.org/",
+            "icon": "_static/BlueEarth.jpg",
+            "type": "local",
+        },
         {
             "name": "Deltares",
             "url": "https://deltares.nl/en/",

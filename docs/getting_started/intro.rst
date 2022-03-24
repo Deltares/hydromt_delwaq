@@ -19,21 +19,10 @@ between ** :ref:`Wflow and DELWAQ <coupling_wflow>` ** is supported.
 
 This plugin supports both:
 
-- emission models, ** `D-Emission <www.deltares.nl/en/software/module/D-Emissions/>`_ ** (also referred to as EM in hydroMT), that predicts the quantity (fluxes) of substances being released from sources of pollutants to the surface waters (mass/time).
+- emission models, ** `D-Emission <https://www.deltares.nl/en/software/module/D-Emissions/>`_ ** (also referred to as EM in hydroMT), that predicts the quantity (fluxes) of substances being released from sources of pollutants to the surface waters (mass/time).
 - fate and transport models, ** `D-Water Quality <https://www.deltares.nl/en/software/module/d-water-quality/>`_ ** (also referred to as WQ in hydroMT), that predicts the fate and transport of substances in the surface waters (concentrations in mass / volume).
 
 .. image:: ../img/D-emissions.png
-
-Content
--------
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: Getting Started
-
-   installation.rst
-   ../examples/index.rst
 
 License
 -------
@@ -47,3 +36,11 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You can find the full terms of the GNU General Public License at <https://www.gnu.org/licenses/>.
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   :caption: Table of Contents
+
+   installation.rst
+   ../examples/index.rst

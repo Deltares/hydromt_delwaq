@@ -5,9 +5,6 @@ Advanced Topics
 
 TEXT
 
-Content
--------
-
 .. toctree::
    :maxdepth: 1
    :hidden:

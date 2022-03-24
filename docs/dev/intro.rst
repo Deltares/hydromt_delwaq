@@ -5,13 +5,11 @@ Developments
 
 TEXT
 
-Content
--------
 
 .. toctree::
    :maxdepth: 1
    :hidden:
-   :caption: References & Help
+   :caption: Table of Contents
 
    contributing.rst
    ../changelog.rst
