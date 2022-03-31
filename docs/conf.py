@@ -110,24 +110,18 @@ html_theme_options = {
     "use_edit_page_button": True,
     "icon_links": [
         {
-            "name": "HydroMT core",
-            "url": "https://deltares.github.io/hydromt/preview/index.html",
-            "icon": "_static/HydroMT.jpg",
-            "type": "local",
-        },
-        {
-            "name": "BlueEarth",
-            "url": "https://blueearth.deltares.org/",
-            "icon": "_static/BlueEarth.jpg",
-            "type": "local",
-        },
-        {
             "name": "Deltares",
             "url": "https://deltares.nl/en/",
             "icon": "_static/deltares-white.svg",
             "type": "local",
         },
     ],
+    "external_links": [
+        {
+			"name": "HydroMT core", 
+			"url": "https://deltares.github.io/hydromt/preview/index.html",
+		},
+	],
 }
 
 html_context = {
