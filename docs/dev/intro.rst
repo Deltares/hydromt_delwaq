@@ -3,7 +3,7 @@
 Developments
 ============
 
-TEXT
+These pages provide guidelines on how to contribute to HydroMT delwaq. Furthermore it informs you on planned developments and new features.
 
 
 .. toctree::
@@ -11,5 +11,5 @@ TEXT
    :hidden:
    :caption: Table of Contents
 
-   contributing.rst
    ../changelog.rst
+   contributing.rst

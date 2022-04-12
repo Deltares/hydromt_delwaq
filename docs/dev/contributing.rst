@@ -1,4 +1,4 @@
-Contributing
+Contributors
 ============
 
 .. _contributing:

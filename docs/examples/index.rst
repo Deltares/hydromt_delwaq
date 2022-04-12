@@ -1,30 +1,33 @@
+.. _examples:
+
 Examples
 ========
 
 .. include:: examples/README.rst
 
-**Build model from command line interface**
+For a static (non-interactive) view of the examples follow one of the links below:
+
+**Building a model (CLI usage)**
+
+.. toctree:: 
+   :maxdepth: 2
+   
+   ./examples/build_EM_model.ipynb
+   ./examples/build_WQ_model.ipynb
+   
+**Updating your model (CLI usage)**
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    
-   Build D-Emissions model <examples/build_EM_model>
-   Build D-Water Quality model <examples/build_WQ_model>
+   ./examples/adding_global_emission.ipynb
+   ./examples/adding_local_emission.ipynb
+   ./examples/update_model_monitoring.ipynb
+   ./examples/update_model_forcing.ipynb
 
-
-**Update model from command line interface**
+**Visualizing results (Python interface)**
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    
-   Update Delwaq model: monitoring <examples/update_model_monitoring>
-   Update Delwaq model: global emission <examples/adding_global_emission>
-   Update Delwaq model: local emission <examples/adding_local_emission>
-   Update Delwaq model: forcing <examples/update_model_forcing>
-
-**Advanced topics (Python interface)**
-
-.. toctree::
-   :maxdepth: 1
-   
-   Plot Delwaq model <examples/plot_delwaq>
+   ./examples/plot_delwaq.ipynb

@@ -1,10 +1,8 @@
 .. _coupling_wflow:
 
-Coupling with Wflow
-===================
+Explaining the Wflow - Delwaq coupling
+--------------------------------------
 
-Concepts of the Wflow - Delwaq coupling
----------------------------------------
 Water quality and emission, fate and transport of pollutants through the landscape is very much linked to the water movements. In most cases, pollutants are emitted on land and 
 either leach into the soil or are picked up by water during rain events and transported towards and into the rivers. In order to model water quality is it therefore essential to first understand and assess the hydrology of the catchment / region of interests.
 
@@ -44,7 +42,7 @@ C)  Fate and transport modelling with D-Water Quality
 -  Edit the WQ run info and run D-Water Quality (WQ-Plugin)
 
 Hydrological forcing from Wflow
--------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In order to determine how and where substances are emitted and how they move through the landscape via the surface water, water quality modelling requires certain 
 hydrological information.

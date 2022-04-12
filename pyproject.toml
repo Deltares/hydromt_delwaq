@@ -36,6 +36,7 @@ doc = [
 	"sphinx",
     "pydata-sphinx-theme",
 	"black",
+    "sphinx_design",
 ]
 
 [project.urls]

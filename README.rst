@@ -12,7 +12,7 @@ HydroMT-delwaq: DELWAQ plugin for HydroMT
     :target: https://deltares.github.io/hydromt_delwaq/stable
     :alt: Stable docs last release
 
-.. image:: https://pypip.in/v/hydromt_delwaq/badge.png
+.. image:: https://badge.fury.io/py/hydromt.svg
     :target: https://pypi.org/project/hydromt_delwaq/
     :alt: Latest PyPI version
 
