@@ -7,7 +7,7 @@ HydroMT-delwaq: DELWAQ plugin for HydroMT
 and analyse environmental models. It provides a generic model api with attributes to access the model schematization, 
 (dynamic) forcing data, results and states.
 
-This plugin provides an implementation for the `DELWAQ <https://oss.deltares.nl/web/delft3d/delwaq1>`_ water quality engine. 
+This plugin provides an implementation for the `DELWAQ <https://www.deltares.nl/en/software/module/d-water-quality/>`_ water quality engine. 
 It details the different steps and explains how to use HydroMT to easily get started and work on your own DELWAQ model. WIth this plugin 
 you can interact with both classic **D-Water Quality** models as well as **D-Emission** models.
 

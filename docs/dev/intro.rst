@@ -13,6 +13,6 @@ These pages provide guidelines on how to contribute to HydroMT delwaq. Furthermo
 
    ../changelog.rst
    roadmap.rst
-   contributing.rst
+   Developer's guide <https://deltares.github.io/hydromt/preview/dev/contributing.html#>
    dev_install.rst
    team.rst
