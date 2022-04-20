@@ -14,5 +14,5 @@ if needed edit your data library with new data sources required for the update a
    :maxdepth: 2
    :caption: Available tutorials:
    
-   Example: Update monitoring locations  <../examples/examples/update_model_monitoring.ipynb>
-   Example: Update forcing data <../examples/examples/update_model_forcing.ipynb>
+   Example: Update monitoring locations  <../_examples/update_model_monitoring.ipynb>
+   Example: Update forcing data <../_examples/update_model_forcing.ipynb>

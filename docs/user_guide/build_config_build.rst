@@ -34,8 +34,8 @@ For an explanation about how to prepare the delwaq models, follow one of the lin
    :maxdepth: 2
    :caption: Available tutorials:
    
-   Example: Build an emission model <../examples/examples/build_EM_model.ipynb>
-   Example: Build a water quality model <../examples/examples/build_WQ_model.ipynb>
+   Example: Build an emission model <../_examples/build_EM_model.ipynb>
+   Example: Build a water quality model <../_examples/build_WQ_model.ipynb>
    
    
  

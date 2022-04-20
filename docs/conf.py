@@ -18,11 +18,23 @@
 #
 import os
 import sys
+import shutil
 import hydromt
 import hydromt_delwaq
+from distutils.dir_util import copy_tree
 
 here = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(here, "..")))
+
+
+def remove_dir_content(path: str) -> None:
+    for root, dirs, files in os.walk(path):
+        for f in files:
+            os.unlink(os.path.join(root, f))
+        for d in dirs:
+            shutil.rmtree(os.path.join(root, d))
+    if os.path.isdir(path):
+        shutil.rmtree(path)
 
 # -- Project information -----------------------------------------------------
 
@@ -32,6 +44,13 @@ author = "Hélène Boisgontier"
 
 # The short version which is displayed
 version = hydromt_delwaq.__version__
+
+# # -- Copy notebooks to include in docs -------
+if os.path.isdir("_examples"):
+    remove_dir_content("_examples")
+os.makedirs("_examples")
+copy_tree("../examples", "_examples")
+
 
 # -- General configuration ------------------------------------------------
 

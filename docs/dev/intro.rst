@@ -12,4 +12,7 @@ These pages provide guidelines on how to contribute to HydroMT delwaq. Furthermo
    :caption: Table of Contents
 
    ../changelog.rst
+   roadmap.rst
    contributing.rst
+   dev_install.rst
+   team.rst

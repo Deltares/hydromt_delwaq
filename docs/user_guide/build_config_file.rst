@@ -30,15 +30,15 @@ For a **WQ** type of model, these are:
   evaporation…) in order to close the surface water mass balance.
 
 Below is an example of ini file that can be used to build a complete **EM model**
-:download:`.ini file <../examples/examples/delwaq_build_EM.ini>`. Each section corresponds 
+:download:`.ini file <../_examples/delwaq_build_EM.ini>`. Each section corresponds 
 to a model component with the same name.
 
-.. literalinclude:: ../examples/examples/delwaq_build_EM.ini
+.. literalinclude:: ../_examples/delwaq_build_EM.ini
    :language: Ini
 
 Below is an example of ini file that can be used to build a complete **WQ model**
-:download:`.ini file <../examples/examples/delwaq_build_WQ.ini>`. Each section corresponds 
+:download:`.ini file <../_examples/delwaq_build_WQ.ini>`. Each section corresponds 
 to a model component with the same name.
 
-.. literalinclude:: ../examples/examples/delwaq_build_WQ.ini
+.. literalinclude:: ../_examples/delwaq_build_WQ.ini
    :language: Ini

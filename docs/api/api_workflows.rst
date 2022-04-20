@@ -9,7 +9,7 @@ Emissions
 =========
 
 .. autosummary::
-   :toctree: ../generated/
+   :toctree: ../_generated/
 
    workflows.emissions.emission_raster
    workflows.emissions.emission_vector
@@ -19,7 +19,7 @@ Segments
 ========
 
 .. autosummary::
-   :toctree: ../generated/
+   :toctree: ../_generated/
 
    workflows.segments.hydromaps
    workflows.segments.pointer

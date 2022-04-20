@@ -72,24 +72,11 @@ This plugin supports both:
 
 .. image:: ../img/D-emissions.png
 
-License
--------
-
-Copyright (c) 2021, Deltares
-
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public 
-License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
-of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You can find the full terms of the GNU General Public License at <https://www.gnu.org/licenses/>.
-
 .. toctree::
    :maxdepth: 1
    :hidden:
    :caption: Table of Contents
 
    installation.rst
-   ../examples/index.rst
+   examples_index.rst
    user_stories.rst

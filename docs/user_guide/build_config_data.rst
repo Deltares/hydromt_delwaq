@@ -20,6 +20,6 @@ are three ways for the user to select which data libraries to use:
 .. toctree::
    :caption: Available tutorials:
   
-   Example: Add (global) emission data <../examples/examples/adding_global_emission.ipynb>
-   Example: Add (local) emission data  <../examples/examples/adding_local_emission.ipynb>
-   Example: Plot DELWAQ data <../examples/examples/plot_delwaq.ipynb>
+   Example: Add (global) emission data <../_examples/adding_global_emission.ipynb>
+   Example: Add (local) emission data  <../_examples/adding_local_emission.ipynb>
+   Example: Plot DELWAQ data <../_examples/plot_delwaq.ipynb>

@@ -8,7 +8,7 @@ Initialize
 ----------
 
 .. autosummary::
-   :toctree: ../generated/
+   :toctree: ../_generated/
 
    DelwaqModel
 
@@ -20,7 +20,7 @@ Build components
 For DELWAQ, the different components available for building or updating are:
 
 .. autosummary::
-   :toctree: ../generated/
+   :toctree: ../_generated/
 
    DelwaqModel.setup_config
    DelwaqModel.setup_basemaps
@@ -36,7 +36,7 @@ Model specific attributes
 A Delwaq model in HydroMT also has a set of specific attributes, on top of the ones from the model API. These are:
 
 .. autosummary::
-   :toctree: ../generated/
+   :toctree: ../_generated/
 
    DelwaqModel.basins
    DelwaqModel.hydromaps
@@ -45,7 +45,7 @@ Model specific methods
 --------------------------
 
 .. autosummary::
-   :toctree: ../generated/
+   :toctree: ../_generated/
 
    DelwaqModel.set_hydromaps
 
@@ -54,7 +54,7 @@ Model specific I/O methods
 High level I/O methods
 
 .. autosummary::
-   :toctree: ../generated/
+   :toctree: ../_generated/
 
    DelwaqModel.read_hydromaps
    DelwaqModel.write_hydromaps
@@ -66,7 +66,7 @@ High level I/O methods
 Intermediate I/O methods
 
 .. autosummary::
-   :toctree: ../generated/
+   :toctree: ../_generated/
 
    DelwaqModel.write_monitoring
    DelwaqModel.dw_WriteSegmentOrExchangeData
