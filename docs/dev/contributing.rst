@@ -1,5 +1,5 @@
-Contributors
-============
+Developer's guide
+=================
 
 .. _contributing:
 
