@@ -13,4 +13,5 @@ def remove_dir_content(path: str) -> None:
 
 
 remove_dir_content("_build")
-remove_dir_content("generated")
+remove_dir_content("_generated")
+remove_dir_content("_examples")
