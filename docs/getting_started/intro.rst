@@ -3,6 +3,15 @@
 Getting Started
 ===============
 
+.. Note:: 
+    TODOs:
+    * add external links to README.rst instead of text
+    * Merge text on this page with README.rst and place before buttons
+    * Merge API refs to one rst
+    * Include ref to API components (in table) if needed
+    * Change developers guide to external link
+	* Extent documentation with detailed explanation of D-Emissions from Jos' memo "D-Emissions.docx"
+
 .. grid:: 2
     :gutter: 1 
 
@@ -81,11 +90,4 @@ This plugin supports both:
    examples_index.rst
    user_stories.rst
 
-.. Note:: 
-    TODOs:
-    add external links to README.rst instead of text
-    Merge text on this page with README.rst and place before buttons
-    Merge API refs to one rst
-    Include ref to API components (in table) if needed
-    Change developers guide to external link
 
