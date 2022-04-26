@@ -29,6 +29,9 @@ jobs:
         with:
           environment-file: envs/hydromt-delwaq.yml
           python-version: "3.9"
+          mamba-version: "*"
+          channels: conda-forge,defaults
+          channel-priority: true
           activate-environment: hydromt-delwaq
 
       - name: Install plugin

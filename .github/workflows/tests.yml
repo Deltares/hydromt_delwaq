@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["windows-latest"] #, "macos-latest", "ubuntu-latest"]
-        python-version: ["3.8", "3.9"] # fix tests to support older versions
+        python-version: ["3.9"] # fix tests to support older versions
     
     steps:
       - uses: actions/checkout@v2
@@ -25,6 +25,9 @@ jobs:
         with:
           environment-file: envs/hydromt-delwaq.yml
           python-version: ${{ matrix.python-version }}
+          mamba-version: "*"
+          channels: conda-forge,defaults
+          channel-priority: true
           activate-environment: hydromt-delwaq
 
       - name: Conda info
