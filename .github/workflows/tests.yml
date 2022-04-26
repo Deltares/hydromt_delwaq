@@ -16,14 +16,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["windows-latest"] #, "macos-latest", "ubuntu-latest"]
+        os: ["windows-latest", "ubuntu-latest"] #, "macos-latest"]
         python-version: ["3.9"] # fix tests to support older versions
     
     steps:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
         with:
-          environment-file: envs/hydromt-delwaq.yml
+          environment-file: envs/test_env.yml
           python-version: ${{ matrix.python-version }}
           mamba-version: "*"
           channels: conda-forge,defaults
