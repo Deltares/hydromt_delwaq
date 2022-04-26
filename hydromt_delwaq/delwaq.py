@@ -297,7 +297,7 @@ class DelwaqModel(Model):
                         f"No {mon_points} gauge locations found within domain"
                     )
                 else:
-                    gdf["index"] = gdf.index.values
+                    gdf.index.name = "index"
                     monpoints = self.staticmaps.raster.rasterize(
                         gdf, col_name="index", nodata=mv
                     )
@@ -310,9 +310,6 @@ class DelwaqModel(Model):
             nb_points = len(points)
             # Add to staticgeoms if mon_points is not segments
             if mon_points != "segments":
-                # if first column has no name, give it a default name otherwise column is omitted when written to geojson
-                if gdf.index.name is None:
-                    gdf.index.name = "fid"
                 self.set_staticgeoms(gdf, name="monpoints")
         else:
             self.logger.info("No monitoring points set in the config file, skipping")
@@ -493,7 +490,7 @@ class DelwaqModel(Model):
             times.freq = pd.infer_freq(times)
             times_offset = times + times.freq
             vol = ds["vol"].copy()
-            ds = ds.drop("vol")
+            ds = ds.drop_vars("vol")
             vol["time"] = times_offset
             ds = ds.merge(vol)
         # Sell times to starttime and endtime
@@ -1025,7 +1022,9 @@ class DelwaqModel(Model):
             self.logger.info(f"Read staticmaps from {fn}")
             # FIXME: we need a smarter (lazy) solution for big models which also
             # works when overwriting / apending data in thet same source!
-            ds = xr.open_dataset(fn, mask_and_scale=False, **kwargs).load()
+            ds = xr.open_dataset(
+                fn, mask_and_scale=False, decode_coords="all", **kwargs
+            ).load()
             ds.close()
             self.set_staticmaps(ds)
 
@@ -1037,13 +1036,13 @@ class DelwaqModel(Model):
 
         # Filter data with mask
         for dvar in ds_out.data_vars:
-            nodata = ds_out[dvar].raster.nodata
-            ds_out[dvar] = xr.where(ds_out["mask"], ds_out[dvar], nodata)
-            ds_out[dvar].attrs.update(_FillValue=nodata)
+            ds_out[dvar] = ds_out[dvar].raster.mask(mask=ds_out["mask"])
 
         self.logger.info("Writing staticmap files.")
         # Netcdf format
         fname = join(self.root, "staticdata", "staticmaps.nc")
+        # Update attributes for gdal compliance
+        # ds_out = ds_out.raster.gdal_compliant(rename_dims=False)
         if os.path.isfile(fname):
             ds_out.to_netcdf(path=fname, mode="a")
         else:
@@ -1053,7 +1052,6 @@ class DelwaqModel(Model):
         for dvar in ds_out.data_vars:
             if dvar != "monpoints" and dvar != "monareas":
                 fname = join(self.root, "staticdata", dvar + ".dat")
-                # nodata = ds_out[dvar].raster.nodata
                 data = ds_out[dvar].values.flatten()
                 mask = ds_out["mask"].values.flatten()
                 data = data[mask]
@@ -1114,7 +1112,7 @@ class DelwaqModel(Model):
             self._hydromaps = io.open_mfraster(fns, **kwargs)
         if self._hydromaps.raster.crs is None and crs is not None:
             self.set_crs(crs)
-        self._hydromaps["modelmap"] = self._hydromaps["modelmap"].astype(np.bool)
+        self._hydromaps["modelmap"] = self._hydromaps["modelmap"].astype(bool)
         self._hydromaps.coords["mask"] = self._hydromaps["modelmap"]
 
     def write_hydromaps(self):
@@ -1197,7 +1195,7 @@ class DelwaqModel(Model):
             timear = np.array(0, dtype=np.int32)
             # Open and write the data
             fp = open(fname + ".bin", "wb")
-            tstr = timear.tostring() + artow.tostring()
+            tstr = timear.tobytes() + artow.tobytes()
             fp.write(tstr)
             fp.close()
 
@@ -1432,7 +1430,7 @@ class DelwaqModel(Model):
 
         if os.path.isfile(fname) and mode == "a":  # append to existing file
             fp = open(fname, "ab")
-            tstr = timear.tostring() + artow.tostring()
+            tstr = timear.tobytes() + artow.tobytes()
             fp.write(tstr)
             if WriteAscii:
                 fpa = open(fname + ".asc", "a")
@@ -1441,7 +1439,7 @@ class DelwaqModel(Model):
                 fpa.write("\n")
         else:
             fp = open(fname, "wb")
-            tstr = timear.tostring() + artow.tostring()
+            tstr = timear.tobytes() + artow.tobytes()
             fp.write(tstr)
             if WriteAscii:
                 fpa = open(fname + ".asc", "w")
@@ -1470,7 +1468,7 @@ class DelwaqModel(Model):
             points = points[points != mv]
             nb_points = len(points)
             names_points = np.array(
-                ["'Point" + x1 + "_Sfw'" for x1 in points.astype(np.str)]
+                ["'Point" + x1 + "_Sfw'" for x1 in points.astype(str)]
             ).reshape(nb_points, 1)
             onecol = np.repeat(1, nb_points).reshape(nb_points, 1)
             balcol = np.repeat("NO_BALANCE", nb_points).reshape(nb_points, 1)
@@ -1570,13 +1568,13 @@ class DelwaqModel(Model):
         nodes_y = []
         nodes_z = []
         net_links = []
-        elem_nodes = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.int)
+        elem_nodes = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.int32)
         face_x_bnd = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.double)
         face_y_bnd = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.double)
-        flow_links = np.zeros((n_flow_link, n_flow_link_pts), dtype=np.int)
+        flow_links = np.zeros((n_flow_link, n_flow_link_pts), dtype=np.int32)
         flow_link_type = np.repeat(2, n_flow_link)
-        flow_link_x = np.zeros((n_flow_link), dtype=np.float)
-        flow_link_y = np.zeros((n_flow_link), dtype=np.float)
+        flow_link_x = np.zeros((n_flow_link), dtype=np.float32)
+        flow_link_y = np.zeros((n_flow_link), dtype=np.float32)
 
         # prepare all coordinates for grid csv
         nodes_x_all = []
