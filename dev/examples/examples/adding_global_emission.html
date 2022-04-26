@@ -16,8 +16,8 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -320,7 +320,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -392,8 +392,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -401,8 +400,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># for plotting</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for plotting</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">cartopy.io.img_tiles</span> <span class="k">as</span> <span class="nn">cimgt</span>
 <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
@@ -414,8 +412,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># import hydromt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import hydromt</span>
 <span class="kn">import</span> <span class="nn">hydromt</span>
 </pre></div>
 </div>
@@ -424,8 +421,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># setup logging</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setup logging</span>
 <span class="kn">from</span>  <span class="nn">hydromt.log</span> <span class="kn">import</span> <span class="n">setuplog</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">setuplog</span><span class="p">(</span><span class="s2">&quot;update_model_emission&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
@@ -436,7 +432,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-10-06 06:32:20,389 - update_model_emission - log - INFO - HydroMT version: 0.4.3
+2022-04-26 12:25:20,537 - update_model_emission - log - INFO - HydroMT version: 0.4.5
 </pre></div></div>
 </div>
 </section>
@@ -447,8 +443,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Print the options available from the update command</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print the options available from the update command</span>
 <span class="o">!</span> hydromt update --help
 </pre></div>
 </div>
@@ -460,8 +455,8 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
 
-  Update a specific component of a model. Set an output directory to copy
-  the edited model to a new folder, otherwise maps are overwritten.
+  Update a specific component of a model. Set an output directory to copy the
+  edited model to a new folder, otherwise maps are overwritten.
 
   Example usage:
   --------------
@@ -475,22 +470,17 @@ Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
 Options:
   -o, --model-out DIRECTORY  Output model folder. Maps in MODEL_ROOT are
                              overwritten if left empty.
-
   -c, --components TEXT      Model components from ini file to run
   --opt TEXT                 Component specific keyword arguments, see the
                              setup_&lt;component&gt; method of the specific model
                              for more information about the arguments.
-
   -i, --config PATH          Path to hydroMT configuration file, for the model
                              specific implementation.
-
   -d, --data PATH            File path to yml data sources file. See
                              documentation for required yml file format.
-
   --dd, --deltares-data      Parse default deltares data yml from
                              https://github.com/DirkEilander/hydromt-
                              artifacts/releases
-
   -q, --quiet                Decrease verbosity.
   -v, --verbose              Increase verbosity.
   --help                     Show this message and exit.
@@ -506,8 +496,7 @@ Options:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#Let&#39;s see what are the attributes of the glw_cattle data source</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Let&#39;s see what are the attributes of the glw_cattle data source</span>
 <span class="n">data_catalog</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">DataCatalog</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
 <span class="n">data_catalog</span><span class="p">[</span><span class="s2">&quot;glw_cattle&quot;</span><span class="p">]</span>
 </pre></div>
@@ -518,9 +507,9 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-10-06 06:32:22,421 - update_model_emission - data_adapter - INFO - Downloading file to /home/runner/.hydromt_data/data/v0.0.5/data.tar.gz
-2021-10-06 06:32:23,049 - update_model_emission - data_adapter - DEBUG - Unpacking data from /home/runner/.hydromt_data/data/v0.0.5/data.tar.gz
-2021-10-06 06:32:24,818 - update_model_emission - data_adapter - INFO - Adding sample data v0.0.5 from artifacts
+2022-04-26 12:25:23,526 - update_model_emission - data_adapter - INFO - Downloading file to /home/runner/.hydromt_data/data/v0.0.6/data.tar.gz
+2022-04-26 12:25:24,868 - update_model_emission - data_adapter - DEBUG - Unpacking data from /home/runner/.hydromt_data/data/v0.0.6/data.tar.gz
+2022-04-26 12:25:25,752 - update_model_emission - data_adapter - INFO - Adding sample data v0.0.6 from artifacts
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -534,7 +523,7 @@ Options:
  &#39;driver&#39;: &#39;raster&#39;,
  &#39;paper_doi&#39;: &#39;10.7910/DVN/GIVQ75&#39;,
  &#39;paper_ref&#39;: &#39;Gilbert at al (2018)&#39;,
- &#39;path&#39;: &#39;/home/runner/.hydromt_data/data/v0.0.5/glw_cattle.tif&#39;,
+ &#39;path&#39;: &#39;/home/runner/.hydromt_data/data/v0.0.6/glw_cattle.tif&#39;,
  &#39;source_author&#39;: &#39;glw (Gridded Livestock of World 3 Dataverse)&#39;,
  &#39;source_license&#39;: &#39;CC 4.0&#39;,
  &#39;source_url&#39;: &#39;https://dataverse.harvard.edu/dataverse/glw_3&#39;,
@@ -557,8 +546,7 @@ Options:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Dictionnary with all the components and options we want to update</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dictionnary with all the components and options we want to update</span>
 <span class="n">emission_raster_options</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;global&#39;</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;mtype&#39;</span><span class="p">:</span> <span class="s1">&#39;EM&#39;</span><span class="p">},</span>
     <span class="s1">&#39;setup_emission_raster&#39;</span><span class="p">:</span> <span class="p">{</span>
@@ -611,8 +599,7 @@ area_division = True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
 <span class="o">!</span> hydromt update delwaq EM_piave -o ./EM_piave_extended -i delwaq_update_emission_cattle.ini -vv
 </pre></div>
 </div>
@@ -622,32 +609,34 @@ area_division = True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-10-06 06:32:26,573 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/hydromt.log.
-2021-10-06 06:32:26,574 - update - log - INFO - HydroMT version: 0.4.3
-2021-10-06 06:32:26,574 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave (r).
-2021-10-06 06:32:26,574 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended
-2021-10-06 06:32:26,574 - update - main - INFO - User settings:
-2021-10-06 06:32:26,610 - update - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2021-10-06 06:32:26,610 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2021-10-06 06:32:26,611 - update - delwaq - INFO - Reading model staticgeom files.
-2021-10-06 06:32:26,675 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave/staticdata/staticmaps.nc
-2021-10-06 06:32:26,685 - update - delwaq - INFO - Model read
-2021-10-06 06:32:26,689 - update - model_api - INFO - setup_emission_raster.emission_fn: glw_cattle
-2021-10-06 06:32:26,689 - update - model_api - INFO - setup_emission_raster.scale_method: average
-2021-10-06 06:32:26,689 - update - model_api - INFO - setup_emission_raster.fillna_method: zero
-2021-10-06 06:32:26,689 - update - model_api - INFO - setup_emission_raster.fillna_value: 0.0
-2021-10-06 06:32:26,689 - update - model_api - INFO - setup_emission_raster.area_division: True
-2021-10-06 06:32:26,689 - update - data_adapter - INFO - Adding sample data v0.0.5 from artifacts
-2021-10-06 06:32:26,757 - update - delwaq - INFO - Preparing &#39;glw_cattle&#39; map.
-2021-10-06 06:32:26,760 - update - data_adapter - INFO - DataCatalog: Getting glw_cattle RasterDataset raster data from /home/runner/.hydromt_data/data/v0.0.5/glw_cattle.tif
-2021-10-06 06:32:26,769 - update - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2021-10-06 06:32:26,787 - update - emissions - INFO - Deriving None using average resampling (nodata=-1.7e+308).
-2021-10-06 06:32:26,812 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended
-2021-10-06 06:32:26,831 - update - delwaq - INFO - Writing staticmap files.
-2021-10-06 06:32:26,879 - update - delwaq - INFO - Writing model staticgeom to file.
-2021-10-06 06:32:26,893 - update - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2021-10-06 06:32:26,893 - update - delwaq - INFO - Writing hydromap files.
-2021-10-06 06:32:26,961 - update - delwaq - WARNING - Warning: no dynamic map, skipping write_dynamicmaps.
+2022-04-26 12:25:27,864 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/hydromt.log.
+2022-04-26 12:25:27,864 - update - log - INFO - HydroMT version: 0.4.5
+2022-04-26 12:25:27,864 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave (r).
+2022-04-26 12:25:27,864 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended
+2022-04-26 12:25:27,864 - update - main - INFO - User settings:
+2022-04-26 12:25:27,872 - update - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
+2022-04-26 12:25:27,872 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-04-26 12:25:27,872 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave/hydromt.log.
+2022-04-26 12:25:27,873 - update - delwaq - INFO - Reading model staticgeom files.
+2022-04-26 12:25:28,333 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave/staticdata/staticmaps.nc
+2022-04-26 12:25:28,348 - update - delwaq - INFO - Model read
+2022-04-26 12:25:28,348 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended/hydromt.log.
+2022-04-26 12:25:28,352 - update - model_api - INFO - setup_emission_raster.emission_fn: glw_cattle
+2022-04-26 12:25:28,352 - update - model_api - INFO - setup_emission_raster.scale_method: average
+2022-04-26 12:25:28,352 - update - model_api - INFO - setup_emission_raster.fillna_method: zero
+2022-04-26 12:25:28,352 - update - model_api - INFO - setup_emission_raster.fillna_value: 0.0
+2022-04-26 12:25:28,352 - update - model_api - INFO - setup_emission_raster.area_division: True
+2022-04-26 12:25:28,352 - update - data_adapter - INFO - Adding sample data v0.0.6 from artifacts
+2022-04-26 12:25:28,419 - update - delwaq - INFO - Preparing &#39;glw_cattle&#39; map.
+2022-04-26 12:25:28,422 - update - data_adapter - INFO - DataCatalog: Getting glw_cattle RasterDataset raster data from /home/runner/.hydromt_data/data/v0.0.6/glw_cattle.tif
+2022-04-26 12:25:28,432 - update - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2022-04-26 12:25:28,450 - update - emissions - INFO - Deriving None using average resampling (nodata=-1.7e+308).
+2022-04-26 12:25:28,476 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_piave_extended
+2022-04-26 12:25:28,492 - update - delwaq - INFO - Writing staticmap files.
+2022-04-26 12:25:28,534 - update - delwaq - INFO - Writing model staticgeom to file.
+2022-04-26 12:25:28,547 - update - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
+2022-04-26 12:25:28,547 - update - delwaq - INFO - Writing hydromap files.
+2022-04-26 12:25:28,613 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>
@@ -667,8 +656,7 @@ area_division = True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Load the original and updated model with hydromt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the original and updated model with hydromt</span>
 <span class="n">mod</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;EM_piave_extended&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -677,8 +665,7 @@ area_division = True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Edit the lines below to change the emission map and its colormap</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Edit the lines below to change the emission map and its colormap</span>
 <span class="n">emissionmap</span> <span class="o">=</span> <span class="s1">&#39;glw_cattle&#39;</span>
 <span class="n">colormap</span> <span class="o">=</span> <span class="s1">&#39;Reds&#39;</span>
 

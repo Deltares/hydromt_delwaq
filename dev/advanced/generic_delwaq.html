@@ -328,29 +328,29 @@ Below is an example <a class="reference download internal" download="" href="../
 <li><p>the amount of the precipation that goes directly to surface runoff from paved areas</p></li>
 <li><p>the amount of the precipation that goes directly to surface runoff from unpaved areas</p></li>
 </ul>
-<div class="highlight-Ini notranslate"><div class="highlight"><pre><span></span><span class="k">[global]</span>
-<span class="na">mtype</span>             <span class="o">=</span> <span class="s">EM                    # type of Delwaq model [&#39;EM&#39;, &#39;WQ&#39;]</span>
-<span class="na">data_libs</span>         <span class="o">=</span> <span class="s">[local_sources.yml]                    # add optional paths to data yml files</span>
+<div class="highlight-Ini notranslate"><div class="highlight"><pre><span></span><span class="k">[global]</span><span class="w"></span>
+<span class="na">mtype</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="s">EM                    # type of Delwaq model [&#39;EM&#39;, &#39;WQ&#39;]</span><span class="w"></span>
+<span class="na">data_libs</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s">[local_sources.yml]                    # add optional paths to data yml files</span><span class="w"></span>
 
-<span class="k">[setup_basemaps]</span>
-<span class="na">include_soil</span>      <span class="o">=</span> <span class="s">False                 # add a soil compartment in addition to the surface waters</span>
+<span class="k">[setup_basemaps]</span><span class="w"></span>
+<span class="na">include_soil</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s">False                 # add a soil compartment in addition to the surface waters</span><span class="w"></span>
 
-<span class="k">[setup_monitoring]</span>
-<span class="na">mon_points</span>        <span class="o">=</span> <span class="s">None                  # monitoring points [&#39;None&#39;, &#39;segments&#39;, &#39;path to station location&#39;, &#39;source in DataCatalog&#39;]</span>
-<span class="na">mon_areas</span>         <span class="o">=</span> <span class="s">compartments          # monitoring areas [&#39;None&#39;, &#39;compartments&#39;, &#39;subcatch&#39;]</span>
+<span class="k">[setup_monitoring]</span><span class="w"></span>
+<span class="na">mon_points</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="s">None                  # monitoring points [&#39;None&#39;, &#39;segments&#39;, &#39;path to station location&#39;, &#39;source in DataCatalog&#39;]</span><span class="w"></span>
+<span class="na">mon_areas</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s">compartments          # monitoring areas [&#39;None&#39;, &#39;compartments&#39;, &#39;subcatch&#39;]</span><span class="w"></span>
 
-<span class="k">[setup_hydrology_forcing]</span>
-<span class="na">hydro_forcing_fn</span>  <span class="o">=</span> <span class="s">wflow_output          # source name of the hydrological forcing in the yaml file</span>
-<span class="na">starttime</span>         <span class="o">=</span> <span class="s">2010-02-03 00:00:00   # start time of the Delwaq run</span>
-<span class="na">endtime</span>           <span class="o">=</span> <span class="s">2010-02-10 00:00:00   # end time of the Delwaq run</span>
-<span class="na">timestepsecs</span>      <span class="o">=</span> <span class="s">86400                 # model timestep in seconds</span>
-<span class="na">add_volume_offset</span> <span class="o">=</span> <span class="s">True                  # add a one-timestep offset to the volume data in the hydrological forcing file compared to the flows</span>
+<span class="k">[setup_hydrology_forcing]</span><span class="w"></span>
+<span class="na">hydro_forcing_fn</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">wflow_output          # source name of the hydrological forcing in the yaml file</span><span class="w"></span>
+<span class="na">starttime</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s">2010-02-03 00:00:00   # start time of the Delwaq run</span><span class="w"></span>
+<span class="na">endtime</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="s">2010-02-10 00:00:00   # end time of the Delwaq run</span><span class="w"></span>
+<span class="na">timestepsecs</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s">86400                 # model timestep in seconds</span><span class="w"></span>
+<span class="na">add_volume_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True                  # add a one-timestep offset to the volume data in the hydrological forcing file compared to the flows</span><span class="w"></span>
 
-<span class="k">[setup_emission_raster]</span>
-<span class="na">emission_fn</span>       <span class="o">=</span> <span class="s">GHS-POP_2015</span>
-<span class="na">scale_method</span>      <span class="o">=</span> <span class="s">average</span>
-<span class="na">fillna_method</span>     <span class="o">=</span> <span class="s">zero</span>
-<span class="na">area_division</span>     <span class="o">=</span> <span class="s">True</span>
+<span class="k">[setup_emission_raster]</span><span class="w"></span>
+<span class="na">emission_fn</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s">GHS-POP_2015</span><span class="w"></span>
+<span class="na">scale_method</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s">average</span><span class="w"></span>
+<span class="na">fillna_method</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s">zero</span><span class="w"></span>
+<span class="na">area_division</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s">True</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -695,23 +695,23 @@ Below is an example <a class="reference download internal" download="" href="../
 <li><p>surface water volumes</p></li>
 <li><p>total water entering the surface waters (e.g. precipitation, exfiltration from the soil, evaporation…) in order to close the surface water mass balance</p></li>
 </ul>
-<div class="highlight-Ini notranslate"><div class="highlight"><pre><span></span><span class="k">[global]</span>
-<span class="na">mtype</span>             <span class="o">=</span> <span class="s">WQ                   # type of Delwaq model [&#39;EM&#39;, &#39;WQ&#39;]</span>
-<span class="na">data_libs</span>         <span class="o">=</span> <span class="s">[&#39;local_sources.yml&#39;] # add optional paths to data yml files</span>
+<div class="highlight-Ini notranslate"><div class="highlight"><pre><span></span><span class="k">[global]</span><span class="w"></span>
+<span class="na">mtype</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="s">WQ                   # type of Delwaq model [&#39;EM&#39;, &#39;WQ&#39;]</span><span class="w"></span>
+<span class="na">data_libs</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s">[&#39;local_sources.yml&#39;] # add optional paths to data yml files</span><span class="w"></span>
 
-<span class="k">[setup_basemaps]</span>
-<span class="na">include_soil</span>      <span class="o">=</span> <span class="s">False                # add a soil compartment in addition to the surface waters</span>
+<span class="k">[setup_basemaps]</span><span class="w"></span>
+<span class="na">include_soil</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s">False                # add a soil compartment in addition to the surface waters</span><span class="w"></span>
 
-<span class="k">[setup_monitoring]</span>
-<span class="na">mon_points</span>        <span class="o">=</span> <span class="s">segments             # monitoring points [&#39;None&#39;, &#39;segments&#39;, &#39;path to station location&#39;, &#39;source in DataCatalog&#39;]</span>
-<span class="na">mon_areas</span>         <span class="o">=</span> <span class="s">compartments         # monitoring areas [&#39;None&#39;, &#39;compartments&#39;, &#39;subcatch&#39;]</span>
+<span class="k">[setup_monitoring]</span><span class="w"></span>
+<span class="na">mon_points</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="s">segments             # monitoring points [&#39;None&#39;, &#39;segments&#39;, &#39;path to station location&#39;, &#39;source in DataCatalog&#39;]</span><span class="w"></span>
+<span class="na">mon_areas</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s">compartments         # monitoring areas [&#39;None&#39;, &#39;compartments&#39;, &#39;subcatch&#39;]</span><span class="w"></span>
 
-<span class="k">[setup_hydrology_forcing]</span>
-<span class="na">hydro_forcing_fn</span>  <span class="o">=</span> <span class="s">wflow_output         # source name of the hydrological forcing in the yaml file</span>
-<span class="na">starttime</span>         <span class="o">=</span> <span class="s">2010-02-03 00:00:00  # start time of the Delwaq run</span>
-<span class="na">endtime</span>           <span class="o">=</span> <span class="s">2010-02-10 00:00:00  # end time of the Delwaq run</span>
-<span class="na">timestepsecs</span>      <span class="o">=</span> <span class="s">86400                # model timestep in seconds</span>
-<span class="na">add_volume_offset</span> <span class="o">=</span> <span class="s">true                 # add a one-timestep offset to the volume data in the hydrological forcing file compared to the flows</span>
+<span class="k">[setup_hydrology_forcing]</span><span class="w"></span>
+<span class="na">hydro_forcing_fn</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">wflow_output         # source name of the hydrological forcing in the yaml file</span><span class="w"></span>
+<span class="na">starttime</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s">2010-02-03 00:00:00  # start time of the Delwaq run</span><span class="w"></span>
+<span class="na">endtime</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="s">2010-02-10 00:00:00  # end time of the Delwaq run</span><span class="w"></span>
+<span class="na">timestepsecs</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s">86400                # model timestep in seconds</span><span class="w"></span>
+<span class="na">add_volume_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true                 # add a one-timestep offset to the volume data in the hydrological forcing file compared to the flows</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="admonition note">

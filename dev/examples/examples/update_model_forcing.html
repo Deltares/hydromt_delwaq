@@ -16,8 +16,8 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -325,7 +325,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -398,8 +398,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
 </pre></div>
 </div>
 </div>
@@ -407,8 +406,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># import hydromt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import hydromt</span>
 <span class="kn">import</span> <span class="nn">hydromt</span>
 </pre></div>
 </div>
@@ -417,8 +415,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># setup logging</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setup logging</span>
 <span class="kn">from</span>  <span class="nn">hydromt.log</span> <span class="kn">import</span> <span class="n">setuplog</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">setuplog</span><span class="p">(</span><span class="s2">&quot;update_model_forcing&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
@@ -429,7 +426,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-10-06 06:33:16,143 - update_model_forcing - log - INFO - HydroMT version: 0.4.3
+2022-04-26 12:26:24,506 - update_model_forcing - log - INFO - HydroMT version: 0.4.5
 </pre></div></div>
 </div>
 </section>
@@ -459,8 +456,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fn_ini</span> <span class="o">=</span> <span class="s1">&#39;wflow_update.ini&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fn_ini</span> <span class="o">=</span> <span class="s1">&#39;wflow_update.ini&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_ini</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
@@ -495,8 +491,7 @@ output.lateral.land.to_river = &#34;inwint&#34;
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">!</span> hydromt update wflow wflow_piave -i wflow_update.ini -vvv
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> hydromt update wflow wflow_piave -i wflow_update.ini -vvv
 </pre></div>
 </div>
 </div>
@@ -505,22 +500,22 @@ output.lateral.land.to_river = &#34;inwint&#34;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-10-06 06:33:17,718 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/hydromt.log.
-2021-10-06 06:33:17,718 - update - log - INFO - HydroMT version: 0.4.3
-2021-10-06 06:33:17,718 - update - main - INFO - Updating wflow model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave (r+).
-2021-10-06 06:33:17,718 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
-2021-10-06 06:33:17,718 - update - main - INFO - User settings:
-2021-10-06 06:33:17,753 - update - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.3)
-2021-10-06 06:33:17,753 - update - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.3).
-2021-10-06 06:33:17,756 - update - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
-2021-10-06 06:33:17,756 - update - wflow - INFO - Reading model staticgeom files.
-2021-10-06 06:33:17,789 - update - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
-2021-10-06 06:33:17,851 - update - model_api - DEBUG - Setting model config options.
-2021-10-06 06:33:17,851 - update - wflow - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
-2021-10-06 06:33:17,851 - update - data_adapter - INFO - Adding sample data v0.0.5 from artifacts
-2021-10-06 06:33:17,960 - update - model_api - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
-2021-10-06 06:33:17,961 - update - wflow - INFO - Write staticmaps to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
-2021-10-06 06:33:18,403 - update - wflow - INFO - Writing model staticgeom to file.
+2022-04-26 12:26:26,511 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/hydromt.log.
+2022-04-26 12:26:26,511 - update - log - INFO - HydroMT version: 0.4.5
+2022-04-26 12:26:26,511 - update - main - INFO - Updating wflow model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave (r+).
+2022-04-26 12:26:26,511 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
+2022-04-26 12:26:26,511 - update - main - INFO - User settings:
+2022-04-26 12:26:26,518 - update - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.4)
+2022-04-26 12:26:26,518 - update - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.4).
+2022-04-26 12:26:26,520 - update - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
+2022-04-26 12:26:26,521 - update - wflow - INFO - Reading model staticgeom files.
+2022-04-26 12:26:26,557 - update - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
+2022-04-26 12:26:26,616 - update - model_api - DEBUG - Setting model config options.
+2022-04-26 12:26:26,616 - update - wflow - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave
+2022-04-26 12:26:26,616 - update - data_adapter - INFO - Adding sample data v0.0.6 from artifacts
+2022-04-26 12:26:26,722 - update - model_api - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
+2022-04-26 12:26:26,723 - update - wflow - INFO - Write staticmaps to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
+2022-04-26 12:26:27,143 - update - wflow - INFO - Writing model staticgeom to file.
 
 </pre></div></div>
 </div>
@@ -542,8 +537,7 @@ output.lateral.land.to_river = &#34;inwint&#34;
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Open the file</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Open the file</span>
 <span class="n">wflow_output_fn</span> <span class="o">=</span> <span class="s1">&#39;wflow_piave/run_default/output.nc&#39;</span>
 <span class="n">outputs</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">wflow_output_fn</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">})</span>
 <span class="c1">#Print available variables and start and end time</span>
@@ -558,14 +552,14 @@ output.lateral.land.to_river = &#34;inwint&#34;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Available outputs from wflow: Data variables: (12/13)
+Available outputs from wflow: Data variables:
     runPav     (time, lat, lon) float32 dask.array&lt;chunksize=(9, 53, 58), meta=np.ndarray&gt;
     vol_river  (time, lat, lon) float32 dask.array&lt;chunksize=(9, 53, 58), meta=np.ndarray&gt;
     h_river    (time, lat, lon) float32 dask.array&lt;chunksize=(9, 53, 58), meta=np.ndarray&gt;
     inwint     (time, lat, lon) float32 dask.array&lt;chunksize=(9, 53, 58), meta=np.ndarray&gt;
     runUnp     (time, lat, lon) float32 dask.array&lt;chunksize=(9, 53, 58), meta=np.ndarray&gt;
     q_land     (time, lat, lon) float32 dask.array&lt;chunksize=(9, 53, 58), meta=np.ndarray&gt;
-    ...         ...
+    prec       (time, lat, lon) float32 dask.array&lt;chunksize=(9, 53, 58), meta=np.ndarray&gt;
     h_land     (time, lat, lon) float32 dask.array&lt;chunksize=(9, 53, 58), meta=np.ndarray&gt;
     inf        (time, lat, lon) float32 dask.array&lt;chunksize=(9, 53, 58), meta=np.ndarray&gt;
     vol_land   (time, lat, lon) float32 dask.array&lt;chunksize=(9, 53, 58), meta=np.ndarray&gt;
@@ -585,8 +579,7 @@ Outputs available from 2010-02-02T00:00:00.000000000 to 2010-02-10T00:00:00.0000
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fn_yml</span> <span class="o">=</span> <span class="s1">&#39;local_sources.yml&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fn_yml</span> <span class="o">=</span> <span class="s1">&#39;local_sources.yml&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_yml</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
@@ -661,8 +654,7 @@ wflow_output:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fn_ini</span> <span class="o">=</span> <span class="s1">&#39;delwaq_update_EM_forcing.ini&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fn_ini</span> <span class="o">=</span> <span class="s1">&#39;delwaq_update_EM_forcing.ini&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_ini</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
@@ -697,8 +689,7 @@ add_volume_offset = True                  # add a one-timestep offset to the vol
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Print the options available from the update command</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print the options available from the update command</span>
 <span class="o">!</span> hydromt update --help
 </pre></div>
 </div>
@@ -710,8 +701,8 @@ add_volume_offset = True                  # add a one-timestep offset to the vol
 <div class="highlight"><pre>
 Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
 
-  Update a specific component of a model. Set an output directory to copy
-  the edited model to a new folder, otherwise maps are overwritten.
+  Update a specific component of a model. Set an output directory to copy the
+  edited model to a new folder, otherwise maps are overwritten.
 
   Example usage:
   --------------
@@ -725,22 +716,17 @@ Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
 Options:
   -o, --model-out DIRECTORY  Output model folder. Maps in MODEL_ROOT are
                              overwritten if left empty.
-
   -c, --components TEXT      Model components from ini file to run
   --opt TEXT                 Component specific keyword arguments, see the
                              setup_&lt;component&gt; method of the specific model
                              for more information about the arguments.
-
   -i, --config PATH          Path to hydroMT configuration file, for the model
                              specific implementation.
-
   -d, --data PATH            File path to yml data sources file. See
                              documentation for required yml file format.
-
   --dd, --deltares-data      Parse default deltares data yml from
                              https://github.com/DirkEilander/hydromt-
                              artifacts/releases
-
   -q, --quiet                Decrease verbosity.
   -v, --verbose              Increase verbosity.
   --help                     Show this message and exit.
@@ -754,8 +740,7 @@ Options:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
 <span class="o">!</span> hydromt update delwaq ./EM_test_full -i delwaq_update_EM_forcing.ini -d local_sources.yml -vv
 </pre></div>
 </div>
@@ -765,41 +750,41 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-10-06 06:33:22,278 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/hydromt.log.
-2021-10-06 06:33:22,279 - update - log - INFO - HydroMT version: 0.4.3
-2021-10-06 06:33:22,279 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full (r+).
-2021-10-06 06:33:22,279 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
-2021-10-06 06:33:22,279 - update - main - INFO - Additional data sources: (&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_sources.yml&#39;,)
-2021-10-06 06:33:22,279 - update - main - INFO - User settings:
-2021-10-06 06:33:22,314 - update - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2021-10-06 06:33:22,315 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2021-10-06 06:33:22,319 - update - delwaq - INFO - Reading model staticgeom files.
-2021-10-06 06:33:22,330 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/staticdata/staticmaps.nc
-2021-10-06 06:33:22,343 - update - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
-2021-10-06 06:33:22,344 - update - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2021-10-06 06:33:22,344 - update - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2021-10-06 06:33:22,344 - update - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
-2021-10-06 06:33:22,344 - update - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
-2021-10-06 06:33:22,344 - update - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
-2021-10-06 06:33:22,344 - update - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
-2021-10-06 06:33:22,347 - update - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/run_default/output.nc
-2021-10-06 06:33:22,371 - update - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2021-10-06 06:33:22,480 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/delwaq.inp
-2021-10-06 06:33:22,480 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
-2021-10-06 06:33:22,496 - update - delwaq - INFO - Writing staticmap files.
-2021-10-06 06:33:22,506 - update - delwaq - INFO - Writing model staticgeom to file.
-2021-10-06 06:33:22,519 - update - delwaq - INFO - Writing model config to file.
-2021-10-06 06:33:22,520 - update - delwaq - WARNING - No updated maps. Skipping writing to file.
-2021-10-06 06:33:22,543 - update - delwaq - INFO - Writing dynamicmap files.
-2021-10-06 06:33:22,543 - update - delwaq - INFO - Writting dynamic data for timestep 1/8
-2021-10-06 06:33:22,558 - update - delwaq - INFO - Writting dynamic data for timestep 2/8
-2021-10-06 06:33:22,573 - update - delwaq - INFO - Writting dynamic data for timestep 3/8
-2021-10-06 06:33:22,590 - update - delwaq - INFO - Writting dynamic data for timestep 4/8
-2021-10-06 06:33:22,604 - update - delwaq - INFO - Writting dynamic data for timestep 5/8
-2021-10-06 06:33:22,619 - update - delwaq - INFO - Writting dynamic data for timestep 6/8
-2021-10-06 06:33:22,633 - update - delwaq - INFO - Writting dynamic data for timestep 7/8
-2021-10-06 06:33:22,648 - update - delwaq - INFO - Writting dynamic data for timestep 8/8
-2021-10-06 06:33:22,663 - update - delwaq - INFO - Writting waqgeom.nc file
+2022-04-26 12:26:32,057 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/hydromt.log.
+2022-04-26 12:26:32,057 - update - log - INFO - HydroMT version: 0.4.5
+2022-04-26 12:26:32,057 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full (r+).
+2022-04-26 12:26:32,057 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
+2022-04-26 12:26:32,057 - update - main - INFO - Additional data sources: (&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/local_sources.yml&#39;,)
+2022-04-26 12:26:32,057 - update - main - INFO - User settings:
+2022-04-26 12:26:32,065 - update - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
+2022-04-26 12:26:32,065 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-04-26 12:26:32,069 - update - delwaq - INFO - Reading model staticgeom files.
+2022-04-26 12:26:32,080 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/staticdata/staticmaps.nc
+2022-04-26 12:26:32,097 - update - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
+2022-04-26 12:26:32,097 - update - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2022-04-26 12:26:32,097 - update - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2022-04-26 12:26:32,097 - update - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2022-04-26 12:26:32,098 - update - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
+2022-04-26 12:26:32,098 - update - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
+2022-04-26 12:26:32,098 - update - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
+2022-04-26 12:26:32,101 - update - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/run_default/output.nc
+2022-04-26 12:26:32,125 - update - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2022-04-26 12:26:32,233 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full/delwaq.inp
+2022-04-26 12:26:32,233 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/EM_test_full
+2022-04-26 12:26:32,246 - update - delwaq - INFO - Writing staticmap files.
+2022-04-26 12:26:32,257 - update - delwaq - INFO - Writing model staticgeom to file.
+2022-04-26 12:26:32,270 - update - delwaq - INFO - Writing model config to file.
+2022-04-26 12:26:32,271 - update - delwaq - WARNING - No updated maps. Skipping writing to file.
+2022-04-26 12:26:32,292 - update - delwaq - INFO - Writing dynamicmap files.
+2022-04-26 12:26:32,292 - update - delwaq - INFO - Writting dynamic data for timestep 1/8
+2022-04-26 12:26:32,309 - update - delwaq - INFO - Writting dynamic data for timestep 2/8
+2022-04-26 12:26:32,324 - update - delwaq - INFO - Writting dynamic data for timestep 3/8
+2022-04-26 12:26:32,339 - update - delwaq - INFO - Writting dynamic data for timestep 4/8
+2022-04-26 12:26:32,355 - update - delwaq - INFO - Writting dynamic data for timestep 5/8
+2022-04-26 12:26:32,371 - update - delwaq - INFO - Writting dynamic data for timestep 6/8
+2022-04-26 12:26:32,388 - update - delwaq - INFO - Writting dynamic data for timestep 7/8
+2022-04-26 12:26:32,403 - update - delwaq - INFO - Writting dynamic data for timestep 8/8
+2022-04-26 12:26:32,418 - update - delwaq - INFO - Writting waqgeom.nc file
 
 </pre></div></div>
 </div>
@@ -819,8 +804,7 @@ Options:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">root</span> <span class="o">=</span> <span class="s1">&#39;EM_test_full&#39;</span>
 <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -839,44 +823,45 @@ Options:
 EM_test_full
  - hydromt.log
 EM_test_full/config
- - B2_outputtimes.inc
- - B5_boundlist.inc
  - B2_sysclock.inc
- - B2_nrofmon.inc
- - B3_attributes.inc
- - B7_geometry.inc
- - B7_geometry-parameters.inc
- - B2_stations.inc
- - B2_timers_only.inc
- - B7_geometry.bin
- - B4_nrofexch.inc
- - B3_nrofseg.inc
  - B7_hydrology.inc
- - B3_waqgeom.nc
+ - B7_surf.inc
+ - B5_boundlist.inc
+ - B7_geometry-parameters.inc
+ - B4_nrofexch.inc
+ - B2_nrofmon.inc
  - B1_timestamp.inc
+ - B3_attributes.inc
  - B2_timers.inc
+ - B2_outputtimes.inc
+ - B7_geometry.bin
+ - B2_timers_only.inc
+ - B3_waqgeom.nc
  - B2_monareas.inc
-EM_test_full/hydromodel
- - ldd.tif
- - rivwth.tif
- - rivlen.tif
- - basins.tif
- - modelmap.tif
- - ptid.tif
-EM_test_full/staticgeoms
- - monareas.geojson
- - basins.geojson
-EM_test_full/fews
-EM_test_full/dynamicdata
- - hydrology.bin
+ - B3_nrofseg.inc
+ - B2_stations.inc
+ - B7_geometry.inc
 EM_test_full/staticdata
  - ghs_smod_2015.dat
- - streamorder.dat
- - gdp_world.dat
- - river.dat
- - ghs_pop_2015.dat
  - staticmaps.nc
+ - river.dat
  - slope.dat
+ - gdp_world.dat
+ - ghs_pop_2015.dat
+ - streamorder.dat
+EM_test_full/dynamicdata
+ - hydrology.bin
+EM_test_full/staticgeoms
+ - basins.geojson
+ - monareas.geojson
+EM_test_full/fews
+EM_test_full/hydromodel
+ - modelmap.tif
+ - ldd.tif
+ - basins.tif
+ - ptid.tif
+ - rivwth.tif
+ - rivlen.tif
 </pre></div></div>
 </div>
 <p>You can have a look at some of these files:</p>
@@ -884,8 +869,7 @@ EM_test_full/staticdata
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./EM_test_full&#39;</span>
 <span class="n">fn_config</span> <span class="o">=</span> <span class="s1">&#39;config/B1_timestamp.inc&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="n">fn_config</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -913,8 +897,7 @@ EM_test_full/staticdata
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./EM_test_full&#39;</span>
 <span class="n">fn_config</span> <span class="o">=</span> <span class="s1">&#39;config/B7_hydrology.inc&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="n">fn_config</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>

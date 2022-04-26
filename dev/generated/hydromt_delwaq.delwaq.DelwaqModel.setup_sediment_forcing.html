@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hydromt_delwaq.delwaq.DelwaqModel.setup_config &mdash; hydromt_delwaq  documentation</title>
+  <title>hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing &mdash; hydromt_delwaq  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps" href="hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps.html" />
-    <link rel="prev" title="Model components" href="../user_guide/components.html" /> 
+    <link rel="next" title="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster" href="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster.html" />
+    <link rel="prev" title="hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing" href="hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,11 +50,11 @@
 <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../user_guide/components.html">Model components</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">hydromt_delwaq.delwaq.DelwaqModel.setup_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_config.html">hydromt_delwaq.delwaq.DelwaqModel.setup_config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps.html">hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring.html">hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing.html">hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing.html">hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster.html">hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector.html">hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_mapping.html">hydromt_delwaq.delwaq.DelwaqModel.setup_emission_mapping</a></li>
@@ -91,9 +91,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../user_guide/components.html">Model components</a> &raquo;</li>
-      <li>hydromt_delwaq.delwaq.DelwaqModel.setup_config</li>
+      <li>hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_config.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -125,12 +125,32 @@
     text-align: unset;
 }
 </style>
-<section id="hydromt-delwaq-delwaq-delwaqmodel-setup-config">
-<h1>hydromt_delwaq.delwaq.DelwaqModel.setup_config<a class="headerlink" href="#hydromt-delwaq-delwaq-delwaqmodel-setup-config" title="Permalink to this headline"></a></h1>
+<section id="hydromt-delwaq-delwaq-delwaqmodel-setup-sediment-forcing">
+<h1>hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing<a class="headerlink" href="#hydromt-delwaq-delwaq-delwaqmodel-setup-sediment-forcing" title="Permalink to this headline"></a></h1>
 <dl class="py method">
-<dt class="sig sig-object py" id="hydromt_delwaq.delwaq.DelwaqModel.setup_config">
-<span class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></span><span class="sig-name descname"><span class="pre">setup_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">cfdict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hydromt_delwaq.delwaq.DelwaqModel.setup_config" title="Permalink to this definition"></a></dt>
-<dd><p>Update config with a dictionary</p>
+<dt class="sig sig-object py" id="hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing">
+<span class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></span><span class="sig-name descname"><span class="pre">setup_sediment_forcing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sediment_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['IM1',</span> <span class="pre">'IM2',</span> <span class="pre">'IM3',</span> <span class="pre">'IM4',</span> <span class="pre">'IM5']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.setup_sediment_forcing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing" title="Permalink to this definition"></a></dt>
+<dd><p>Setup Delwaq hydrological fluxes.</p>
+<p>Adds model layers:</p>
+<ul class="simple">
+<li><p><strong>sediment.bin</strong> dynmap: sediment particles from land erosion (fErodIM*) [g/timestep]</p></li>
+<li><p><strong>B7_sediment.inc</strong> config: names of sediment fluxes included in sediment.bin</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sediment_fn</strong> (<em>{'None'</em><em>, </em><em>'name in local_sources.yml'}</em>) – <p>Either None, or name in a local or global data_sources.yml file. Can contain several
+particule sizes (IM1, IM2 etc)</p>
+<ul>
+<li><p>Required variables: [‘ErodIM*’]</p></li>
+</ul>
+</p></li>
+<li><p><strong>startime</strong> (<em>str</em>) – Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS</p></li>
+<li><p><strong>endtime</strong> (<em>str</em>) – Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS</p></li>
+<li><p><strong>particle_class</strong> (<em>str list</em><em>, </em><em>optional</em>) – List of particle classes to consider. By default 5 classes: [‘IM1’, ‘IM2’, ‘IM3’, ‘IM4’, ‘IM5’]</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -139,8 +159,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../user_guide/components.html" class="btn btn-neutral float-left" title="Model components" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps.html" class="btn btn-neutral float-right" title="hydromt_delwaq.delwaq.DelwaqModel.setup_basemaps" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing.html" class="btn btn-neutral float-left" title="hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster.html" class="btn btn-neutral float-right" title="hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

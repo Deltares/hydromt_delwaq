@@ -16,8 +16,8 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -320,7 +320,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -392,8 +392,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># this should return &quot;delwaq, wflow, wflow_sediment&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># this should return &quot;delwaq, wflow, wflow_sediment&quot;</span>
 <span class="o">!</span>hydromt --models
 </pre></div>
 </div>
@@ -403,7 +402,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-hydroMT model plugins: wflow (v0.1.3), wflow_sediment (v0.1.3), delwaq (v0.1.3.dev0)
+hydroMT model plugins: wflow (v0.1.4), wflow_sediment (v0.1.4), delwaq (v0.1.3.dev0)
 
 </pre></div></div>
 </div>
@@ -412,8 +411,7 @@ hydroMT model plugins: wflow (v0.1.3), wflow_sediment (v0.1.3), delwaq (v0.1.3.d
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">!</span>hydromt build --help
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>hydromt build --help
 </pre></div>
 </div>
 </div>
@@ -444,17 +442,13 @@ Options:
   --opt TEXT                  Component specific keyword arguments, see the
                               setup_&lt;component&gt; method of the specific model
                               for more information about the arguments.
-
   -i, --config PATH           Path to hydroMT configuration file, for the
                               model specific implementation.
-
   -d, --data PATH             File path to yml data sources file. See
                               documentation for required yml file format.
-
   --dd, --deltares-data       Parse default deltares data yml from
                               https://github.com/DirkEilander/hydromt-
                               artifacts/releases
-
   -q, --quiet                 Decrease verbosity.
   -v, --verbose               Increase verbosity.
   --help                      Show this message and exit.
@@ -470,8 +464,7 @@ Options:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
 <span class="o">!</span>hydromt build delwaq <span class="s2">&quot;./WQ_test_base&quot;</span> <span class="s2">&quot;{&#39;wflow&#39;: &#39;wflow_piave&#39;}&quot;</span> --opt global.mtype<span class="o">=</span>WQ -vvv
 </pre></div>
 </div>
@@ -481,27 +474,28 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-10-06 06:33:00,862 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base/hydromt.log.
-2021-10-06 06:33:00,862 - build - log - INFO - HydroMT version: 0.4.3
-2021-10-06 06:33:00,862 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base.
-2021-10-06 06:33:00,862 - build - main - INFO - User settings:
-2021-10-06 06:33:00,898 - build - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2021-10-06 06:33:00,898 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2021-10-06 06:33:00,898 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2021-10-06 06:33:00,899 - build - model_api - INFO - setup_basemaps.include_soil: False
-2021-10-06 06:33:00,899 - build - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.3)
-2021-10-06 06:33:00,899 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.3).
-2021-10-06 06:33:00,899 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f4c36388a30&gt;}
-2021-10-06 06:33:00,899 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2021-10-06 06:33:00,901 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
-2021-10-06 06:33:00,902 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
-2021-10-06 06:33:01,752 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2021-10-06 06:33:01,753 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base
-2021-10-06 06:33:01,763 - build - delwaq - INFO - Writing staticmap files.
-2021-10-06 06:33:01,773 - build - delwaq - INFO - Writing model config to file.
-2021-10-06 06:33:01,773 - build - delwaq - INFO - Writing hydromap files.
-2021-10-06 06:33:01,814 - build - delwaq - INFO - Writting pointer file in root/config
-2021-10-06 06:33:01,829 - build - delwaq - WARNING - Warning: no dynamic map, skipping write_dynamicmaps.
+2022-04-26 12:26:07,250 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base/hydromt.log.
+2022-04-26 12:26:07,250 - build - log - INFO - HydroMT version: 0.4.5
+2022-04-26 12:26:07,250 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base.
+2022-04-26 12:26:07,250 - build - main - INFO - User settings:
+2022-04-26 12:26:07,257 - build - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
+2022-04-26 12:26:07,257 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-04-26 12:26:07,258 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2022-04-26 12:26:07,258 - build - model_api - INFO - setup_basemaps.include_soil: False
+2022-04-26 12:26:07,258 - build - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.4)
+2022-04-26 12:26:07,258 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.4).
+2022-04-26 12:26:07,258 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/hydromt.log.
+2022-04-26 12:26:07,258 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f9dae4cda30&gt;}
+2022-04-26 12:26:07,258 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2022-04-26 12:26:07,261 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
+2022-04-26 12:26:07,261 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
+2022-04-26 12:26:08,180 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
+2022-04-26 12:26:08,180 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_base
+2022-04-26 12:26:08,189 - build - delwaq - INFO - Writing staticmap files.
+2022-04-26 12:26:08,199 - build - delwaq - INFO - Writing model config to file.
+2022-04-26 12:26:08,199 - build - delwaq - INFO - Writing hydromap files.
+2022-04-26 12:26:08,235 - build - delwaq - INFO - Writting pointer file in root/config
+2022-04-26 12:26:08,250 - build - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>
@@ -527,8 +521,7 @@ Quality)</a>.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fn_ini</span> <span class="o">=</span> <span class="s1">&#39;delwaq_build_WQ.ini&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fn_ini</span> <span class="o">=</span> <span class="s1">&#39;delwaq_build_WQ.ini&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_ini</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
@@ -581,8 +574,7 @@ add_volume_offset = True                 # add a one-timestep offset to the volu
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
 <span class="o">!</span>hydromt build delwaq <span class="s2">&quot;./WQ_test_full&quot;</span> <span class="s2">&quot;{&#39;wflow&#39;: &#39;wflow_piave&#39;}&quot;</span> -i delwaq_build_WQ.ini -vv
 </pre></div>
 </div>
@@ -592,52 +584,53 @@ add_volume_offset = True                 # add a one-timestep offset to the volu
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-10-06 06:33:03,743 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full/hydromt.log.
-2021-10-06 06:33:03,743 - build - log - INFO - HydroMT version: 0.4.3
-2021-10-06 06:33:03,743 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full.
-2021-10-06 06:33:03,743 - build - main - INFO - User settings:
-2021-10-06 06:33:03,779 - build - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2021-10-06 06:33:03,779 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2021-10-06 06:33:03,783 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2021-10-06 06:33:03,783 - build - model_api - INFO - setup_basemaps.include_soil: False
-2021-10-06 06:33:03,783 - build - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.3)
-2021-10-06 06:33:03,783 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.3).
-2021-10-06 06:33:03,784 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7ffa527a7700&gt;}
-2021-10-06 06:33:03,784 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2021-10-06 06:33:03,786 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
-2021-10-06 06:33:03,786 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
-2021-10-06 06:33:04,643 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2021-10-06 06:33:04,643 - build - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
-2021-10-06 06:33:04,643 - build - model_api - INFO - setup_monitoring.mon_areas: compartments
-2021-10-06 06:33:04,643 - build - delwaq - INFO - Setting monitoring points and areas
-2021-10-06 06:33:04,651 - build - data_adapter - INFO - DataCatalog: Getting gauges GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
-2021-10-06 06:33:04,652 - build - data_adapter - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
-2021-10-06 06:33:04,669 - build - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
-2021-10-06 06:33:04,678 - build - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
-2021-10-06 06:33:04,678 - build - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2021-10-06 06:33:04,678 - build - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2021-10-06 06:33:04,678 - build - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
-2021-10-06 06:33:04,678 - build - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
-2021-10-06 06:33:04,678 - build - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
-2021-10-06 06:33:04,678 - build - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
-2021-10-06 06:33:04,681 - build - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/run_default/output.nc
-2021-10-06 06:33:04,705 - build - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2021-10-06 06:33:04,783 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full
-2021-10-06 06:33:04,798 - build - delwaq - INFO - Writing staticmap files.
-2021-10-06 06:33:04,811 - build - delwaq - INFO - Writing model staticgeom to file.
-2021-10-06 06:33:04,836 - build - delwaq - INFO - Writing model config to file.
-2021-10-06 06:33:04,837 - build - delwaq - INFO - Writing hydromap files.
-2021-10-06 06:33:04,877 - build - delwaq - INFO - Writting pointer file in root/config
-2021-10-06 06:33:04,905 - build - delwaq - INFO - Writing dynamicmap files.
-2021-10-06 06:33:04,906 - build - delwaq - INFO - Writting dynamic data for timestep 1/8
-2021-10-06 06:33:04,924 - build - delwaq - INFO - Writting dynamic data for timestep 2/8
-2021-10-06 06:33:04,940 - build - delwaq - INFO - Writting dynamic data for timestep 3/8
-2021-10-06 06:33:04,957 - build - delwaq - INFO - Writting dynamic data for timestep 4/8
-2021-10-06 06:33:04,973 - build - delwaq - INFO - Writting dynamic data for timestep 5/8
-2021-10-06 06:33:04,989 - build - delwaq - INFO - Writting dynamic data for timestep 6/8
-2021-10-06 06:33:05,005 - build - delwaq - INFO - Writting dynamic data for timestep 7/8
-2021-10-06 06:33:05,021 - build - delwaq - INFO - Writting dynamic data for timestep 8/8
-2021-10-06 06:33:05,037 - build - delwaq - INFO - Writting waqgeom.nc file
+2022-04-26 12:26:10,653 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full/hydromt.log.
+2022-04-26 12:26:10,653 - build - log - INFO - HydroMT version: 0.4.5
+2022-04-26 12:26:10,653 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full.
+2022-04-26 12:26:10,653 - build - main - INFO - User settings:
+2022-04-26 12:26:10,661 - build - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
+2022-04-26 12:26:10,661 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-04-26 12:26:10,665 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2022-04-26 12:26:10,665 - build - model_api - INFO - setup_basemaps.include_soil: False
+2022-04-26 12:26:10,665 - build - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.4)
+2022-04-26 12:26:10,665 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.4).
+2022-04-26 12:26:10,665 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/hydromt.log.
+2022-04-26 12:26:10,666 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f7fd5fcc9a0&gt;}
+2022-04-26 12:26:10,666 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2022-04-26 12:26:10,668 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/wflow_sbm.toml
+2022-04-26 12:26:10,668 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticmaps.nc
+2022-04-26 12:26:11,594 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
+2022-04-26 12:26:11,594 - build - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
+2022-04-26 12:26:11,594 - build - model_api - INFO - setup_monitoring.mon_areas: compartments
+2022-04-26 12:26:11,594 - build - delwaq - INFO - Setting monitoring points and areas
+2022-04-26 12:26:11,602 - build - data_adapter - INFO - DataCatalog: Getting gauges GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
+2022-04-26 12:26:11,603 - build - data_adapter - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
+2022-04-26 12:26:11,621 - build - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/staticgeoms/gauges.geojson
+2022-04-26 12:26:11,629 - build - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
+2022-04-26 12:26:11,629 - build - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2022-04-26 12:26:11,629 - build - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2022-04-26 12:26:11,629 - build - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2022-04-26 12:26:11,629 - build - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
+2022-04-26 12:26:11,629 - build - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
+2022-04-26 12:26:11,629 - build - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
+2022-04-26 12:26:11,632 - build - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/wflow_piave/run_default/output.nc
+2022-04-26 12:26:11,657 - build - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2022-04-26 12:26:11,733 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_test_full
+2022-04-26 12:26:11,747 - build - delwaq - INFO - Writing staticmap files.
+2022-04-26 12:26:11,759 - build - delwaq - INFO - Writing model staticgeom to file.
+2022-04-26 12:26:11,786 - build - delwaq - INFO - Writing model config to file.
+2022-04-26 12:26:11,786 - build - delwaq - INFO - Writing hydromap files.
+2022-04-26 12:26:11,821 - build - delwaq - INFO - Writting pointer file in root/config
+2022-04-26 12:26:11,849 - build - delwaq - INFO - Writing dynamicmap files.
+2022-04-26 12:26:11,849 - build - delwaq - INFO - Writting dynamic data for timestep 1/8
+2022-04-26 12:26:11,868 - build - delwaq - INFO - Writting dynamic data for timestep 2/8
+2022-04-26 12:26:11,886 - build - delwaq - INFO - Writting dynamic data for timestep 3/8
+2022-04-26 12:26:11,901 - build - delwaq - INFO - Writting dynamic data for timestep 4/8
+2022-04-26 12:26:11,916 - build - delwaq - INFO - Writting dynamic data for timestep 5/8
+2022-04-26 12:26:11,931 - build - delwaq - INFO - Writting dynamic data for timestep 6/8
+2022-04-26 12:26:11,947 - build - delwaq - INFO - Writting dynamic data for timestep 7/8
+2022-04-26 12:26:11,962 - build - delwaq - INFO - Writting dynamic data for timestep 8/8
+2022-04-26 12:26:11,979 - build - delwaq - INFO - Writting waqgeom.nc file
 
 </pre></div></div>
 </div>
@@ -656,8 +649,7 @@ add_volume_offset = True                 # add a one-timestep offset to the volu
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">root</span> <span class="o">=</span> <span class="s1">&#39;WQ_test_full&#39;</span>
 <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -676,45 +668,45 @@ add_volume_offset = True                 # add a one-timestep offset to the volu
 WQ_test_full
  - hydromt.log
 WQ_test_full/config
- - B2_outputtimes.inc
- - B5_boundlist.inc
  - B2_sysclock.inc
- - B2_nrofmon.inc
- - B3_attributes.inc
- - B4_pointer.poi
- - B2_stations.inc
- - B2_timers_only.inc
- - B4_pointer.inc
+ - B5_boundlist.inc
  - B4_nrofexch.inc
- - B3_nrofseg.inc
- - B3_waqgeom.nc
+ - B4_pointer.poi
+ - B2_nrofmon.inc
  - B1_timestamp.inc
+ - B3_attributes.inc
  - B2_timers.inc
+ - B2_outputtimes.inc
  - B2_stations-balance.inc
+ - B2_timers_only.inc
+ - B3_waqgeom.nc
  - B2_monareas.inc
-WQ_test_full/hydromodel
- - ldd.tif
- - rivwth.tif
- - ptiddown.tif
- - rivlen.tif
- - basins.tif
- - modelmap.tif
- - ptid.tif
-WQ_test_full/staticgeoms
- - monareas.geojson
- - basins.geojson
- - monpoints.geojson
-WQ_test_full/fews
-WQ_test_full/dynamicdata
- - flow.dat
- - volume.dat
+ - B3_nrofseg.inc
+ - B2_stations.inc
+ - B4_pointer.inc
 WQ_test_full/staticdata
- - streamorder.dat
- - river.dat
  - staticmaps.nc
+ - river.dat
  - slope.dat
  - surface.dat
  - manning.dat
+ - streamorder.dat
+WQ_test_full/dynamicdata
+ - flow.dat
+ - volume.dat
+WQ_test_full/staticgeoms
+ - basins.geojson
+ - monpoints.geojson
+ - monareas.geojson
+WQ_test_full/fews
+WQ_test_full/hydromodel
+ - modelmap.tif
+ - ldd.tif
+ - basins.tif
+ - ptiddown.tif
+ - ptid.tif
+ - rivwth.tif
+ - rivlen.tif
 </pre></div></div>
 </div>
 <p>You can see that we didn’t create any emission data here. In some cases, you may require some additional GIS data in order to run a WQ model, for example, when you do not need to run the D-Emissions model beforehand, but include point sources that emit pollutants into the surface water directly. When this is the case, you can still use the various [setup_emission_*] components of hydroMT_delwaq.</p>
@@ -729,8 +721,7 @@ WQ_test_full/staticdata
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./WQ_test_full&#39;</span>
 <span class="n">fn_config</span> <span class="o">=</span> <span class="s1">&#39;config/B3_nrofseg.inc&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="n">fn_config</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>

@@ -341,7 +341,14 @@
                     <span class="p">{</span><span class="n">lstr</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;&#39;BD_</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">bd_id</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="si">}</span><span class="s2">&#39; &#39;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">bd_id</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="si">}</span><span class="s2">&#39; &#39;</span><span class="si">{</span><span class="n">bd_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">}</span>
                 <span class="p">)</span>
         <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">lines_ini</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_config</span><span class="p">(</span><span class="s2">&quot;B5_boundlist&quot;</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">lines_ini</span><span class="p">[</span><span class="n">option</span><span class="p">])</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_config</span><span class="p">(</span><span class="s2">&quot;B5_boundlist&quot;</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">lines_ini</span><span class="p">[</span><span class="n">option</span><span class="p">])</span>
+        <span class="c1"># B7_Surf</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;EM&quot;</span><span class="p">:</span>
+            <span class="n">lines_ini</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;l1&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;PARAMETERS Surf ALL DATA </span><span class="si">{</span><span class="n">nrofseg</span><span class="si">}</span><span class="s2">*1.0&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">lines_ini</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_config</span><span class="p">(</span><span class="s2">&quot;B7_surf&quot;</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">lines_ini</span><span class="p">[</span><span class="n">option</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="DelwaqModel.setup_monitoring"><a class="viewcode-back" href="../../generated/hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring.html#hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring">[docs]</a>    <span class="k">def</span> <span class="nf">setup_monitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mon_points</span><span class="p">,</span> <span class="n">mon_areas</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Setup Delwaq monitoring points and areas options.</span>
@@ -488,7 +495,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">hydro_forcing_fn</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_catalog</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;None or Invalid source &#39;</span><span class="si">{</span><span class="n">hydro_forcing_fn</span><span class="si">}</span><span class="s2">&#39;, skipping setup_dynamic.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;None or Invalid source &#39;</span><span class="si">{</span><span class="n">hydro_forcing_fn</span><span class="si">}</span><span class="s2">&#39;, skipping setup_hydrology_forcing.&quot;</span>
             <span class="p">)</span>
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
@@ -668,6 +675,79 @@
             <span class="p">}</span>
             <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">lines_ini</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_config</span><span class="p">(</span><span class="s2">&quot;B7_hydrology&quot;</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">lines_ini</span><span class="p">[</span><span class="n">option</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="DelwaqModel.setup_sediment_forcing"><a class="viewcode-back" href="../../generated/hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing.html#hydromt_delwaq.delwaq.DelwaqModel.setup_sediment_forcing">[docs]</a>    <span class="k">def</span> <span class="nf">setup_sediment_forcing</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sediment_fn</span><span class="p">,</span>
+        <span class="n">starttime</span><span class="p">,</span>
+        <span class="n">endtime</span><span class="p">,</span>
+        <span class="n">particle_class</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;IM1&quot;</span><span class="p">,</span> <span class="s2">&quot;IM2&quot;</span><span class="p">,</span> <span class="s2">&quot;IM3&quot;</span><span class="p">,</span> <span class="s2">&quot;IM4&quot;</span><span class="p">,</span> <span class="s2">&quot;IM5&quot;</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Setup Delwaq hydrological fluxes.</span>
+
+<span class="sd">        Adds model layers:</span>
+
+<span class="sd">        * **sediment.bin** dynmap: sediment particles from land erosion (fErodIM*) [g/timestep]</span>
+<span class="sd">        * **B7_sediment.inc** config: names of sediment fluxes included in sediment.bin</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sediment_fn : {&#39;None&#39;, &#39;name in local_sources.yml&#39;}</span>
+<span class="sd">            Either None, or name in a local or global data_sources.yml file. Can contain several</span>
+<span class="sd">            particule sizes (IM1, IM2 etc)</span>
+
+<span class="sd">            * Required variables: [&#39;ErodIM*&#39;]</span>
+<span class="sd">        startime : str</span>
+<span class="sd">            Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS</span>
+<span class="sd">        endtime : str</span>
+<span class="sd">            Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS</span>
+<span class="sd">        particle_class : str list, optional</span>
+<span class="sd">            List of particle classes to consider. By default 5 classes: [&#39;IM1&#39;, &#39;IM2&#39;, &#39;IM3&#39;, &#39;IM4&#39;, &#39;IM5&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sediment_fn</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_catalog</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;None or Invalid source &#39;</span><span class="si">{</span><span class="n">sediment_fn</span><span class="si">}</span><span class="s2">&#39;, skipping setup_sediment_forcing.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Setting dynamic data from sediment source </span><span class="si">{</span><span class="n">sediment_fn</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># read dynamic data</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_catalog</span><span class="o">.</span><span class="n">get_rasterdataset</span><span class="p">(</span><span class="n">sediment_fn</span><span class="p">,</span> <span class="n">geom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">)</span>
+        <span class="c1"># align forcing file with hydromaps</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">reproject_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hydromaps</span><span class="p">)</span>
+
+        <span class="c1"># Select time and particle classes</span>
+        <span class="c1"># Sell times to starttime and endtime</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="n">starttime</span><span class="p">,</span> <span class="n">endtime</span><span class="p">))</span>
+        <span class="n">sed_vars</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Erod</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">particle_class</span><span class="p">]</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">sed_vars</span><span class="p">]</span>
+
+        <span class="c1"># Add basin mask</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+            <span class="n">dims</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
+            <span class="n">coords</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hydromaps</span><span class="p">[</span><span class="s2">&quot;modelmap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">_FillValue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hydromaps</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="c1"># Add _FillValue to the data attributes</span>
+        <span class="k">for</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">nodata</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span>
+            <span class="k">if</span> <span class="n">nodata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ds</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_FillValue</span><span class="o">=</span><span class="n">nodata</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ds</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_FillValue</span><span class="o">=-</span><span class="mf">9999.0</span><span class="p">)</span>
+            <span class="c1"># Fill with zeros inside mask and keep NaN outside</span>
+            <span class="n">ds</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">],</span> <span class="n">ds</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_forcing</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+
+        <span class="n">lines_ini</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;l1&quot;</span><span class="p">:</span> <span class="s2">&quot;SEG_FUNCTIONS&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;l2&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sed_vars</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">lines_ini</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_config</span><span class="p">(</span><span class="s2">&quot;B7_sediment&quot;</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">lines_ini</span><span class="p">[</span><span class="n">option</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="DelwaqModel.setup_emission_raster"><a class="viewcode-back" href="../../generated/hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster.html#hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster">[docs]</a>    <span class="k">def</span> <span class="nf">setup_emission_raster</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -1228,7 +1308,9 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Model opened in read-only mode&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">forcing</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Warning: no dynamic map, skipping write_dynamicmaps.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Warning: no forcing available, skipping write_forcing.&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span>
 
         <span class="c1"># Go from dictionnary to xr.DataSet</span>
@@ -1303,6 +1385,19 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">dw_WriteSegmentOrExchangeData</span><span class="p">(</span>
                     <span class="n">timestepstamp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">voname</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">WriteAscii</span><span class="o">=</span><span class="kc">False</span>
                 <span class="p">)</span>
+                <span class="c1"># sediment</span>
+                <span class="k">if</span> <span class="s2">&quot;B7_sediment&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
+                    <span class="n">sedname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;dynamicdata&quot;</span><span class="p">,</span> <span class="s2">&quot;sediment.dat&quot;</span><span class="p">)</span>
+                    <span class="n">sed_vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;B7_sediment.l2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                    <span class="n">sedblock</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="n">sed_vars</span><span class="p">:</span>
+                        <span class="n">nodata</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">!=</span> <span class="n">nodata</span><span class="p">]</span>
+                        <span class="n">sedblock</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sedblock</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dw_WriteSegmentOrExchangeData</span><span class="p">(</span>
+                        <span class="n">timestepstamp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sedname</span><span class="p">,</span> <span class="n">sedblock</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">WriteAscii</span><span class="o">=</span><span class="kc">False</span>
+                    <span class="p">)</span>
 
         <span class="c1"># Add waqgeom.nc file to allow Delwaq to save outputs in nc format</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writting waqgeom.nc file&quot;</span><span class="p">)</span>

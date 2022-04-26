@@ -16,8 +16,8 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -319,7 +319,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -391,8 +391,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -400,8 +399,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># for plotting</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for plotting</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">cartopy.io.img_tiles</span> <span class="k">as</span> <span class="nn">cimgt</span>
 <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
@@ -413,8 +411,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># import hydromt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import hydromt</span>
 <span class="kn">import</span> <span class="nn">hydromt</span>
 </pre></div>
 </div>
@@ -423,8 +420,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># setup logging</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setup logging</span>
 <span class="kn">from</span>  <span class="nn">hydromt.log</span> <span class="kn">import</span> <span class="n">setuplog</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">setuplog</span><span class="p">(</span><span class="s2">&quot;update_model_monitoring&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
@@ -435,7 +431,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-10-06 06:33:27,765 - update_model_monitoring - log - INFO - HydroMT version: 0.4.3
+2022-04-26 12:26:38,347 - update_model_monitoring - log - INFO - HydroMT version: 0.4.5
 </pre></div></div>
 </div>
 </section>
@@ -447,8 +443,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fn_station</span> <span class="o">=</span> <span class="s1">&#39;examples_data/test_monpoints.csv&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fn_station</span> <span class="o">=</span> <span class="s1">&#39;examples_data/test_monpoints.csv&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_station</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
@@ -475,8 +470,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Print the options available from the update command</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print the options available from the update command</span>
 <span class="o">!</span> hydromt update --help
 </pre></div>
 </div>
@@ -488,8 +482,8 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
 
-  Update a specific component of a model. Set an output directory to copy
-  the edited model to a new folder, otherwise maps are overwritten.
+  Update a specific component of a model. Set an output directory to copy the
+  edited model to a new folder, otherwise maps are overwritten.
 
   Example usage:
   --------------
@@ -503,22 +497,17 @@ Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
 Options:
   -o, --model-out DIRECTORY  Output model folder. Maps in MODEL_ROOT are
                              overwritten if left empty.
-
   -c, --components TEXT      Model components from ini file to run
   --opt TEXT                 Component specific keyword arguments, see the
                              setup_&lt;component&gt; method of the specific model
                              for more information about the arguments.
-
   -i, --config PATH          Path to hydroMT configuration file, for the model
                              specific implementation.
-
   -d, --data PATH            File path to yml data sources file. See
                              documentation for required yml file format.
-
   --dd, --deltares-data      Parse default deltares data yml from
                              https://github.com/DirkEilander/hydromt-
                              artifacts/releases
-
   -q, --quiet                Decrease verbosity.
   -v, --verbose              Increase verbosity.
   --help                     Show this message and exit.
@@ -533,8 +522,7 @@ Options:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Dictionnary with all the components and options we want to update</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dictionnary with all the components and options we want to update</span>
 <span class="n">monitoring_options</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;global&#39;</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;mtype&#39;</span><span class="p">:</span> <span class="s1">&#39;WQ&#39;</span><span class="p">},</span>
     <span class="s1">&#39;setup_monitoring&#39;</span><span class="p">:</span> <span class="p">{</span>
@@ -573,8 +561,7 @@ mon_areas = compartment
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
 <span class="o">!</span> hydromt update delwaq WQ_piave -o ./WQ_piave_monitoring -i delwaq_update_monitoring.ini -vv
 </pre></div>
 </div>
@@ -584,30 +571,33 @@ mon_areas = compartment
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2021-10-06 06:33:31,222 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave_monitoring/hydromt.log.
-2021-10-06 06:33:31,222 - update - log - INFO - HydroMT version: 0.4.3
-2021-10-06 06:33:31,223 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave (r).
-2021-10-06 06:33:31,223 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave_monitoring
-2021-10-06 06:33:31,223 - update - main - INFO - User settings:
-2021-10-06 06:33:31,258 - update - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2021-10-06 06:33:31,258 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2021-10-06 06:33:31,258 - update - delwaq - INFO - Reading model staticgeom files.
-2021-10-06 06:33:31,332 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave/staticdata/staticmaps.nc
-2021-10-06 06:33:31,342 - update - delwaq - INFO - Model read
-2021-10-06 06:33:31,345 - update - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/examples_data/test_monpoints.csv
-2021-10-06 06:33:31,345 - update - model_api - INFO - setup_monitoring.mon_areas: compartment
-2021-10-06 06:33:31,346 - update - delwaq - INFO - Setting monitoring points and areas
-2021-10-06 06:33:31,346 - update - data_adapter - INFO - DataCatalog: Getting test_monpoints GeoDataFrame csv data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/examples_data/test_monpoints.csv
-2021-10-06 06:33:31,347 - update - data_adapter - INFO - GeoDataFrame: Read csv data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
-2021-10-06 06:33:31,360 - update - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/examples_data/test_monpoints.csv
-2021-10-06 06:33:31,361 - update - delwaq - INFO - No monitoring areas set in the config file, skipping
-2021-10-06 06:33:31,362 - update - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2021-10-06 06:33:31,362 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave_monitoring
-2021-10-06 06:33:31,377 - update - delwaq - INFO - Writing staticmap files.
-2021-10-06 06:33:31,392 - update - delwaq - INFO - Writing model staticgeom to file.
-2021-10-06 06:33:31,410 - update - delwaq - INFO - Writing model config to file.
-2021-10-06 06:33:31,410 - update - delwaq - INFO - Writing hydromap files.
-2021-10-06 06:33:31,488 - update - delwaq - WARNING - Warning: no dynamic map, skipping write_dynamicmaps.
+2022-04-26 12:26:42,780 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave_monitoring/hydromt.log.
+2022-04-26 12:26:42,780 - update - log - INFO - HydroMT version: 0.4.5
+2022-04-26 12:26:42,781 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave (r).
+2022-04-26 12:26:42,781 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave_monitoring
+2022-04-26 12:26:42,781 - update - main - INFO - User settings:
+2022-04-26 12:26:42,788 - update - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
+2022-04-26 12:26:42,788 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-04-26 12:26:42,789 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave/hydromt.log.
+2022-04-26 12:26:42,789 - update - delwaq - INFO - Reading model staticgeom files.
+2022-04-26 12:26:42,868 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave/staticdata/staticmaps.nc
+2022-04-26 12:26:42,884 - update - delwaq - INFO - Model read
+2022-04-26 12:26:42,884 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave_monitoring/hydromt.log.
+2022-04-26 12:26:42,888 - update - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/examples_data/test_monpoints.csv
+2022-04-26 12:26:42,888 - update - model_api - INFO - setup_monitoring.mon_areas: compartment
+2022-04-26 12:26:42,888 - update - delwaq - INFO - Setting monitoring points and areas
+2022-04-26 12:26:42,888 - update - data_adapter - INFO - Adding sample data v0.0.6 from artifacts
+2022-04-26 12:26:42,953 - update - data_adapter - INFO - DataCatalog: Getting test_monpoints GeoDataFrame csv data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/examples_data/test_monpoints.csv
+2022-04-26 12:26:42,954 - update - data_adapter - INFO - GeoDataFrame: Read csv data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
+2022-04-26 12:26:42,968 - update - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/examples_data/test_monpoints.csv
+2022-04-26 12:26:42,969 - update - delwaq - INFO - No monitoring areas set in the config file, skipping
+2022-04-26 12:26:42,969 - update - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
+2022-04-26 12:26:42,969 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/examples/examples/WQ_piave_monitoring
+2022-04-26 12:26:42,982 - update - delwaq - INFO - Writing staticmap files.
+2022-04-26 12:26:42,997 - update - delwaq - INFO - Writing model staticgeom to file.
+2022-04-26 12:26:43,015 - update - delwaq - INFO - Writing model config to file.
+2022-04-26 12:26:43,016 - update - delwaq - INFO - Writing hydromap files.
+2022-04-26 12:26:43,094 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>
@@ -627,8 +617,7 @@ mon_areas = compartment
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Load the original and updated model with hydromt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the original and updated model with hydromt</span>
 <span class="n">mod0</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;WQ_piave&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
 <span class="n">mod1</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;WQ_piave_monitoring&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
 </pre></div>
@@ -638,8 +627,7 @@ mon_areas = compartment
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># read/derive model basin boundary</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># read/derive model basin boundary</span>
 <span class="n">gdf_bas</span> <span class="o">=</span> <span class="n">mod0</span><span class="o">.</span><span class="n">basins</span>
 </pre></div>
 </div>
@@ -648,8 +636,7 @@ mon_areas = compartment
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Plot</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;seaborn-whitegrid&#39;</span><span class="p">)</span> <span class="c1"># set nice style</span>
 <span class="c1"># we assume the model maps are in the geographic CRS EPSG:4326</span>
 <span class="n">proj</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
