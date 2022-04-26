@@ -15,8 +15,7 @@ dependencies:
   - flit>=3.2
   - gdal>=3.1
   - geopandas
-  - hydromt
-  - hydromt_wflow
+  - git
   - jupyter # to run examples
   - netcdf4
   - matplotlib # to run examples
@@ -39,4 +38,7 @@ dependencies:
   - sphinx_rtd_theme # docs
   - xarray
   - zarr
+  - pip:
+    - git+https://github.com/Deltares/hydromt.git
+    - git+https://github.com/Deltares/hydromt_wflow.git
 
