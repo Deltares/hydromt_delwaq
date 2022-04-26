@@ -8,6 +8,12 @@ The format is based on `Keep a Changelog`_, and this project adheres to
 [Unreleased]
 ------------
 
+Added
+^^^^^
+
+- New setup_sediment_forcing method to add eroded soil particles emissions as input to the river in the WQ component. 
+  Different particles size can be taken into account.
+
 v0.1.2 (6 October 2021)
 -----------------------
 This release introduces a new component to prepare road related data and adds several fixes for computation of hydrological forcing.
