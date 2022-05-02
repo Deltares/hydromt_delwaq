@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Explaining the Wflow - Delwaq coupling &#8212; HydroMT delwaq  documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Explaining the D-Emission - D-Water Quality coupling" href="coupling_delwaq.html" />
+    <link rel="prev" title="Reading more about coupling the individual modules" href="coupling_main.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../index.html">
+<p class="title">HydroMT delwaq</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../getting_started/intro.html">
+  Getting Started
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="intro.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../api.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../dev/intro.html">
+  Developments
+ </a>
+</li>
+
+    
+    <li class="nav-item">
+        <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/preview/index.html">HydroMT core<i class="fas fa-external-link-alt"></i></a>
+    </li>
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://deltares.nl/en/" rel="noopener" target="_blank" title="Deltares"><img src="../_static/deltares-white.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="generic_delwaq_EM.html">
+   Working with the D-Emissions model
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="EM_model.html">
+     D-Emission model components
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_EM_substances.html">
+     Selection of substance(s) and sources
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="build_config_EM.html">
+     Building a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/build_EM_model.html">
+       Example: Build D-Emission model
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="update_config_EM.html">
+     Updating a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/adding_global_emission.html">
+       Example: Add (global) emission data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/adding_local_emission.html">
+       Example: Add (local) emission data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/update_model_forcing.html">
+       Example: Update forcing data
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_EM_prepare.html">
+     Editing the EM run information
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_EM_run.html">
+     Running D-Emissions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="generic_delwaq_WQ.html">
+   Working with the D-Water Quality model
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="WQ_model.html">
+     D-Water Quality model components
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_WQ_substances.html">
+     Selection of substance(s) and processes
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="build_config_WQ.html">
+     Building a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+    <label for="toctree-checkbox-5">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/build_WQ_model.html">
+       Example: Build D-Water Quality model
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="update_config_WQ.html">
+     Updating a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+    <label for="toctree-checkbox-6">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/update_model_monitoring.html">
+       Example: Update monitoring data
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_WQ_prepare.html">
+     Editing the WQ run information
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_WQ_run.html">
+     Running D-Water Quality
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="process_analyze.html">
+   Postprocessing and visualization
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../_examples/plot_delwaq.html">
+     Example: Plot Delwaq staticmaps
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="coupling_main.html">
+   Reading more about coupling the individual modules
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Explaining the Wflow - Delwaq coupling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="coupling_delwaq.html">
+     Explaining the D-Emission - D-Water Quality coupling
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hydrological-forcing-from-wflow">
+   Hydrological forcing from Wflow
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/Deltares/hydromt_delwaq/edit/new_docs/docs/user_guide/coupling_wflow.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="explaining-the-wflow-delwaq-coupling">
+<span id="coupling-wflow"></span><h1>Explaining the Wflow - Delwaq coupling<a class="headerlink" href="#explaining-the-wflow-delwaq-coupling" title="Permalink to this headline">#</a></h1>
+<p>Water quality and emission, fate and transport of pollutants through the landscape is very much linked to the water movements. In most cases, pollutants are emitted on land and
+either leach into the soil or are picked up by water during rain events and transported towards and into the rivers. In order to model water quality is it therefore essential to first understand and assess the hydrology of the catchment / region of interests.</p>
+<p>A full hydrology - water quality modelling suite is in general separated in three parts:</p>
+<ul class="simple">
+<li><p>the hydrological model, <em>wflow_sbm</em>, that predicts water movements through the catchments.</p></li>
+<li><p>an emission model, <em>D-Emission</em> (also referred to as EM in hydroMT), that predicts the quantity (fluxes) of substances being released from sources of pollutants to the surface waters (mass/time).</p></li>
+<li><p>a fate and transport model, <em>D-Water Quality</em> (also referred to as WQ in hydroMT), that predicts the fate and transport of substances in the surface waters (concentrations in mass / volume).</p></li>
+</ul>
+<img alt="../_images/wflow-Delwaq.jpg" src="../_images/wflow-Delwaq.jpg" />
+<p>For the purpose of modelling catchment water quality, the wflow_sbm model has been linked to EM and WQ (both based on Delwaq, Deltares water quality software) using a “coupling” function integrated in the
+HydroMT-Delwaq plugin.</p>
+<p>The wflow-Delwaq coupling function in hydroMT:</p>
+<ul class="simple">
+<li><p>translates wflow schematization to Delwaq schematization;</p></li>
+<li><p>prepares static inputs needed for water quality modelling (emission sources, locators…);</p></li>
+<li><p>prepares dynamic inputs needed for water quality modelling (different water fluxes and volumes);</p></li>
+<li><p>supports the modelling of different types of pollutants.</p></li>
+</ul>
+<p>A full hydrology - water quality modelling suite is setup and run using the following steps:</p>
+<ol class="upperalpha simple">
+<li><p>Hydrological modelling with wflow</p></li>
+</ol>
+<ul class="simple">
+<li><p>Run wflow in order to prepare the hydrological fluxes required by EM and WQ.</p></li>
+</ul>
+<ol class="upperalpha simple" start="2">
+<li><p>Emissions modelling with D-Emissions</p></li>
+</ol>
+<ul class="simple">
+<li><p>Setup the EM model from wflow and emission data using hydroMT</p></li>
+<li><p>Edit the EM run info and run D-Emission (EM-Plugin)</p></li>
+</ul>
+<ol class="upperalpha simple" start="3">
+<li><p>Fate and transport modelling with D-Water Quality</p></li>
+</ol>
+<ul class="simple">
+<li><p>Setup the WQ model from wflow and emission data using hydroMT</p></li>
+<li><p>Link EM results to WQ</p></li>
+<li><p>Edit the WQ run info and run D-Water Quality (WQ-Plugin)</p></li>
+</ul>
+<section id="hydrological-forcing-from-wflow">
+<h2>Hydrological forcing from Wflow<a class="headerlink" href="#hydrological-forcing-from-wflow" title="Permalink to this headline">#</a></h2>
+<p>In order to determine how and where substances are emitted and how they move through the landscape via the surface water, water quality modelling requires certain
+hydrological information.</p>
+<p>For an EM type of model (emission of substances in the surface waters), the required information is:</p>
+<ul class="simple">
+<li><p><strong>precipitation</strong>;</p></li>
+<li><p>the amount of the precipitation that <strong>infiltrates</strong> into the soil from unpaved areas;</p></li>
+<li><p>the amount of the precipitation that goes directly <strong>to surface runoff from paved areas</strong>;</p></li>
+<li><p>the amount of the precipitation that goes directly <strong>to surface runoff from unpaved areas</strong>.</p></li>
+</ul>
+<p>For a WQ type of model (fate and transport of substances in the surface waters), the required information is:</p>
+<ul class="simple">
+<li><p><strong>Surface runoff</strong></p></li>
+<li><p><strong>Surface water volumes</strong></p></li>
+<li><p><strong>Total water entering the surface waters</strong> (e.g. precipitation, exfiltration from the soil, evaporation…) in order to close the surface water mass balance.</p></li>
+</ul>
+<p>Wflow separates and routes water for three different components, the surface waters on the land, the river surface water and the water in the soil. Delwaq uses only the one surface water components
+and therefore the river and land surface waters from wflow are saved together for Delwaq. The corresponding water balances for the river and land surface waters in wflow are shown in the Figure below.
+In order to prepare hydrological fluxes for Delwaq from wflow, Wflow should be run and the required fluxes saved (same order as above):</p>
+<ul class="simple">
+<li><p>vertical.precipitation (precipitation input)</p></li>
+<li><p>vertical.actinfilt (infiltration in the soil)</p></li>
+<li><p>vertical.excesswaterpath (infiltration excess runoff on paved areas)</p></li>
+<li><p>vertical.excesswatersoil (infiltration excess runoff on unpaved areas)</p></li>
+<li><p>lateral.river.q_av and lateral.land.q_av (runoff in the river and land kinematic wave)</p></li>
+<li><p>lateral.river.volume and lateral.land.volume (kinematic wave volume in the river and on the land)</p></li>
+<li><p>lateral.river.inwater, lateral.land.inwater and lateral.land.to_river (inwater river/land is the sum of all fluxes reaching the kinematic wave of the river/land surface water. As
+inwater also contains an internal flux between the land and river water, the part of land runoff that reaches the river lateral.land.to_river, we will need to substract
+it to not count it twice, see Figure below).</p></li>
+</ul>
+<img alt="../_images/wflow_balances.png" src="../_images/wflow_balances.png" />
+<p>Figure of the Wflow water balances for the land surface water (top left), river surface water (top right) and the total surface water (bottom).</p>
+</section>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="coupling_main.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Reading more about coupling the individual modules</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="coupling_delwaq.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Explaining the D-Emission - D-Water Quality coupling</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Deltares.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
