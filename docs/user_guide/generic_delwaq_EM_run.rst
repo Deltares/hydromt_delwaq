@@ -1,7 +1,12 @@
 .. _generic_delwaq_EM_run:
 
-Running D-Emission
-^^^^^^^^^^^^^^^^^^
+Running D-Emissions
+-------------------
+
+.. Tip::
+
+    This page contains additional information on the generic D-Emissions module, not direclty related to the HydroMT-delwaq plugin.
+
 In order to run delwaq for D-Emissions, we need to include the EM-Plugin to the run. Delwaq is also run via command lines using two executables, one that reads and process all the information and data 
 in the input file **delwaq1.exe**, and one that runs Delwaq with this data **delwaq2.exe**. The command line also include the path to the input file (**espace.inp**) and to 
 specific libraries in the EM-Plugin (or D-Emissions plugin). Here is an example:

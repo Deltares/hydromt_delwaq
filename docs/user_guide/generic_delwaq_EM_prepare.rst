@@ -1,9 +1,15 @@
 .. _generic_delwaq_EM_prepare:
 
 Editing the EM run information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In order to run the EM-Plugin of DELWAQ, an input file is used to set up all the relevant run information such as substances and processes to include, run time information, data and model parameters 
-to use etc. This is set up in a **.inp** file. A template of such a :download:`file <../_static/espace.inp>`, for an EM run, is shown below.
+------------------------------
+
+.. Tip::
+
+    This page contains additional information on the generic D-Emissions module, not direclty related to the HydroMT-delwaq plugin.
+
+In order to run the D-Emissions module of DELWAQ, an input file is used to set up all the relevant run information such as substances and processes to include, 
+run time information, data and model parameters to use etc. This is set up in a **.inp** file. A template of such 
+a :download:`file <../_static/espace.inp>`, for an EM run, is shown below.
 
 The input file is separated into 10 input blocks each requiring different type of information. You can find more info on what is expected 
 where in the `Delwaq input file documentation <content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Input_File_Description.pdf>`_. In short, the ten blocks are:
@@ -19,7 +25,7 @@ where in the `Delwaq input file documentation <content.oss.deltares.nl/delft3d/m
 - B9: Model output
 - B10: Statistical output
 
-With hydroMT, different files were prepared containing information that can be directly linked and included in this input file. These are:
+With HydroMT, different files were prepared containing information that can be directly linked and included in this input file. These are:
 
 - The different files in the *config* folder: each filename has a prefix containing the block number it should be inserted in (ex: B1_timestamp.inc).
 - Emission and other grid data stored in *staticdata* folder

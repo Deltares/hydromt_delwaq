@@ -7,12 +7,12 @@ The first step in solving or mitigating many water quality and health problems, 
 Because it simulates the true cause-effect chain, it provides predictive power and allows for “what if” scenarios driven by policy projections and implemented measures.
 
 
-D-Emissions is a library of the Delwaq software which, in combination with rainfall-runoff and hydraulic modules (e.g. wflow), may form an integral catchment model.
+D-Emissions is a library of the Delwaq software which, in combination with rainfall-runoff and hydraulic modules (e.g. Wflow), may form an integral catchment model.
 
 In this section, we will detail the full steps to prepare and run D-Emissions models:
 
 -  :ref:`Selection substance(s) <generic_delwaq_EM_substances>` of interest and their relevant sources (based on available data)
--  :ref:`Preparing the EM model with HydroMT <build_config_EM>` (EM model setup and emission data preparation) 
+-  :ref:`Building the EM model with HydroMT <build_config_EM>` (EM model setup and emission data preparation) 
 -  :ref:`Editing the EM run information <generic_delwaq_EM_prepare>`
 -  :ref:`Running D-Emissions <generic_delwaq_EM_run>` (EM-Plugin)
 
@@ -21,6 +21,9 @@ In this section, we will detail the full steps to prepare and run D-Emissions mo
    :hidden:
    :caption: Table of Contents
    
+   EM_model.rst
    generic_delwaq_EM_substances.rst
+   build_config_EM.rst
+   update_config_EM.rst
    generic_delwaq_EM_prepare.rst
    generic_delwaq_EM_run.rst

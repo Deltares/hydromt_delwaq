@@ -25,6 +25,9 @@ jobs:
         with:
           environment-file: envs/hydromt-delwaq.yml
           python-version: ${{ matrix.python-version }}
+          mamba-version: "*"
+          channels: conda-forge,defaults
+          channel-priority: true
           activate-environment: hydromt-delwaq
 
       - name: Conda info

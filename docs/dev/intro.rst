@@ -3,7 +3,7 @@
 Developments
 ============
 
-These pages provide guidelines on how to contribute to HydroMT delwaq. Furthermore it informs you on planned developments and new features.
+These pages provide guidelines on how to contribute to HydroMT-delwaq. Furthermore it informs you on planned developments and new features.
 
 
 .. toctree::

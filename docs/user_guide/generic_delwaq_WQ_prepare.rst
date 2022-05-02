@@ -1,8 +1,13 @@
 .. _generic_delwaq_WQ_prepare:
 
 Editing the WQ run information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In order to run the WQ-Plugin of DELWAQ, an input file is used to set up all the relevant run information such as substances and processes to include, run time information, data and model parameters 
+------------------------------
+
+.. Tip::
+
+    This page contains additional information on the generic D-Water Quality module, not direclty related to the HydroMT-delwaq plugin.
+
+In order to run the D-Water Quality module of DELWAQ, an input file is used to set up all the relevant run information such as substances and processes to include, run time information, data and model parameters 
 to use etc. This is set up in a **.inp** file. A template of such a :download:`file <../_static/delwaq.inp>`, for an WQ run, is shown below.
 
 The input file is separated into 10 input blocks each requiring different type of information. You can find more info on what is expected 

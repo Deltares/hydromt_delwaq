@@ -1,29 +1,66 @@
 .. _build_config_EM:
 
-Preparing the EM model with HydroMT
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-D-Emissions (Delwaq) is an unstructured model and composed of unordered segments. D-Emissions segments represent one environmental layer unit (eg open water, soil..). 
-The direction of the flows in D-Emissions between each segment is defined in the pointer file. This pointer file defines not only the direction 
-of lateral flows between segments (eg discharge), but also the direction of vertical flows (flows between the different layers/compartments of a single geographic cell). 
-This means that external flows into / out of a segment (for example precipitation from the atmosphere) are defined in the pointer as flows between a segment and 
-a boundary (for precipitation the boundary is the atmosphere).
+Building a model
+================
 
-By only modelling substances one-by-one, the generic D-Emissions version only considers one environment layer which is the **emission or substance layer**. As D-Emissions does not deal 
-with fate and transport (no lateral flux between segments), there is then no need to define either a pointer or a boundary file. In essence, D-Emissions calculates the various emitted loads per wflow cell.
+This plugin allows to build a complete D-Emissions model from available data. Once the configuration and 
+data libraries are set, you can build a model by using:
 
-To build an EM model with HydroMT you can use the ** :ref:`build command line <model_config_build>` ** to prepare all the different ** :ref:`components <model_components>` ** of your model.
-Below is an example :download:`.ini file <../_static/delwaq_build_EM_TN.ini>` for the **Total Nitrogen (TN)** released by **households** example.
+.. code-block:: console
 
-As a reminder, for an EM model, the required hydrological data (from wflow_output in our example) is:
+    activate hydromt-delwaq
+    hydromt build delwaq path/to/built_model "{'wflow': path/to/wflow_model}" --opt global.mtype=EM -i delwaq_build.ini -d data_sources.yml -vv
 
-- precipitation
-- the amount of the precipitation that infiltrates into the soil from unpaved areas
-- the amount of the precipation that goes directly to surface runoff from paved areas
-- the amount of the precipation that goes directly to surface runoff from unpaved areas
+The recommended `region options <https://deltares.github.io/hydromt/latest/user_guide/cli.html#region-options>`_ 
+for a proper implementation of this model are:
+
+- model
+
+Alternatively, do start from a complete new region, you can start by first using HydroMT to build the linked hydrological/hydrualic 
+model for your case and then build delwaq.
+
+.. warning::
+
+  As of now, DELWAQ models can only be built on top of existing Wflow models.
+
+Configuration file
+------------------
+Settings to build or update a D-Emissions model are managed in a configuration file. In this file,
+every option from each :ref:`model methods <em_methods>` can be changed by the user
+in its corresponding section.
+
+In addition to the model components, the ini also contains a [global] section 
+in order to specify if the model to build/update is either an EM (D-Emissions) or a WQ (D-Water Quality) model ('mtype' option).
+
+.. code-block:: console
+
+    [global]
+    mtype = EM                     # type of Delwaq model ['EM', 'WQ']
+
+Below is an example of :download:`.ini file <../_static/delwaq_build_EM_TN.ini>` that can be used to build a **EM model** 
+for modelling **Total Nitrogen (TN)** released by **households**.
 
 .. literalinclude:: ../_static/delwaq_build_EM_TN.ini
    :language: Ini
 
-.. note::
+Selecting data
+--------------
+Data sources in HydroMT are provided in one of several yaml libraries. These libraries contain required 
+information on the different data sources so that HydroMT can process them for the different models. There 
+are three ways for the user to select which data libraries to use:
 
-   In this version of EM, the *the amount of the precipitation that **infiltrates** into the soil from unpaved areas* is dealt with as a sink, since the WQ version does not yet contain a Soil compartment.
+- If no yaml file is selected, HydroMT will use the data stored in the 
+  `hydromt-artifacts <https://github.com/DirkEilander/hydromt-artifacts>`_ 
+  which contains an extract of global data for a small region around the Piave river in Northern Italy.
+- Another options for Deltares users is to select the deltares-data library (requires access to the Deltares 
+  P-drive). In the command lines examples below, this is done by adding either **-dd** or **--deltares-data** 
+  to the build / update command line.
+- Finally, the user can prepare its own yaml libary (or libraries) (see 
+  `HydroMT documentation <https://deltares.github.io/hydromt/latest/user_guide/data.html>`_ to check the guidelines). 
+  These user libraries can be added either in the command line using the **-d** option and path/to/yaml or in the **ini file** 
+  with the **data_libs** option in the [global] sections.
+
+  .. toctree::
+     :hidden:
+
+     Example: Build D-Emission model <../_examples/build_EM_model.ipynb>
