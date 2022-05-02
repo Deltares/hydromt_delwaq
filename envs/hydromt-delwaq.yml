@@ -16,6 +16,7 @@ dependencies:
   - gdal>=3.1
   - geopandas
   - hydromt
+  - hydromt_wflow
   - jupyter # to run examples
   - netcdf4
   - matplotlib # to run examples
@@ -33,11 +34,10 @@ dependencies:
   - python>=3.7
   - rasterio
   - requests
+  - rioxarray
   - scipy
   - sphinx # docs
   - sphinx_rtd_theme # docs
   - xarray
   - zarr
-  - pip:
-    - hydromt_wflow
 

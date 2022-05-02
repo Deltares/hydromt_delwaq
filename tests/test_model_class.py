@@ -8,7 +8,7 @@ import warnings
 from click.testing import CliRunner
 
 import hydromt
-from hydromt.models import MODELS
+from hydromt_delwaq.delwaq import DelwaqModel
 from hydromt.cli.cli_utils import parse_config
 from hydromt.cli.main import main as hydromt_cli
 
@@ -19,10 +19,12 @@ _models = {
     "EM": {
         "example": "EM_piave",
         "ini": "delwaq_build_EM.ini",
+        "ini_update": "delwaq_update_EM_forcing.ini",
     },
     "WQ": {
         "example": "WQ_piave",
         "ini": "delwaq_build_WQ.ini",
+        "ini_update": "delwaq_update_WQ_sed.ini",
     },
 }
 
@@ -32,7 +34,7 @@ def test_model_class(model):
     _model = _models[model]
     # read model in examples folder
     root = join(EXAMPLEDIR, _model["example"])
-    mod = MODELS.get("delwaq")(root=root, mode="r")
+    mod = DelwaqModel(root=root, mode="r")
     mod.read()
     # run test_model_api() method
     non_compliant_list = mod.test_model_api()
@@ -60,9 +62,9 @@ def test_model_build(tmpdir, model):
 
     # Compare with model from examples folder
     root0 = join(EXAMPLEDIR, _model["example"])
-    mod0 = MODELS.get("delwaq")(root=root0, mode="r")
+    mod0 = DelwaqModel(root=root0, mode="r")
     mod0.read()
-    mod1 = MODELS.get("delwaq")(root=root, mode="r")
+    mod1 = DelwaqModel(root=root, mode="r")
     mod1.read()
     # check maps
     invalid_maps = []
@@ -90,3 +92,21 @@ def test_model_build(tmpdir, model):
             assert geom0.crs == geom1.crs, f"geom crs {name}"
             if not np.all(geom0.geometry == geom1.geometry):
                 warnings.warn(f"New geom {name} different than the example one.")
+
+
+@pytest.mark.parametrize("model", list(_models.keys()))
+def test_model_update(tmpdir, model):
+    # test update method
+    # just sees if the CLI run
+    # TODO: also check results
+    _model = _models[model]
+    root = str(tmpdir.join(model + "_update"))
+    config = join(TESTDATADIR, _model["ini_update"])
+    delwaq_path = join(EXAMPLEDIR, _model["example"])
+    # Transform the path to be processed by CLI runner and json.load
+    delwaq_path = str(delwaq_path).replace("\\", "/")
+    # Update model
+    r = CliRunner().invoke(
+        hydromt_cli, ["update", "delwaq", delwaq_path, "-o", root, "-i", config, "-vv"]
+    )
+    assert r.exit_code == 0

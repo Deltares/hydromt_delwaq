@@ -49,3 +49,8 @@ delwaq = "hydromt_delwaq.delwaq:DelwaqModel"
 [tool.black]
 line-length = 88
 target-version = ['py38']
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:distutils Version classes are deprecated:DeprecationWarning",
+]

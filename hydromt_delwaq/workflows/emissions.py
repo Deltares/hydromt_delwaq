@@ -79,12 +79,21 @@ def emission_raster(
         Dataset containing gridded emission map at model resolution.
     """
     nodata = da.raster.nodata
-    if fillna_method == "zero":
-        da = da.where(da.values != nodata).fillna(0)
-    elif fillna_method == "value":
-        da = da.where(da.values != nodata).fillna(fillna_value)
+    if nodata is not None:
+        if fillna_method == "zero":
+            da = da.where(da.values != nodata).fillna(0)
+        elif fillna_method == "value":
+            da = da.where(da.values != nodata).fillna(fillna_value)
+        else:
+            da = da.raster.interpolate_na(method="nearest")
     else:
-        da = da.raster.interpolate_na(method="nearest")
+        if np.issubdtype(da.dtype, np.signedinteger):
+            nodata = -999
+        elif np.issubdtype(da.dtype, np.unsignedinteger):
+            nodata = 255
+        else:
+            nodata = -999.0
+        da.raster.set_nodata(nodata)
 
     if area_division:
         da_area = gridarea(da)

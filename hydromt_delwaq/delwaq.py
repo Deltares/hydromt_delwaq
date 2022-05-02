@@ -252,6 +252,13 @@ class DelwaqModel(Model):
                 )
         for option in lines_ini:
             self.set_config("B5_boundlist", option, lines_ini[option])
+        # B7_Surf
+        if self.type == "EM":
+            lines_ini = {
+                "l1": f"PARAMETERS Surf ALL DATA {nrofseg}*1.0",
+            }
+            for option in lines_ini:
+                self.set_config("B7_surf", option, lines_ini[option])
 
     def setup_monitoring(self, mon_points, mon_areas, **kwargs):
         """Setup Delwaq monitoring points and areas options.
@@ -290,7 +297,7 @@ class DelwaqModel(Model):
                         f"No {mon_points} gauge locations found within domain"
                     )
                 else:
-                    gdf["index"] = gdf.index.values
+                    gdf.index.name = "index"
                     monpoints = self.staticmaps.raster.rasterize(
                         gdf, col_name="index", nodata=mv
                     )
@@ -303,9 +310,6 @@ class DelwaqModel(Model):
             nb_points = len(points)
             # Add to staticgeoms if mon_points is not segments
             if mon_points != "segments":
-                # if first column has no name, give it a default name otherwise column is omitted when written to geojson
-                if gdf.index.name is None:
-                    gdf.index.name = "fid"
                 self.set_staticgeoms(gdf, name="monpoints")
         else:
             self.logger.info("No monitoring points set in the config file, skipping")
@@ -398,7 +402,7 @@ class DelwaqModel(Model):
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
-                f"None or Invalid source '{hydro_forcing_fn}', skipping setup_dynamic."
+                f"None or Invalid source '{hydro_forcing_fn}', skipping setup_hydrology_forcing."
             )
             return
         self.logger.info(
@@ -486,7 +490,7 @@ class DelwaqModel(Model):
             times.freq = pd.infer_freq(times)
             times_offset = times + times.freq
             vol = ds["vol"].copy()
-            ds = ds.drop("vol")
+            ds = ds.drop_vars("vol")
             vol["time"] = times_offset
             ds = ds.merge(vol)
         # Sell times to starttime and endtime
@@ -578,6 +582,79 @@ class DelwaqModel(Model):
             }
             for option in lines_ini:
                 self.set_config("B7_hydrology", option, lines_ini[option])
+
+    def setup_sediment_forcing(
+        self,
+        sediment_fn,
+        starttime,
+        endtime,
+        particle_class=["IM1", "IM2", "IM3", "IM4", "IM5"],
+        **kwargs,
+    ):
+        """Setup Delwaq hydrological fluxes.
+
+        Adds model layers:
+
+        * **sediment.bin** dynmap: sediment particles from land erosion (fErodIM*) [g/timestep]
+        * **B7_sediment.inc** config: names of sediment fluxes included in sediment.bin
+
+        Parameters
+        ----------
+        sediment_fn : {'None', 'name in local_sources.yml'}
+            Either None, or name in a local or global data_sources.yml file. Can contain several
+            particule sizes (IM1, IM2 etc)
+
+            * Required variables: ['ErodIM*']
+        startime : str
+            Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
+        endtime : str
+            Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS
+        particle_class : str list, optional
+            List of particle classes to consider. By default 5 classes: ['IM1', 'IM2', 'IM3', 'IM4', 'IM5']
+        """
+        if sediment_fn not in self.data_catalog:
+            self.logger.warning(
+                f"None or Invalid source '{sediment_fn}', skipping setup_sediment_forcing."
+            )
+            return
+        self.logger.info(f"Setting dynamic data from sediment source {sediment_fn}.")
+
+        # read dynamic data
+        ds = self.data_catalog.get_rasterdataset(sediment_fn, geom=self.region)
+        # align forcing file with hydromaps
+        ds = ds.raster.reproject_like(self.hydromaps)
+
+        # Select time and particle classes
+        # Sell times to starttime and endtime
+        ds = ds.sel(time=slice(starttime, endtime))
+        sed_vars = [f"Erod{x}" for x in particle_class]
+        ds = ds[sed_vars]
+
+        # Add basin mask
+        ds.coords["mask"] = xr.DataArray(
+            dims=ds.raster.dims,
+            coords=ds.raster.coords,
+            data=self.hydromaps["modelmap"].values,
+            attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
+        )
+        # Add _FillValue to the data attributes
+        for dvar in ds.data_vars.keys():
+            nodata = ds[dvar].raster.nodata
+            if nodata is not None:
+                ds[dvar].attrs.update(_FillValue=nodata)
+            else:
+                ds[dvar].attrs.update(_FillValue=-9999.0)
+            # Fill with zeros inside mask and keep NaN outside
+            ds[dvar] = ds[dvar].fillna(0).where(ds["mask"], ds[dvar].raster.nodata)
+
+        self.set_forcing(ds)
+
+        lines_ini = {
+            "l1": "SEG_FUNCTIONS",
+            "l2": " ".join(str(x) for x in sed_vars),
+        }
+        for option in lines_ini:
+            self.set_config("B7_sediment", option, lines_ini[option])
 
     def setup_emission_raster(
         self,
@@ -945,7 +1022,9 @@ class DelwaqModel(Model):
             self.logger.info(f"Read staticmaps from {fn}")
             # FIXME: we need a smarter (lazy) solution for big models which also
             # works when overwriting / apending data in thet same source!
-            ds = xr.open_dataset(fn, mask_and_scale=False, **kwargs).load()
+            ds = xr.open_dataset(
+                fn, mask_and_scale=False, decode_coords="all", **kwargs
+            ).load()
             ds.close()
             self.set_staticmaps(ds)
 
@@ -957,13 +1036,13 @@ class DelwaqModel(Model):
 
         # Filter data with mask
         for dvar in ds_out.data_vars:
-            nodata = ds_out[dvar].raster.nodata
-            ds_out[dvar] = xr.where(ds_out["mask"], ds_out[dvar], nodata)
-            ds_out[dvar].attrs.update(_FillValue=nodata)
+            ds_out[dvar] = ds_out[dvar].raster.mask(mask=ds_out["mask"])
 
         self.logger.info("Writing staticmap files.")
         # Netcdf format
         fname = join(self.root, "staticdata", "staticmaps.nc")
+        # Update attributes for gdal compliance
+        # ds_out = ds_out.raster.gdal_compliant(rename_dims=False)
         if os.path.isfile(fname):
             ds_out.to_netcdf(path=fname, mode="a")
         else:
@@ -973,7 +1052,6 @@ class DelwaqModel(Model):
         for dvar in ds_out.data_vars:
             if dvar != "monpoints" and dvar != "monareas":
                 fname = join(self.root, "staticdata", dvar + ".dat")
-                # nodata = ds_out[dvar].raster.nodata
                 data = ds_out[dvar].values.flatten()
                 mask = ds_out["mask"].values.flatten()
                 data = data[mask]
@@ -1034,7 +1112,7 @@ class DelwaqModel(Model):
             self._hydromaps = io.open_mfraster(fns, **kwargs)
         if self._hydromaps.raster.crs is None and crs is not None:
             self.set_crs(crs)
-        self._hydromaps["modelmap"] = self._hydromaps["modelmap"].astype(np.bool)
+        self._hydromaps["modelmap"] = self._hydromaps["modelmap"].astype(bool)
         self._hydromaps.coords["mask"] = self._hydromaps["modelmap"]
 
     def write_hydromaps(self):
@@ -1117,7 +1195,7 @@ class DelwaqModel(Model):
             timear = np.array(0, dtype=np.int32)
             # Open and write the data
             fp = open(fname + ".bin", "wb")
-            tstr = timear.tostring() + artow.tostring()
+            tstr = timear.tobytes() + artow.tobytes()
             fp.write(tstr)
             fp.close()
 
@@ -1138,7 +1216,9 @@ class DelwaqModel(Model):
         if not self._write:
             raise IOError("Model opened in read-only mode")
         if not self.forcing:
-            self.logger.warning("Warning: no dynamic map, skipping write_dynamicmaps.")
+            self.logger.warning(
+                "Warning: no forcing available, skipping write_forcing."
+            )
             return
 
         # Go from dictionnary to xr.DataSet
@@ -1213,6 +1293,19 @@ class DelwaqModel(Model):
                 self.dw_WriteSegmentOrExchangeData(
                     timestepstamp[i], voname, data, 1, WriteAscii=False
                 )
+                # sediment
+                if "B7_sediment" in self.config:
+                    sedname = join(self.root, "dynamicdata", "sediment.dat")
+                    sed_vars = self.get_config("B7_sediment.l2").split(" ")
+                    sedblock = []
+                    for dvar in sed_vars:
+                        nodata = ds_out[dvar].raster.nodata
+                        data = ds_out[dvar].isel(time=i).values.flatten()
+                        data = data[data != nodata]
+                        sedblock = np.append(sedblock, data)
+                    self.dw_WriteSegmentOrExchangeData(
+                        timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
+                    )
 
         # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
         self.logger.info("Writting waqgeom.nc file")
@@ -1337,7 +1430,7 @@ class DelwaqModel(Model):
 
         if os.path.isfile(fname) and mode == "a":  # append to existing file
             fp = open(fname, "ab")
-            tstr = timear.tostring() + artow.tostring()
+            tstr = timear.tobytes() + artow.tobytes()
             fp.write(tstr)
             if WriteAscii:
                 fpa = open(fname + ".asc", "a")
@@ -1346,7 +1439,7 @@ class DelwaqModel(Model):
                 fpa.write("\n")
         else:
             fp = open(fname, "wb")
-            tstr = timear.tostring() + artow.tostring()
+            tstr = timear.tobytes() + artow.tobytes()
             fp.write(tstr)
             if WriteAscii:
                 fpa = open(fname + ".asc", "w")
@@ -1375,7 +1468,7 @@ class DelwaqModel(Model):
             points = points[points != mv]
             nb_points = len(points)
             names_points = np.array(
-                ["'Point" + x1 + "_Sfw'" for x1 in points.astype(np.str)]
+                ["'Point" + x1 + "_Sfw'" for x1 in points.astype(str)]
             ).reshape(nb_points, 1)
             onecol = np.repeat(1, nb_points).reshape(nb_points, 1)
             balcol = np.repeat("NO_BALANCE", nb_points).reshape(nb_points, 1)
@@ -1475,13 +1568,13 @@ class DelwaqModel(Model):
         nodes_y = []
         nodes_z = []
         net_links = []
-        elem_nodes = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.int)
+        elem_nodes = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.int32)
         face_x_bnd = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.double)
         face_y_bnd = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.double)
-        flow_links = np.zeros((n_flow_link, n_flow_link_pts), dtype=np.int)
+        flow_links = np.zeros((n_flow_link, n_flow_link_pts), dtype=np.int32)
         flow_link_type = np.repeat(2, n_flow_link)
-        flow_link_x = np.zeros((n_flow_link), dtype=np.float)
-        flow_link_y = np.zeros((n_flow_link), dtype=np.float)
+        flow_link_x = np.zeros((n_flow_link), dtype=np.float32)
+        flow_link_y = np.zeros((n_flow_link), dtype=np.float32)
 
         # prepare all coordinates for grid csv
         nodes_x_all = []

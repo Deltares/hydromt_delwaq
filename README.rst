@@ -43,7 +43,7 @@ Contributing
 You can find information about contributing to hydroMT at our `Contributing page <https://deltares.github.io/hydromt_plugin/latest/contributing.html>`_.
 
 
-.. |pypi| image:: https://badge.fury.io/py/hydromt.svg
+.. |pypi| image:: https://badge.fury.io/py/hydromt_delwaq.svg
     :target: https://pypi.org/project/hydromt_delwaq/
     :alt: Latest PyPI version
 
