@@ -15,7 +15,7 @@ import time as t
 import hydromt
 from hydromt.models.model_api import Model
 from hydromt import workflows, flw, io
-
+from hydromt.cf_utils import FewsUtils
 
 from hydromt_wflow.wflow import WflowModel
 
@@ -1849,3 +1849,70 @@ class DelwaqModel(Model):
         # Write the waqgeom.nc file
         fname = join(self.root, "config", "B3_waqgeom.nc")
         ds_out.to_netcdf(path=fname, mode="w", format="NETCDF3_CLASSIC")
+
+    def write_fews(
+        self,
+        fews_root: str,
+        scheme_version: int,
+        region_name: str,
+        model_version: int,
+        fews_template: str = None,
+        delwaq_template: str = None,
+    ) -> None:
+        """
+        Method to write and export the complete model schematization and configuration to a Delft-FEWS configuration.
+        Writes:
+        * zipped delwaq model in ModuleDataSetFiles
+        * staticgeoms in MapLayerFiles
+        * states in ColdStateFiles
+        * forcing in Import
+        Parameters
+        ----------
+        fews_root: str
+            Path to the FEWS configuration.
+        scheme_version: int
+            Version number of the modelling scheme (coupled model suite).
+        region_name: str
+            Name of the model region.
+        model_version: int
+            Version of the current delwaq model version for region_name.
+        fews_template: str, Path, optional
+            Path to a FEWS config template for initialisation. If None, download from url.
+        delwaq_template: str, Path, optional
+            Path to a folder containing all delwaq template files. If None download from url.
+        """
+        if self._read:
+            self.read()
+        self.logger.info(f"Setting FEWS config at {fews_root}")
+        fews = FewsUtils(fews_root, template_path=fews_template)
+        # Instantiate the delwaq model in fews object
+        model_name = f"delwaq.{region_name}.{model_version}"
+        fews.add_modeldata(
+            name=model_name,
+            scheme_version=scheme_version,
+            crs=self.crs,
+            shape=self.staticmaps.raster.shape,
+            bounds=self.staticmaps.raster.bounds,
+        )
+
+        # Update and write delwaq model components in specific FEWS folders and format
+        self.logger.info(f"Write model data to {fews_root}")
+        # Location of delwaq model
+        delwaq_root = os.path.join(
+            fews.module_path,
+            f"scheme.{scheme_version}",
+            f"delwaq.{region_name}.{model_version}",
+        )
+        self.set_root(delwaq_root, mode="w")
+
+        # Add inital start of the FEWS CF application
+        self.logger.info("Adding FEWS inital start files for FEWS CF application")
+        fews.from_initialstart(
+            fews_root=fews_root, template_path=fews_template
+        )
+
+        # Add FEWS config file for the model
+        self.logger.info("Adding FEWS template files for Delwaq")
+        fews.add_template_configfiles(
+            model_source=model_name, model_templates=delwaq_template
+        )
