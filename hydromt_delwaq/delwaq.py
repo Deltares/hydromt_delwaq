@@ -62,7 +62,6 @@ class DelwaqModel(Model):
         root=None,
         mode="w",
         config_fn=None,
-        mtype="EM",
         hydromodel_name="wflow",
         hydromodel_root=None,
         data_libs=None,
@@ -83,28 +82,29 @@ class DelwaqModel(Model):
         self.hydromodel_root = hydromodel_root
 
         self._hydromaps = xr.Dataset()  # extract of hydromodel staticmaps
-        self._pointer = None
+        self._pointer = (
+            None  # dictionnary of pointer values and related model attributes
+        )
         self._geometry = None
         self._fewsadapter = None
 
         self.timestepsecs = 86400
 
-        self.type = mtype
-
     def setup_basemaps(
         self,
         region,
-        include_soil=False,
+        compartments=["sfw"],
+        boundaries=["bd"],
+        fluxes=["sfw>sfw", "bd>sfw"],
+        comp_attributes=[0],
     ):
         """Setup the delwaq model schematization using the hydromodel region and
         resolution. 
         
         Maps used and derived from the hydromodel are stored in a specific\ 
-        hydromodel attribute. Depending on the global option ``type``, build a\ 
-        one-substance D-Emission ("EM") or D-Water Quality ("WQ") case.\
-        For a WQ case, the pointer will be created. No arguments are needed for this\
-        function (``include_soil`` will be supported later for subsurface transport of\
-        substances).
+        hydromodel attribute. Build a D-Water Quality ("WQ") case.\
+        The pointer will be created based on the ``fluxes`` list
+        between model compartments and boundaries.
         
         Adds model layers:
         
@@ -120,8 +120,16 @@ class DelwaqModel(Model):
         region : dict
             Dictionary describing region of interest.
             Currently supported format is {'wflow': 'path/to/wflow_model'}        
-        include_soil : boolean
-            add a soil compartment for transport (default: False)
+        compartments : list of str, optional
+            List of names of compartments to include. By default one for surface waters called 'sfw'.
+        boundaries: list of str, optional
+            List of names of boundaries to include. By default a unique boundary called 'bd'.
+        fluxes: list of str
+            List of fluxes to include between compartments/boundaries. Name convention is '{compartment_name}>{boundary_name}'
+            for a flux from a compartment to a boundary, ex 'sfw>bd'. By default ['sfw>sfw', 'bd>sfw'] for runoff and inwater.
+            Names in the fluxes list should match name in the hydrology_fn source in setup_hydrology_forcing.
+        comp_attributes: list of int
+            Attribute 1 value of the B3_attributes config file. 1 or 0 for surface water. Also used to compute surface variable.
         """
         # Initialise hydromodel from region
         kind, region = workflows.parse_region(region, logger=self.logger)
@@ -136,7 +144,7 @@ class DelwaqModel(Model):
             self.hydromodel_name = hydromodel._NAME
             self.hydromodel_root = hydromodel.root
 
-        self.logger.info(f"Preparing {self.type} basemaps from hydromodel.")
+        self.logger.info(f"Preparing WQ basemaps from hydromodel.")
 
         ### Select and build hydromaps from model ###
         # Initialise hydromaps
@@ -147,16 +155,21 @@ class DelwaqModel(Model):
 
         # Build segment ID and add to hydromaps
         # Prepare delwaq pointer file for WAQ simulation (not needed with EM)
-        if self.type == "WQ":
-            nrofseg, da_ptid, da_ptiddown, pointer, bd_id, bd_type = segments.pointer(
-                self.hydromaps, build_pointer=True
-            )
-            self.set_hydromaps(da_ptid, name="ptid")
-            self.set_hydromaps(da_ptiddown, name="ptiddown")
-            self._pointer = pointer
-        else:
-            nrofseg, da_ptid = segments.pointer(self.hydromaps, build_pointer=False)
-            self.set_hydromaps(da_ptid, name="ptid")
+        nrofseg, da_ptid, da_ptiddown, pointer, bd_id, bd_type = segments.pointer(
+            self.hydromaps,
+            build_pointer=True,
+            compartments=compartments,
+            boundaries=boundaries,
+            fluxes=fluxes,
+        )
+        self.set_hydromaps(da_ptid, name="ptid")
+        self.set_hydromaps(da_ptiddown, name="ptiddown")
+        # Initialise pointer object with schematisation attributes
+        self.set_pointer(pointer, name="pointer")
+        self.set_pointer(nrofseg, name="nrofseg")
+        self.set_pointer(compartments, name="compartments")
+        self.set_pointer(bd_type, name="boundaries")
+        self.set_pointer(fluxes, name="fluxes")
 
         ### Initialise staticmaps with streamorder, river and slope ###
         ds_stat = (
@@ -172,41 +185,29 @@ class DelwaqModel(Model):
         ### Geometry data ###
         surface = emissions.gridarea(hydromodel.staticmaps)
         surface.raster.set_nodata(np.nan)
-        geom = surface.rename("surface").to_dataset()
-        # For WQ type, add surface and manning to staticmaps
-        if self.type == "WQ":
-            # For WQ surface in river cells should be river surface
-            rivlen = hydromodel.staticmaps[hydromodel._MAPS["rivlen"]]
-            rivwth = hydromodel.staticmaps[hydromodel._MAPS["rivwth"]]
-            rivmsk = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
-            geom["surface"] = xr.where(rivmsk, rivlen * rivwth, geom["surface"])
-            geom["surface"].raster.set_nodata(np.nan)
-            geom["manning"] = hydromodel.staticmaps["N"]
-            self.set_staticmaps(geom)
-        # For EM type build a pointer like object and add to self.geometry
-        if self.type == "EM":
-            geom["fPaved"] = hydromodel.staticmaps["PathFrac"]
-            geom["fOpenWater"] = hydromodel.staticmaps["WaterFrac"]
-            geom["fUnpaved"] = (
-                (geom["fPaved"] * 0.0 + 1.0) - geom["fPaved"] - geom["fOpenWater"]
+        surface = surface.rename("surface")
+        surface_tot = []
+        for i in range(len(compartments)):
+            if comp_attributes[i] == 0:  # surface water
+                rivlen = hydromodel.staticmaps[hydromodel._MAPS["rivlen"]]
+                rivwth = hydromodel.staticmaps[hydromodel._MAPS["rivwth"]]
+                rivmsk = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
+                surface_tot.append(xr.where(rivmsk, rivlen * rivwth, surface))
+            else:  # other use direct cell surface
+                surface_tot.append(surface)
+        geom = (
+            xr.concat(
+                surface_tot,
+                pd.Index(np.arange(1, len(compartments) + 1, dtype=int), name="comp"),
             )
-            geom["fUnpaved"] = xr.where(geom["fUnpaved"] < 0.0, 0.0, geom["fUnpaved"])
-
-            mask = self.staticmaps["mask"].values.flatten()
-            for dvar in ["surface", "fPaved", "fUnpaved", "fOpenWater"]:
-                data = geom[dvar].values.flatten()
-                data = data[mask].reshape(nrofseg, 1)
-                if dvar == "surface":
-                    geometry = data
-                else:
-                    geometry = np.hstack((geometry, data))
-            self._geometry = pd.DataFrame(
-                geometry, columns=(["TotArea", "fPaved", "fUnpaved", "fOpenWater"])
-            )
+            .transpose("comp", ...)
+            .to_dataset()
+        )
+        geom["manning"] = hydromodel.staticmaps["N"]
+        self.set_staticmaps(geom)
 
         ### Config ###
-        # For now, only one compartment in EM and WQ
-        nrofcomp = 1
+        nrofcomp = len(compartments)
         # B3_nrofseg
         lines_ini = {
             "l1": f"{nrofseg} ; nr of segments",
@@ -214,10 +215,6 @@ class DelwaqModel(Model):
         for option in lines_ini:
             self.set_config("B3_nrofseg", option, lines_ini[option])
         # B3_attributes
-        if self.type == "EM":
-            l7 = f"     {int(nrofseg/nrofcomp)}*01 ; EM"
-        else:
-            l7 = f"     {int(nrofseg/nrofcomp)}*01 ; Sfw"
         lines_ini = {
             "l1": "      ; DELWAQ_COMPLETE_ATTRIBUTES",
             "l2": " 1    ; one block with input",
@@ -225,18 +222,19 @@ class DelwaqModel(Model):
             "l4": "     1     2",
             "l5": " 1    ; file option in this file",
             "l6": " 1    ; option without defaults",
-            "l7": l7,
-            "l8": " 0    ; no time dependent attributes",
         }
+        nl = 7
+        for i in range(nrofcomp):
+            lines_ini[
+                f"l{nl}"
+            ] = f"     {int(nrofseg/nrofcomp)}*{comp_attributes[i]}1 ; {compartments[i]}"
+            nl += 1
+        lines_ini[f"l{nl}"] = " 0    ; no time dependent attributes"
         for option in lines_ini:
             self.set_config("B3_attributes", option, lines_ini[option])
         # B4_nrofexch
-        if self.type == "WQ":
-            nrexch = self._pointer.shape[0]
-        else:
-            nrexch = 0
         lines_ini = {
-            "l1": f"{nrexch} 0 0 ; x, y, z direction",
+            "l1": f"{self.nrofexch} 0 0 ; x, y, z direction",
         }
         for option in lines_ini:
             self.set_config("B4_nrofexch", option, lines_ini[option])
@@ -244,21 +242,20 @@ class DelwaqModel(Model):
         lines_ini = {
             "l1": f";'NodeID' 'Number' 'Type'",
         }
-        if self.type == "WQ":
-            for i in range(len(bd_id)):
-                lstr = "l" + str(i + 2)
-                lines_ini.update(
-                    {lstr: f"'BD_{int(bd_id[i])}' '{int(bd_id[i])}' '{bd_type[i]}'"}
-                )
+        for i in range(len(bd_id)):
+            lstr = "l" + str(i + 2)
+            lines_ini.update(
+                {lstr: f"'BD_{int(bd_id[i])}' '{int(bd_id[i])}' '{bd_type[i]}'"}
+            )
         for option in lines_ini:
             self.set_config("B5_boundlist", option, lines_ini[option])
-        # B7_Surf
-        if self.type == "EM":
-            lines_ini = {
-                "l1": f"PARAMETERS Surf ALL DATA {nrofseg}*1.0",
-            }
-            for option in lines_ini:
-                self.set_config("B7_surf", option, lines_ini[option])
+        # B7_fluxes
+        lines_ini = {
+            "l1": "SEG_FUNCTIONS",
+            "l2": " ".join(fluxes),
+        }
+        for option in lines_ini:
+            self.set_config("B7_fluxes", option, lines_ini[option])
 
     def setup_monitoring(self, mon_points, mon_areas, **kwargs):
         """Setup Delwaq monitoring points and areas options.
@@ -284,7 +281,7 @@ class DelwaqModel(Model):
         if mon_points is not None:
             if mon_points == "segments":
                 monpoints = self.hydromaps["ptid"]
-            else:
+            else:  # TODO update for several compartements
                 kwargs = {}
                 if isfile(mon_points) and str(mon_points).endswith(".csv"):
                     kwargs.update(crs=self.crs)
@@ -318,18 +315,32 @@ class DelwaqModel(Model):
         # Monitoring areas domain
         monareas = None
         if mon_areas == "subcatch" or mon_areas == "compartments":
-            monareas = self.hydromaps["basins"]
+            monareas = self.hydromaps["basins"].copy()
+            monareas_tot = []
             if mon_areas == "compartments":
-                monareas = xr.where(self.hydromaps["modelmap"], 1, mv).astype(np.int32)
+                nb_areas = self.nrofcomp
+                for i in range(self.nrofcomp):
+                    monareas_tot.append(
+                        xr.where(self.hydromaps["modelmap"], i, mv).astype(np.int32)
+                    )
+            else:  # subcatch
+                # Number or monitoring areas
+                areas = monareas.values.flatten()
+                areas = areas[areas != mv]
+                nb_sub = len(np.unique(areas))
+                nb_areas = nb_sub * self.nrofcomp
+                for i in range(self.nrofcomp):
+                    monareas_tot.append(monareas + (i * nb_sub))
+            monareas = xr.concat(
+                monareas_tot,
+                pd.Index(np.arange(1, self.nrofcomp + 1, dtype=int), name="comp"),
+            ).transpose("comp", ...)
             # Add to staticmaps
             self.set_staticmaps(monareas.rename("monareas"))
             self.staticmaps["monareas"].attrs.update(_FillValue=mv)
-            # Number or monitoring areas
-            areas = monareas.values.flatten()
-            areas = areas[areas != mv]
-            nb_areas = len(np.unique(areas))
-            # Add to staticgeoms
-            gdf_areas = self.staticmaps["monareas"].raster.vectorize()
+
+            # Add to staticgeoms (only first compartments)
+            gdf_areas = self.staticmaps["monareas"].sel(comp=1).raster.vectorize()
             self.set_staticgeoms(gdf_areas, name="monareas")
         else:
             self.logger.info("No monitoring areas set in the config file, skipping")
@@ -356,21 +367,24 @@ class DelwaqModel(Model):
     ):
         """Setup Delwaq hydrological fluxes.
 
+        As the fluxes order should precisely macth the pointer defined in setup_basemaps, the variables names
+        in ``hydro_forcing_fn`` should match names defined in the ``fluxes`` argument of setup_basemaps.
+        These names should also have been saved in the file config/B7_fluxes.inc.
+
+        If several sub-variables in ``hydro_forcing_fn`` need to be summed up to get the expected flux in pointer,
+        they can be named {flux_name_in_pointer}_{number} (eg "sfw>sfw_1" and "sfw>sfw_2" to get "sfw>sfw") and the
+        function will sum them on the fly. To remove (- instead of +) use unit_mult attribute of tha data catalog
+        with -1 for the sub-variables of interest.
+
+        Unit conversions are possible (after the sum!) from mm/day to m3/s for fluxes, volumes should be provided directly in m3.
+
         Adds model layers:
 
         * **B1_timestamp.inc** config: timestamp at the beginning of the simulation.
         * **B2_outputtimes.inc** config: start and end timestamp for the delwaq outputs.
         * **B2_sysclock.inc** config: model timestep.
         * **B2_timers.inc** config: timers info (start, end, timstep...).
-
-        In EM mode, adds:
-
-        * **hydrology.bin** dynmap: fluxes for EM (Rainfall RunoffPav  RunoffUnp Infiltr TotalFlow) [mm]
-        * **B7_hydrology.inc** config: names of fluxes included in hydrology.bin
-
-        In WQ mode, adds:
-
-        * **flow.dat** dynmap: fluxes for WQ (SurfaceRunoff Inwater) [m3/s]
+        * **flow.dat** dynmap: water fluxes [m3/s]
         * **volume.dat** dynmap: water volumes [m3]
         * **area.dat** dynmap: water cross sections [m2]
         * **velocity.dat** dynmap: flow velocity [m/s]
@@ -379,14 +393,10 @@ class DelwaqModel(Model):
         ----------
         hydro_forcing_fn : {'None', 'name in local_sources.yml'}
             Either None, or name in a local or global data_sources.yml file.
+            Names of fluxes should match those as set in the ``fluxes`` list of setup_basemaps methods (pointer creation).
 
-            * Required variables for EM: ['time', 'precip', 'infilt', 'runPav', 'runUnp']
+            * Required variables (to be deprecated): ['time', 'run', 'vol' or 'lev', 'inwater']
 
-            * Required variables for WQ (option1): ['time', 'run', 'vol' or 'lev', 'inwater']
-
-            * Required variables for WQ (option2): ['time', 'runRiv' and 'runLand', 'volRiv' and 'volLand' or 'levRiv' and 'levLand', 'inwaterRiv' and 'inwaterLand']
-
-            * Optional variable for WQ: ['inwaterInternal']
         startime : str
             Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
         endtime : str
@@ -431,79 +441,55 @@ class DelwaqModel(Model):
 
         # Update model timestepsecs attribute
         self.timestepsecs = timestepsecs
-        # Select variables based on model type
-        if self.type == "EM":
-            ds = ds[["precip", "runPav", "runUnp", "infilt"]]
-            # Add total flow
-            ds["totflw"] = ds["precip"].copy()
-        else:
-            # If needed compute total variables from land + river
-            if "runLand" in ds.data_vars and "runRiv" in ds.data_vars:
-                attrs = ds["runLand"].attrs.copy()
-                ds["run"] = ds["runRiv"].fillna(0) + ds["runLand"]
-                ds["run"].attrs.update(attrs)
-            if "inwaterLand" in ds.data_vars and "inwaterRiv" in ds.data_vars:
-                attrs = ds["inwaterLand"].attrs.copy()
-                ds["inwater"] = ds["inwaterRiv"].fillna(0) + ds["inwaterLand"]
-                ds["inwater"].attrs.update(attrs)
-            # In wflow the inwater flux contains internal water fluxes between the land and river surface waters components
-            # This needs to be substracted from the inwater
-            if "inwaterInternal" in ds.data_vars:
-                attrs = ds["inwater"].attrs.copy()
-                ds["inwater"] = ds["inwater"] - ds["inwaterInternal"]
-                ds["inwater"].attrs.update(attrs)
 
-            # If needed, compute volume from level using surface
-            if "vol" not in ds.data_vars and "volRiv" not in ds.data_vars:
-                if "levLand" in ds.data_vars and "levRiv" in ds.data_vars:
-                    surface = emissions.gridarea(ds)
-                    volL = ds["levLand"] * surface
-                    rivlen = self.hydromaps["rivlen"]
-                    rivwth = self.hydromaps["rivwth"]
-                    volR = ds["levRiv"] * rivlen * rivwth
-                    ds["vol"] = volL + volR.fillna(0) + min_volume
-                    ds["vol"].attrs.update(units="m3")
-                    ds["vol"].attrs.update(_FillValue=ds["levLand"].raster.nodata)
-                else:
-                    ds["vol"] = ds["lev"] * self.staticmaps["surface"] + min_volume
-                    ds["vol"].attrs.update(units="m3")
-                    ds["vol"].attrs.update(_FillValue=ds["lev"].raster.nodata)
-            else:
-                if "volLand" in ds.data_vars and "volRiv" in ds.data_vars:
-                    attrs = ds["volLand"].attrs.copy()
-                    ds["vol"] = ds["volRiv"].fillna(0) + ds["volLand"] + min_volume
-                    ds["vol"].attrs.update(attrs)
-                else:
-                    # In order to avoid zero volumes, a basic minimum value of 0.0001 m3 is added to all volumes
-                    attrs = ds["vol"].attrs.copy()
-                    ds["vol"] = ds["vol"] + min_volume
-                    ds["vol"].attrs.update(attrs)
+        ### Fluxes ###
+        for flux in self.fluxes:
+            # Check if the flux is split into several variables
+            fl_vars = [v for v in ds.data_vars if v.startswith(flux)]
+            attrs = ds[fl_vars[0]].attrs.copy()
+            if len(fl_vars) > 1:  # need to sum
+                ds[flux] = ds[fl_vars].fillna(0).to_array().sum("variable")
+            # Unit conversion (from mm to m3/s)
+            if ds[flux].attrs.get("units") == "mm":
+                surface = emissions.gridarea(ds)
+                ds[flux] = ds[flux] * surface / (1000 * self.timestepsecs)
+            ds[flux].attrs.update(attrs)
+            ds[flux].attrs.update(unit="m3/s")
 
-            # Select variables
-            ds = ds[["run", "inwater", "vol"]]
-
-        # Select times
+        ### Volumes ###
         # Add offset for the volumes if needed
-        if add_volume_offset and self.type == "WQ":
+        if add_volume_offset:
             # Get the freq of ds and add + 1 offset
             times = pd.to_datetime(ds["time"].values)
             times.freq = pd.infer_freq(times)
             times_offset = times + times.freq
-            vol = ds["vol"].copy()
-            ds = ds.drop_vars("vol")
-            vol["time"] = times_offset
-            ds = ds.merge(vol)
+        for vol in self.compartments:
+            # Check if the flux is split into several variables
+            vol_vars = [v for v in ds.data_vars if v.startswith(vol)]
+            attrs = ds[vol_vars[0]].attrs.copy()
+            if len(vol_vars) > 1:  # need to sum
+                ds[vol] = ds[vol_vars].fillna(0).to_array().sum("variable")
+            # Unit conversion (from mm to m3)
+            # if ds[flux].attrs.get("units") == "mm":
+            # TODO
+            # In order to avoid zero volumes, a basic minimum value of 0.0001 m3 is added to all volumes
+            ds["vol"] = ds["vol"] + min_volume
+            # Add offset for the volumes if needed
+            if add_volume_offset:
+                vol = ds[vol].copy()
+                ds = ds.drop_vars(vol)
+                vol["time"] = times_offset
+                ds = ds.merge(vol)
+            ds[vol].attrs.update(attrs)
+            ds[vol].attrs.update(unit="m3")
+
+        # Select variables
+        variables = self.fluxes.copy()
+        variables.extend(self.compartments)
+        ds = ds[variables]
+
         # Sell times to starttime and endtime
         ds = ds.sel(time=slice(starttime, endtime))
-
-        # Unit conversion (from mm to m3/s)
-        for dvar in ds.data_vars.keys():
-            if ds[dvar].attrs.get("units") == "mm":
-                attrs = ds[dvar].attrs.copy()
-                surface = emissions.gridarea(ds)
-                ds[dvar] = ds[dvar] * surface / (1000 * self.timestepsecs)
-                ds[dvar].attrs.update(attrs)  # set original attributes
-                ds[dvar].attrs.update(unit="m3/s")
 
         ds.coords["mask"] = xr.DataArray(
             dims=ds.raster.dims,
@@ -543,14 +529,9 @@ class DelwaqModel(Model):
 
         # B2_sysclock
         timestepsec = timestep.days * 86400 + timestep.seconds
-        if self.type == "EM":
-            lines_ini = {
-                "l1": f"  1 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
-            }
-        else:
-            lines_ini = {
-                "l1": f"{timestepsec:7d} 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
-            }
+        lines_ini = {
+            "l1": f"{timestepsec:7d} 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
+        }
         for option in lines_ini:
             self.set_config("B2_sysclock", option, lines_ini[option])
 
@@ -573,15 +554,6 @@ class DelwaqModel(Model):
         }
         for option in lines_ini:
             self.set_config("B2_timers_only", option, lines_ini[option])
-
-        # Add var info to config
-        if self.type == "EM":
-            lines_ini = {
-                "l1": "SEG_FUNCTIONS",
-                "l2": "Rainfall RunoffPav RunoffUnp Infiltr TotalFlow ",
-            }
-            for option in lines_ini:
-                self.set_config("B7_hydrology", option, lines_ini[option])
 
     def setup_sediment_forcing(
         self,
@@ -838,147 +810,6 @@ class DelwaqModel(Model):
             }
             self.set_staticmaps(ds_admin_maps.rename(rmdict))
 
-    def setup_roads(
-        self,
-        roads_fn,
-        highway_list,
-        country_list,
-        non_highway_list=None,
-        country_fn=None,
-    ):
-        """Setup roads statistics needed for emission modelling.
-
-        Adds model layers:
-
-        * **km_highway_country** map: emission data with for each grid cell the total km of highway for the country the grid cell is in [km highway/country]
-        * **km_other_country** map: emission data with for each grid cell the total km of non highway roads for the country the grid cell is in [km other road/country]
-        * **km_highway_cell** map: emission data containing highway length per cell [km highway/cell]
-        * **km_other_cell** map:
-        * **emission factor X** map: emission data from mapping file to classification
-
-        Parameters
-        ----------
-        roads_fn: str
-            Name of road data source in data_sources.yml file.
-
-            * Required variables: ['road_type']
-
-            * Optional variable: ['length', 'country_code']
-        highway_list: str or list of str
-            List of highway roads in the type variable of roads_fn.
-        non_highway_list: str or list of str, optional.
-            List of non highway roads in the type variable of roads_fn. If not provided takes every roads except the ones in highway_list.
-        country_list: str or list of str, optional.
-            List of countries for the model area in country_fn and optionnally in country_code variable of roads_fn.
-        country_fn: str, optional.
-            Name of country boundaries data source in data_sources.yml file.
-
-            * Required variables: ['country_code']
-
-        """
-        if roads_fn is None:
-            return
-        if roads_fn not in self.data_catalog:
-            self.logger.warning(f"Invalid source '{roads_fn}', skipping setup_roads.")
-            return
-        # Convert string to lists
-        if not isinstance(highway_list, list):
-            highway_list = [highway_list]
-        if not isinstance(country_list, list):
-            country_list = [country_list]
-
-        # Mask the road data with countries of interest
-        gdf_country = self.data_catalog.get_geodataframe(country_fn, dst_crs=self.crs)
-        gdf_country = gdf_country.astype({"country_code": "str"})
-        gdf_country = gdf_country.iloc[
-            np.isin(gdf_country["country_code"], country_list)
-        ]
-        # bbox = gdf_country.total_bounds
-
-        # Read the roads data and mask with country geom
-        gdf_roads = self.data_catalog.get_geodataframe(
-            roads_fn, dst_crs=self.crs, geom=gdf_country, variables=["road_type"]
-        )
-        # Make sure road type is str format
-        gdf_roads["road_type"] = gdf_roads["road_type"].astype(str)
-        # Get non_highway_list
-        if non_highway_list is None:
-            road_types = np.unique(gdf_roads["road_type"].values)
-            non_highway_list = road_types[~np.isin(road_types, highway_list)].tolist()
-        elif not isinstance(non_highway_list, list):
-            non_highway_list = [non_highway_list]
-
-        # Feature filter for highway and non-highway
-        feature_filter = {
-            "hwy": {"road_type": highway_list},
-            "nnhwy": {"road_type": non_highway_list},
-        }
-
-        ### Country statistics ###
-        # Loop over feature_filter
-        for name, colfilter in feature_filter.items():
-            self.logger.info(
-                f"Computing {name} roads statistics per country of interest"
-            )
-            # Filter gdf
-            colname = [k for k in colfilter.keys()][0]
-            subset_roads = gdf_roads.iloc[
-                np.isin(gdf_roads[colname], colfilter.get(colname))
-            ]
-            gdf_country = roads.zonal_stats(
-                gdf=subset_roads,
-                zones=gdf_country,
-                variables=["length"],
-                stats=["sum"],
-                method="sjoin",
-            )
-            gdf_country = gdf_country.rename(
-                columns={"length_sum": f"{name}_length_sum"}
-            )
-            # Convert from m to km
-            gdf_country[f"{name}_length_sum"] = gdf_country[f"{name}_length_sum"] / 1000
-
-            # Rasterize statistics
-            da_emi = emissions.emission_vector(
-                gdf=gdf_country,
-                ds_like=self.staticmaps,
-                col_name=f"{name}_length_sum",
-                method="value",
-                mask_name="mask",
-                logger=self.logger,
-            )
-            self.set_staticmaps(da_emi.rename(f"{name}_length_sum_country"))
-
-        ### Road statistics per segment ###
-        # Filter road gdf with model mask
-        mask = self.staticmaps["mask"].astype("int32").raster.vectorize()
-        gdf_roads = self.data_catalog.get_geodataframe(
-            roads_fn, dst_crs=self.crs, geom=mask, variables=["road_type"]
-        )
-        # Make sure road type is str format
-        gdf_roads["road_type"] = gdf_roads["road_type"].astype(str)
-
-        # Loop over feature_filter
-        for name, colfilter in feature_filter.items():
-            self.logger.info(f"Computing {name} roads statistics per segment")
-            # Filter gdf
-            colname = [k for k in colfilter.keys()][0]
-            subset_roads = gdf_roads.iloc[
-                np.isin(gdf_roads[colname], colfilter.get(colname))
-            ]
-            ds_roads = roads.zonal_stats_grid(
-                gdf=subset_roads,
-                ds_like=self.staticmaps,
-                variables=["length"],
-                stats=["sum"],
-                mask_name="mask",
-                method="overlay",
-            )
-            # Convert from m to km and rename
-            ds_roads[f"{name}_length"] = ds_roads["length_sum"] / 1000
-            ds_roads[f"{name}_length"].attrs.update(_FillValue=0)
-            self.set_staticmaps(ds_roads)
-
     # I/O
     def read(self):
         """Method to read the complete model schematization and configuration from file."""
@@ -1152,57 +983,21 @@ class DelwaqModel(Model):
         if not self._write:
             raise IOError("Model opened in read-only mode")
         if self._pointer is not None:
+            pointer = self.pointer["pointer"]
             self.logger.info("Writting pointer file in root/config")
             fname = join(self.root, "config", "B4_pointer")
             # Write ASCII file
             exfile = open((fname + ".inc"), "w")
             print(";Pointer for WAQ simulation in Surface Water", file=exfile)
-            print(";nr of pointers is: ", str(self._pointer.shape[0]), file=exfile)
-            np.savetxt(exfile, self._pointer, fmt="%10.0f")
+            print(";nr of pointers is: ", str(pointer.shape[0]), file=exfile)
+            np.savetxt(exfile, pointer, fmt="%10.0f")
             exfile.close()
 
             # Write binary file
             f = open((fname + ".poi"), "wb")
-            for i in range(self._pointer.shape[0]):
-                f.write(struct.pack("4i", *np.int_(self._pointer[i, :])))
+            for i in range(pointer.shape[0]):
+                f.write(struct.pack("4i", *np.int_(pointer[i, :])))
             f.close()
-
-    def read_geometry(self):
-        """Read Delwaq EM geometry file"""
-        raise NotImplementedError()
-
-    def write_geometry(self):
-        """Write geometry at <root/staticdata> in ASCII and binary format."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
-        if self._geometry is not None:
-            self.logger.info("Writting geometry file in root/staticdata")
-            fname = join(self.root, "config", "B7_geometry")
-
-            # Write ASCII file
-            exfile = open(fname + ".inc", "w")
-            print(";Geometry of the EM compartment", file=exfile)
-            print("PARAMETERS TotArea fPaved fUnpaved fOpenWater ALL", file=exfile)
-            print("DATA", file=exfile)
-            np.savetxt(exfile, self._geometry.values, fmt="%10.4f")
-            exfile.close()
-
-            # Write binary file
-            # Flatten the geometry data and repeat them for each compartment
-            geometry_data = np.tile(self._geometry.values.flatten(), 1)
-            artow = np.array(geometry_data, dtype=np.float32).copy()
-            # Define dummy time
-            timear = np.array(0, dtype=np.int32)
-            # Open and write the data
-            fp = open(fname + ".bin", "wb")
-            tstr = timear.tobytes() + artow.tobytes()
-            fp.write(tstr)
-            fp.close()
-
-            # Write corresponding def file of the geometry
-            fpa = open(fname + "-parameters.inc", "w")
-            print("PARAMETERS TotArea fPaved fUnpaved fOpenWater", file=fpa)
-            fpa.close()
 
     def read_forcing(self):
         """Read and forcing at <root/?/> and parse to dict of xr.DataArray"""
@@ -1254,58 +1049,42 @@ class DelwaqModel(Model):
         timestepstamp = np.arange(
             0, (len(ds_out.time.values) + 1) * int(self.timestepsecs), self.timestepsecs
         )
-        if self.type == "EM":
-            for i in timesteps:
-                self.logger.info(
-                    f"Writting dynamic data for timestep {i+1}/{timesteps[-1]+1}"
-                )
-                fname = join(self.root, "dynamicdata", "hydrology.bin")
-                datablock = []
-                for dvar in ["precip", "runPav", "runUnp", "infilt", "totflw"]:
-                    nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
-                    data = data[data != nodata]
-                    datablock = np.append(datablock, data)
-                self.dw_WriteSegmentOrExchangeData(
-                    timestepstamp[i], fname, datablock, 1, WriteAscii=False
-                )
-        else:
-            for i in timesteps:
-                self.logger.info(
-                    f"Writting dynamic data for timestep {i+1}/{len(timesteps)}"
-                )
-                # Flow
-                flname = join(self.root, "dynamicdata", "flow.dat")
-                flowblock = []
-                for dvar in ["run", "inwater"]:
-                    nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
-                    data = data[data != nodata]
-                    flowblock = np.append(flowblock, data)
-                self.dw_WriteSegmentOrExchangeData(
-                    timestepstamp[i], flname, flowblock, 1, WriteAscii=False
-                )
-                # volume
-                voname = join(self.root, "dynamicdata", "volume.dat")
-                nodata = ds_out["vol"].raster.nodata
-                data = ds_out["vol"].isel(time=i).values.flatten()
+        for i in timesteps:
+            self.logger.info(
+                f"Writting dynamic data for timestep {i+1}/{len(timesteps)}"
+            )
+            # Flow
+            flname = join(self.root, "dynamicdata", "flow.dat")
+            flowblock = []
+            for dvar in ["run", "inwater"]:
+                nodata = ds_out[dvar].raster.nodata
+                data = ds_out[dvar].isel(time=i).values.flatten()
                 data = data[data != nodata]
+                flowblock = np.append(flowblock, data)
+            self.dw_WriteSegmentOrExchangeData(
+                timestepstamp[i], flname, flowblock, 1, WriteAscii=False
+            )
+            # volume
+            voname = join(self.root, "dynamicdata", "volume.dat")
+            nodata = ds_out["vol"].raster.nodata
+            data = ds_out["vol"].isel(time=i).values.flatten()
+            data = data[data != nodata]
+            self.dw_WriteSegmentOrExchangeData(
+                timestepstamp[i], voname, data, 1, WriteAscii=False
+            )
+            # sediment
+            if "B7_sediment" in self.config:
+                sedname = join(self.root, "dynamicdata", "sediment.dat")
+                sed_vars = self.get_config("B7_sediment.l2").split(" ")
+                sedblock = []
+                for dvar in sed_vars:
+                    nodata = ds_out[dvar].raster.nodata
+                    data = ds_out[dvar].isel(time=i).values.flatten()
+                    data = data[data != nodata]
+                    sedblock = np.append(sedblock, data)
                 self.dw_WriteSegmentOrExchangeData(
-                    timestepstamp[i], voname, data, 1, WriteAscii=False
+                    timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
                 )
-                # sediment
-                if "B7_sediment" in self.config:
-                    sedname = join(self.root, "dynamicdata", "sediment.dat")
-                    sed_vars = self.get_config("B7_sediment.l2").split(" ")
-                    sedblock = []
-                    for dvar in sed_vars:
-                        nodata = ds_out[dvar].raster.nodata
-                        data = ds_out[dvar].isel(time=i).values.flatten()
-                        data = data[data != nodata]
-                        sedblock = np.append(sedblock, data)
-                    self.dw_WriteSegmentOrExchangeData(
-                        timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
-                    )
 
         # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
         self.logger.info("Writting waqgeom.nc file")
@@ -1395,6 +1174,142 @@ class DelwaqModel(Model):
                     elif self._read:
                         self.logger.warning(f"Overwriting staticmap: {dvar}")
                 self._hydromaps[dvar] = data[dvar]
+
+    @property
+    def pointer(self):
+        """
+        Dictionnary of schematisation attributes of a Delwaq model.
+
+        Contains
+        --------
+        pointer: np.array
+            Model pointer defining exchanges between segments
+        compartments: list of str
+            List of model compartments names
+        boundaries: list of str
+            List of model boundaries names
+        fluxes: list of str
+            List of model fluxes names
+        nrofseg: int
+            number of segments
+        nrofexch: int
+            number of exchanges
+        nrofcomp: int
+            number of compartments
+        """
+        if not self._pointer:
+            # not implemented yet, fix later
+            self._pointer = dict()
+            # if self._read:
+            #    self.read_pointer
+        return self._pointer
+
+    def set_pointer(self, attr, name):
+        """Add model attribute property to pointer"""
+        # Check that pointer attr is a four column np.array
+        if name == "pointer":
+            if not isinstance(attr, np.array) and attr.shape[1] == 4:
+                self.logger.warning(
+                    "pointer values in self.pointer should be a np.array with four columns."
+                )
+                return
+        elif np.isin(name, ["compartments", "boundaries", "fluxes"]):
+            if not isinstance(attr, list):
+                self.logger.warning(
+                    f"{name} object in self.pointer should be a list of names."
+                )
+                return
+        elif np.isin(name, ["nrofseg", "nrofexch", "nrofcomp"]):
+            if not isinstance(attr, int):
+                self.logger.warning(
+                    f"{name} object in self.pointer should be an integer."
+                )
+                return
+        self._pointer[name] = attr
+
+    @property
+    def nrofseg(self):
+        """Fast accessor to nrofseg property of pointer"""
+        if "nrofseg" in self.pointer:
+            nseg = self.pointer["nrofseg"]
+        else:
+            # from config
+            nseg = self.get_config("B3_nrofseg.l1", "0 ; nr of segments")
+            nseg = int(nseg.split(";")[0])
+            self.set_pointer(nseg, "nrofseg")
+        return nseg
+
+    @property
+    def nrofexch(self):
+        """Fast accessor to nrofexch property of pointer"""
+        if "nrofexch" in self.pointer:
+            nexch = self.pointer["nrofexch"]
+        elif "pointer" in self.pointer:
+            nexch = self.pointer["pointer"].shape[0]
+            self.set_pointer(nexch, "nrofexch")
+        else:
+            # from config
+            nexch = self.get_config(
+                "B4_nrofexch.l1",
+                "0 0 0 ; x, y, z direction",
+            )
+            nexch = int(nexch.split(" ")[0])
+            self.set_pointer(nexch, "nrofexch")
+        return nexch
+
+    @property
+    def nrofcomp(self):
+        """Fast accessor to nrofcomp property of pointer"""
+        if "nrofcomp" in self.pointer:
+            ncomp = self.pointer["nrofcomp"]
+        elif "compartments" in self.pointer:
+            ncomp = len(self.pointer["compartments"])
+            self.set_pointer(ncomp, "nrofcomp")
+        else:
+            # from config
+            ncomp = self.get_config(
+                "B3_attributes.l7",
+                "     1*01 ; sfw",
+            )
+            ncells = ncomp.split("*")[0]
+            ncomp = int(self.nrofseg / ncells)
+            self.set_pointer(ncomp, "nrofexch")
+        return ncomp
+
+    @property
+    def compartments(self):
+        """Fast accessor to compartments property of pointer"""
+        if "compartments" in self.pointer:
+            comp = self.pointer["compartments"]
+        else:
+            # from config
+            nl = 7
+            comp = []
+            for i in range(self.nrofcomp):
+                cp = self.get_config(
+                    f"B3_attributes.l{nl}",
+                    "     1*01 ; sfw",
+                )
+                cp = cp.split(";")[0][1:-1]
+                comp.append(cp)
+                nl += 1
+            self.set_pointer(comp, "compartments")
+        return comp
+
+    @property
+    def fluxes(self):
+        """Fast accessor to fluxes property of pointer"""
+        if "fluxes" in self.pointer:
+            fl = self.pointer["fluxes"]
+        else:
+            # from config
+            fl = self.get_config(
+                "B7_fluxes.l2",
+                "sfw>sfw inw>sfw",
+            )
+            fl = fl.split(" ")
+            self.set_pointer(fl, "fluxes")
+        return fl
 
     def dw_WriteSegmentOrExchangeData(
         self,
