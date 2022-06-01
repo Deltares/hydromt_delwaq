@@ -11,8 +11,8 @@ The main interactions are available from the HydroMT Command Line Interface and 
 HydroMT in order to build or update D-Water Quality (WQ) models.
 
 When building or updating a model from command line a
-`model region <https://deltares.github.io/hydromt/preview/user_guide/model_region>`_; a model setup
-:ref:`configuration <model_config>` (.ini file) with model components and options and, optionally,
+`model region <https://deltares.github.io/hydromt/preview/user_guide/model_region>`_, a model setup
+:ref:`configuration <config_file_WQ>` (.ini file) with model components and options and, optionally,
 a `data sources <https://deltares.github.io/hydromt/preview/user_guide/data_main>`_ (.yml) file should be prepared.
 
 .. _wq_methods:

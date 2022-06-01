@@ -10,7 +10,7 @@ Getting Started
     * Merge API refs to one rst
     * Include ref to API components (in table) if needed
     * Change developers guide to external link
-	* Extent documentation with detailed explanation of D-Emissions from Jos' memo "D-Emissions.docx"
+    * Extent documentation with detailed explanation of D-Emissions from Jos' memo "D-Emissions.docx"
 
 .. grid:: 2
     :gutter: 1 

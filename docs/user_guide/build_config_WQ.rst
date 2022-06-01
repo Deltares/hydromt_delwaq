@@ -16,12 +16,14 @@ for a proper implementation of this model are:
 
 - model
 
-Alternatively, do start from a complete new region, you can start by first using HydroMT to build the linked hydrological/hydrualic 
+Alternatively, to start from a complete new region, you can start by first using HydroMT to build the linked hydrological/hydraulic 
 model for your case and then build delwaq.
 
 .. warning::
 
   As of now, DELWAQ models can only be built on top of existing Wflow models.
+
+.. _config_file_WQ:
 
 Configuration file
 ------------------

@@ -1,4 +1,4 @@
-.. _model_config_update:
+.. _model_config_update_EM:
 
 Updating a model
 ----------------
