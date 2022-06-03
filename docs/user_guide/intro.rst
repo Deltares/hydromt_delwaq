@@ -4,7 +4,7 @@ User Guide
 ==========
 
 With the **HydroMT-delwaq plugin**, users can easily benefit from the rich set of tools of the 
-`HydroMT package <https://deltares.github.io/hydromt/preview/index.html>`_ to build and update
+`HydroMT package <https://deltares.github.io/hydromt/latest/index.html>`_ to build and update
 water quality models from available global and local data.
 As a reminder, a full hydrology/hydrodynamic - water quality simulation is in general separated in three parts:
 

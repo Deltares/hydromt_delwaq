@@ -7,7 +7,7 @@ Installation guide
 Prerequisites
 =============
 
-For the necessary prerequisites, see `HydroMT core prerequisites <https://deltares.github.io/hydromt/preview/getting_started/installation.html#prerequisites>`_.
+For the necessary prerequisites, see `HydroMT core prerequisites <https://deltares.github.io/hydromt/latest/getting_started/installation.html#prerequisites>`_.
 
 Additional dependencies
 -----------------------
@@ -54,6 +54,9 @@ available yet from conda-forge, we recommend to first install HydroMT and the re
     $ conda install -c conda-forge hydromt hydromt_wflow
     $ pip install hydromt_delwaq
 
+.. Note::
+
+    hydroMT-delwaq is available from pypi and we are working on adding a release from conda-forge (ongoing).
 
 Developer install
 -----------------

@@ -91,3 +91,9 @@ the one-substance D-Emissions model:
   Here the EF factor was set to a constant dummy value but you can use HydroMT to prepare and distribute 'real' values from local/global data.
 
 .. literalinclude:: ../_static/espace.inp
+
+
+.. toctree::
+     :hidden:
+     
+     Further reading: Detailed functional description <EM_functional_description.rst>
