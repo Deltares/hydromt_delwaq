@@ -44,6 +44,7 @@ Source = "https://github.com/Deltares/hydromt_delwaq"
 
 [project.entry-points."hydromt.models"]
 delwaq = "hydromt_delwaq.delwaq:DelwaqModel"
+demission = "hydromt_delwaq.demission:DemissionModel"
 
 [tool.black]
 line-length = 88

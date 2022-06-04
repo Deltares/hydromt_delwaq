@@ -605,3 +605,35 @@ class DemissionModel(DelwaqModel):
         # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
         self.logger.info("Writting waqgeom.nc file")
         self.dw_WriteWaqGeom()
+
+    @property
+    def nrofseg(self):
+        """Fast accessor to nrofseg property of pointer"""
+        if "nrofseg" in self.pointer:
+            nseg = self.pointer["nrofseg"]
+        else:
+            # from config
+            nseg = self.get_config("B3_nrofseg.l1", "0 ; nr of segments")
+            nseg = int(nseg.split(";")[0])
+            self.set_pointer(nseg, "nrofseg")
+        return nseg
+
+    @property
+    def nrofexch(self):
+        """Fast accessor to nrofexch property of pointer"""
+        if "nrofexch" in self.pointer:
+            nexch = self.pointer["nrofexch"]
+        else:
+            nexch =self.nrofseg * 5 
+            self.set_pointer(nexch, "nrofexch")
+        return nexch
+
+    @property
+    def nrofcomp(self):
+        """Fast accessor to nrofcomp property of pointer"""
+        if "nrofcomp" in self.pointer:
+            ncomp = self.pointer["nrofcomp"]
+        else:
+            ncomp = 1
+            self.set_pointer(ncomp, "nrofexch")
+        return ncomp
