@@ -11,4 +11,4 @@ The Hydromt-delwaq plugin provides several possibilities to postprocess and visa
 .. toctree::
     :hidden:
 
-    Example: Plot Delwaq staticmaps <../_examples/plot_delwaq.ipynb>
+    Example: Plot DELWAQ staticmaps <../_examples/plot_delwaq.ipynb>

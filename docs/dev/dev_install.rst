@@ -14,7 +14,7 @@ If you need a github authentification key, you can use `ssh <https://docs.github
     $ git clone git@github.com:Deltares/hydromt_delwaq.git
 
 Then, navigate into the code folder (where the envs folder and pyproject.toml are located):
-Make and activate a new hydromt-delwaq conda environment based on the envs/hydromt-delwaq.yml
+Make and activate a new Hydromt-delwaq conda environment based on the envs/hydromt-delwaq.yml
 file contained in the repository:
 
 .. code-block:: console

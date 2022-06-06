@@ -15,8 +15,8 @@ Additional dependencies
 The HydroMT-delwaq Python package makes use of the HydroMT core.
 For a complete list of dependencies, see the pyproject.toml file. 
 
-Delwaq models are built on top of existing hydrology/hydrodynamic models. 
-To build a Delwaq model, the plugin of the corresponding hydrology/hydrodynamic model 
+DELWAQ models are built on top of existing hydrology/hydrodynamic models. 
+To build a DELWAQ model, the plugin of the corresponding hydrology/hydrodynamic model 
 also needs to be installed (example HydroMT-Wflow).
 
 Installation
@@ -56,7 +56,7 @@ available yet from conda-forge, we recommend to first install HydroMT and the re
 
 .. Note::
 
-    hydroMT-delwaq is available from pypi and we are working on adding a release from conda-forge (ongoing).
+    HydroMT-delwaq is available from pypi and we are working on adding a release from conda-forge (ongoing).
 
 Developer install
 -----------------

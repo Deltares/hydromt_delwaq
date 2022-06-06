@@ -8,7 +8,7 @@ API reference
 
 .. _api_model:
 
-Delwaq model class
+DELWAQ model class
 ==================
 
 Initialize
@@ -97,7 +97,7 @@ General methods
 
 .. _workflows:
 
-Delwaq workflows
+DELWAQ workflows
 ================
 
 .. autosummary::

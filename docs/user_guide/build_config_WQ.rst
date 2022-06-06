@@ -17,7 +17,7 @@ for a proper implementation of this model are:
 - model
 
 Alternatively, to start from a complete new region, you can start by first using HydroMT to build the linked hydrological/hydraulic 
-model for your case and then build delwaq.
+model for your case and then build DELWAQ.
 
 .. warning::
 
@@ -37,7 +37,7 @@ in order to specify if the model to build/update is either an EM (D-Emissions) o
 .. code-block:: console
 
     [global]
-    mtype = WQ                     # type of Delwaq model ['EM', 'WQ']
+    mtype = WQ                     # type of DELWAQ model ['EM', 'WQ']
 
 Below is an example of :download:`ini file <../_static/delwaq_build_WQ_TN.ini>` that can be used to build a **WQ model** 
 for modelling **Total Nitrogen (TN)** released by **households**.

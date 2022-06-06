@@ -14,13 +14,13 @@ As a reminder, a full hydrology/hydrodynamic - water quality simulation is in ge
 - a fate and transport model, D-Water Quality (also referred to as WQ in this documentation), 
   that predicts the fate and transport of substances in the surface waters (concentrations in mass / volume).
 
-This plugin assist the delwaq modeller in:
+This plugin assist the DELWAQ modeller in:
 
 - Quickly setting up a base D-Emissions or D-Water Quality model on top of an hydrologic Wflow model
 - Making maximum use of the best available global or local data
-- Adjusting and updating components of a delwaq model and their associated parameters in a consistent way
+- Adjusting and updating components of a DELWAQ model and their associated parameters in a consistent way
 
-The prepared delwaq models with HydroMT are almost ready-to-run, and the users only needs to adjust the `.inp` configuration
+The prepared DELWAQ models with HydroMT are almost ready-to-run, and the users only needs to adjust the `.inp` configuration
 file to finalise the setup of his water quality model run and substances to model.
 
 .. toctree::

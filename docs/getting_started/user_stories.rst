@@ -8,7 +8,7 @@ User's stories
 Water quality diagnostic in Peru
 --------------------------------
 Deltares BlueEarth new approach on model setup, **from global to local**, was applied recently 
-in Peru for a nation-wide water quality diagnostic project. The wflow hydrologic and Delwaq water 
+in Peru for a nation-wide water quality diagnostic project. The Wflow hydrologic and DELWAQ water 
 quality models were first prepared from global data and refined later using collected local data. 
 For the water quality model alone, more than forty emission input data were prepared using a combination 
 of global and local sources in various format using the HydroMT tool. These include global population 

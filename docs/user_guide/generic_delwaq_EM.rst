@@ -7,7 +7,7 @@ The first step in solving or mitigating many water quality and health problems, 
 Because it simulates the true cause-effect chain, it provides predictive power and allows for “what if” scenarios driven by policy projections and implemented measures.
 
 
-D-Emissions is a library of the Delwaq software which, in combination with rainfall-runoff and hydraulic modules (e.g. Wflow), may form an integral catchment model.
+D-Emissions is a library of the DELWAQ software which, in combination with rainfall-runoff and hydraulic modules (e.g. Wflow), may form an integral catchment model.
 
 In this section, we will detail the full steps to prepare and run D-Emissions models:
 

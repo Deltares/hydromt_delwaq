@@ -70,7 +70,7 @@ Documentation
 
 v0.1.0 (4 May 2021)
 ----------------------
-Initial open source release of hydroMT delwaq plugin, also published on pypi. Noticeable changes are listed below.
+Initial open source release of HydroMT-delwaq plugin, also published on pypi. Noticeable changes are listed below.
 
 Added
 ^^^^^
@@ -93,7 +93,7 @@ Documentation
 Tests
 ^^^^^
 
-- Initial tests for delwaq EM and WQ.
+- Initial tests for DELWAQ EM and WQ.
 
 .. _Keep a Changelog: https://keepachangelog.com/en/1.0.0/
 .. _Semantic Versioning: https://semver.org/spec/v2.0.0.html

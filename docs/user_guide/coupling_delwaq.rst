@@ -39,7 +39,7 @@ OR
 
 .. note::
 
-    The Delwaq software is not case sensitive. Filenames can therefore either be TRA_em.def or tra_em.def etc.
+    The DELWAQ software is not case sensitive. Filenames can therefore either be TRA_em.def or tra_em.def etc.
 
 .. _coupling_delwaq_multiple:
 

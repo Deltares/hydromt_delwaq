@@ -11,7 +11,7 @@ In order to run the D-Water Quality module of DELWAQ, an input file is used to s
 to use etc. This is set up in a **.inp** file. A template of such a :download:`file <../_static/delwaq.inp>`, for an WQ run, is shown below.
 
 The input file is separated into 10 input blocks each requiring different type of information. You can find more info on what is expected 
-where in the `Delwaq input file documentation <content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Input_File_Description.pdf>`_. In short, the ten blocks are:
+where in the `DELWAQ input file documentation <content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Input_File_Description.pdf>`_. In short, the ten blocks are:
 
 - B1: Identification, selected substances
 - B2: Timers, integration, monitoring
@@ -47,7 +47,7 @@ Depending on their format (binary or ASCII), the files can be included in the in
 In the template below, all (mandatory) files produced by HydroMT have been added and linked. Some explanations on the specificities of the settings for 
 the D-Water Quality linked to one-substance D-Emissions models:
 
-- In block 1, you can see that we are going to model TN as a tracer for simplification (less expert processes to define). The generic name for a tracer in Delwaq is **cTR1**:
+- In block 1, you can see that we are going to model TN as a tracer for simplification (less expert processes to define). The generic name for a tracer in DELWAQ is **cTR1**:
 
 ::
 

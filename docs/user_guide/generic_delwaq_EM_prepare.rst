@@ -12,7 +12,7 @@ run time information, data and model parameters to use etc. This is set up in a 
 a :download:`file <../_static/espace.inp>`, for an EM run, is shown below.
 
 The input file is separated into 10 input blocks each requiring different type of information. You can find more info on what is expected 
-where in the `Delwaq input file documentation <content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Input_File_Description.pdf>`_. In short, the ten blocks are:
+where in the `DELWAQ input file documentation <content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Input_File_Description.pdf>`_. In short, the ten blocks are:
 
 - B1: Identification, selected substances
 - B2: Timers, integration, monitoring
