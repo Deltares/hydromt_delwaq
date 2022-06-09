@@ -22,7 +22,7 @@ This plugin assists the modeller in:
 
 Water quality and emission, fate and transport of pollutants through the landscape, rivers and oceans is very much linked to the water movements. 
 For this reason, HydroMT strongly links DELWAQ modelbuilding to an underlying hydrology / hydraulic or hydrodynamic model. As of now, only the link 
-between :ref:`Wflow and DELWAQ <coupling_wflow>` is supported.
+between `Wflow and DELWAQ <coupling_wflow>`_ is supported.
 
 This plugin supports both:
 
