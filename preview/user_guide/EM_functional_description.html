@@ -1,0 +1,1254 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Detailed functional description &#8212; HydroMT delwaq  documentation</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Running D-Emissions" href="generic_delwaq_EM_run.html" />
+    <link rel="prev" title="Editing the EM run information" href="generic_delwaq_EM_prepare.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">HydroMT delwaq  documentation</p>
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../getting_started/intro.html">
+  Getting Started
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="intro.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../api.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../dev/intro.html">
+  Developments
+ </a>
+</li>
+
+    
+    <li class="nav-item">
+        <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">HydroMT core<i class="fas fa-external-link-alt"></i></a>
+    </li>
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://deltares.nl/en/" rel="noopener" target="_blank" title="Deltares"><img src="../_static/deltares-white.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="generic_delwaq_EM.html">
+   Working with the D-Emissions model
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="EM_model.html">
+     D-Emission model components
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_EM_substances.html">
+     Selection of substance(s) and sources
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="build_config_EM.html">
+     Building a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/build_EM_model.html">
+       Example: Build D-Emission model
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="update_config_EM.html">
+     Updating a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/adding_global_emission.html">
+       Example: Add (global) emission data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/adding_local_emission.html">
+       Example: Add (local) emission data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/update_model_forcing.html">
+       Example: Update forcing data
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 current active has-children">
+    <a class="reference internal" href="generic_delwaq_EM_prepare.html">
+     Editing the EM run information
+    </a>
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul class="current">
+     <li class="toctree-l3 current active">
+      <a class="current reference internal" href="#">
+       Further reading: Detailed functional description
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_EM_run.html">
+     Running D-Emissions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="generic_delwaq_WQ.html">
+   Working with the D-Water Quality model
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="WQ_model.html">
+     D-Water Quality model components
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_WQ_substances.html">
+     Selection of substance(s) and processes
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="build_config_WQ.html">
+     Building a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+    <label for="toctree-checkbox-6">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/build_WQ_model.html">
+       Example: Build D-Water Quality model
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="update_config_WQ.html">
+     Updating a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/update_model_monitoring.html">
+       Example: Update monitoring data
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_WQ_prepare.html">
+     Editing the WQ run information
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_WQ_run.html">
+     Running D-Water Quality
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="process_analyze.html">
+   Postprocessing and visualization
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../_examples/plot_delwaq.html">
+     Example: Plot DELWAQ staticmaps
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="coupling_main.html">
+   Reading more about coupling the individual modules
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="coupling_wflow.html">
+     Explaining the Wflow - DELWAQ coupling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="coupling_delwaq.html">
+     Explaining the D-Emission - D-Water Quality coupling
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generic-single-substance-emission-model-em-gss">
+   Generic Single Substance Emission Model (EM_GSS)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction">
+     Introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#implementation">
+     Implementation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#formulation">
+     Formulation
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#releases">
+       Releases
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#paved-surfaces">
+       Paved surfaces
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#unpaved-surfaces">
+       Unpaved surfaces
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#combined-sewer-systems">
+       Combined sewer systems
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#separated-sewer-systems">
+       Separated sewer systems
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#input">
+     Input
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#output">
+     Output
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#waste-water-management-supportive-process-genwwman">
+   Waste water management supportive process (GenWWman)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     Implementation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     Formulation
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#allocation-of-wastewater-to-receiving-compartments">
+       Allocation of wastewater to receiving compartments
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#fate-of-substances-reaching-wwtps">
+       Fate of substances reaching WWTPs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     Input
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id5">
+     Output
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/Deltares/hydromt_delwaq/edit/new_docs/docs/user_guide/EM_functional_description.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="detailed-functional-description">
+<span id="em-functional-description"></span><h1>Detailed functional description<a class="headerlink" href="#detailed-functional-description" title="Permalink to this headline">#</a></h1>
+<section id="generic-single-substance-emission-model-em-gss">
+<span id="em-gss"></span><h2>Generic Single Substance Emission Model (EM_GSS)<a class="headerlink" href="#generic-single-substance-emission-model-em-gss" title="Permalink to this headline">#</a></h2>
+<section id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h3>
+<p>This process quantifies releases to various compartments and routes them to the final recipients: surface waters and soils. It is applied for a single substance.</p>
+<p>Releases are defined for:</p>
+<ul class="simple">
+<li><p>Atmospheric deposition: dry deposition as mass/time/surface area, wet deposition as mass/volume in precipitation;</p></li>
+<li><p>A variable number of “type A” sources;</p></li>
+<li><p>A variable number of “type B” sources.</p></li>
+</ul>
+<p>The quantification of the releases of polutants associated to the various sources proceeds by the emission factor method. A variable collection of sources can be considered. Releases (<span class="math notranslate nohighlight">\(L\)</span>) of a pollutant “p” for a certain socio-economic activity “a” are calculated by multiplying an activity rate (<span class="math notranslate nohighlight">\(AR_a\)</span>) by an emission factor for this activity and a certain pollutant (<span class="math notranslate nohighlight">\(EF_{p,a}\)</span>):</p>
+<div class="math notranslate nohighlight" id="equation-eq-release-polutant">
+<span class="eqno">(1)<a class="headerlink" href="#equation-eq-release-polutant" title="Permalink to this equation">#</a></span>\[L_{p,a} = AR_a * EF_{p,a}\]</div>
+<p>Releases are distributed in space according to two alternative methods:</p>
+<ol class="upperalpha simple">
+<li><p>The activity rate is known for a larger geographic area (region, country). The releases are first calculated at this aggregated level and then distributed in space using an auxiliary spatial variable called a “locator”.</p></li>
+<li><p>The activity rate is already a spatially distributed variable and can be directly used to calculate spatially variable releases.</p></li>
+</ol>
+<p>The quantified releases are allocated to various initial receptors and routed towards the final receiving compartments: the soil system or the surface waters. Initial receptors can be: (1) the surface waters (directly), (2) the soil system (directly), (3) impermeable surfaces, (4) permeable surfaces, (5) the sewage collection system (combined or separated) and (6) the separate rainwater collection system.</p>
+<p>The emissions related to stormwater and wastewater are simulated as follows:</p>
+<ul class="simple">
+<li><p>The allocation of the wastewater releases from households to initial receptors should take into account the share of unconnected households and the share of households using septic tanks or other “individual or appropriate systems” (IAS, as defined under the Urban Wastewater Treatment Directive).</p></li>
+<li><p>The substances washed off from impermeable areas find their way to a separate rainwater collection system, a combined collection system for stormwater and wastewater or to surface waters and soils in places where there is no collection system.</p></li>
+<li><p>Separate collection systems discharge to surface waters, while a retention term can be defined that is partly allocated to soils (re-use or distribution of sludge).</p></li>
+<li><p>Combined collection systems discharge via a WWTP, where the treatment level can be variable.</p></li>
+<li><p>Combined collection systems feature overflow events (CSOs), during which the treatment is bypassed; CSOs are a fixed fraction or occur if a daily rainfall threshold is exceeded.</p></li>
+</ul>
+</section>
+<section id="implementation">
+<h3>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">#</a></h3>
+<p>The EM is currently configured for 6 compartments.</p>
+<table class="colwidths-given table" id="em-compartments">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Abbreviation</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Sew</span></code></p></td>
+<td><p>Sewer system that receives wastewater and (optionally) stormwater</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Pav</span></code></p></td>
+<td><p>Paved or impermeable surfaces</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Unp</span></code></p></td>
+<td><p>Unpaved or permeable surfaces</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Stw</span></code></p></td>
+<td><p>Sewer system that receives only stormwater</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Sfw</span></code></p></td>
+<td><p>Final recipient surface water, all matter that ends up here is “emissions to surface waters”</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Soi</span></code></p></td>
+<td><p>Final recipient soil system, all matter that ends up here is “emissions to soils”</p></td>
+</tr>
+</tbody>
+</table>
+<p>In the EM software, these compartments are mathematically represented by substances. The mass of the simulated substances is expressed in grams. Transports from one compartment to another (in g s-1) are mathematically represented by “process fluxes” (transformations of one substance into another substance). This comes back in the mass balance output.</p>
+<p>As the mathematical concept of a “substance” is used to represent compartments, EM has been set up to run for one “true” substance at a time.</p>
+</section>
+<section id="formulation">
+<h3>Formulation<a class="headerlink" href="#formulation" title="Permalink to this headline">#</a></h3>
+<section id="releases">
+<h4>Releases<a class="headerlink" href="#releases" title="Permalink to this headline">#</a></h4>
+<p>Releases of substances are quantified per time step.
+Releases from atmospheric deposition are automatically allocated to the proper receiving compartment (paved surfaces, unpaved surfaces and surface waters) depending on the local conditions that follow from the supportive hydrology model.
+Releases from other sources need to be allocated to the proper receiving compartment by the user.
+Optionally, a part of the releases can be <strong>preliminary</strong> allocated to wastewater.
+The subsequent allocation of the wastewater to receiving compartments can then be arranged by a supportive process <a class="reference internal" href="#genwwman"><span class="std std-ref">GenWWman</span></a>.</p>
+</section>
+<section id="paved-surfaces">
+<h4>Paved surfaces<a class="headerlink" href="#paved-surfaces" title="Permalink to this headline">#</a></h4>
+<p>The figure below shows a schematic overview of the fate of releases to paved areas.
+Substances reaching paved areas undergo a decay process and can be washed off.
+The fraction that is not removed by runoff or decay remains in the paved emission pool.
+The intensity of runoff is regulated by the rainfall intensity.
+Wash-off starts at a threshold of 2 mm runoff and the removed fraction linearly increases to 100% at a runoff intensity of 5 mm.
+This relation is fixed in the model code.</p>
+<img alt="../_images/EM_PavedSurfaces.png" src="../_images/EM_PavedSurfaces.png" />
+<p><em>Schematic overview of the pathway that releases follow when distributed to the paved areas.
+The fate of the release is either runoff to storm water or decay and thereby removal from the model.</em></p>
+<p>In formulas:</p>
+<div class="math notranslate nohighlight" id="equation-eq-paved1">
+<span class="eqno">(2)<a class="headerlink" href="#equation-eq-paved1" title="Permalink to this equation">#</a></span>\[f_{runoff} =
+max \left( min \left( \frac{RO - 2}{5 - 2},1  \right),0 \right)\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-paved2">
+<span class="eqno">(3)<a class="headerlink" href="#equation-eq-paved2" title="Permalink to this equation">#</a></span>\[F_{loss} =
+k_{paved} M\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-paved3">
+<span class="eqno">(4)<a class="headerlink" href="#equation-eq-paved3" title="Permalink to this equation">#</a></span>\[F_{runoff} =
+\left( \frac{M}{\Delta t} + L - F_{loss} \right) * f_{runoff}\]</div>
+<p>where</p>
+<table class="table">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(f_{runoff}\)</span></p></td>
+<td><p>fraction washed off by surface runoff (-)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(RO\)</span></p></td>
+<td><p>actual surface runoff intensity (mm/d)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(F_{loss}\)</span></p></td>
+<td><p>flux lost by decay (g/d)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(k_{paved}\)</span></p></td>
+<td><p>decay rate (1/d)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(M\)</span></p></td>
+<td><p>mass available on paved surfaces (g)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(F_{runoff}\)</span></p></td>
+<td><p>flux washed off by surface runoff (g/d)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(L\)</span></p></td>
+<td><p>releases to paved surfaces (g/d)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\Delta t\)</span></p></td>
+<td><p>time step in calculation (d)</p></td>
+</tr>
+</tbody>
+</table>
+<p>The washed off substances are distributed over different compartments:</p>
+<ul class="simple">
+<li><p>A fraction <em>FrSewered</em> is distributed over the <em>Sew</em> and <em>Stw</em> compartments according to the parameter <em>fComSew</em>.</p></li>
+<li><p>Out of the remainder, a fraction <em>fOpenWater</em> is allocated to <em>Sfw</em> and the rest to <em>Soi</em>.</p></li>
+</ul>
+</section>
+<section id="unpaved-surfaces">
+<h4>Unpaved surfaces<a class="headerlink" href="#unpaved-surfaces" title="Permalink to this headline">#</a></h4>
+<p>The figure below presents a schematic overview of the simulated pathways for unpaved areas.
+The unpaved pool is undergoing burial and decay.
+Both processes remove substances from the simulation.
+Depending on the hydrological conditions, a fraction of the pool can be washed off, infiltrate or erode.
+The fraction of the emission that is not removed by any of these processes remains in the unpaved pool.</p>
+<p>The pool is split into fractions bound and unbound to soil particles (parameter <span class="math notranslate nohighlight">\(Kd_{unpaved}\)</span>).
+The bound fraction can erode, the unbound fraction can infiltrate and be washed off.
+Erosion depends on the rainfall intensity: 10 - 20 mm rainfall is equivalent to 0 - 100% erosion (see figure below).
+Wash-off and infiltration also depend on rainfall intensity: 0 - 7 mm of combined runoff and infiltration lead to 0 - 100% of mobilization,
+distributed over wash-off and infiltration in accordance with the hydrological fluxes.</p>
+<img alt="../_images/EM_UnpavedSurfaces.png" src="../_images/EM_UnpavedSurfaces.png" />
+<p><em>Schematic overview of the pathways in unpaved areas.
+The releases are first divided over the bound and unbound fractions.
+The fate of the unbound fraction is either runoff to the storm water collection system (runoff) or infiltration to the soil.
+The fate of the bound fraction is erosion.
+Both fractions will experience burial and decay and thereby removal from the model.</em></p>
+<p>In formulas:</p>
+<div class="math notranslate nohighlight" id="equation-eq-unpaved1">
+<span class="eqno">(5)<a class="headerlink" href="#equation-eq-unpaved1" title="Permalink to this equation">#</a></span>\[f_{erosion} =
+max \left( min \left( \frac{RA - 10}{20 - 10},1  \right),0 \right)\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-unpaved2">
+<span class="eqno">(6)<a class="headerlink" href="#equation-eq-unpaved2" title="Permalink to this equation">#</a></span>\[f_{mob} =
+max \left( min \left( \frac{RO + INF}{7},1  \right),0 \right)\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-unpaved3">
+<span class="eqno">(7)<a class="headerlink" href="#equation-eq-unpaved3" title="Permalink to this equation">#</a></span>\[f_{runoff} =
+max \left( min \left( \frac{RO}{RO + INF},1  \right),0 \right)\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-unpaved4">
+<span class="eqno">(8)<a class="headerlink" href="#equation-eq-unpaved4" title="Permalink to this equation">#</a></span>\[f_{infilt} =
+max \left( min \left( \frac{INF}{RO + INF},1  \right),0 \right)\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-unpaved5">
+<span class="eqno">(9)<a class="headerlink" href="#equation-eq-unpaved5" title="Permalink to this equation">#</a></span>\[F_{loss} =
+\left( k_{unpaved} + b \right) M\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-unpaved6">
+<span class="eqno">(10)<a class="headerlink" href="#equation-eq-unpaved6" title="Permalink to this equation">#</a></span>\[F_{part} =
+Kd_{unpaved} * \left( \frac{M}{\Delta t} + L - F_{loss} \right)\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-unpaved7">
+<span class="eqno">(11)<a class="headerlink" href="#equation-eq-unpaved7" title="Permalink to this equation">#</a></span>\[F_{dis} =
+\left(1 - Kd_{unpaved} \right) * \left( \frac{M}{\Delta t} + L - F_{loss} \right)\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-unpaved8">
+<span class="eqno">(12)<a class="headerlink" href="#equation-eq-unpaved8" title="Permalink to this equation">#</a></span>\[F_{erosion} = F_{part} * f_{erosion}\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-unpaved9">
+<span class="eqno">(13)<a class="headerlink" href="#equation-eq-unpaved9" title="Permalink to this equation">#</a></span>\[F_{infilt} = F_{dis} * f_{mob} * f_{infilt}\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-unpaved10">
+<span class="eqno">(14)<a class="headerlink" href="#equation-eq-unpaved10" title="Permalink to this equation">#</a></span>\[F_{runoff} = F_{dis} * f_{mob} * f_{runoff}\]</div>
+<p>where</p>
+<table class="table">
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 69%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(f_{erosion}\)</span></p></td>
+<td><p>fraction eroded by surface runoff (-)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(f_{mob}\)</span></p></td>
+<td><p>fraction mobilised by runoff or infiltration (-)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(f_{runoff}\)</span></p></td>
+<td><p>fraction mobilised by surface runoff (-)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(f_{infilt}\)</span></p></td>
+<td><p>fraction mobilised by infiltration (-)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(RO\)</span></p></td>
+<td><p>actual surface runoff intensity (mm/d)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(RA\)</span></p></td>
+<td><p>actual rainfall intensity (mm/d)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(INF\)</span></p></td>
+<td><p>actual infiltration intensity (mm/d)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(F_{loss}\)</span></p></td>
+<td><p>flux lost by decay (g/d)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(k_{unpaved}\)</span></p></td>
+<td><p>decay rate (1/d)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(b\)</span></p></td>
+<td><p>burial rate (1/d)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(Kd_{unpaved}\)</span></p></td>
+<td><p>partition fraction (-)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(M\)</span></p></td>
+<td><p>mass available on unpaved surfaces (g)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(F_{loss}\)</span></p></td>
+<td><p>flux lost by decay (g/d)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(L\)</span></p></td>
+<td><p>releases to unpaved surfaces (g/d)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\Delta t\)</span></p></td>
+<td><p>time step in calculation (d)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(F_{part}\)</span></p></td>
+<td><p>particulate flux available for transport (-)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(F_{dis}\)</span></p></td>
+<td><p>dissolved flux available for transport (-)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(F_{erosion}\)</span></p></td>
+<td><p>erosion flux by surface runoff (-)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(F_{runoff}\)</span></p></td>
+<td><p>runoff flux (-)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(F_{infilt}\)</span></p></td>
+<td><p>infiltration flux (-)</p></td>
+</tr>
+</tbody>
+</table>
+<p>The washed off and eroded fractions are routed to the <em>Sfw</em> compartment.
+The infiltrating fraction is routed to the <em>Soi</em> compartment.</p>
+</section>
+<section id="combined-sewer-systems">
+<h4>Combined sewer systems<a class="headerlink" href="#combined-sewer-systems" title="Permalink to this headline">#</a></h4>
+<p>A flux from the Sew to surface water is defined that corresponds to leakages and combined sewer overflows (CSO’s).
+This is controlled by the parameter <em>SewLeakage</em>.
+If this parameter is a positive number, it represents a constant leakage fraction.
+If this parameter is negative, it represents a precipitation threshold.
+If the threshold is exceeded, the inflow to the Sew compartment is directly routed to <em>Sfw</em>.</p>
+<p>The parameters <em>LocWWTP</em> and <em>RecWWTP</em> allow a man-induced horizontal displacement of the collected water in the <em>Sew</em> compartment.
+This is only relevant in small scale applications, e.g. in cities.</p>
+<p>The substances remaining in <em>Sew</em> undergo a treatment.
+The fate of the substances in the influent is fixed by the parameters specifying the fractions that end up in effluent (<em>Eff_WWTP</em>) and in sludge (<em>Sld_WWTP</em>) respectively.
+These two parameters implicitly determine the removal by wastewater treatment (<em>1 - Eff_WWTP-Sld_WWTP</em>).</p>
+</section>
+<section id="separated-sewer-systems">
+<h4>Separated sewer systems<a class="headerlink" href="#separated-sewer-systems" title="Permalink to this headline">#</a></h4>
+<p>The parameters <em>LocSTW</em> and <em>RecSTW</em> allow a man-induced horizontal displacement of the collected water in the <em>Sew</em> and <em>Stw</em> compartments respectively.
+This is only relevant in small scale applications, e.g. in cities.</p>
+<p>The substances remaining in <em>Stw</em> can partly be retained.
+The fate of the substances in the influent is fixed by the parameters specifying the fractions that end up in effluent (<em>Eff_RS</em>) and in sludge (<em>Sld_RS</em>) respectively.
+These two parameters implicitly determine the retention (<em>1 - Eff_RS-Sld_RS</em>).</p>
+</section>
+</section>
+<section id="input">
+<h3>Input<a class="headerlink" href="#input" title="Permalink to this headline">#</a></h3>
+<table class="colwidths-given table">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 45%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name in model</p></th>
+<th class="head"><p>Definition</p></th>
+<th class="head"><p>Unit</p></th>
+<th class="head"><p>Spatial function?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fComSew</span></code></p></td>
+<td><p>fraction of combined sewers</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SewLeakage</span></code></p></td>
+<td><p>sewer leakage / CSO definition</p></td>
+<td><p>(-) or mm/day</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LocWWTP</span></code></p></td>
+<td><p>whereto for mixed sewers</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RecWWTP</span></code></p></td>
+<td><p>receivers of mixed sewers</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LocSTW</span></code></p></td>
+<td><p>whereto for rain sewers</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RecSTW</span></code></p></td>
+<td><p>receivers of rain sewers</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kBurial</span></code></p></td>
+<td><p>burial rate of unpaved pool</p></td>
+<td><p>(-)</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DecPav</span></code></p></td>
+<td><p>decay rate paved (substance dependent)</p></td>
+<td><p>(/d)</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DecUnp</span></code></p></td>
+<td><p>decay rate unpaved  (substance dependent)</p></td>
+<td><p>(/d)</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">KdUnpa</span></code></p></td>
+<td><p>fraction of bound vs unbound (substance dependent)</p></td>
+<td><p>(-)</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EF_DDp</span></code></p></td>
+<td><p>dry deposition rate (substance dependent)</p></td>
+<td><p>(g/m2/d)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EF_WDp</span></code></p></td>
+<td><p>wet deposition rate (substance dependent)</p></td>
+<td><p>(g/m3)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Eff_WWTP</span></code></p></td>
+<td><p>fraction of substance in WWTP influent that reaches the effluent (substance dependent)</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Sld_WWTP</span></code></p></td>
+<td><p>fraction of substance in WWTP influent that reaches the sludge (substance dependent)</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Eff_RS</span></code></p></td>
+<td><p>Fraction to effluent of rain sewers influent (substance dependent)</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Sld_RS</span></code></p></td>
+<td><p>Fraction to sludge of rain sewers influent (substance dependent)</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FrSewered</span></code></p></td>
+<td><p>fraction wastewater and stormwater intercepted by sewer systems</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WWtoSew</span></code></p></td>
+<td><p>fraction of wastewater allocated to mixed sewers</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WWtoSfw</span></code></p></td>
+<td><p>fraction of wastewater allocated to surface waters</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WWtoSoi</span></code></p></td>
+<td><p>fraction of wastewater allocated to soils</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EV_A01</span></code></p></td>
+<td><p>emission variable of source A01</p></td>
+<td><p>( X )</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LOC_A01</span></code></p></td>
+<td><p>locator variable of source A01</p></td>
+<td><p>( Y )</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EF_A01</span></code></p></td>
+<td><p>emission factor of source A01 (substance dependent)</p></td>
+<td><p>(kg/d/X)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">A01toWW</span></code></p></td>
+<td><p>released fraction to wastewater of source A01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">A01toSew</span></code></p></td>
+<td><p>released fraction to mixed sewers of source A01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">A01toPav</span></code></p></td>
+<td><p>released fraction to paved areas of source A01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">A01toUnp</span></code></p></td>
+<td><p>released fraction to unpaved areas of source A01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">A01toStw</span></code></p></td>
+<td><p>released fraction to separated sewers of source A01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">A01toSfw</span></code></p></td>
+<td><p>released fraction to surface waters of source A01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">A01toSoi</span></code></p></td>
+<td><p>released fraction to soils of source A01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EV_B01</span></code></p></td>
+<td><p>locator/EV variable of source B01</p></td>
+<td><p>( X )</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EF_B01</span></code></p></td>
+<td><p>emission factor of source B01 (substance dependent)</p></td>
+<td><p>(kg/d/X)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">B01toWW</span></code></p></td>
+<td><p>released fraction to wastewater of source B01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">B01toSew</span></code></p></td>
+<td><p>released fraction to mixed sewers of source B01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">B01toPav</span></code></p></td>
+<td><p>released fraction to paved areas of source B01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">B01toUnp</span></code></p></td>
+<td><p>released fraction to unpaved areas of source B01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">B01toStw</span></code></p></td>
+<td><p>released fraction to separated sewers of source B01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">B01toSfw</span></code></p></td>
+<td><p>released fraction to surface waters of source B01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">B01toSoi</span></code></p></td>
+<td><p>released fraction to soils of source B01</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Where “Spatial function?” is indicated as “yes”, the user has the option to specify the related input as a function of space. Where this is indicated as “no”, any defined spatial variability is <strong>neglected</strong> (the value for the first cell will be applied model-wide).</p></li>
+<li><p>A supportive process can provide the allocation of the substances released to wastewater to the receiving compartments (<em>WWtoSew</em>, etc.) (see <a class="reference internal" href="#genwwman"><span class="std std-ref">GenWWman</span></a>).</p></li>
+<li><p>A supportive process can provide the WWTP treatment parameters (<em>Eff_WWTP</em>, <em>Sld_WWTP</em>) as a spatially variable mix of up to three available treatment levels (see <a class="reference internal" href="#genwwman"><span class="std std-ref">GenWWman</span></a>).</p></li>
+<li><p>Note that some parameters are substance dependent. The user should take care to define realistic values.</p></li>
+</ul>
+</div>
+</section>
+<section id="output">
+<h3>Output<a class="headerlink" href="#output" title="Permalink to this headline">#</a></h3>
+<p>The simulated emissions to surface waters (<em>Emis_Sfw</em>; g/s) and to soils (<em>Emis_Soi</em>; g/s) are available for output.</p>
+</section>
+</section>
+<section id="waste-water-management-supportive-process-genwwman">
+<span id="genwwman"></span><h2>Waste water management supportive process (GenWWman)<a class="headerlink" href="#waste-water-management-supportive-process-genwwman" title="Permalink to this headline">#</a></h2>
+<section id="id1">
+<h3>Introduction<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<p>This process supports the emission modelling as discussed in <a class="reference internal" href="#em-gss"><span class="std std-ref">EM_GSS</span></a> by providing the allocation of the substances released to wastewater to the receiving compartments (<em>WWtoSew</em>, etc.)
+and by providing the WWTP treatment parameters (<em>Eff_WWTP</em>, <em>Sld_WWTP</em>) as a spatially variable mix of up to three available treatment levels.</p>
+</section>
+<section id="id2">
+<h3>Implementation<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h3>
+<p>The process is implemented for the compartments listed in Table <a class="reference internal" href="#em-compartments"><span class="std std-ref">EM compartments</span></a>.
+The local treatment capacity can be specified for up to three levels of treatment, each with different properties.</p>
+</section>
+<section id="id3">
+<h3>Formulation<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+<section id="allocation-of-wastewater-to-receiving-compartments">
+<h4>Allocation of wastewater to receiving compartments<a class="headerlink" href="#allocation-of-wastewater-to-receiving-compartments" title="Permalink to this headline">#</a></h4>
+<p>Wastewater is either collected in a sewer system (<em>FrSewered</em>), or in septic tanks (<em>FrSeptic</em>) or remains unmanaged (<em>1 - FrSewered - FrSeptic</em>).</p>
+<p>For the fraction collected in septic tanks, a loss to surface waters (<em>Eff_Septic</em>) and to soils (<em>Sld_Septic</em>) can be defined. The remaining part is assumed transported to treatment plants by other means than sewer systems.</p>
+<p>From the unmanaged wastewater, a fraction <em>fOpenWater</em> is allocated to surface waters, the remainder to soils.</p>
+<p>Thus, the allocation of wastewater to the modelled compartments is:</p>
+<div class="math notranslate nohighlight" id="equation-eq-wwman1">
+<span class="eqno">(15)<a class="headerlink" href="#equation-eq-wwman1" title="Permalink to this equation">#</a></span>\[WWtoSew = FrSewered + FrSeptic*(1-Eff\_Septic-Sld\_Septic)\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-wwman2">
+<span class="eqno">(16)<a class="headerlink" href="#equation-eq-wwman2" title="Permalink to this equation">#</a></span>\[WWtoSfw = FrUnManaged*fOpenWater + FrSeptic*Eff_Septic\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-wwman3">
+<span class="eqno">(17)<a class="headerlink" href="#equation-eq-wwman3" title="Permalink to this equation">#</a></span>\[WWtoSoi = FrUnManaged*(1-fOpenWater) + FrSeptic*Sld_Septic\]</div>
+</section>
+<section id="fate-of-substances-reaching-wwtps">
+<h4>Fate of substances reaching WWTPs<a class="headerlink" href="#fate-of-substances-reaching-wwtps" title="Permalink to this headline">#</a></h4>
+<p>The fraction of wastewater treated at three individual levels can be indicated. The remainder is assumed untreated:</p>
+<div class="math notranslate nohighlight" id="equation-eq-wwman4">
+<span class="eqno">(18)<a class="headerlink" href="#equation-eq-wwman4" title="Permalink to this equation">#</a></span>\[FrUnTreated = 1 - FrTreat1 - FrTreat2 - FrTreat3\]</div>
+<p>For each of the three treatment levels, the fraction of the influent reaching the effluent and the sludge respectively is specified.
+For the untreated fraction all influent reaches the effluent.</p>
+<p>For the complete treatment system, the fractions reaching the effluent and the sludge equal:</p>
+<div class="math notranslate nohighlight" id="equation-eq-wwman5">
+<span class="eqno">(19)<a class="headerlink" href="#equation-eq-wwman5" title="Permalink to this equation">#</a></span>\[\begin{split}Eff_WWTP =
+FrUnTreated +
+FrTreat1*Eff_Treat1 +\\
+FrTreat2*Eff_Treat2 +
+FrTreat3*Eff_Treat3\end{split}\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-wwman6">
+<span class="eqno">(20)<a class="headerlink" href="#equation-eq-wwman6" title="Permalink to this equation">#</a></span>\[\begin{split}Sld_WWTP =
+FrTreat1*Sld_Treat1 +
+FrTreat2*Sld_Treat2 +\\
+FrTreat3*Sld_Treat3\end{split}\]</div>
+<p>In a final step, the fraction reaching sludge is corrected for “removal” of sludge by incineration and isolation.
+The remaining part is routed to soils in the main emission modelling process.</p>
+<div class="math notranslate nohighlight" id="equation-eq-wwman7">
+<span class="eqno">(21)<a class="headerlink" href="#equation-eq-wwman7" title="Permalink to this equation">#</a></span>\[Sld_WWTP = Sld_WWTP*(1-fSldgRem)\]</div>
+</section>
+</section>
+<section id="id4">
+<h3>Input<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h3>
+<table class="colwidths-given table">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 50%" />
+<col style="width: 10%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name in model</p></th>
+<th class="head"><p>Definition</p></th>
+<th class="head"><p>Unit</p></th>
+<th class="head"><p>Spatial function?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FrSewered</span></code></p></td>
+<td><p>fraction wastewater and stormwater intercepted by sewer systems</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FrSeptic</span></code></p></td>
+<td><p>fraction wastewater to septic tanks</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FrTreat1</span></code></p></td>
+<td><p>fraction wastewater primary treated</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FrTreat2</span></code></p></td>
+<td><p>fraction wastewater secondary treated</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FrTreat3</span></code></p></td>
+<td><p>fraction wastewater tertiary treated</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Eff_Septic</span></code></p></td>
+<td><p>fraction directly to surface waters for septic tanks</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Eff_Treat1</span></code></p></td>
+<td><p>fraction to effluent for primary treatment</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Eff_Treat2</span></code></p></td>
+<td><p>fraction to effluent for secondary treatment</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Eff_Treat3</span></code></p></td>
+<td><p>fraction to effluent for tertiary treatment</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Sld_Septic</span></code></p></td>
+<td><p>fraction directly to soils for septic tanks</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Sld_Treat1</span></code></p></td>
+<td><p>fraction to sludge for primary treatment</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Sld_Treat2</span></code></p></td>
+<td><p>fraction to sludge for secondary treatment</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Sld_Treat3</span></code></p></td>
+<td><p>fraction to sludge for tertiary treatment</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FrSldgRem</span></code></p></td>
+<td><p>fraction of sludge removed (not reused)</p></td>
+<td><p>(-)</p></td>
+<td><p>yes</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Where “Spatial function?” is indicated as “yes”, the user has the option to specify the related input as a function of space. Where this is indicated as “no”, any defined spatial variability is <strong>neglected</strong> (the value for the first cell will be applied model-wide).</p></li>
+<li><p>Note that some parameters are substance dependent. The user should take care to define realistic values.</p></li>
+</ul>
+</div>
+</section>
+<section id="id5">
+<h3>Output<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h3>
+<p>The supportive process produces the below output, that feeds directly into the main emission modelling process.</p>
+<table class="colwidths-given table">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 71%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name in model</p></th>
+<th class="head"><p>Definition</p></th>
+<th class="head"><p>Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Eff_WWTP</span></code></p></td>
+<td><p>fraction of substance in WWTP influent that reaches the effluent (substance dependent)</p></td>
+<td><p>(-)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Sld_WWTP</span></code></p></td>
+<td><p>fraction of substance in WWTP influent that reaches the sludge (substance dependent)</p></td>
+<td><p>(-)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WWtoSew</span></code></p></td>
+<td><p>fraction of wastewater allocated to mixed sewers</p></td>
+<td><p>(-)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WWtoSfw</span></code></p></td>
+<td><p>fraction of wastewater allocated to surface waters</p></td>
+<td><p>(-)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WWtoSoi</span></code></p></td>
+<td><p>fraction of wastewater allocated to soils</p></td>
+<td><p>(-)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="generic_delwaq_EM_prepare.html" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Editing the EM run information</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="generic_delwaq_EM_run.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Running D-Emissions</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright Deltares.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

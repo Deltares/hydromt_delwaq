@@ -7,12 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>Build a water quality model &#8212; HydroMT delwaq  documentation</title>
-    
-  <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
 
-    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
   <link rel="stylesheet"
     href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
   <link rel="preload" as="font" type="font/woff2" crossorigin
@@ -23,9 +27,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
-    
+
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -39,32 +43,40 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Updating a model" href="../user_guide/update_config_WQ.html" />
     <link rel="prev" title="Building a model" href="../user_guide/build_config_WQ.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en">
-    
-
-    <!-- Google Analytics -->
-    
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
 
     
-    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
 
   <div id="navbar-start">
     
     
-<a class="navbar-brand" href="../index.html">
-<p class="title">HydroMT delwaq</p>
-</a>
+  
 
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">HydroMT delwaq  documentation</p>
+  
+</a>
     
   </div>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+    <span class="fas fa-bars"></span>
   </button>
 
   
@@ -99,7 +111,7 @@
 
     
     <li class="nav-item">
-        <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/preview/index.html">HydroMT core<i class="fas fa-external-link-alt"></i></a>
+        <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">HydroMT core<i class="fas fa-external-link-alt"></i></a>
     </li>
     
 </ul>
@@ -108,6 +120,14 @@
     </div>
 
     <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
       
       <div class="navbar-end-item">
         <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
@@ -123,13 +143,13 @@
     </nav>
     
 
-    <div class="container-xl">
-      <div class="row">
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
           
-            
-            <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar">
-              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
@@ -199,10 +219,22 @@
      </li>
     </ul>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="../user_guide/generic_delwaq_EM_prepare.html">
      Editing the EM run information
     </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../user_guide/EM_functional_description.html">
+       Further reading: Detailed functional description
+      </a>
+     </li>
+    </ul>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../user_guide/generic_delwaq_EM_run.html">
@@ -215,8 +247,8 @@
   <a class="reference internal" href="../user_guide/generic_delwaq_WQ.html">
    Working with the D-Water Quality model
   </a>
-  <input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
+  <input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -235,8 +267,8 @@
     <a class="reference internal" href="../user_guide/build_config_WQ.html">
      Building a model
     </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-    <label for="toctree-checkbox-5">
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+    <label for="toctree-checkbox-6">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -252,8 +284,8 @@
     <a class="reference internal" href="../user_guide/update_config_WQ.html">
      Updating a model
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-    <label for="toctree-checkbox-6">
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -281,15 +313,15 @@
   <a class="reference internal" href="../user_guide/process_analyze.html">
    Postprocessing and visualization
   </a>
-  <input checked class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
+  <input checked class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="plot_delwaq.html">
-     Example: Plot Delwaq staticmaps
+     Example: Plot DELWAQ staticmaps
     </a>
    </li>
   </ul>
@@ -298,15 +330,15 @@
   <a class="reference internal" href="../user_guide/coupling_main.html">
    Reading more about coupling the individual modules
   </a>
-  <input checked class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-  <label for="toctree-checkbox-8">
+  <input checked class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../user_guide/coupling_wflow.html">
-     Explaining the Wflow - Delwaq coupling
+     Explaining the Wflow - DELWAQ coupling
     </a>
    </li>
    <li class="toctree-l2">
@@ -320,19 +352,20 @@
 
   </div>
 </nav>
-              </div>
-              <div class="sidebar-end-items">
-              </div>
-            </div>
-            
-          
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
 
           
-          <div class="d-none d-xl-block col-xl-2 bd-toc">
-            
-              
-              <div class="toc-item">
-                
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
 <div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
@@ -372,10 +405,10 @@
 </ul>
 
 </nav>
-              </div>
-              
-              <div class="toc-item">
-                
+    </div>
+    
+    <div class="toc-item">
+      
 
 <div class="tocsection editthispage">
     <a href="https://github.com/Deltares/hydromt_delwaq/edit/new_docs/docs/_examples/build_WQ_model.ipynb">
@@ -383,19 +416,17 @@
     </a>
 </div>
 
-              </div>
-              
-            
-          </div>
-          
+    </div>
+    
+  
+</div>
+
 
           
           
-            
-          
-          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+          <div class="bd-content col-12 col-md-9 col-xl-7">
               
-              <div>
+              <article class="bd-article" role="main">
                 
   
 <style>
@@ -612,6 +643,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -620,10 +652,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -635,12 +671,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -667,7 +706,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-hydroMT model plugins: wflow (v0.1.4), wflow_sediment (v0.1.4), delwaq (v0.1.3.dev0)
+hydroMT model plugins: wflow (v0.1.5.dev0), wflow_sediment (v0.1.5.dev0), delwaq (v0.1.3.dev0)
 
 </pre></div></div>
 </div>
@@ -687,26 +726,23 @@ hydroMT model plugins: wflow (v0.1.4), wflow_sediment (v0.1.4), delwaq (v0.1.3.d
 <div class="highlight"><pre>
 Usage: hydromt build [OPTIONS] MODEL MODEL_ROOT REGION
 
-  Build models from source data.
+  Build models from scratch.
 
   Example usage:
   --------------
 
   To build a wflow model for a subbasin using and point coordinates snapped to cells with stream order &gt;= 4
-  hydromt build wflow /path/to/model_root &#34;{&#39;subbasin&#39;: [-7.24, 62.09], &#39;strord&#39;: 4}&#34; -i /path/to/wflow_config.ini
+  hydromt build wflow /path/to/model_root &#34;{&#39;subbasin&#39;: [-7.24, 62.09], &#39;strord&#39;: 4}&#34; -i /path/to/wflow_config.ini -d /path/to/data_catalog.yaml -v
 
-  To build a wflow model based on basin ID
-  hydromt build wflow /path/to/model_root &#34;{&#39;basin&#39;: 230001006}&#34;
-
-  To build a sfincs model based on a bbox (for Texel)
-  hydromt build sfincs /path/to/model_root &#34;{&#39;bbox&#39;: [4.6891,52.9750,4.9576,53.1994]}&#34;
+  To build a sfincs model based on a bbox
+  hydromt build sfincs /path/to/model_root &#34;{&#39;bbox&#39;: [4.6891,52.9750,4.9576,53.1994]}&#34; -i /path/to/sfincs_config.ini -d /path/to/data_catalog.yaml -v
 
 Options:
   -r, --res FLOAT             Model resolution in model src.
   --build-base / --build-all  Deprecated!
-  --opt TEXT                  Component specific keyword arguments, see the
-                              setup_&lt;component&gt; method of the specific model
-                              for more information about the arguments.
+  --opt TEXT                  Method specific keyword arguments, see the
+                              method documentation of the specific model for
+                              more information about the arguments.
   -i, --config PATH           Path to hydroMT configuration file, for the
                               model specific implementation.
   -d, --data PATH             File path to yml data sources file. See
@@ -739,28 +775,28 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-06-01 11:38:27,396 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base/hydromt.log.
-2022-06-01 11:38:27,396 - build - log - INFO - HydroMT version: 0.4.5
-2022-06-01 11:38:27,396 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base.
-2022-06-01 11:38:27,396 - build - main - INFO - User settings:
-2022-06-01 11:38:27,403 - build - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2022-06-01 11:38:27,403 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2022-06-01 11:38:27,404 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2022-06-01 11:38:27,404 - build - model_api - INFO - setup_basemaps.include_soil: False
-2022-06-01 11:38:27,404 - build - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.4)
-2022-06-01 11:38:27,404 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.4).
-2022-06-01 11:38:27,404 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2022-06-01 11:38:27,404 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f5294f5b9d0&gt;}
-2022-06-01 11:38:27,404 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2022-06-01 11:38:27,406 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2022-06-01 11:38:27,407 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2022-06-01 11:38:28,257 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2022-06-01 11:38:28,257 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base
-2022-06-01 11:38:28,265 - build - delwaq - INFO - Writing staticmap files.
-2022-06-01 11:38:28,275 - build - delwaq - INFO - Writing model config to file.
-2022-06-01 11:38:28,275 - build - delwaq - INFO - Writing hydromap files.
-2022-06-01 11:38:28,307 - build - delwaq - INFO - Writting pointer file in root/config
-2022-06-01 11:38:28,321 - build - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
+2022-06-09 11:30:06,455 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base/hydromt.log.
+2022-06-09 11:30:06,455 - build - log - INFO - HydroMT version: 0.4.6.dev
+2022-06-09 11:30:06,455 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base.
+2022-06-09 11:30:06,455 - build - main - INFO - User settings:
+2022-06-09 11:30:06,468 - build - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
+2022-06-09 11:30:06,469 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-06-09 11:30:06,469 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2022-06-09 11:30:06,469 - build - model_api - INFO - setup_basemaps.include_soil: False
+2022-06-09 11:30:06,469 - build - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.5.dev0)
+2022-06-09 11:30:06,470 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2022-06-09 11:30:06,470 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.5.dev0).
+2022-06-09 11:30:06,470 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f438dbcc970&gt;}
+2022-06-09 11:30:06,470 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2022-06-09 11:30:06,472 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2022-06-09 11:30:06,473 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2022-06-09 11:30:07,533 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
+2022-06-09 11:30:07,533 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base
+2022-06-09 11:30:07,544 - build - delwaq - INFO - Writing staticmap files.
+2022-06-09 11:30:07,555 - build - delwaq - INFO - Writing model config to file.
+2022-06-09 11:30:07,556 - build - delwaq - INFO - Writing hydromap files.
+2022-06-09 11:30:07,596 - build - delwaq - INFO - Writting pointer file in root/config
+2022-06-09 11:30:07,614 - build - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>
@@ -849,53 +885,53 @@ add_volume_offset = True                 # add a one-timestep offset to the volu
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-06-01 11:38:30,956 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full/hydromt.log.
-2022-06-01 11:38:30,956 - build - log - INFO - HydroMT version: 0.4.5
-2022-06-01 11:38:30,956 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full.
-2022-06-01 11:38:30,956 - build - main - INFO - User settings:
-2022-06-01 11:38:30,965 - build - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2022-06-01 11:38:30,965 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2022-06-01 11:38:30,969 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2022-06-01 11:38:30,969 - build - model_api - INFO - setup_basemaps.include_soil: False
-2022-06-01 11:38:30,969 - build - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.4)
-2022-06-01 11:38:30,969 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.4).
-2022-06-01 11:38:30,969 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2022-06-01 11:38:30,969 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f811bbd7220&gt;}
-2022-06-01 11:38:30,969 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2022-06-01 11:38:30,972 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2022-06-01 11:38:30,972 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2022-06-01 11:38:31,931 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2022-06-01 11:38:31,932 - build - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
-2022-06-01 11:38:31,932 - build - model_api - INFO - setup_monitoring.mon_areas: compartments
-2022-06-01 11:38:31,932 - build - delwaq - INFO - Setting monitoring points and areas
-2022-06-01 11:38:31,940 - build - data_adapter - INFO - DataCatalog: Getting gauges GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
-2022-06-01 11:38:31,941 - build - data_adapter - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
-2022-06-01 11:38:31,958 - build - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
-2022-06-01 11:38:31,966 - build - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
-2022-06-01 11:38:31,967 - build - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2022-06-01 11:38:31,967 - build - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2022-06-01 11:38:31,967 - build - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
-2022-06-01 11:38:31,967 - build - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
-2022-06-01 11:38:31,967 - build - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
-2022-06-01 11:38:31,967 - build - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
-2022-06-01 11:38:31,970 - build - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
-2022-06-01 11:38:31,994 - build - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2022-06-01 11:38:32,071 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full
-2022-06-01 11:38:32,086 - build - delwaq - INFO - Writing staticmap files.
-2022-06-01 11:38:32,099 - build - delwaq - INFO - Writing model staticgeom to file.
-2022-06-01 11:38:32,127 - build - delwaq - INFO - Writing model config to file.
-2022-06-01 11:38:32,128 - build - delwaq - INFO - Writing hydromap files.
-2022-06-01 11:38:32,164 - build - delwaq - INFO - Writting pointer file in root/config
-2022-06-01 11:38:32,192 - build - delwaq - INFO - Writing dynamicmap files.
-2022-06-01 11:38:32,193 - build - delwaq - INFO - Writting dynamic data for timestep 1/8
-2022-06-01 11:38:32,210 - build - delwaq - INFO - Writting dynamic data for timestep 2/8
-2022-06-01 11:38:32,227 - build - delwaq - INFO - Writting dynamic data for timestep 3/8
-2022-06-01 11:38:32,249 - build - delwaq - INFO - Writting dynamic data for timestep 4/8
-2022-06-01 11:38:32,268 - build - delwaq - INFO - Writting dynamic data for timestep 5/8
-2022-06-01 11:38:32,289 - build - delwaq - INFO - Writting dynamic data for timestep 6/8
-2022-06-01 11:38:32,303 - build - delwaq - INFO - Writting dynamic data for timestep 7/8
-2022-06-01 11:38:32,318 - build - delwaq - INFO - Writting dynamic data for timestep 8/8
-2022-06-01 11:38:32,334 - build - delwaq - INFO - Writting waqgeom.nc file
+2022-06-09 11:30:10,442 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full/hydromt.log.
+2022-06-09 11:30:10,442 - build - log - INFO - HydroMT version: 0.4.6.dev
+2022-06-09 11:30:10,442 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full.
+2022-06-09 11:30:10,442 - build - main - INFO - User settings:
+2022-06-09 11:30:10,455 - build - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
+2022-06-09 11:30:10,460 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-06-09 11:30:10,460 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2022-06-09 11:30:10,460 - build - model_api - INFO - setup_basemaps.include_soil: False
+2022-06-09 11:30:10,460 - build - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.5.dev0)
+2022-06-09 11:30:10,461 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2022-06-09 11:30:10,461 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.5.dev0).
+2022-06-09 11:30:10,461 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f144a12e9d0&gt;}
+2022-06-09 11:30:10,461 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2022-06-09 11:30:10,464 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2022-06-09 11:30:10,464 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2022-06-09 11:30:11,525 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
+2022-06-09 11:30:11,525 - build - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
+2022-06-09 11:30:11,525 - build - model_api - INFO - setup_monitoring.mon_areas: compartments
+2022-06-09 11:30:11,525 - build - delwaq - INFO - Setting monitoring points and areas
+2022-06-09 11:30:11,534 - build - data_adapter - INFO - DataCatalog: Getting gauges GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
+2022-06-09 11:30:11,535 - build - data_adapter - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
+2022-06-09 11:30:11,554 - build - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
+2022-06-09 11:30:11,563 - build - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
+2022-06-09 11:30:11,563 - build - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2022-06-09 11:30:11,563 - build - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2022-06-09 11:30:11,563 - build - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2022-06-09 11:30:11,563 - build - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
+2022-06-09 11:30:11,563 - build - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
+2022-06-09 11:30:11,563 - build - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
+2022-06-09 11:30:11,567 - build - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
+2022-06-09 11:30:11,595 - build - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2022-06-09 11:30:11,679 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full
+2022-06-09 11:30:11,695 - build - delwaq - INFO - Writing staticmap files.
+2022-06-09 11:30:11,710 - build - delwaq - INFO - Writing model staticgeom to file.
+2022-06-09 11:30:11,741 - build - delwaq - INFO - Writing model config to file.
+2022-06-09 11:30:11,742 - build - delwaq - INFO - Writing hydromap files.
+2022-06-09 11:30:11,781 - build - delwaq - INFO - Writting pointer file in root/config
+2022-06-09 11:30:11,813 - build - delwaq - INFO - Writing dynamicmap files.
+2022-06-09 11:30:11,813 - build - delwaq - INFO - Writting dynamic data for timestep 1/8
+2022-06-09 11:30:11,832 - build - delwaq - INFO - Writting dynamic data for timestep 2/8
+2022-06-09 11:30:11,850 - build - delwaq - INFO - Writting dynamic data for timestep 3/8
+2022-06-09 11:30:11,868 - build - delwaq - INFO - Writting dynamic data for timestep 4/8
+2022-06-09 11:30:11,885 - build - delwaq - INFO - Writting dynamic data for timestep 5/8
+2022-06-09 11:30:11,903 - build - delwaq - INFO - Writting dynamic data for timestep 6/8
+2022-06-09 11:30:11,920 - build - delwaq - INFO - Writting dynamic data for timestep 7/8
+2022-06-09 11:30:11,938 - build - delwaq - INFO - Writting dynamic data for timestep 8/8
+2022-06-09 11:30:11,955 - build - delwaq - INFO - Writting waqgeom.nc file
 
 </pre></div></div>
 </div>
@@ -1014,51 +1050,55 @@ WQ_test_full/config
 </section>
 
 
-              </div>
+              </article>
               
-              
-              <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../user_guide/build_config_WQ.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Building a model</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="../user_guide/update_config_WQ.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Updating a model</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
-</div>
-              
-          </main>
-          
 
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="../user_guide/build_config_WQ.html" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Building a model</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../user_guide/update_config_WQ.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Updating a model</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+              </footer>
+              
+          </div>
+          
       </div>
     </div>
+
+  
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-<footer class="footer mt-5 mt-md-0">
-  <div class="container">
-    
-    <div class="footer-item">
-      <p class="copyright">
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
     &copy; Copyright Deltares.<br>
 </p>
-    </div>
-    
-    <div class="footer-item">
-      <p class="sphinx-version">
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
 </p>
-    </div>
-    
   </div>
+  
+</div>
 </footer>
   </body>
 </html>
