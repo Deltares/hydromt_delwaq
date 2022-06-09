@@ -36,7 +36,7 @@ dependencies:
   - rioxarray
   - scipy
   - sphinx # docs
-  - sphinx_rtd_theme=0.8.0 # docs
+  - pydata_sphinx_theme=0.8.0 # docs
   - xarray
   - zarr
   - pip:
