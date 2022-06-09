@@ -20,7 +20,7 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Hydrology",
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Programming Language :: Python :: 3",
 ]
 dynamic = ['version', 'description']
@@ -31,12 +31,12 @@ test = [
 	"responses",
 	"pytest>=2.7.3",
 	"pytest-cov",
+	"black",
 ]
 doc = [
-	"sphinx",
-    "pydata-sphinx-theme",
-	"black",
+    "sphinx",
     "sphinx_design",
+    "pydata-sphinx-theme",
 ]
 
 [project.urls]
