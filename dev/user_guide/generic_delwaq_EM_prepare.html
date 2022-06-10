@@ -1,0 +1,707 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Editing the EM run information &#8212; HydroMT delwaq  documentation</title>
+    
+    <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  
+    
+    <link rel="stylesheet"
+      href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+    
+      
+  
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
+    
+    <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Detailed functional description" href="EM_functional_description.html" />
+    <link rel="prev" title="Update forcing data" href="../_examples/update_model_forcing.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../index.html">
+<p class="title">HydroMT delwaq</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../getting_started/intro.html">
+  Getting Started
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="intro.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../api.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../dev/intro.html">
+  Developments
+ </a>
+</li>
+
+    
+    <li class="nav-item">
+        <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">HydroMT core<i class="fas fa-external-link-alt"></i></a>
+    </li>
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://deltares.nl/en/" rel="noopener" target="_blank" title="Deltares"><img src="../_static/deltares-white.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="generic_delwaq_EM.html">
+   Working with the D-Emissions model
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="EM_model.html">
+     D-Emission model components
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_EM_substances.html">
+     Selection of substance(s) and sources
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="build_config_EM.html">
+     Building a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/build_EM_model.html">
+       Example: Build D-Emission model
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="update_config_EM.html">
+     Updating a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/adding_global_emission.html">
+       Example: Add (global) emission data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/adding_local_emission.html">
+       Example: Add (local) emission data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/update_model_forcing.html">
+       Example: Update forcing data
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 current active has-children">
+    <a class="current reference internal" href="#">
+     Editing the EM run information
+    </a>
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="EM_functional_description.html">
+       Further reading: Detailed functional description
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_EM_run.html">
+     Running D-Emissions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="generic_delwaq_WQ.html">
+   Working with the D-Water Quality model
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="WQ_model.html">
+     D-Water Quality model components
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_WQ_substances.html">
+     Selection of substance(s) and processes
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="build_config_WQ.html">
+     Building a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+    <label for="toctree-checkbox-6">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/build_WQ_model.html">
+       Example: Build D-Water Quality model
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="update_config_WQ.html">
+     Updating a model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_examples/update_model_monitoring.html">
+       Example: Update monitoring data
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_WQ_prepare.html">
+     Editing the WQ run information
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic_delwaq_WQ_run.html">
+     Running D-Water Quality
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="process_analyze.html">
+   Postprocessing and visualization
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../_examples/plot_delwaq.html">
+     Example: Plot DELWAQ staticmaps
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="coupling_main.html">
+   Reading more about coupling the individual modules
+  </a>
+  <input checked class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="coupling_wflow.html">
+     Explaining the Wflow - DELWAQ coupling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="coupling_delwaq.html">
+     Explaining the D-Emission - D-Water Quality coupling
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+
+<nav id="bd-toc-nav">
+    
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/Deltares/hydromt_delwaq/edit/new_docs/docs/user_guide/generic_delwaq_EM_prepare.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="editing-the-em-run-information">
+<span id="generic-delwaq-em-prepare"></span><h1>Editing the EM run information<a class="headerlink" href="#editing-the-em-run-information" title="Permalink to this headline">¶</a></h1>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>This page contains additional information on the generic D-Emissions module, not direclty related to the HydroMT-delwaq plugin.</p>
+</div>
+<p>In order to run the D-Emissions module of DELWAQ, an input file is used to set up all the relevant run information such as substances and processes to include,
+run time information, data and model parameters to use etc. This is set up in a <strong>.inp</strong> file. A template of such
+a <a class="reference download internal" download="" href="../_downloads/331f1d77c3e1093eb11a307f0f868e8a/espace.inp"><code class="xref download docutils literal notranslate"><span class="pre">file</span></code></a>, for an EM run, is shown below.</p>
+<p>The input file is separated into 10 input blocks each requiring different type of information. You can find more info on what is expected
+where in the <a class="reference external" href="content.oss.deltares.nl/delft3d/manuals/D-Water_Quality_Input_File_Description.pdf">DELWAQ input file documentation</a>. In short, the ten blocks are:</p>
+<ul class="simple">
+<li><p>B1: Identification, selected substances</p></li>
+<li><p>B2: Timers, integration, monitoring</p></li>
+<li><p>B3: Grid and values of the volumes</p></li>
+<li><p>B4: Hydrodynamic data</p></li>
+<li><p>B5: Open boundary conditions</p></li>
+<li><p>B6: Loads and withdrawals</p></li>
+<li><p>B7: Process steering</p></li>
+<li><p>B8: Initial conditions</p></li>
+<li><p>B9: Model output</p></li>
+<li><p>B10: Statistical output</p></li>
+</ul>
+<p>With HydroMT, different files were prepared containing information that can be directly linked and included in this input file. These are:</p>
+<ul class="simple">
+<li><p>The different files in the <em>config</em> folder: each filename has a prefix containing the block number it should be inserted in (ex: B1_timestamp.inc).</p></li>
+<li><p>Emission and other grid data stored in <em>staticdata</em> folder</p></li>
+<li><p>Time-dependant data such as hydrological fluxes stored in <em>dynamicdata</em> folder.</p></li>
+</ul>
+<p>Depending on their format (binary or ASCII), the files can be included in the input file using the following syntax.</p>
+<ul class="simple">
+<li><p>For ASCII files: keyword <strong>INCLUDE</strong> + path/to/ascii</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INCLUDE</span> <span class="s1">&#39;config\B1_timestamp.inc&#39;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>For binary files: keywords <strong>ALL BINARY_FILE</strong> + path/to/binary</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;dynamicdata\hydrology.bin&#39;</span>
+</pre></div>
+</div>
+<p>In the template below, all (mandatory) files produced by HydroMT have been added and linked. Some explanations on the specificities of the settings for
+the one-substance D-Emissions model:</p>
+<ul class="simple">
+<li><p>In block 1, you can see that in the one-substance D-Emissions model, instead of the substances (nitrogen, TSS…), we model the emission receptors compartments in a specific order.
+With this, emission modelling can be more generic, run time faster and there is no need to update the procdef tables for each D-Emissions model case.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span><span class="n">Nr</span>     <span class="n">Name</span>
+<span class="mi">1</span>       <span class="n">Sew</span>
+<span class="mi">2</span>       <span class="n">Pav</span>
+<span class="mi">3</span>       <span class="n">Unp</span>
+<span class="mi">4</span>       <span class="n">Stw</span>
+<span class="mi">5</span>       <span class="n">Sfw</span>
+<span class="mi">6</span>       <span class="n">Soi</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The different emission sources are defined in block 7. Currently, in the one-substance D-Emissions model, <strong>one type A source</strong> and <strong>three type B sources</strong> can be defined. All names
+respect a certain convention (EV_A01, EV_B01). The user should also define to which receptor (from block 1) the source emission goes to. Here is an example for a type B source :</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">source</span> <span class="n">Type</span> <span class="n">B01</span>
+<span class="n">PARAMETERS</span> <span class="n">EV_B01</span>        <span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;staticdata\GHS-POP_2015.dat&#39;</span> <span class="p">;</span> <span class="n">locator</span><span class="o">/</span><span class="n">EV</span> <span class="n">variable</span> <span class="nb">type</span> <span class="n">B</span>    <span class="p">(</span><span class="n">cap</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">EF_B01</span>           <span class="n">DATA</span> <span class="mf">2.2</span>          <span class="p">;</span> <span class="n">emission</span> <span class="n">factor</span>                                        <span class="p">(</span><span class="n">Kg</span><span class="o">/</span><span class="n">d</span><span class="o">/</span><span class="n">cap</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSew</span>         <span class="n">DATA</span> <span class="mf">1.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toPav</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toUnp</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSoi</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toStw</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSfw</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>All unused type A and/or B sources should still be listed in the input file with zero data:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">source</span> <span class="n">Types</span> <span class="n">NOT</span> <span class="n">USED</span>
+<span class="n">CONSTANTS</span>  <span class="n">EV_A01</span>        <span class="n">DATA</span> <span class="mf">0.</span>
+<span class="n">CONSTANTS</span>  <span class="n">EV_B02</span>        <span class="n">DATA</span> <span class="mf">0.</span>
+<span class="n">CONSTANTS</span>  <span class="n">EV_B03</span>        <span class="n">DATA</span> <span class="mf">0.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The unit of emission factor EF is kg/d/X, where X is the emission unit provided in the Emission Variable EV, e.g. capita for Population.
+Here the EF factor was set to a constant dummy value but you can use HydroMT to prepare and distribute ‘real’ values from local/global data.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">999</span> <span class="mi">80</span> <span class="s1">&#39;;&#39;</span>
+<span class="p">;</span><span class="n">DELWAQ_VERSION_4</span><span class="mf">.910</span>                        		<span class="p">;</span> <span class="n">Delwaq</span> <span class="n">version</span> <span class="n">number</span>
+<span class="p">;</span><span class="n">PRINT_OUTPUT_OPTION_2</span>                       		<span class="p">;</span> <span class="n">Debug</span> <span class="n">level</span>
+
+<span class="p">;</span> <span class="n">TEMPLATE</span> <span class="n">FILE</span> <span class="n">FOR</span> <span class="n">EMISSION</span> <span class="n">DISAGGREGATION</span>
+<span class="p">;</span> <span class="n">First</span> <span class="nb">input</span> <span class="n">block</span>
+<span class="s1">&#39;Demo Emission Model linked to WFLOW for TN&#39;</span>
+<span class="s1">&#39; &#39;</span>
+<span class="s1">&#39; &#39;</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B1_timestamp.inc&#39;</span>
+
+ <span class="mi">6</span>    <span class="mi">0</span>
+
+<span class="p">;</span><span class="n">Nr</span>      <span class="n">Name</span>        
+<span class="mi">1</span>       <span class="n">Sew</span>      <span class="p">;</span>   
+<span class="mi">2</span>       <span class="n">Pav</span>      <span class="p">;</span>    
+<span class="mi">3</span>       <span class="n">Unp</span>      <span class="p">;</span>   
+<span class="mi">4</span>       <span class="n">Stw</span>  
+<span class="mi">5</span>       <span class="n">Sfw</span>  
+<span class="mi">6</span>       <span class="n">Soi</span>  
+<span class="c1">#1;</span>
+
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Second</span> <span class="nb">input</span> <span class="n">block</span>
+  <span class="mi">1</span> <span class="s1">&#39;DDHHMMSS&#39;</span> <span class="s1">&#39;DDHHMMSS&#39;</span>  <span class="p">;</span> <span class="n">system</span> <span class="n">clock</span>
+<span class="p">;</span><span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_sysclock.inc&#39;</span>
+
+     <span class="mf">1.03</span>                      <span class="p">;</span> <span class="n">integration</span> <span class="n">option</span> 
+   <span class="n">BAL_NOLUMPPROCESSES</span>
+   <span class="n">BAL_NOLUMPLOADS</span>
+   <span class="n">BAL_NOLUMPTRANSPORT</span>
+   <span class="n">BAL_NOSUPPRESSSPACE</span>
+   <span class="n">BAL_NOSUPPRESSTIME</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_timers.inc&#39;</span>
+
+ <span class="mi">1</span>                                                 	<span class="p">;</span> <span class="n">Monitoring</span> <span class="n">areas</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_nrofmon.inc&#39;</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_monareas.inc&#39;</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_stations.inc&#39;</span>
+
+ <span class="mi">2</span>                                                 	<span class="p">;</span> <span class="n">No</span> <span class="n">monitoring</span> <span class="n">cross</span> <span class="n">areas</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B2_outputtimes.inc&#39;</span>
+
+<span class="c1">#2;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Third</span> <span class="nb">input</span> <span class="n">block</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B3_nrofseg.inc&#39;</span>
+
+
+      <span class="mi">2</span>                     <span class="p">;</span> <span class="n">grid</span> <span class="n">layout</span> <span class="ow">not</span> <span class="n">used</span>
+      
+<span class="p">;</span>      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">constant</span> <span class="nb">property</span> <span class="n">arrays</span>
+<span class="p">;</span>      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">time</span> <span class="n">varying</span> <span class="nb">property</span> <span class="n">arrays</span>
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B3_attributes.inc&#39;</span>
+
+
+ 
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">volumes</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+      <span class="mi">2</span>                     <span class="p">;</span> <span class="n">constant</span> <span class="k">with</span> <span class="n">defaults</span>
+      <span class="mf">1.0</span>                   <span class="p">;</span> <span class="n">scale</span> <span class="n">factor</span>
+      <span class="mf">1.0</span>                   <span class="p">;</span> <span class="n">default</span> <span class="n">volume</span>
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">overrides</span>
+
+<span class="c1">#3;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Fourth</span> <span class="nb">input</span> <span class="n">block</span>
+<span class="p">;</span> 
+<span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">nr</span> <span class="n">of</span> <span class="n">exchanges</span>
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="c1"># of dispersion arrays</span>
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="c1"># of velocity arrays</span>
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">first</span> <span class="n">form</span> <span class="ow">is</span> <span class="n">used</span> <span class="k">for</span> <span class="nb">input</span>
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">exchange</span> <span class="n">pointers</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+<span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+
+ 
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">dispersions</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+     <span class="mf">1.0</span>      <span class="mf">1.0</span>     <span class="mf">1.0</span>   <span class="p">;</span> <span class="n">scale</span> <span class="n">factors</span> <span class="ow">in</span> <span class="mi">3</span> <span class="n">directions</span>
+     <span class="mf">0.0</span>      <span class="mf">0.0</span>     <span class="mf">0.0</span>   <span class="p">;</span> <span class="n">values</span> <span class="ow">in</span> <span class="mi">3</span> <span class="n">directions</span>
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">areas</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+      <span class="mi">2</span>                     <span class="p">;</span> <span class="n">constant</span><span class="p">,</span> <span class="n">defaults</span>
+     <span class="mf">1.0</span>      <span class="mf">1.0</span>           <span class="p">;</span> <span class="n">scale</span> <span class="ow">and</span> <span class="n">value</span>
+      <span class="mi">0</span>
+      
+      <span class="mi">1</span>                     <span class="p">;</span> <span class="n">flows</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+      <span class="mi">2</span>                     <span class="p">;</span> <span class="n">constant</span><span class="p">,</span> <span class="n">defaults</span>
+     <span class="mf">1.0</span>      <span class="mf">0.0</span>           <span class="p">;</span> <span class="n">scale</span> <span class="ow">and</span> <span class="n">value</span>
+      <span class="mi">0</span>
+     
+      <span class="mi">0</span>                     <span class="p">;</span> <span class="n">constant</span> <span class="n">length</span>
+     <span class="mf">1.0</span>                    <span class="p">;</span> <span class="n">scale</span> <span class="n">factor</span>
+     <span class="mf">1.0</span>      <span class="mf">1.0</span>     <span class="mf">1.0</span>   <span class="p">;</span> <span class="n">values</span> <span class="ow">in</span> <span class="mi">3</span> <span class="n">directions</span>
+
+<span class="c1">#4;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Fifth</span> <span class="nb">input</span> <span class="n">block</span><span class="p">,</span> <span class="n">water</span> <span class="n">quality</span> <span class="n">calculation</span>
+<span class="p">;</span><span class="n">INCLUDE</span> <span class="s1">&#39;config\B5_boundlist.inc&#39;</span>
+
+<span class="c1">#5;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Sixth</span> <span class="nb">input</span> <span class="n">block</span><span class="p">,</span> <span class="n">Dry</span> <span class="n">Waste</span> <span class="n">Loads</span> <span class="n">block</span>
+<span class="p">;</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">loads</span> <span class="p">(</span><span class="n">dummy</span> <span class="n">value</span><span class="p">)</span>
+<span class="mi">0</span>							<span class="p">;</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">loads</span>
+
+<span class="c1">#6;</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Seventh</span> <span class="nb">input</span> <span class="n">block</span>
+
+
+<span class="n">CONSTANTS</span>  <span class="s1">&#39;Nothreads&#39;</span>       <span class="n">DATA</span>  <span class="mi">0</span>                  <span class="p">;</span> <span class="n">Multicore</span>
+<span class="n">CONSTANTS</span> <span class="n">Only_Active</span>        <span class="n">DATA</span>  <span class="mi">1</span>
+<span class="n">CONSTANTS</span> <span class="n">Active_EM_GSS</span>      <span class="n">DATA</span>  <span class="mi">1</span>
+
+<span class="p">;</span> <span class="n">geometry</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B7_geometry-parameters.inc&#39;</span>
+<span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;config\B7_geometry.bin&#39;</span>
+
+<span class="p">;</span> <span class="n">hydrology</span>
+
+<span class="n">INCLUDE</span> <span class="s1">&#39;config\B7_hydrology.inc&#39;</span>
+<span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;dynamicdata\hydrology.bin&#39;</span>
+
+<span class="p">;</span> <span class="n">infrastructure</span>
+
+<span class="n">CONSTANTS</span>  <span class="n">SewLeakage</span>      <span class="n">DATA</span> <span class="mf">0.0</span>         <span class="p">;</span> <span class="n">sewer</span> <span class="n">leakage</span>                                          <span class="p">(</span><span class="o">%</span><span class="p">)</span>                 
+
+<span class="p">;</span> <span class="n">source</span> <span class="n">atmospheric</span> <span class="n">deposition</span>
+
+<span class="n">CONSTANTS</span>  <span class="n">EF_DDp</span>        <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">dry</span> <span class="n">deposition</span> <span class="n">rate</span>                                    <span class="p">(</span><span class="n">g</span><span class="o">/</span><span class="n">m2</span><span class="o">/</span><span class="n">d</span><span class="p">)</span>            
+<span class="n">CONSTANTS</span>  <span class="n">EF_WDp</span>        <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">wet</span> <span class="n">deposition</span> <span class="n">rate</span>                                    <span class="p">(</span><span class="n">g</span><span class="o">/</span><span class="n">m3</span><span class="p">)</span>              
+
+<span class="p">;</span> <span class="n">source</span> <span class="n">SEWAGE</span> <span class="p">(</span><span class="n">Type</span> <span class="n">B01</span><span class="p">)</span>
+
+<span class="n">PARAMETERS</span> <span class="n">EV_B01</span>        <span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;staticdata\GHS-POP_2015.dat&#39;</span> <span class="p">;</span> <span class="n">locator</span><span class="o">/</span><span class="n">EV</span> <span class="n">variable</span> <span class="nb">type</span> <span class="n">B</span>    <span class="p">(</span><span class="n">cap</span><span class="p">)</span>                
+<span class="n">CONSTANTS</span>  <span class="n">EF_B01</span>           <span class="n">DATA</span> <span class="mf">2.2</span>          <span class="p">;</span> <span class="n">emission</span> <span class="n">factor</span>                                        <span class="p">(</span><span class="n">Kg</span><span class="o">/</span><span class="n">d</span><span class="o">/</span><span class="n">cap</span><span class="p">)</span>           
+<span class="p">;</span> <span class="n">the</span> <span class="n">below</span> <span class="n">comes</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">supportive</span> <span class="n">project</span> <span class="n">specific</span> <span class="n">process</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSew</span>         <span class="n">DATA</span> <span class="mf">1.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>                 
+<span class="n">CONSTANTS</span>  <span class="n">B01toPav</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>                 
+<span class="n">CONSTANTS</span>  <span class="n">B01toUnp</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSoi</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toStw</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+<span class="n">CONSTANTS</span>  <span class="n">B01toSfw</span>         <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">released</span> <span class="n">fraction</span> <span class="n">receptor</span>                             <span class="p">(</span><span class="o">-</span><span class="p">)</span>                     
+
+<span class="p">;</span> <span class="n">source</span> <span class="n">Types</span> <span class="n">NOT</span> <span class="n">USED</span>
+
+<span class="n">CONSTANTS</span>  <span class="n">EV_A01</span>        <span class="n">DATA</span> <span class="mf">0.</span>    
+<span class="n">CONSTANTS</span>  <span class="n">EV_B02</span>        <span class="n">DATA</span> <span class="mf">0.</span>    
+<span class="n">CONSTANTS</span>  <span class="n">EV_B03</span>        <span class="n">DATA</span> <span class="mf">0.</span>    
+
+<span class="p">;</span> <span class="n">fate</span> <span class="o">&amp;</span> <span class="n">transport</span>
+
+<span class="n">CONSTANTS</span>  <span class="n">DecPav</span>        <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">decay</span> <span class="n">rate</span> <span class="n">paved</span>                                       <span class="p">(</span><span class="o">/</span><span class="n">d</span><span class="p">)</span>                
+<span class="n">CONSTANTS</span>  <span class="n">DecUnp</span>        <span class="n">DATA</span> <span class="mf">0.0</span>          <span class="p">;</span> <span class="n">decay</span> <span class="n">rate</span> <span class="n">unpaved</span>                                     <span class="p">(</span><span class="o">/</span><span class="n">d</span><span class="p">)</span>                
+<span class="n">CONSTANTS</span>  <span class="n">KdUnpa</span>        <span class="n">DATA</span> <span class="mf">0.5</span>          <span class="p">;</span> <span class="n">fraction</span> <span class="n">of</span> <span class="n">bound</span> <span class="n">vs</span> <span class="n">unbound</span>                           <span class="p">(</span><span class="o">-</span><span class="p">)</span>                 
+
+<span class="p">;</span> <span class="n">preprocessing</span>
+
+<span class="n">PARAMETERS</span> <span class="n">Streamordr</span> <span class="n">ALL</span> <span class="n">BINARY_FILE</span> <span class="s1">&#39;staticdata\streamorder.dat&#39;</span>
+
+<span class="c1">#7</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Eighth</span> <span class="nb">input</span> <span class="n">block</span>
+
+<span class="n">INITIALS</span>  <span class="n">Sew</span> <span class="n">Pav</span> <span class="n">Unp</span> <span class="n">Stw</span> <span class="n">Sfw</span> <span class="n">Soi</span>
+<span class="n">DEFAULTS</span>  <span class="mi">6</span><span class="o">*</span><span class="mf">0.0</span>
+
+ 
+<span class="c1">#8</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Ninth</span> <span class="nb">input</span> <span class="n">block</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">Conditions</span> <span class="n">follow</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">file</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">Monitor</span><span class="o">-</span><span class="n">file</span>
+ <span class="mi">0</span>                                           		<span class="p">;</span> <span class="n">Grid</span><span class="o">-</span><span class="n">file</span>
+ <span class="mi">1</span>                                                      <span class="p">;</span> <span class="n">His</span>
+ <span class="mi">1</span>                                                      <span class="p">;</span> <span class="n">Map</span>
+ 
+ <span class="p">;</span> <span class="n">Binary</span><span class="o">/</span><span class="n">Nefis</span> <span class="ow">and</span> <span class="n">History</span><span class="o">/</span><span class="n">Map</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">on</span>  <span class="n">binary</span> <span class="n">History</span> <span class="n">file</span>
+ <span class="mi">1</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">on</span>  <span class="n">binary</span> <span class="n">Map</span>     <span class="n">file</span>
+ <span class="mi">0</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">off</span> <span class="n">Nefis</span>  <span class="n">History</span> <span class="n">file</span>
+ <span class="mi">0</span>                                           		<span class="p">;</span> <span class="n">switch</span> <span class="n">off</span> <span class="n">Nefis</span>  <span class="n">Map</span>     <span class="n">file</span>
+<span class="c1">#9</span>
+<span class="p">;</span><span class="c1">###############################################################################</span>
+<span class="p">;</span> <span class="n">Tenth</span> <span class="nb">input</span> <span class="n">block</span>
+
+<span class="c1">#10</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../_examples/update_model_forcing.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Update forcing data</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="EM_functional_description.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Detailed functional description</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+    <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Deltares.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
