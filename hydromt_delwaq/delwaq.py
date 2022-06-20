@@ -12,6 +12,8 @@ import logging
 import struct
 from datetime import datetime
 import time as t
+from typing import Union
+from pathlib import Path
 
 import hydromt
 from hydromt.models.model_api import Model
@@ -22,6 +24,10 @@ from hydromt_wflow.wflow import WflowModel
 
 from .workflows import emissions, segments, roads
 from . import DATADIR
+
+RasterDatasetSource = Union[str, Path]
+GeoDatasetSource = Union[str, Path]
+GeoDataframeSource = Union[str, Path]
 
 __all__ = ["DelwaqModel"]
 
@@ -346,7 +352,7 @@ class DelwaqModel(Model):
 
     def setup_hydrology_forcing(
         self,
-        hydro_forcing_fn,
+        hydro_forcing_fn: RasterDatasetSource,
         starttime,
         endtime,
         timestepsecs,
@@ -585,7 +591,7 @@ class DelwaqModel(Model):
 
     def setup_sediment_forcing(
         self,
-        sediment_fn,
+        sediment_fn: RasterDatasetSource,
         starttime,
         endtime,
         particle_class=["IM1", "IM2", "IM3", "IM4", "IM5"],
@@ -658,7 +664,7 @@ class DelwaqModel(Model):
 
     def setup_emission_raster(
         self,
-        emission_fn,
+        emission_fn: RasterDatasetSource,
         scale_method="average",
         fillna_method="zero",
         fillna_value=0.0,
@@ -712,7 +718,7 @@ class DelwaqModel(Model):
 
     def setup_emission_vector(
         self,
-        emission_fn,
+        emission_fn: RasterDatasetSource,
         col2raster="",
         rasterize_method="value",
     ):
@@ -766,7 +772,7 @@ class DelwaqModel(Model):
             )
         self.set_staticmaps(ds_emi.rename(emission_fn))
 
-    def setup_emission_mapping(self, region_fn, mapping_fn=None):
+    def setup_emission_mapping(self, region_fn: GeoDatasetSource, mapping_fn=None):
         """This component derives several emission maps based on administrative
         boundaries.
 
@@ -840,11 +846,11 @@ class DelwaqModel(Model):
 
     def setup_roads(
         self,
-        roads_fn,
+        roads_fn: GeoDatasetSource,
         highway_list,
         country_list,
         non_highway_list=None,
-        country_fn=None,
+        country_fn: GeoDatasetSource = None,
     ):
         """Setup roads statistics needed for emission modelling.
 
