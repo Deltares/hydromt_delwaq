@@ -44,6 +44,38 @@ def gridarea(ds):
     return da_out
 
 
+def gridlength_gridwidth(ds):
+    """Returns two DataArray for length and width of the grid"""
+    lons = ds.raster.xcoords.values
+    lats = ds.raster.ycoords.values
+    xres = np.abs(np.mean(np.diff(lons)))
+    yres = np.abs(np.mean(np.diff(lats)))
+    ones = np.ones((lats.size, lons.size), dtype=lats.dtype)
+
+    w, l = gis_utils.cellres(lats, xres, yres)
+    width = w[:, None] * ones
+    length = l[:, None] * ones
+
+    da_len = xr.DataArray(
+        data=length.astype("float32"),
+        coords=ds.raster.coords,
+        dims=ds.raster.dims,
+    )
+    da_len.raster.set_nodata(0)
+    da_len.raster.set_crs(ds.raster.crs)
+    da_len.attrs.update(unit="m")
+    da_width = xr.DataArray(
+        data=width.astype("float32"),
+        coords=ds.raster.coords,
+        dims=ds.raster.dims,
+    )
+    da_width.raster.set_nodata(0)
+    da_width.raster.set_crs(ds.raster.crs)
+    da_width.attrs.update(unit="m")
+
+    return da_len.rename("length"), da_width.rename("width")
+
+
 def emission_raster(
     da,
     ds_like,

@@ -20,7 +20,7 @@ from hydromt import workflows, flw, io
 
 from hydromt_wflow.wflow import WflowModel
 
-from .workflows import emissions, segments, roads
+from .workflows import emissions, segments
 from . import DATADIR
 
 __all__ = ["DelwaqModel"]
@@ -45,8 +45,13 @@ class DelwaqModel(Model):
     _CF = dict()  # configreader kwargs
     _GEOMS = {}
     _MAPS = {
-        "flwdir": "ldd",
         "basmsk": "modelmap",
+        "flwdir": "ldd",
+        "lndslp": "slope",
+        "N": "manning",
+        "rivmsk": "river",
+        "strord": "streamorder",
+        "thetaS": "porosity",
     }
     _FOLDERS = [
         "hydromodel",
@@ -96,7 +101,8 @@ class DelwaqModel(Model):
         compartments=["sfw"],
         boundaries=["bd"],
         fluxes=["sfw>sfw", "bd>sfw"],
-        comp_attributes=[0],
+        comp_attributes=["0"],
+        maps=["rivmsk", "lndslp", "strord", "N"],
     ):
         """Setup the delwaq model schematization using the hydromodel region and
         resolution. 
@@ -113,6 +119,10 @@ class DelwaqModel(Model):
         * **ptid** hydromap: unique ID of Delwaq segments [-]
         * **streamorder** map: Strahler stream order map. [-]
         * **slope** map: slope map [-]
+        * **river** map: river mask map [-]
+        * **surface** map: surface map [m2]
+        * **length** map: length map [m]
+        * **width** map: width map [m]
         * **pointer** poi: delwaq pointer between segments
 
         Parameters
@@ -130,7 +140,12 @@ class DelwaqModel(Model):
             Names in the fluxes list should match name in the hydrology_fn source in setup_hydrology_forcing.
         comp_attributes: list of int
             Attribute 1 value of the B3_attributes config file. 1 or 0 for surface water. Also used to compute surface variable.
+        maps: list of str
+            List of variables from hydromodel to add to staticmaps. 
+            By default ['rivmsk', 'lndslp', 'strord', 'N'].
         """
+        # Only list of str allowed in config
+        comp_attributes = [int(i) for i in comp_attributes]
         # Initialise hydromodel from region
         kind, region = workflows.parse_region(region, logger=self.logger)
         if kind != "model":
@@ -172,39 +187,18 @@ class DelwaqModel(Model):
         self.set_pointer(fluxes, name="fluxes")
 
         ### Initialise staticmaps with streamorder, river and slope ###
-        ds_stat = (
-            hydromodel.staticmaps[hydromodel._MAPS["strord"]]
-            .rename("streamorder")
-            .to_dataset()
+        ds_stat = segments.maps_from_hydromodel(hydromodel, compartments, maps=maps)
+        mask = segments.extend_comp_with_duplicates(
+            self.hydromaps["modelmap"].to_dataset(), compartments
         )
-        ds_stat["slope"] = hydromodel.staticmaps[hydromodel._MAPS["lndslp"]]
-        ds_stat["river"] = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
-        self.set_staticmaps(ds_stat)
-        self.staticmaps.coords["mask"] = self.hydromaps["modelmap"]
+        ds_stat["mask"] = mask["modelmap"]
+        ds_stat = ds_stat.set_coords("mask")
+        rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
+        self.set_staticmaps(ds_stat.rename(rmdict))
 
-        ### Geometry data ###
-        surface = emissions.gridarea(hydromodel.staticmaps)
-        surface.raster.set_nodata(np.nan)
-        surface = surface.rename("surface")
-        surface_tot = []
-        for i in range(len(compartments)):
-            if comp_attributes[i] == 0:  # surface water
-                rivlen = hydromodel.staticmaps[hydromodel._MAPS["rivlen"]]
-                rivwth = hydromodel.staticmaps[hydromodel._MAPS["rivwth"]]
-                rivmsk = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
-                surface_tot.append(xr.where(rivmsk, rivlen * rivwth, surface))
-            else:  # other use direct cell surface
-                surface_tot.append(surface)
-        geom = (
-            xr.concat(
-                surface_tot,
-                pd.Index(np.arange(1, len(compartments) + 1, dtype=int), name="comp"),
-            )
-            .transpose("comp", ...)
-            .to_dataset()
-        )
-        geom["manning"] = hydromodel.staticmaps["N"]
-        self.set_staticmaps(geom)
+        ### Add geometry ###
+        ds_geom = segments.geometrymaps(hydromodel, compartments, comp_attributes)
+        self.set_staticmaps(ds_geom)
 
         ### Config ###
         nrofcomp = len(compartments)
@@ -319,7 +313,7 @@ class DelwaqModel(Model):
             monareas_tot = []
             if mon_areas == "compartments":
                 nb_areas = self.nrofcomp
-                for i in range(self.nrofcomp):
+                for i in np.arange(1, self.nrofcomp + 1):
                     monareas_tot.append(
                         xr.where(self.hydromaps["modelmap"], i, mv).astype(np.int32)
                     )
@@ -442,6 +436,11 @@ class DelwaqModel(Model):
         # Update model timestepsecs attribute
         self.timestepsecs = timestepsecs
 
+        # Copy of ds to be filled
+        dsvar = [v for v in ds.data_vars if v.startswith(self.fluxes[0])][0]
+        ds_out = hydromt.raster.full_like(ds[dsvar]).to_dataset()
+        ds_out = ds_out.sel(time=slice(starttime, endtime))
+
         ### Fluxes ###
         for flux in self.fluxes:
             # Check if the flux is split into several variables
@@ -453,8 +452,9 @@ class DelwaqModel(Model):
             if ds[flux].attrs.get("units") == "mm":
                 surface = emissions.gridarea(ds)
                 ds[flux] = ds[flux] * surface / (1000 * self.timestepsecs)
-            ds[flux].attrs.update(attrs)
-            ds[flux].attrs.update(unit="m3/s")
+            ds_out[flux] = ds[flux].sel(time=slice(starttime, endtime))
+            ds_out[flux].attrs.update(attrs)
+            ds_out[flux].attrs.update(unit="m3/s")
 
         ### Volumes ###
         # Add offset for the volumes if needed
@@ -470,35 +470,39 @@ class DelwaqModel(Model):
             if len(vol_vars) > 1:  # need to sum
                 ds[vol] = ds[vol_vars].fillna(0).to_array().sum("variable")
             # Unit conversion (from mm to m3)
-            # if ds[flux].attrs.get("units") == "mm":
-            # TODO
+            if ds[vol].attrs.get("units") == "mm":
+                surface = emissions.gridarea(ds)
+                ds[vol] = ds[vol] * surface / (1000 * self.timestepsecs)
             # In order to avoid zero volumes, a basic minimum value of 0.0001 m3 is added to all volumes
-            ds["vol"] = ds["vol"] + min_volume
+            ds[vol] = ds[vol] + min_volume
             # Add offset for the volumes if needed
             if add_volume_offset:
-                vol = ds[vol].copy()
+                da_vol = ds[vol].copy()
                 ds = ds.drop_vars(vol)
-                vol["time"] = times_offset
-                ds = ds.merge(vol)
-            ds[vol].attrs.update(attrs)
-            ds[vol].attrs.update(unit="m3")
+                da_vol["time"] = times_offset
+                # ds = ds.merge(da_vol)
+            else:
+                da_vol = ds[vol]
+            ds_out[vol] = da_vol.sel(time=slice(starttime, endtime))
+            ds_out[vol].attrs.update(attrs)
+            ds_out[vol].attrs.update(unit="m3")
 
-        # Select variables
+        # Select variables, needed??
         variables = self.fluxes.copy()
         variables.extend(self.compartments)
-        ds = ds[variables]
+        ds_out = ds_out[variables]
 
         # Sell times to starttime and endtime
-        ds = ds.sel(time=slice(starttime, endtime))
+        # ds = ds.sel(time=slice(starttime, endtime))
 
-        ds.coords["mask"] = xr.DataArray(
-            dims=ds.raster.dims,
-            coords=ds.raster.coords,
+        ds_out.coords["mask"] = xr.DataArray(
+            dims=ds_out.raster.dims,
+            coords=ds_out.raster.coords,
             data=self.hydromaps["modelmap"].values,
             attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
         )
 
-        self.set_forcing(ds)
+        self.set_forcing(ds_out)
 
         # Add time info to config
         ST = datetime.strptime(starttime, "%Y-%m-%d %H:%M:%S")
@@ -513,7 +517,7 @@ class DelwaqModel(Model):
         # B2_outputtimes
         STstr = ST.strftime("%Y/%m/%d-%H:%M:%S")
         ETstr = ET.strftime("%Y/%m/%d-%H:%M:%S")
-        timestep = pd.Timedelta(ds.time.values[1] - ds.time.values[0])
+        timestep = pd.Timedelta(ds_out.time.values[1] - ds_out.time.values[0])
         hours = int(timestep.seconds / 3600)
         minutes = int(timestep.seconds / 60)
         seconds = int(timestep.seconds - minutes * 60)
@@ -593,14 +597,13 @@ class DelwaqModel(Model):
 
         # read dynamic data
         ds = self.data_catalog.get_rasterdataset(sediment_fn, geom=self.region)
-        # align forcing file with hydromaps
-        ds = ds.raster.reproject_like(self.hydromaps)
-
         # Select time and particle classes
         # Sell times to starttime and endtime
         ds = ds.sel(time=slice(starttime, endtime))
         sed_vars = [f"Erod{x}" for x in particle_class]
         ds = ds[sed_vars]
+        # align forcing file with hydromaps
+        ds = ds.raster.reproject_like(self.hydromaps)
 
         # Add basin mask
         ds.coords["mask"] = xr.DataArray(
@@ -619,6 +622,12 @@ class DelwaqModel(Model):
             # Fill with zeros inside mask and keep NaN outside
             ds[dvar] = ds[dvar].fillna(0).where(ds["mask"], ds[dvar].raster.nodata)
 
+        # Add zeros to the non surface water compartments
+        comp_sfw = segments.sfwcomp(self.compartments, self.config)
+        ds = segments.extend_comp_with_zeros(
+            ds1c=ds, comp_ds1c=comp_sfw, compartments=self.compartments
+        )
+
         self.set_forcing(ds)
 
         lines_ini = {
@@ -628,13 +637,157 @@ class DelwaqModel(Model):
         for option in lines_ini:
             self.set_config("B7_sediment", option, lines_ini[option])
 
+    def setup_climate_forcing(
+        self,
+        climate_fn: str,
+        starttime: str,
+        endtime: str,
+        timestepsecs: int,
+        climate_vars: list = ["temp", "temp_dew", "ssr", "wind_u", "wind_v", "tcc"],
+        temp_correction: bool = False,
+        dem_forcing_fn: str = None,
+        **kwargs,
+    ):
+        """Setup Delwaq climate fluxes.
+
+        Adds model layers:
+
+        * **climate.bin** dynmap: climate fuxes for climate_vars
+        * **B7_climate.inc** config: names of climate fluxes included in climate.bin
+
+        Parameters
+        ----------
+        climate_fn : str
+            Climate data
+
+            * Required variables: variables listed in climate_vars
+        startime : str
+            Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
+        timestepsecs: int
+            Delwaq model timestep in seconds.
+        endtime : str
+            Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS
+        climate_vars : str list, optional
+            List of climate_vars to consider. By default ["temp", "temp_dew", "ssr", "wind_u", "wind_v", "tcc"]
+        temp_correction : bool, optional
+             If True temperature are corrected using elevation lapse rate,
+             by default False.
+        dem_forcing_fn : str, default None
+             Elevation data source with coverage of entire meteorological forcing domain.
+             If temp_correction is True and dem_forcing_fn is provided this is used in
+             combination with elevation at model resolution to correct the temperature.
+        """
+        self.logger.info(f"Setting dynamic data from climate source {climate_fn}.")
+        # TODO function to get times
+        freq = pd.to_timedelta(timestepsecs, unit="s")
+        mask = self.hydromaps["modelmap"].values > 0
+
+        # read dynamic data
+
+        ds = self.data_catalog.get_rasterdataset(
+            climate_fn,
+            geom=self.region,
+            variables=climate_vars,
+            time_tuple=(starttime, endtime),
+        )
+        dem_forcing = None
+        if dem_forcing_fn != None:
+            dem_forcing = self.data_catalog.get_rasterdataset(
+                dem_forcing_fn,
+                geom=ds.raster.box,  # clip dem with forcing bbox for full coverage
+                buffer=2,
+                variables=["elevtn"],
+            ).squeeze()
+
+        ds_out = xr.Dataset()
+
+        # Start with wind
+        if "wind_u" in climate_vars and "wind_v" in climate_vars:
+            ds_out["wind"] = hydromt.workflows.forcing.wind(
+                self.hydromaps,
+                wind_u=ds["wind_u"],
+                wind_v=ds["wind_v"],
+                altitude_correction=False,
+            )
+            climate_vars.remove("wind_u")
+            climate_vars.remove("wind_v")
+        elif "wind" in climate_vars:
+            ds_out["wind"] = hydromt.workflows.forcing.wind(
+                self.hydromaps,
+                wind=ds_out["wind"],
+                altitude_correction=False,
+            )
+            climate_vars.remove("wind")
+        # Add other variables
+        temp_vars = [v for v in climate_vars if v.startswith("temp")]
+        for v in climate_vars:
+            if v in temp_vars:
+                temp_v = hydromt.workflows.forcing.temp(
+                    ds[v],
+                    dem_model=self.hydromaps["elevtn"],
+                    dem_forcing=dem_forcing,
+                    lapse_correction=temp_correction,
+                    logger=self.logger,
+                    freq=freq,
+                    reproj_method="nearest_index",
+                    lapse_rate=-0.0065,
+                    resample_kwargs=dict(label="right", closed="right"),
+                )
+                ds_out[v] = temp_v
+            else:
+                da_out = ds[v].raster.reproject_like(
+                    self.hydromaps, method="nearest_index"
+                )
+                da_out = hydromt.workflows.forcing.resample_time(
+                    da_out,
+                    freq,
+                    upsampling="bfill",  # we assume right labeled original data
+                    downsampling="mean",
+                    conserve_mass=False,
+                    logger=self.logger,
+                )
+                ds_out[v] = da_out
+        # Add basin mask
+        ds_out.coords["mask"] = xr.DataArray(
+            dims=ds_out.raster.dims,
+            coords=ds_out.raster.coords,
+            data=self.hydromaps["modelmap"].values,
+            attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
+        )
+        # Add _FillValue to the data attributes
+        for dvar in ds_out.data_vars.keys():
+            nodata = ds_out[dvar].raster.nodata
+            if nodata is not None:
+                ds_out[dvar].attrs.update(_FillValue=nodata)
+            else:
+                ds_out[dvar].attrs.update(_FillValue=-9999.0)
+            # Fill with zeros inside mask and keep NaN outside
+            ds_out[dvar] = (
+                ds_out[dvar].fillna(0).where(ds_out["mask"], ds_out[dvar].raster.nodata)
+            )
+        # Add zeros to the non surface water compartments
+        comp_sfw = segments.sfwcomp(self.compartments, self.config)
+        ds_out = segments.extend_comp_with_zeros(
+            ds1c=ds_out, comp_ds1c=comp_sfw, compartments=self.compartments
+        )
+
+        self.set_forcing(ds_out)
+
+        lines_ini = {
+            "l1": "SEG_FUNCTIONS",
+            "l2": " ".join(str(x) for x in ds_out.data_vars),
+        }
+        for option in lines_ini:
+            self.set_config("B7_climate", option, lines_ini[option])
+
     def setup_emission_raster(
         self,
-        emission_fn,
-        scale_method="average",
-        fillna_method="zero",
-        fillna_value=0.0,
-        area_division=False,
+        emission_fn: str,
+        scale_method: str = "average",
+        fillna_method: str = "zero",
+        fillna_value: int = 0.0,
+        area_division: bool = False,
+        comp_emi: str = "sfw",
     ):
         """Setup one or several emission map from raster data.
 
@@ -654,6 +807,8 @@ class DelwaqModel(Model):
             If fillna_method is set to 'value', NaNs in the emission maps will be replaced by this value.
         area_division : boolean
             If needed do the resampling in cap/m2 (True) instead of cap (False)
+        comp_emi: str
+            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
         """
         if emission_fn is None:
             self.logger.warning(
@@ -680,13 +835,18 @@ class DelwaqModel(Model):
             area_division=area_division,
             logger=self.logger,
         )
+        # Attribute to comp_emi compartment and add zeros for the others
+        ds_emi = segments.extend_comp_with_zeros(
+            ds1c=ds_emi, comp_ds1c=comp_emi, compartments=self.compartments
+        )
         self.set_staticmaps(ds_emi.rename(emission_fn))
 
     def setup_emission_vector(
         self,
-        emission_fn,
-        col2raster="",
-        rasterize_method="value",
+        emission_fn: str,
+        col2raster: str = "",
+        rasterize_method: str = "value",
+        comp_emi: str = "sfw",
     ):
         """Setup emission map from vector data.
 
@@ -705,6 +865,8 @@ class DelwaqModel(Model):
             Method to rasterize the vector data. Either {"value", "fraction"}.
             If "value", the value from the col2raster is used directly in the raster.
             If "fraction", the fraction of the grid cell covered by the vector file is returned.
+        comp_emi: str
+            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
         """
         if emission_fn is None:
             self.logger.warning(
@@ -736,9 +898,18 @@ class DelwaqModel(Model):
                 mask_name="mask",
                 logger=self.logger,
             )
+        # Attribute to comp_emi compartment and add zeros for the others
+        ds_emi = segments.extend_comp_with_zeros(
+            ds1c=ds_emi, comp_ds1c=comp_emi, compartments=self.compartments
+        )
         self.set_staticmaps(ds_emi.rename(emission_fn))
 
-    def setup_emission_mapping(self, region_fn, mapping_fn=None):
+    def setup_emission_mapping(
+        self,
+        region_fn,
+        mapping_fn=None,
+        comp_emi="sfw",
+    ):
         """This component derives several emission maps based on administrative
         boundaries.
 
@@ -760,6 +931,8 @@ class DelwaqModel(Model):
             * Required variables: ['ID']
         mapping_fn : str, optional
             Path to the emission mapping file corresponding to region_fn.
+        comp_emi: str
+            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
         """
         if region_fn is None:
             self.logger.warning(
@@ -808,6 +981,10 @@ class DelwaqModel(Model):
             rmdict = {
                 k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars
             }
+            # Attribute to comp_emi compartment and add zeros for the others
+            ds_admin_maps = segments.extend_comp_with_zeros(
+                ds1c=ds_admin_maps, comp_ds1c=comp_emi, compartments=self.compartments
+            )
             self.set_staticmaps(ds_admin_maps.rename(rmdict))
 
     # I/O
@@ -836,8 +1013,6 @@ class DelwaqModel(Model):
             self.write_hydromaps()
         if self._pointer is not None or not self._read:
             self.write_pointer()
-        if self._geometry is not None or not self._read:
-            self.write_geometry()
         #        if self._fewsadapter or not self._read:
         #            self.write_fewsadapter()
         if self._forcing or not self._read:
@@ -874,10 +1049,7 @@ class DelwaqModel(Model):
         fname = join(self.root, "staticdata", "staticmaps.nc")
         # Update attributes for gdal compliance
         # ds_out = ds_out.raster.gdal_compliant(rename_dims=False)
-        if os.path.isfile(fname):
-            ds_out.to_netcdf(path=fname, mode="a")
-        else:
-            ds_out.to_netcdf(path=fname)
+        ds_out.to_netcdf(path=fname)
 
         # Binary format
         for dvar in ds_out.data_vars:
@@ -1039,10 +1211,8 @@ class DelwaqModel(Model):
         # Netcdf format
         if write_nc:
             fname = join(self.root, "dynamicdata", "dynamicmaps.nc")
-            if os.path.isfile(fname):
-                ds_out.to_netcdf(path=fname, mode="a")
-            else:
-                ds_out.to_netcdf(path=fname)
+            ds_out = ds_out.drop_vars(["mask", "spatial_ref"], errors="ignore")
+            ds_out.to_netcdf(path=fname)
 
         # Binary format
         timesteps = np.arange(0, len(ds_out.time.values))
@@ -1055,8 +1225,9 @@ class DelwaqModel(Model):
             )
             # Flow
             flname = join(self.root, "dynamicdata", "flow.dat")
+            flow_vars = self.get_config("B7_fluxes.l2").split(" ")
             flowblock = []
-            for dvar in ["run", "inwater"]:
+            for dvar in flow_vars:
                 nodata = ds_out[dvar].raster.nodata
                 data = ds_out[dvar].isel(time=i).values.flatten()
                 data = data[data != nodata]
@@ -1066,11 +1237,15 @@ class DelwaqModel(Model):
             )
             # volume
             voname = join(self.root, "dynamicdata", "volume.dat")
-            nodata = ds_out["vol"].raster.nodata
-            data = ds_out["vol"].isel(time=i).values.flatten()
-            data = data[data != nodata]
+            vol_vars = self.compartments
+            volblock = []
+            for dvar in vol_vars:
+                nodata = ds_out[dvar].raster.nodata
+                data = ds_out[dvar].isel(time=i).values.flatten()
+                data = data[data != nodata]
+                volblock = np.append(volblock, data)
             self.dw_WriteSegmentOrExchangeData(
-                timestepstamp[i], voname, data, 1, WriteAscii=False
+                timestepstamp[i], voname, volblock, 1, WriteAscii=False
             )
             # sediment
             if "B7_sediment" in self.config:
@@ -1085,10 +1260,24 @@ class DelwaqModel(Model):
                 self.dw_WriteSegmentOrExchangeData(
                     timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
                 )
+            # sediment
+            if "B7_climate" in self.config:
+                climname = join(self.root, "dynamicdata", "climate.dat")
+                clim_vars = self.get_config("B7_climate.l2").split(" ")
+                climblock = []
+                for dvar in clim_vars:
+                    nodata = ds_out[dvar].raster.nodata
+                    data = ds_out[dvar].isel(time=i).values.flatten()
+                    data = data[data != nodata]
+                    climblock = np.append(climblock, data)
+                self.dw_WriteSegmentOrExchangeData(
+                    timestepstamp[i], climname, climblock, 1, WriteAscii=False
+                )
 
         # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
-        self.logger.info("Writting waqgeom.nc file")
-        self.dw_WriteWaqGeom()
+        # TODO: Update for several layers
+        # self.logger.info("Writting waqgeom.nc file")
+        # self.dw_WriteWaqGeom()
 
     def read_states(self):
         """Read states at <root/?/> and parse to dict of xr.DataArray"""
@@ -1208,9 +1397,9 @@ class DelwaqModel(Model):
         """Add model attribute property to pointer"""
         # Check that pointer attr is a four column np.array
         if name == "pointer":
-            if not isinstance(attr, np.array) and attr.shape[1] == 4:
+            if not isinstance(attr, np.ndarray) and attr.shape[1] == 4:
                 self.logger.warning(
-                    "pointer values in self.pointer should be a np.array with four columns."
+                    "pointer values in self.pointer should be a np.ndarray with four columns."
                 )
                 return
         elif np.isin(name, ["compartments", "boundaries", "fluxes"]):
@@ -1225,7 +1414,10 @@ class DelwaqModel(Model):
                     f"{name} object in self.pointer should be an integer."
                 )
                 return
-        self._pointer[name] = attr
+        if self._pointer is None:
+            self._pointer = {name: attr}
+        else:
+            self._pointer[name] = attr
 
     @property
     def nrofseg(self):
@@ -1271,7 +1463,7 @@ class DelwaqModel(Model):
                 "B3_attributes.l7",
                 "     1*01 ; sfw",
             )
-            ncells = ncomp.split("*")[0]
+            ncells = int(ncomp.split("*")[0])
             ncomp = int(self.nrofseg / ncells)
             self.set_pointer(ncomp, "nrofexch")
         return ncomp
@@ -1448,7 +1640,7 @@ class DelwaqModel(Model):
         ptid = xr.where(ptid == ptid_mv, -1, ptid - 1)
         np_ptid = ptid.values
         # Wflow map dimensions
-        m, n = np_ptid.shape
+        k, m, n = np_ptid.shape
         # Number of segments in horizontal dimension
         nosegh = int(np.max(np_ptid)) + 1  # because of the zero based
         # Get LDD map
@@ -1547,7 +1739,7 @@ class DelwaqModel(Model):
         for i in range(m):
             for j in range(n):
                 # Current element index
-                i_elem = int(np_ptid[i, j])
+                i_elem = int(np_ptid[0, i, j])
                 if i_elem < 0:
                     # Skip inactive segment
                     continue
@@ -1559,21 +1751,21 @@ class DelwaqModel(Model):
                     i_elem_up_right = -1
                 elif j == 0:
                     i_elem_up_left = -1
-                    i_elem_up = int(np_ptid[i - 1, j])
-                    i_elem_up_right = int(np_ptid[i - 1, j + 1])
+                    i_elem_up = int(np_ptid[0, i - 1, j])
+                    i_elem_up_right = int(np_ptid[0, i - 1, j + 1])
                 elif j == n - 1:
-                    i_elem_up_left = int(np_ptid[i - 1, j - 1])
-                    i_elem_up = int(np_ptid[i - 1, j])
+                    i_elem_up_left = int(np_ptid[0, i - 1, j - 1])
+                    i_elem_up = int(np_ptid[0, i - 1, j])
                     i_elem_up_right = -1
                 else:
-                    i_elem_up_left = int(np_ptid[i - 1, j - 1])
-                    i_elem_up = int(np_ptid[i - 1, j])
-                    i_elem_up_right = int(np_ptid[i - 1, j + 1])
+                    i_elem_up_left = int(np_ptid[0, i - 1, j - 1])
+                    i_elem_up = int(np_ptid[0, i - 1, j])
+                    i_elem_up_right = int(np_ptid[0, i - 1, j + 1])
 
                 if j == 0:
                     i_elem_left = -1
                 else:
-                    i_elem_left = int(np_ptid[i, j - 1])
+                    i_elem_left = int(np_ptid[0, i, j - 1])
 
                 # Update nodes:
                 # If left or upper neighbours are active, some nodes of current cell
@@ -1630,21 +1822,21 @@ class DelwaqModel(Model):
                 direction = np_ldd[i, j]
                 i_other = -1
                 if direction == 1:
-                    i_other = np_ptid[i + 1, j - 1]  # to lower left
+                    i_other = np_ptid[0, i + 1, j - 1]  # to lower left
                 elif direction == 2:
-                    i_other = np_ptid[i + 1, j]  # to lower
+                    i_other = np_ptid[0, i + 1, j]  # to lower
                 elif direction == 3:
-                    i_other = np_ptid[i + 1, j + 1]  # to lower right
+                    i_other = np_ptid[0, i + 1, j + 1]  # to lower right
                 elif direction == 4:
-                    i_other = np_ptid[i, j - 1]  # to left
+                    i_other = np_ptid[0, i, j - 1]  # to left
                 elif direction == 6:
-                    i_other = np_ptid[i, j + 1]  # to right
+                    i_other = np_ptid[0, i, j + 1]  # to right
                 elif direction == 7:
-                    i_other = np_ptid[i - 1, j - 1]  # to upper right
+                    i_other = np_ptid[0, i - 1, j - 1]  # to upper right
                 elif direction == 8:
-                    i_other = np_ptid[i - 1, j]  # to upper
+                    i_other = np_ptid[0, i - 1, j]  # to upper
                 elif direction == 9:
-                    i_other = np_ptid[i - 1, j + 1]  # to upper left
+                    i_other = np_ptid[0, i - 1, j + 1]  # to upper left
                 if i_other >= 0:
                     flow_links[i_flink, :] = i_elem, i_other
                     i_flink += 1
