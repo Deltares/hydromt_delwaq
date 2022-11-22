@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from rasterio.enums import MergeAlg
 import xarray as xr
 import logging
 
@@ -147,7 +148,6 @@ def emission_vector(
             sindex=False,
         )
     elif method == "fraction":
-        # Using the vectors directly (long computation time but most accurate)
         # Create vector grid (for calculating fraction and storage per grid cell)
         logger.debug(
             "Creating vector grid for calculating coverage fraction per grid cell"
@@ -156,33 +156,37 @@ def emission_vector(
         msktn = ds_like[mask_name]
         idx_valid = np.where(msktn.values.flatten() != msktn.raster.nodata)[0]
         gdf_grid = ds_like.raster.vector_grid().loc[idx_valid]
-        gdf_grid["coverfrac"] = np.zeros(len(idx_valid))
-        gdf_grid["area"] = gdf_grid.to_crs(
-            3857
-        ).area  # area calculation in projected crs
 
-        # Calculate fraction per (vector) grid cell
-        # Looping over each vector shape
-        for i in range(len(gdf)):
-            shape = gdf.iloc[i]
-            gridded_shape = gdf_grid.intersection(shape.geometry)
-            gridded_shape = gridded_shape.loc[~gridded_shape.is_empty]
-            idxs = gridded_shape.index
-            if np.any(idxs):
-                # area calculation needs projected crs
-                sharea_cell = gridded_shape.to_crs(3857).area
-                gdf_grid.loc[idxs, "coverfrac"] += (
-                    sharea_cell / gdf_grid.loc[idxs, "area"]
-                )
-        # Create the rasterized coverage fraction map
-        da_out = ds_like.raster.rasterize(
-            gdf_grid,
-            col_name="coverfrac",
+        # intersect the gdf data with the grid
+        gdf = gdf.to_crs(gdf_grid.crs)
+        gdf_intersect = gdf.overlay(gdf_grid, how="intersection")
+
+        # compute area using same crs for frac
+        gdf_intersect = gdf_intersect.to_crs(3857)
+        gdf_intersect["area"] = gdf_intersect.area
+        # convert to point (easier for stats)
+        gdf_intersect["geometry"] = gdf_intersect.representative_point()
+
+        # Rasterize area column with sum
+        da_area = ds_like.raster.rasterize(
+            gdf_intersect,
+            col_name="area",
             nodata=0,
-            all_touched=False,
-            dtype=None,
-            sindex=False,
+            all_touched=True,
+            merge_alg=MergeAlg.add,
         )
+
+        # Convert to frac using gdf grid in same crs (area error when using ds_like.raster.area_grid)
+        gdf_grid = gdf_grid.to_crs(3857)
+        gdf_grid["area"] = gdf_grid.area
+        da_gridarea = ds_like.raster.rasterize(
+            gdf_grid, col_name="area", nodata=0, all_touched=False
+        )
+
+        da_out = da_area / da_gridarea
+        da_out.raster.set_crs(ds_like.raster.crs)
+        da_out = da_out.where(msktn != msktn.raster.nodata, -999)
+        da_out.raster.set_nodata(-999)
 
     return da_out
 
