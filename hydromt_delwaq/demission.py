@@ -210,6 +210,166 @@ class DemissionModel(DelwaqModel):
         for option in lines_ini:
             self.set_config("B7_surf", option, lines_ini[option])
 
+    def setup_emission_raster(
+        self,
+        emission_fn: str,
+        scale_method: str = "average",
+        fillna_method: str = "zero",
+        fillna_value: int = 0.0,
+        area_division: bool = False,
+        comp_emi: str = "sfw",
+    ):
+        """Setup one or several emission map from raster data.
+
+        Adds model layer:
+
+        * **emission_fn** map: emission data map
+
+        Parameters
+        ----------
+        emission_fn : {'GHS-POP_2015'...}
+            Name of raster emission map source.
+        scale_method : str {'nearest', 'average', 'mode'}
+            Method for resampling
+        fillna_method : str {'nearest', 'zero', 'value'}
+            Method to fill NaN values. Either nearest neighbour, zeros or user defined value.
+        fillna_value : float
+            If fillna_method is set to 'value', NaNs in the emission maps will be replaced by this value.
+        area_division : boolean
+            If needed do the resampling in cap/m2 (True) instead of cap (False)
+        comp_emi: str
+            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
+        """
+        self.logger.info(f"Preparing '{emission_fn}' map.")
+        # process raster emission maps
+        da = self.data_catalog.get_rasterdataset(
+            emission_fn, geom=self.region, buffer=2
+        )
+        ds_emi = emissions.emission_raster(
+            da=da,
+            ds_like=self.staticmaps,
+            method=scale_method,
+            fillna_method=fillna_method,
+            fillna_value=fillna_value,
+            area_division=area_division,
+            logger=self.logger,
+        )
+        self.set_staticmaps(ds_emi.rename(emission_fn))
+
+    def setup_emission_vector(
+        self,
+        emission_fn: str,
+        col2raster: str = "",
+        rasterize_method: str = "value",
+        comp_emi: str = "sfw",
+    ):
+        """Setup emission map from vector data.
+
+        Adds model layer:
+
+        * **emission_fn** map: emission data map
+
+        Parameters
+        ----------
+        emission_fn : {'GDP_world'...}
+            Name of raster emission map source.
+        col2raster : str
+            Name of the column from the vector file to rasterize.
+            Can be left empty if the selected method is set to "fraction".
+        rasterize_method : str
+            Method to rasterize the vector data. Either {"value", "fraction"}.
+            If "value", the value from the col2raster is used directly in the raster.
+            If "fraction", the fraction of the grid cell covered by the vector file is returned.
+        comp_emi: str
+            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
+        """
+        self.logger.info(f"Preparing '{emission_fn}' map.")
+        gdf_org = self.data_catalog.get_geodataframe(
+            emission_fn, geom=self.basins, dst_crs=self.crs
+        )
+        if gdf_org.empty:
+            self.logger.warning(
+                f"No shapes of {emission_fn} found within region, setting to default value."
+            )
+            ds_emi = self.hydromaps["basins"].copy() * 0.0
+            ds_emi.attrs.update(_FillValue=0.0)
+        else:
+            ds_emi = emissions.emission_vector(
+                gdf=gdf_org,
+                ds_like=self.staticmaps,
+                col_name=col2raster,
+                method=rasterize_method,
+                mask_name="mask",
+                logger=self.logger,
+            )
+        self.set_staticmaps(ds_emi.rename(emission_fn))
+
+    def setup_emission_mapping(
+        self,
+        region_fn,
+        mapping_fn=None,
+        comp_emi="sfw",
+    ):
+        """This component derives several emission maps based on administrative
+        boundaries.
+
+        For several emission types administrative classes ('fid' column) are
+        remapped to model parameter values based on lookup tables. The data is
+        remapped at its original resolution and then resampled to the model
+        resolution based using the average value, unless noted differently.
+
+        Adds model layers:
+
+        * **region_fn** map: emission data with classification from source_name [-]
+        * **emission factor X** map: emission data from mapping file to classification
+
+        Parameters
+        ----------
+        region_fn : {["gadm_level1", "gadm_level2", "gadm_level3"]}
+            Name or list of names of data source in data_sources.yml file.
+
+            * Required variables: ['ID']
+        mapping_fn : str, optional
+            Path to the emission mapping file corresponding to region_fn.
+        comp_emi: str
+            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
+        """
+        self.logger.info(
+            f"Preparing administrative boundaries related parameter maps for {region_fn}."
+        )
+        if mapping_fn is None:
+            self.logger.warning(f"Using default mapping file.")
+            mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
+        # process emission factor maps
+        gdf_org = self.data_catalog.get_geodataframe(
+            region_fn, geom=self.basins, dst_crs=self.crs
+        )
+        # Rasterize the GeoDataFrame to get the areas mask of administrative boundaries with their ids
+        gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
+        # make sure index_col always has name fid in source dataset (use rename in data_sources.yml or
+        # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not fid:
+        # rename:
+        #   INDEXCOL: fid)\
+        ds_admin = self.hydromaps.raster.rasterize(
+            gdf_org,
+            col_name="ID",
+            nodata=0,
+            all_touched=True,
+            dtype=None,
+            sindex=False,
+        )
+
+        # add admin_bound map
+        ds_admin_maps = emissions.admin(
+            da=ds_admin,
+            ds_like=self.staticmaps,
+            source_name=region_fn,
+            fn_map=mapping_fn,
+            logger=self.logger,
+        )
+        rmdict = {k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars}
+        self.set_staticmaps(ds_admin_maps.rename(rmdict))
+
     def setup_roads(
         self,
         roads_fn,

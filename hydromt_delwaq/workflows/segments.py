@@ -380,7 +380,7 @@ def extend_comp_with_zeros(ds1c: xr.Dataset, comp_ds1c: str, compartments: list)
 
     """
     for var in ds1c.data_vars:
-        da_zeros = full_like(ds1c[var])
+        da_zeros = full_like(ds1c[var], lazy=True)
         da_zeros = da_zeros.where(ds1c[var] == ds1c[var].raster.nodata, 0)
         da_tot = []
         for i in range(len(compartments)):

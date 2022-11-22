@@ -438,7 +438,7 @@ class DelwaqModel(Model):
 
         # Copy of ds to be filled
         dsvar = [v for v in ds.data_vars if v.startswith(self.fluxes[0])][0]
-        ds_out = hydromt.raster.full_like(ds[dsvar]).to_dataset()
+        ds_out = hydromt.raster.full_like(ds[dsvar], lazy=True).to_dataset()
         ds_out = ds_out.sel(time=slice(starttime, endtime))
 
         ### Fluxes ###
@@ -810,17 +810,6 @@ class DelwaqModel(Model):
         comp_emi: str
             Name of the model compartment recaiving the emission data (by default surface water 'sfw').
         """
-        if emission_fn is None:
-            self.logger.warning(
-                "Source name set to None, skipping setup_emission_raster."
-            )
-            return
-        if emission_fn not in self.data_catalog:
-            self.logger.warning(
-                f"Invalid source '{emission_fn}', skipping setup_emission_raster."
-            )
-            return
-
         self.logger.info(f"Preparing '{emission_fn}' map.")
         # process raster emission maps
         da = self.data_catalog.get_rasterdataset(
@@ -868,17 +857,6 @@ class DelwaqModel(Model):
         comp_emi: str
             Name of the model compartment recaiving the emission data (by default surface water 'sfw').
         """
-        if emission_fn is None:
-            self.logger.warning(
-                "Source name set to None, skipping setup_emission_vector."
-            )
-            return
-        if emission_fn not in self.data_catalog:
-            self.logger.warning(
-                f"Invalid source '{emission_fn}', skipping setup_emission_vector."
-            )
-            return
-
         self.logger.info(f"Preparing '{emission_fn}' map.")
         gdf_org = self.data_catalog.get_geodataframe(
             emission_fn, geom=self.basins, dst_crs=self.crs
@@ -934,58 +912,45 @@ class DelwaqModel(Model):
         comp_emi: str
             Name of the model compartment recaiving the emission data (by default surface water 'sfw').
         """
-        if region_fn is None:
-            self.logger.warning(
-                "Source name set to None, skipping setup_emission_mapping."
-            )
-            return
-        if region_fn not in self.data_catalog:
-            self.logger.warning(
-                f"Invalid source '{region_fn}', skipping setup_admin_bound."
-                "\nCheck if {source_i} exists in data_sources.yml or local_sources.yml"
-            )
-        else:
-            self.logger.info(
-                f"Preparing administrative boundaries related parameter maps for {region_fn}."
-            )
-            if mapping_fn is None:
-                self.logger.warning(f"Using default mapping file.")
-                mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
-            # process emission factor maps
-            gdf_org = self.data_catalog.get_geodataframe(
-                region_fn, geom=self.basins, dst_crs=self.crs
-            )
-            # Rasterize the GeoDataFrame to get the areas mask of administrative boundaries with their ids
-            gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
-            # make sure index_col always has name fid in source dataset (use rename in data_sources.yml or
-            # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not fid:
-            # rename:
-            #   INDEXCOL: fid)\
-            ds_admin = self.hydromaps.raster.rasterize(
-                gdf_org,
-                col_name="ID",
-                nodata=0,
-                all_touched=True,
-                dtype=None,
-                sindex=False,
-            )
+        self.logger.info(
+            f"Preparing administrative boundaries related parameter maps for {region_fn}."
+        )
+        if mapping_fn is None:
+            self.logger.warning(f"Using default mapping file.")
+            mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
+        # process emission factor maps
+        gdf_org = self.data_catalog.get_geodataframe(
+            region_fn, geom=self.basins, dst_crs=self.crs
+        )
+        # Rasterize the GeoDataFrame to get the areas mask of administrative boundaries with their ids
+        gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
+        # make sure index_col always has name fid in source dataset (use rename in data_sources.yml or
+        # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not fid:
+        # rename:
+        #   INDEXCOL: fid)\
+        ds_admin = self.hydromaps.raster.rasterize(
+            gdf_org,
+            col_name="ID",
+            nodata=0,
+            all_touched=True,
+            dtype=None,
+            sindex=False,
+        )
 
-            # add admin_bound map
-            ds_admin_maps = emissions.admin(
-                da=ds_admin,
-                ds_like=self.staticmaps,
-                source_name=region_fn,
-                fn_map=mapping_fn,
-                logger=self.logger,
-            )
-            rmdict = {
-                k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars
-            }
-            # Attribute to comp_emi compartment and add zeros for the others
-            ds_admin_maps = segments.extend_comp_with_zeros(
-                ds1c=ds_admin_maps, comp_ds1c=comp_emi, compartments=self.compartments
-            )
-            self.set_staticmaps(ds_admin_maps.rename(rmdict))
+        # add admin_bound map
+        ds_admin_maps = emissions.admin(
+            da=ds_admin,
+            ds_like=self.staticmaps,
+            source_name=region_fn,
+            fn_map=mapping_fn,
+            logger=self.logger,
+        )
+        rmdict = {k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars}
+        # Attribute to comp_emi compartment and add zeros for the others
+        ds_admin_maps = segments.extend_comp_with_zeros(
+            ds1c=ds_admin_maps, comp_ds1c=comp_emi, compartments=self.compartments
+        )
+        self.set_staticmaps(ds_admin_maps.rename(rmdict))
 
     # I/O
     def read(self):
@@ -1254,20 +1219,30 @@ class DelwaqModel(Model):
                 sedblock = []
                 for dvar in sed_vars:
                     nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
+                    data = (
+                        ds_out[dvar]
+                        .isel(time=i)
+                        .transpose("comp", ...)
+                        .values.flatten()
+                    )
                     data = data[data != nodata]
                     sedblock = np.append(sedblock, data)
                 self.dw_WriteSegmentOrExchangeData(
                     timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
                 )
-            # sediment
+            # climate
             if "B7_climate" in self.config:
                 climname = join(self.root, "dynamicdata", "climate.dat")
                 clim_vars = self.get_config("B7_climate.l2").split(" ")
                 climblock = []
                 for dvar in clim_vars:
                     nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
+                    data = (
+                        ds_out[dvar]
+                        .isel(time=i)
+                        .transpose("comp", ...)
+                        .values.flatten()
+                    )
                     data = data[data != nodata]
                     climblock = np.append(climblock, data)
                 self.dw_WriteSegmentOrExchangeData(
