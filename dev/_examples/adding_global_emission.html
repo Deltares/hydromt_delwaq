@@ -747,7 +747,7 @@ In a future release, GeoPandas will switch to using Shapely by default. If you a
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-12-21 02:29:55,889 - update_model_emission - log - INFO - HydroMT version: 0.6.1.dev
+2022-12-21 06:43:28,236 - update_model_emission - log - INFO - HydroMT version: 0.6.1.dev
 </pre></div></div>
 </div>
 </section>
@@ -836,10 +836,10 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-12-21 02:29:57,877 - update_model_emission - data_catalog - INFO - Reading data catalog artifact_data v0.0.7 from archive
-2022-12-21 02:29:58,329 - update_model_emission - data_catalog - INFO - Downloading data archive file to /home/runner/.hydromt_data/artifact_data/v0.0.7/data.tar.gz
-2022-12-21 02:29:59,713 - update_model_emission - data_catalog - DEBUG - Unpacking data from /home/runner/.hydromt_data/artifact_data/v0.0.7/data.tar.gz
-2022-12-21 02:30:00,614 - update_model_emission - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.7/data_catalog.yml
+2022-12-21 06:43:30,281 - update_model_emission - data_catalog - INFO - Reading data catalog artifact_data v0.0.7 from archive
+2022-12-21 06:43:30,718 - update_model_emission - data_catalog - INFO - Downloading data archive file to /home/runner/.hydromt_data/artifact_data/v0.0.7/data.tar.gz
+2022-12-21 06:43:32,800 - update_model_emission - data_catalog - DEBUG - Unpacking data from /home/runner/.hydromt_data/artifact_data/v0.0.7/data.tar.gz
+2022-12-21 06:43:33,702 - update_model_emission - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.7/data_catalog.yml
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -957,33 +957,33 @@ import geopandas
 
 In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
   from . import raster, vector, gis_utils, merge
-2022-12-21 02:30:02,206 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
-2022-12-21 02:30:02,206 - update - log - INFO - HydroMT version: 0.6.1.dev
-2022-12-21 02:30:02,206 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave (r).
-2022-12-21 02:30:02,206 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
-2022-12-21 02:30:02,206 - update - main - INFO - User settings:
-2022-12-21 02:30:02,226 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromt.log.
-2022-12-21 02:30:02,226 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2022-12-21 02:30:02,227 - update - delwaq - INFO - Reading model staticgeom files.
-2022-12-21 02:30:02,351 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/staticdata/staticmaps.nc
-2022-12-21 02:30:02,362 - update - delwaq - INFO - Model read
-2022-12-21 02:30:02,362 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
-2022-12-21 02:30:02,369 - update - model_api - INFO - setup_emission_raster.emission_fn: glw_cattle
-2022-12-21 02:30:02,369 - update - model_api - INFO - setup_emission_raster.scale_method: average
-2022-12-21 02:30:02,369 - update - model_api - INFO - setup_emission_raster.fillna_method: zero
-2022-12-21 02:30:02,369 - update - model_api - INFO - setup_emission_raster.fillna_value: 0.0
-2022-12-21 02:30:02,369 - update - model_api - INFO - setup_emission_raster.area_division: True
-2022-12-21 02:30:02,447 - update - data_catalog - INFO - Reading data catalog artifact_data v0.0.7 from archive
-2022-12-21 02:30:02,447 - update - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.7/data_catalog.yml
-2022-12-21 02:30:02,513 - update - delwaq - INFO - Preparing &#39;glw_cattle&#39; map.
-2022-12-21 02:30:02,518 - update - data_catalog - INFO - DataCatalog: Getting glw_cattle RasterDataset raster data from /home/runner/.hydromt_data/artifact_data/v0.0.7/glw_cattle.tif
-2022-12-21 02:30:02,536 - update - rasterdataset - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2022-12-21 02:30:02,559 - update - emissions - INFO - Deriving None using average resampling (nodata=-1.7e+308).
-2022-12-21 02:30:02,588 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
-2022-12-21 02:30:02,608 - update - delwaq - INFO - Writing staticmap files.
-2022-12-21 02:30:02,785 - update - delwaq - INFO - Writing model staticgeom to file.
-2022-12-21 02:30:02,810 - update - delwaq - INFO - Writing hydromap files.
-2022-12-21 02:30:02,879 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
+2022-12-21 06:43:35,299 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
+2022-12-21 06:43:35,299 - update - log - INFO - HydroMT version: 0.6.1.dev
+2022-12-21 06:43:35,299 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave (r).
+2022-12-21 06:43:35,299 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
+2022-12-21 06:43:35,299 - update - main - INFO - User settings:
+2022-12-21 06:43:35,322 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromt.log.
+2022-12-21 06:43:35,322 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.2.1.dev0).
+2022-12-21 06:43:35,322 - update - delwaq - INFO - Reading model staticgeom files.
+2022-12-21 06:43:35,447 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/staticdata/staticmaps.nc
+2022-12-21 06:43:35,459 - update - delwaq - INFO - Model read
+2022-12-21 06:43:35,459 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
+2022-12-21 06:43:35,466 - update - model_api - INFO - setup_emission_raster.emission_fn: glw_cattle
+2022-12-21 06:43:35,467 - update - model_api - INFO - setup_emission_raster.scale_method: average
+2022-12-21 06:43:35,467 - update - model_api - INFO - setup_emission_raster.fillna_method: zero
+2022-12-21 06:43:35,467 - update - model_api - INFO - setup_emission_raster.fillna_value: 0.0
+2022-12-21 06:43:35,467 - update - model_api - INFO - setup_emission_raster.area_division: True
+2022-12-21 06:43:35,559 - update - data_catalog - INFO - Reading data catalog artifact_data v0.0.7 from archive
+2022-12-21 06:43:35,559 - update - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.7/data_catalog.yml
+2022-12-21 06:43:35,628 - update - delwaq - INFO - Preparing &#39;glw_cattle&#39; map.
+2022-12-21 06:43:35,633 - update - data_catalog - INFO - DataCatalog: Getting glw_cattle RasterDataset raster data from /home/runner/.hydromt_data/artifact_data/v0.0.7/glw_cattle.tif
+2022-12-21 06:43:35,651 - update - rasterdataset - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2022-12-21 06:43:35,674 - update - emissions - INFO - Deriving None using average resampling (nodata=-1.7e+308).
+2022-12-21 06:43:35,703 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
+2022-12-21 06:43:35,723 - update - delwaq - INFO - Writing staticmap files.
+2022-12-21 06:43:35,904 - update - delwaq - INFO - Writing model staticgeom to file.
+2022-12-21 06:43:35,930 - update - delwaq - INFO - Writing hydromap files.
+2022-12-21 06:43:36,001 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>

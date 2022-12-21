@@ -710,9 +710,9 @@ import geopandas
 In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
   from . import raster, vector, gis_utils, merge
 model plugins:
- - delwaq (hydromt_delwaq 0.1.3.dev0)
  - wflow (hydromt_wflow 0.2.2.dev0)
  - wflow_sediment (hydromt_wflow 0.2.2.dev0)
+ - delwaq (hydromt_delwaq 0.2.1.dev0)
 generic models (hydromt 0.6.1.dev):
  - grid_model
  - lumped_model
@@ -816,25 +816,25 @@ import geopandas
 
 In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
   from . import raster, vector, gis_utils, merge
-2022-12-21 02:30:26,365 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base/hydromt.log.
-2022-12-21 02:30:26,366 - build - log - INFO - HydroMT version: 0.6.1.dev
-2022-12-21 02:30:26,366 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base.
-2022-12-21 02:30:26,366 - build - main - INFO - User settings:
-2022-12-21 02:30:26,386 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2022-12-21 02:30:26,386 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2022-12-21 02:30:26,386 - build - model_api - INFO - setup_basemaps.include_soil: False
-2022-12-21 02:30:26,387 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2022-12-21 02:30:26,387 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.2.2.dev0).
-2022-12-21 02:30:26,387 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f48333b94c0&gt;}
-2022-12-21 02:30:26,387 - build - delwaq - INFO - Preparing EM basemaps from hydromodel.
-2022-12-21 02:30:26,389 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2022-12-21 02:30:26,389 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2022-12-21 02:30:26,488 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base
-2022-12-21 02:30:26,495 - build - delwaq - INFO - Writing staticmap files.
-2022-12-21 02:30:26,639 - build - delwaq - INFO - Writing model config to file.
-2022-12-21 02:30:26,639 - build - delwaq - INFO - Writing hydromap files.
-2022-12-21 02:30:26,673 - build - delwaq - INFO - Writting geometry file in root/staticdata
-2022-12-21 02:30:26,678 - build - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
+2022-12-21 06:43:59,617 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base/hydromt.log.
+2022-12-21 06:43:59,618 - build - log - INFO - HydroMT version: 0.6.1.dev
+2022-12-21 06:43:59,618 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base.
+2022-12-21 06:43:59,618 - build - main - INFO - User settings:
+2022-12-21 06:43:59,638 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.2.1.dev0).
+2022-12-21 06:43:59,638 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2022-12-21 06:43:59,638 - build - model_api - INFO - setup_basemaps.include_soil: False
+2022-12-21 06:43:59,638 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2022-12-21 06:43:59,639 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.2.2.dev0).
+2022-12-21 06:43:59,639 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f9e1a4d3490&gt;}
+2022-12-21 06:43:59,639 - build - delwaq - INFO - Preparing EM basemaps from hydromodel.
+2022-12-21 06:43:59,641 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2022-12-21 06:43:59,641 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2022-12-21 06:43:59,740 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base
+2022-12-21 06:43:59,747 - build - delwaq - INFO - Writing staticmap files.
+2022-12-21 06:43:59,892 - build - delwaq - INFO - Writing model config to file.
+2022-12-21 06:43:59,892 - build - delwaq - INFO - Writing hydromap files.
+2022-12-21 06:43:59,927 - build - delwaq - INFO - Writting geometry file in root/staticdata
+2022-12-21 06:43:59,932 - build - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>
@@ -961,67 +961,67 @@ import geopandas
 
 In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
   from . import raster, vector, gis_utils, merge
-2022-12-21 02:30:28,557 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromt.log.
-2022-12-21 02:30:28,557 - build - log - INFO - HydroMT version: 0.6.1.dev
-2022-12-21 02:30:28,557 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full.
-2022-12-21 02:30:28,557 - build - main - INFO - User settings:
-2022-12-21 02:30:28,578 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2022-12-21 02:30:28,578 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2022-12-21 02:30:28,578 - build - model_api - INFO - setup_basemaps.include_soil: False
-2022-12-21 02:30:28,579 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2022-12-21 02:30:28,579 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.2.2.dev0).
-2022-12-21 02:30:28,579 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f083950eaf0&gt;}
-2022-12-21 02:30:28,579 - build - delwaq - INFO - Preparing EM basemaps from hydromodel.
-2022-12-21 02:30:28,581 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2022-12-21 02:30:28,582 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2022-12-21 02:30:28,679 - build - model_api - INFO - setup_monitoring.mon_points: None
-2022-12-21 02:30:28,680 - build - model_api - INFO - setup_monitoring.mon_areas: compartments
-2022-12-21 02:30:28,680 - build - delwaq - INFO - Setting monitoring points and areas
-2022-12-21 02:30:28,680 - build - delwaq - INFO - No monitoring points set in the config file, skipping
-2022-12-21 02:30:28,690 - build - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: None
-2022-12-21 02:30:28,690 - build - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2022-12-21 02:30:28,690 - build - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2022-12-21 02:30:28,690 - build - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
-2022-12-21 02:30:28,690 - build - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
-2022-12-21 02:30:28,690 - build - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
-2022-12-21 02:30:28,760 - build - data_catalog - INFO - Reading data catalog artifact_data v0.0.7 from archive
-2022-12-21 02:30:28,760 - build - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.7/data_catalog.yml
-2022-12-21 02:30:28,828 - build - delwaq - WARNING - None or Invalid source &#39;None&#39;, skipping setup_hydrology_forcing.
-2022-12-21 02:30:28,829 - build - model_api - INFO - setup_emission_raster.emission_fn: ghs_pop_2015
-2022-12-21 02:30:28,829 - build - model_api - INFO - setup_emission_raster.scale_method: average
-2022-12-21 02:30:28,829 - build - model_api - INFO - setup_emission_raster.fillna_method: zero
-2022-12-21 02:30:28,829 - build - model_api - INFO - setup_emission_raster.fillna_value: 0.0
-2022-12-21 02:30:28,829 - build - model_api - INFO - setup_emission_raster.area_division: True
-2022-12-21 02:30:28,829 - build - delwaq - INFO - Preparing &#39;ghs_pop_2015&#39; map.
-2022-12-21 02:30:28,835 - build - data_catalog - INFO - DataCatalog: Getting ghs_pop_2015 RasterDataset raster data from /home/runner/.hydromt_data/artifact_data/v0.0.7/ghs_pop_2015.tif
-2022-12-21 02:30:28,854 - build - rasterdataset - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2022-12-21 02:30:28,884 - build - emissions - INFO - Deriving None using average resampling (nodata=-200.0).
-2022-12-21 02:30:28,915 - build - model_api - INFO - setup_emission_raster.emission_fn: ghs_smod_2015
-2022-12-21 02:30:28,915 - build - model_api - INFO - setup_emission_raster.scale_method: nearest
-2022-12-21 02:30:28,915 - build - model_api - INFO - setup_emission_raster.fillna_method: zero
-2022-12-21 02:30:28,915 - build - model_api - INFO - setup_emission_raster.fillna_value: 0.0
-2022-12-21 02:30:28,915 - build - model_api - INFO - setup_emission_raster.area_division: False
-2022-12-21 02:30:28,915 - build - delwaq - INFO - Preparing &#39;ghs_smod_2015&#39; map.
-2022-12-21 02:30:28,919 - build - data_catalog - INFO - DataCatalog: Getting ghs_smod_2015 RasterDataset raster data from /home/runner/.hydromt_data/artifact_data/v0.0.7/ghs_smod_2015.tif
+2022-12-21 06:44:01,840 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromt.log.
+2022-12-21 06:44:01,841 - build - log - INFO - HydroMT version: 0.6.1.dev
+2022-12-21 06:44:01,841 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full.
+2022-12-21 06:44:01,841 - build - main - INFO - User settings:
+2022-12-21 06:44:01,862 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.2.1.dev0).
+2022-12-21 06:44:01,863 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2022-12-21 06:44:01,863 - build - model_api - INFO - setup_basemaps.include_soil: False
+2022-12-21 06:44:01,863 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2022-12-21 06:44:01,863 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.2.2.dev0).
+2022-12-21 06:44:01,863 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f5820b80fd0&gt;}
+2022-12-21 06:44:01,863 - build - delwaq - INFO - Preparing EM basemaps from hydromodel.
+2022-12-21 06:44:01,866 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2022-12-21 06:44:01,866 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2022-12-21 06:44:01,966 - build - model_api - INFO - setup_monitoring.mon_points: None
+2022-12-21 06:44:01,966 - build - model_api - INFO - setup_monitoring.mon_areas: compartments
+2022-12-21 06:44:01,966 - build - delwaq - INFO - Setting monitoring points and areas
+2022-12-21 06:44:01,966 - build - delwaq - INFO - No monitoring points set in the config file, skipping
+2022-12-21 06:44:01,976 - build - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: None
+2022-12-21 06:44:01,976 - build - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2022-12-21 06:44:01,976 - build - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2022-12-21 06:44:01,977 - build - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2022-12-21 06:44:01,977 - build - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
+2022-12-21 06:44:01,977 - build - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
+2022-12-21 06:44:02,057 - build - data_catalog - INFO - Reading data catalog artifact_data v0.0.7 from archive
+2022-12-21 06:44:02,058 - build - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.7/data_catalog.yml
+2022-12-21 06:44:02,126 - build - delwaq - WARNING - None or Invalid source &#39;None&#39;, skipping setup_hydrology_forcing.
+2022-12-21 06:44:02,127 - build - model_api - INFO - setup_emission_raster.emission_fn: ghs_pop_2015
+2022-12-21 06:44:02,127 - build - model_api - INFO - setup_emission_raster.scale_method: average
+2022-12-21 06:44:02,127 - build - model_api - INFO - setup_emission_raster.fillna_method: zero
+2022-12-21 06:44:02,127 - build - model_api - INFO - setup_emission_raster.fillna_value: 0.0
+2022-12-21 06:44:02,127 - build - model_api - INFO - setup_emission_raster.area_division: True
+2022-12-21 06:44:02,127 - build - delwaq - INFO - Preparing &#39;ghs_pop_2015&#39; map.
+2022-12-21 06:44:02,133 - build - data_catalog - INFO - DataCatalog: Getting ghs_pop_2015 RasterDataset raster data from /home/runner/.hydromt_data/artifact_data/v0.0.7/ghs_pop_2015.tif
+2022-12-21 06:44:02,152 - build - rasterdataset - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2022-12-21 06:44:02,182 - build - emissions - INFO - Deriving None using average resampling (nodata=-200.0).
+2022-12-21 06:44:02,213 - build - model_api - INFO - setup_emission_raster.emission_fn: ghs_smod_2015
+2022-12-21 06:44:02,213 - build - model_api - INFO - setup_emission_raster.scale_method: nearest
+2022-12-21 06:44:02,213 - build - model_api - INFO - setup_emission_raster.fillna_method: zero
+2022-12-21 06:44:02,213 - build - model_api - INFO - setup_emission_raster.fillna_value: 0.0
+2022-12-21 06:44:02,213 - build - model_api - INFO - setup_emission_raster.area_division: False
+2022-12-21 06:44:02,213 - build - delwaq - INFO - Preparing &#39;ghs_smod_2015&#39; map.
+2022-12-21 06:44:02,217 - build - data_catalog - INFO - DataCatalog: Getting ghs_smod_2015 RasterDataset raster data from /home/runner/.hydromt_data/artifact_data/v0.0.7/ghs_smod_2015.tif
 nodata value missing for /home/runner/.hydromt_data/artifact_data/v0.0.7/ghs_smod_2015.tif
-2022-12-21 02:30:28,975 - build - rasterdataset - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2022-12-21 02:30:29,031 - build - emissions - INFO - Deriving ghs_smod_2015 using nearest resampling (nodata=255).
-2022-12-21 02:30:29,092 - build - model_api - INFO - setup_emission_vector.emission_fn: gdp_world
-2022-12-21 02:30:29,093 - build - model_api - INFO - setup_emission_vector.col2raster: gdp
-2022-12-21 02:30:29,093 - build - model_api - INFO - setup_emission_vector.rasterize_method: value
-2022-12-21 02:30:29,093 - build - delwaq - INFO - Preparing &#39;gdp_world&#39; map.
-2022-12-21 02:30:29,101 - build - data_catalog - INFO - DataCatalog: Getting gdp_world GeoDataFrame vector data from /home/runner/.hydromt_data/artifact_data/v0.0.7/gdp_world.gpkg
-2022-12-21 02:30:29,102 - build - geodataframe - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
-2022-12-21 02:30:29,388 - build - model_api - INFO - setup_emission_mapping.region_fn: None
-2022-12-21 02:30:29,388 - build - model_api - INFO - setup_emission_mapping.mapping_fn: None
-2022-12-21 02:30:29,388 - build - delwaq - WARNING - Source name set to None, skipping setup_emission_mapping.
-2022-12-21 02:30:29,388 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full
-2022-12-21 02:30:29,407 - build - delwaq - INFO - Writing staticmap files.
-2022-12-21 02:30:29,641 - build - delwaq - INFO - Writing model staticgeom to file.
-2022-12-21 02:30:29,659 - build - delwaq - INFO - Writing model config to file.
-2022-12-21 02:30:29,660 - build - delwaq - INFO - Writing hydromap files.
-2022-12-21 02:30:29,692 - build - delwaq - INFO - Writting geometry file in root/staticdata
-2022-12-21 02:30:29,696 - build - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
+2022-12-21 06:44:02,274 - build - rasterdataset - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2022-12-21 06:44:02,330 - build - emissions - INFO - Deriving ghs_smod_2015 using nearest resampling (nodata=255).
+2022-12-21 06:44:02,392 - build - model_api - INFO - setup_emission_vector.emission_fn: gdp_world
+2022-12-21 06:44:02,392 - build - model_api - INFO - setup_emission_vector.col2raster: gdp
+2022-12-21 06:44:02,392 - build - model_api - INFO - setup_emission_vector.rasterize_method: value
+2022-12-21 06:44:02,392 - build - delwaq - INFO - Preparing &#39;gdp_world&#39; map.
+2022-12-21 06:44:02,401 - build - data_catalog - INFO - DataCatalog: Getting gdp_world GeoDataFrame vector data from /home/runner/.hydromt_data/artifact_data/v0.0.7/gdp_world.gpkg
+2022-12-21 06:44:02,402 - build - geodataframe - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
+2022-12-21 06:44:02,681 - build - model_api - INFO - setup_emission_mapping.region_fn: None
+2022-12-21 06:44:02,681 - build - model_api - INFO - setup_emission_mapping.mapping_fn: None
+2022-12-21 06:44:02,681 - build - delwaq - WARNING - Source name set to None, skipping setup_emission_mapping.
+2022-12-21 06:44:02,681 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full
+2022-12-21 06:44:02,700 - build - delwaq - INFO - Writing staticmap files.
+2022-12-21 06:44:02,935 - build - delwaq - INFO - Writing model staticgeom to file.
+2022-12-21 06:44:02,953 - build - delwaq - INFO - Writing model config to file.
+2022-12-21 06:44:02,954 - build - delwaq - INFO - Writing hydromap files.
+2022-12-21 06:44:02,986 - build - delwaq - INFO - Writting geometry file in root/staticdata
+2022-12-21 06:44:02,991 - build - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>

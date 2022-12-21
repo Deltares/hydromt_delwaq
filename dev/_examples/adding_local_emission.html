@@ -693,7 +693,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_3540/1346380944.py:2: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+/tmp/ipykernel_3620/1346380944.py:2: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
 
 import os
 os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
@@ -755,7 +755,7 @@ In a future release, GeoPandas will switch to using Shapely by default. If you a
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-12-21 02:30:09,770 - update_model_emission_local - log - INFO - HydroMT version: 0.6.1.dev
+2022-12-21 06:43:42,821 - update_model_emission_local - log - INFO - HydroMT version: 0.6.1.dev
 </pre></div></div>
 </div>
 </section>
@@ -1147,36 +1147,36 @@ import geopandas
 
 In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
   from . import raster, vector, gis_utils, merge
-2022-12-21 02:30:15,341 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
-2022-12-21 02:30:15,341 - update - log - INFO - HydroMT version: 0.6.1.dev
-2022-12-21 02:30:15,341 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave (r).
-2022-12-21 02:30:15,341 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
-2022-12-21 02:30:15,341 - update - main - INFO - User settings:
-2022-12-21 02:30:15,361 - update - data_catalog - INFO - Parsing data catalog from local_emission_sources.yml
-2022-12-21 02:30:15,364 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromt.log.
-2022-12-21 02:30:15,364 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2022-12-21 02:30:15,364 - update - delwaq - INFO - Reading model staticgeom files.
-2022-12-21 02:30:15,489 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/staticdata/staticmaps.nc
-2022-12-21 02:30:15,500 - update - delwaq - INFO - Model read
-2022-12-21 02:30:15,500 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromodel.
-2022-12-21 02:30:15,500 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/staticdata.
-2022-12-21 02:30:15,500 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/staticgeoms.
-2022-12-21 02:30:15,500 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/config.
-2022-12-21 02:30:15,500 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/dynamicdata.
-2022-12-21 02:30:15,500 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/fews.
-2022-12-21 02:30:15,500 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
-2022-12-21 02:30:15,507 - update - model_api - INFO - setup_emission_vector.emission_fn: EF_local
-2022-12-21 02:30:15,507 - update - model_api - INFO - setup_emission_vector.col2raster: EF
-2022-12-21 02:30:15,507 - update - model_api - INFO - setup_emission_vector.rasterize_method: value
-2022-12-21 02:30:15,507 - update - delwaq - INFO - Preparing &#39;EF_local&#39; map.
-2022-12-21 02:30:15,508 - update - data_catalog - INFO - DataCatalog: Getting EF_local GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/emission_factor.gpkg
-2022-12-21 02:30:15,509 - update - geodataframe - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
-2022-12-21 02:30:15,654 - update - geodataframe - DEBUG - GeoDataFrame: Convert units for 2 columns.
-2022-12-21 02:30:15,792 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
-2022-12-21 02:30:15,811 - update - delwaq - INFO - Writing staticmap files.
-2022-12-21 02:30:15,961 - update - delwaq - INFO - Writing model staticgeom to file.
-2022-12-21 02:30:15,987 - update - delwaq - INFO - Writing hydromap files.
-2022-12-21 02:30:16,061 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
+2022-12-21 06:43:48,339 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
+2022-12-21 06:43:48,339 - update - log - INFO - HydroMT version: 0.6.1.dev
+2022-12-21 06:43:48,339 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave (r).
+2022-12-21 06:43:48,339 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
+2022-12-21 06:43:48,339 - update - main - INFO - User settings:
+2022-12-21 06:43:48,359 - update - data_catalog - INFO - Parsing data catalog from local_emission_sources.yml
+2022-12-21 06:43:48,362 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromt.log.
+2022-12-21 06:43:48,362 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.2.1.dev0).
+2022-12-21 06:43:48,362 - update - delwaq - INFO - Reading model staticgeom files.
+2022-12-21 06:43:48,486 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/staticdata/staticmaps.nc
+2022-12-21 06:43:48,497 - update - delwaq - INFO - Model read
+2022-12-21 06:43:48,498 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromodel.
+2022-12-21 06:43:48,498 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/staticdata.
+2022-12-21 06:43:48,498 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/staticgeoms.
+2022-12-21 06:43:48,498 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/config.
+2022-12-21 06:43:48,498 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/dynamicdata.
+2022-12-21 06:43:48,498 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/fews.
+2022-12-21 06:43:48,498 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
+2022-12-21 06:43:48,505 - update - model_api - INFO - setup_emission_vector.emission_fn: EF_local
+2022-12-21 06:43:48,505 - update - model_api - INFO - setup_emission_vector.col2raster: EF
+2022-12-21 06:43:48,505 - update - model_api - INFO - setup_emission_vector.rasterize_method: value
+2022-12-21 06:43:48,505 - update - delwaq - INFO - Preparing &#39;EF_local&#39; map.
+2022-12-21 06:43:48,506 - update - data_catalog - INFO - DataCatalog: Getting EF_local GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/emission_factor.gpkg
+2022-12-21 06:43:48,507 - update - geodataframe - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
+2022-12-21 06:43:48,639 - update - geodataframe - DEBUG - GeoDataFrame: Convert units for 2 columns.
+2022-12-21 06:43:48,771 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
+2022-12-21 06:43:48,790 - update - delwaq - INFO - Writing staticmap files.
+2022-12-21 06:43:48,942 - update - delwaq - INFO - Writing model staticgeom to file.
+2022-12-21 06:43:48,968 - update - delwaq - INFO - Writing hydromap files.
+2022-12-21 06:43:49,045 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>
