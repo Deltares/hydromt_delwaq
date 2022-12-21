@@ -49,12 +49,11 @@ How to cite?
 For publications, please cite our work using the DOI provided in the Zenodo badge |doi| that points to the latest release.
 
 
-How to contribe?
-----------------
-
+How to contribute?
+------------------
+If you find any issues in the code or documentation feel free to leave an issue on the `github issue tracker. <https://github.com/Deltares/hydromt_delwaq/issues>`_
 You can find information about contributing to HydroMT at our `Contributing page <https://deltares.github.io/hydromt/latest/dev/contributing>`_.
 
-.. image:: ./img/D-emissions.png
 
 .. |pypi| image:: https://badge.fury.io/py/hydromt_delwaq.svg
     :target: https://pypi.org/project/hydromt_delwaq/
