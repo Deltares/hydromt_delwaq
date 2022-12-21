@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>HydroMT-delwaq: DELWAQ plugin for HydroMT &#8212; HydroMT delwaq  documentation</title>
+    
+    <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  
+    
+    <link rel="stylesheet"
+      href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+    
+      
+  
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/pydata-sphinx-theme.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/theme-deltares.css" />
+    
+    <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started" href="getting_started/intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="#">
+<p class="title">HydroMT delwaq</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="getting_started/intro.html">
+  Getting Started
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="user_guide/intro.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="api.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="dev/intro.html">
+  Developments
+ </a>
+</li>
+
+    
+    <li class="nav-item">
+        <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">HydroMT core<i class="fas fa-external-link-alt"></i></a>
+    </li>
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://deltares.nl/en/" rel="noopener" target="_blank" title="Deltares"><img src="_static/deltares-white.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-is-hydromt-delwaq">
+   What is HydroMT-delwaq?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-hydromt-delwaq">
+   Why HydroMT-delwaq?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-use-hydromt-delwaq">
+   How to use HydroMT-delwaq?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-cite">
+   How to cite?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-contribute">
+   How to contribute?
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/Deltares/hydromt_delwaq/edit/new_docs/docs/index.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="hydromt-delwaq-delwaq-plugin-for-hydromt">
+<h1>HydroMT-delwaq: DELWAQ plugin for HydroMT<a class="headerlink" href="#hydromt-delwaq-delwaq-plugin-for-hydromt" title="Permalink to this heading">¶</a></h1>
+<p><a class="reference external" href="https://pypi.org/project/hydromt_delwaq/"><img alt="Latest PyPI version" src="https://badge.fury.io/py/hydromt_delwaq.svg" /></a> <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest"><img alt="Latest developers docs" src="https://img.shields.io/badge/docs-latest-brightgreen.svg" /></a> <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/stable"><img alt="Stable docs last release" src="https://img.shields.io/badge/docs-stable-brightgreen.svg" /></a> <a class="reference external" href="https://codecov.io/gh/Deltares/hydromt_delwaq"><img alt="codecov" src="https://codecov.io/gh/Deltares/hydromt_delwaq/branch/main/graph/badge.svg?token=ss3EgmwHhH" /></a> <a class="reference external" href="https://github.com/Deltares/hydromt_delwaq/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/Deltares/hydromt_delwaq?style=flat" /></a> <a class="reference external" href="https://mybinder.org/v2/gh/Deltares/hydromt_delwaq/main?urlpath=lab/tree/examples"><img alt="binder" src="https://mybinder.org/badge_logo.svg" /></a></p>
+<section id="what-is-hydromt-delwaq">
+<h2>What is HydroMT-delwaq?<a class="headerlink" href="#what-is-hydromt-delwaq" title="Permalink to this heading">¶</a></h2>
+<p>HydroMT-delwaq is a plugin of the <a class="reference external" href="https://deltares.github.io/hydromt/latest/index.html#">HydroMT core</a>, a python package, developed by Deltares, to build
+and analyse environmental models. This plugin provides an implementation for the <a class="reference external" href="https://www.deltares.nl/en/software/module/d-water-quality/">DELWAQ</a> water quality engine.
+It details the different steps and explains how to use HydroMT to easily get started and work on your own DELWAQ model. WIth this plugin
+you can interact with both classic <strong>D-Water Quality</strong> models as well as <strong>D-Emission</strong> models.</p>
+<p>With the <strong>HydroMT-delwaq plugin</strong>, users can easily benefit from the rich set of tools of the
+<a class="reference external" href="https://github.com/Deltares/hydromt">HydroMT package</a> to build and update
+DELWAQ models from available global and local data.</p>
+<p>This plugin assists the modeller in:</p>
+<ul class="simple">
+<li><p>Quickly setting up a model and default parameter values</p></li>
+<li><p>Making maximum use of the best available global or local data</p></li>
+<li><p>Adjusting and updating components of a DELWAQ model and their associated parameters in a consistent way</p></li>
+</ul>
+<p>Water quality and emission, fate and transport of pollutants through the landscape, rivers and oceans is very much linked to the water movements.
+For this reason, HydroMT strongly links DELWAQ modelbuilding to an underlying hydrology / hydraulic or hydrodynamic model. As of now, only the link
+between <a class="reference external" href="coupling_wflow">Wflow and DELWAQ</a> is supported.</p>
+<p>This plugin supports both:</p>
+<ul class="simple">
+<li><p>emission models, <a class="reference external" href="https://www.deltares.nl/en/software/module/D-Emissions/">D-Emission</a> (also referred to as EM in hydroMT), that predicts the quantity (fluxes) of substances being released from sources of pollutants to the surface waters (mass/time).</p></li>
+<li><p>fate and transport models, <a class="reference external" href="https://www.deltares.nl/en/software/module/d-water-quality/">D-Water Quality</a> (also referred to as WQ in hydroMT), that predicts the fate and transport of substances in the surface waters (concentrations in mass / volume).</p></li>
+</ul>
+</section>
+<section id="why-hydromt-delwaq">
+<h2>Why HydroMT-delwaq?<a class="headerlink" href="#why-hydromt-delwaq" title="Permalink to this heading">¶</a></h2>
+<p>Setting up spatial geoscientific models typically requires many (manual) steps
+to process input data and might therefore be time consuming and hard to reproduce.
+Like the other HydroMT model plugins, this package aims to make the model building process <strong>fast</strong>, <strong>modular</strong> and <strong>reproducible</strong>
+by configuring the model building process from a single <em>ini</em> configuration file
+and <strong>model- and data-agnostic</strong> through a common model and data interface.</p>
+</section>
+<section id="how-to-use-hydromt-delwaq">
+<h2>How to use HydroMT-delwaq?<a class="headerlink" href="#how-to-use-hydromt-delwaq" title="Permalink to this heading">¶</a></h2>
+<p>HydroMT-delwaq can be used as a <strong>command line</strong> application, which provides commands to <em>build</em>,
+and <em>update</em> DELWAQ model with a single line, in combination with the HydroMT core’s rich data processing capabilities.</p>
+</section>
+<section id="how-to-cite">
+<h2>How to cite?<a class="headerlink" href="#how-to-cite" title="Permalink to this heading">¶</a></h2>
+<p>For publications, please cite our work using the DOI provided in the Zenodo badge <a class="reference external" href="https://zenodo.org/badge/latestdoi/348020332"><img alt="Zenodo" src="https://zenodo.org/badge/348020332.svg" /></a> that points to the latest release.</p>
+</section>
+<section id="how-to-contribute">
+<h2>How to contribute?<a class="headerlink" href="#how-to-contribute" title="Permalink to this heading">¶</a></h2>
+<p>If you find any issues in the code or documentation feel free to leave an issue on the <a class="reference external" href="https://github.com/Deltares/hydromt_delwaq/issues">github issue tracker.</a>
+You can find information about contributing to HydroMT at our <a class="reference external" href="https://deltares.github.io/hydromt/latest/dev/contributing">Contributing page</a>.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='right-next' id="next-link" href="getting_started/intro.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Getting Started</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+    <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Deltares.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

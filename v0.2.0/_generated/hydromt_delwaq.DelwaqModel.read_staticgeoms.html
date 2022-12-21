@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>hydromt_delwaq.DelwaqModel.read_staticgeoms &#8212; HydroMT delwaq  documentation</title>
+    
+    <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  
+    
+    <link rel="stylesheet"
+      href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+    
+      
+  
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
+    
+    <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hydromt_delwaq.DelwaqModel.write_staticgeoms" href="hydromt_delwaq.DelwaqModel.write_staticgeoms.html" />
+    <link rel="prev" title="hydromt_delwaq.DelwaqModel.set_staticgeoms" href="hydromt_delwaq.DelwaqModel.set_staticgeoms.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../index.html">
+<p class="title">HydroMT delwaq</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../getting_started/intro.html">
+  Getting Started
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../user_guide/intro.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../api.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../dev/intro.html">
+  Developments
+ </a>
+</li>
+
+    
+    <li class="nav-item">
+        <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">HydroMT core<i class="fas fa-external-link-alt"></i></a>
+    </li>
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://deltares.nl/en/" rel="noopener" target="_blank" title="Deltares"><img src="../_static/deltares-white.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.html">
+   hydromt_delwaq.DelwaqModel
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_config.html">
+   hydromt_delwaq.DelwaqModel.setup_config
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_basemaps.html">
+   hydromt_delwaq.DelwaqModel.setup_basemaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_monitoring.html">
+   hydromt_delwaq.DelwaqModel.setup_monitoring
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_hydrology_forcing.html">
+   hydromt_delwaq.DelwaqModel.setup_hydrology_forcing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_sediment_forcing.html">
+   hydromt_delwaq.DelwaqModel.setup_sediment_forcing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_emission_raster.html">
+   hydromt_delwaq.DelwaqModel.setup_emission_raster
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_emission_vector.html">
+   hydromt_delwaq.DelwaqModel.setup_emission_vector
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_emission_mapping.html">
+   hydromt_delwaq.DelwaqModel.setup_emission_mapping
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_roads.html">
+   hydromt_delwaq.DelwaqModel.setup_roads
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.region.html">
+   hydromt_delwaq.DelwaqModel.region
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.crs.html">
+   hydromt_delwaq.DelwaqModel.crs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.res.html">
+   hydromt_delwaq.DelwaqModel.res
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.root.html">
+   hydromt_delwaq.DelwaqModel.root
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.config.html">
+   hydromt_delwaq.DelwaqModel.config
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.staticmaps.html">
+   hydromt_delwaq.DelwaqModel.staticmaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.staticgeoms.html">
+   hydromt_delwaq.DelwaqModel.staticgeoms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.forcing.html">
+   hydromt_delwaq.DelwaqModel.forcing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.basins.html">
+   hydromt_delwaq.DelwaqModel.basins
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.hydromaps.html">
+   hydromt_delwaq.DelwaqModel.hydromaps
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.read.html">
+   hydromt_delwaq.DelwaqModel.read
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.write.html">
+   hydromt_delwaq.DelwaqModel.write
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.build.html">
+   hydromt_delwaq.DelwaqModel.build
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.update.html">
+   hydromt_delwaq.DelwaqModel.update
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_root.html">
+   hydromt_delwaq.DelwaqModel.set_root
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_config.html">
+   hydromt_delwaq.DelwaqModel.setup_config
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.get_config.html">
+   hydromt_delwaq.DelwaqModel.get_config
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_config.html">
+   hydromt_delwaq.DelwaqModel.set_config
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_config.html">
+   hydromt_delwaq.DelwaqModel.read_config
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_config.html">
+   hydromt_delwaq.DelwaqModel.write_config
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_staticmaps.html">
+   hydromt_delwaq.DelwaqModel.set_staticmaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_staticmaps.html">
+   hydromt_delwaq.DelwaqModel.read_staticmaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_staticmaps.html">
+   hydromt_delwaq.DelwaqModel.write_staticmaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_staticgeoms.html">
+   hydromt_delwaq.DelwaqModel.set_staticgeoms
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   hydromt_delwaq.DelwaqModel.read_staticgeoms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_staticgeoms.html">
+   hydromt_delwaq.DelwaqModel.write_staticgeoms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_forcing.html">
+   hydromt_delwaq.DelwaqModel.set_forcing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_forcing.html">
+   hydromt_delwaq.DelwaqModel.read_forcing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_forcing.html">
+   hydromt_delwaq.DelwaqModel.write_forcing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_hydromaps.html">
+   hydromt_delwaq.DelwaqModel.set_hydromaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_hydromaps.html">
+   hydromt_delwaq.DelwaqModel.read_hydromaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_hydromaps.html">
+   hydromt_delwaq.DelwaqModel.write_hydromaps
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.workflows.emissions.html">
+   hydromt_delwaq.workflows.emissions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.workflows.segments.html">
+   hydromt_delwaq.workflows.segments
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hydromt_delwaq.workflows.roads.html">
+   hydromt_delwaq.workflows.roads
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hydromt_delwaq.DelwaqModel.read_staticgeoms">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     DelwaqModel.read_staticgeoms()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/Deltares/hydromt_delwaq/edit/new_docs/docs/_generated/hydromt_delwaq.DelwaqModel.read_staticgeoms.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="hydromt-delwaq-delwaqmodel-read-staticgeoms">
+<h1>hydromt_delwaq.DelwaqModel.read_staticgeoms<a class="headerlink" href="#hydromt-delwaq-delwaqmodel-read-staticgeoms" title="Permalink to this heading">¶</a></h1>
+<dl class="py method">
+<dt class="sig sig-object py" id="hydromt_delwaq.DelwaqModel.read_staticgeoms">
+<span class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></span><span class="sig-name descname"><span class="pre">read_staticgeoms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.read_staticgeoms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.DelwaqModel.read_staticgeoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and staticgeoms at &lt;root/staticgeoms&gt; and parse to geopandas</p>
+</dd></dl>
+
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="hydromt_delwaq.DelwaqModel.set_staticgeoms.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">hydromt_delwaq.DelwaqModel.set_staticgeoms</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="hydromt_delwaq.DelwaqModel.write_staticgeoms.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">hydromt_delwaq.DelwaqModel.write_staticgeoms</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+    <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Deltares.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
