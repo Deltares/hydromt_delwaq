@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Installation guide &#8212; HydroMT delwaq  documentation</title>
     
@@ -25,7 +25,7 @@
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
     
     <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -33,7 +33,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/design-tabs.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -242,12 +244,12 @@
               <div>
                 
   <section id="installation-guide">
-<span id="id1"></span><h1>Installation guide<a class="headerlink" href="#installation-guide" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Installation guide<a class="headerlink" href="#installation-guide" title="Permalink to this heading">¶</a></h1>
 <section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">¶</a></h2>
 <p>For the necessary prerequisites, see <a class="reference external" href="https://deltares.github.io/hydromt/latest/getting_started/installation.html#prerequisites">HydroMT core prerequisites</a>.</p>
 <section id="additional-dependencies">
-<h3>Additional dependencies<a class="headerlink" href="#additional-dependencies" title="Permalink to this headline">¶</a></h3>
+<h3>Additional dependencies<a class="headerlink" href="#additional-dependencies" title="Permalink to this heading">¶</a></h3>
 <p>The HydroMT-delwaq Python package makes use of the HydroMT core.
 For a complete list of dependencies, see the pyproject.toml file.</p>
 <p>DELWAQ models are built on top of existing hydrology/hydrodynamic models.
@@ -256,10 +258,10 @@ also needs to be installed (example HydroMT-Wflow).</p>
 </section>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
 <p>HydroMT-delwaq is available from pypi and in the near future also installation from conda-forge will be supported.</p>
 <section id="install-hydromt-delwaq-in-a-new-environment">
-<h3>Install HydroMT-delwaq in a new environment<a class="headerlink" href="#install-hydromt-delwaq-in-a-new-environment" title="Permalink to this headline">¶</a></h3>
+<h3>Install HydroMT-delwaq in a new environment<a class="headerlink" href="#install-hydromt-delwaq-in-a-new-environment" title="Permalink to this heading">¶</a></h3>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>This is our recommended way of installing HydroMT!</p>
@@ -275,7 +277,7 @@ also needs to be installed (example HydroMT-Wflow).</p>
 </div>
 </section>
 <section id="install-hydromt-delwaq-in-an-existing-environment">
-<h3>Install HydroMT-delwaq in an existing environment<a class="headerlink" href="#install-hydromt-delwaq-in-an-existing-environment" title="Permalink to this headline">¶</a></h3>
+<h3>Install HydroMT-delwaq in an existing environment<a class="headerlink" href="#install-hydromt-delwaq-in-an-existing-environment" title="Permalink to this heading">¶</a></h3>
 <p>To install HydroMT Wflow <strong>using mamba or conda</strong> execute the command below after activating the correct environment.
 Note that if some dependencies are not installed from conda-forge the installation may fail. As HydroMT-delwaq is not
 available yet from conda-forge, we recommend to first install HydroMT and the required hydrology/hydrodynamic plugins:</p>
@@ -289,7 +291,7 @@ available yet from conda-forge, we recommend to first install HydroMT and the re
 </div>
 </section>
 <section id="developer-install">
-<h3>Developer install<a class="headerlink" href="#developer-install" title="Permalink to this headline">¶</a></h3>
+<h3>Developer install<a class="headerlink" href="#developer-install" title="Permalink to this heading">¶</a></h3>
 <p>To be able to test and develop the HydroMT-delwaq package see instructions in the <a class="reference internal" href="../dev/dev_install.html#dev-env"><span class="std std-ref">Developer installation guide</span></a>.</p>
 <p>For more information about how to contribute, see <a class="reference external" href="https://hydromt.readthedocs.io/en/latest/contributing.html">HydroMT contributing guidelines</a>.</p>
 </section>
@@ -336,7 +338,7 @@ available yet from conda-forge, we recommend to first install HydroMT and the re
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
     </div>
     

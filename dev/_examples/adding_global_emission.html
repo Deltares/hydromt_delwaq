@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Add (global) emission data &#8212; HydroMT delwaq  documentation</title>
     
@@ -25,7 +25,7 @@
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
     
     <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -33,7 +33,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/design-tabs.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -522,10 +524,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -669,12 +672,12 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Add-(global)-emission-data">
-<h1>Add (global) emission data<a class="headerlink" href="#Add-(global)-emission-data" title="Permalink to this headline">¶</a></h1>
+<h1>Add (global) emission data<a class="headerlink" href="#Add-(global)-emission-data" title="Permalink to this heading">¶</a></h1>
 <p>Once you have a <strong>DELWAQ</strong> model, you may want to update your model in order to add new emission data, add sample locations, use different hydrological forcing data, create and run different scenarios etc.</p>
 <p>With HydroMT, you can easily read your model and update one or several components of your model using the <strong>update</strong> function of the command line interface (CLI). Here are the steps and some examples on how to <strong>update and add global emission data to your model</strong>.</p>
 <p>All lines in this notebook which starts with ! are executed from the command line. Within the notebook environment the logging messages are shown after completion. You can also copy these lines and paste them in your shell to get more feedback.</p>
 <section id="Import-packages">
-<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">¶</a></h2>
 <p>In this notebook, we will use some functions of HydroMT to prepare hydroMT configuration and library file and plot the new emission data of the updated model. Here are the libraries to import to realize these steps.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -696,14 +699,38 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import hydromt</span>
 <span class="kn">import</span> <span class="nn">hydromt</span>
+<span class="kn">from</span> <span class="nn">hydromt_delwaq</span> <span class="kn">import</span> <span class="n">DelwaqModel</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/workflows/basin_mask.py:9: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  import geopandas as gpd
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/io.py:14: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  from . import raster, vector, gis_utils, merge
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -720,12 +747,12 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-06-10 08:35:04,362 - update_model_emission - log - INFO - HydroMT version: 0.4.6.dev
+2022-12-21 02:29:55,889 - update_model_emission - log - INFO - HydroMT version: 0.6.1.dev
 </pre></div></div>
 </div>
 </section>
 <section id="hydroMT-CLI-update-interface">
-<h2>hydroMT CLI update interface<a class="headerlink" href="#hydroMT-CLI-update-interface" title="Permalink to this headline">¶</a></h2>
+<h2>hydroMT CLI update interface<a class="headerlink" href="#hydroMT-CLI-update-interface" title="Permalink to this heading">¶</a></h2>
 <p>Using the <code class="docutils literal notranslate"><span class="pre">hydroMT</span> <span class="pre">update</span></code> API, we can update one or several components of an already existing DELWAQ model. Let’s get an overview of the available options:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -741,6 +768,22 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/workflows/basin_mask.py:9: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  import geopandas as gpd
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/io.py:14: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  from . import raster, vector, gis_utils, merge
 Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
 
   Update a specific component of a model. Set an output directory to copy the
@@ -750,10 +793,10 @@ Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
   --------------
 
   Update (overwrite!) landuse-landcover based maps in a Wflow model
-  hydromt update wflow /path/to/model_root -c setup_lulcmaps --opt lulc_fn=vito -d /path/to/data_catalog.yaml -v
+  hydromt update wflow /path/to/model_root -c setup_lulcmaps --opt lulc_fn=vito -d /path/to/data_catalog.yml -v
 
   Update Wflow model components outlined in an .ini configuration file and write the model to a directory
-  hydromt update wflow /path/to/model_root -o /path/to/model_out -i /path/to/wflow_config.ini -d /path/to/data_catalog.yaml -v
+  hydromt update wflow /path/to/model_root -o /path/to/model_out -i /path/to/wflow_config.ini -d /path/to/data_catalog.yml -v
 
 Options:
   -o, --model-out DIRECTORY  Output model folder. Maps in MODEL_ROOT are
@@ -764,11 +807,9 @@ Options:
                              information about the arguments.
   -i, --config PATH          Path to hydroMT configuration file, for the model
                              specific implementation.
-  -d, --data PATH            File path to yml data sources file. See
-                             documentation for required yml file format.
-  --dd, --deltares-data      Parse default deltares data yml from
-                             https://github.com/DirkEilander/hydromt-
-                             artifacts/releases
+  -d, --data TEXT            Path to local yaml data catalog file OR name of
+                             predefined data catalog.
+  --dd, --deltares-data      Shortcut to add the &#34;deltares_data&#34; catalog
   -q, --quiet                Decrease verbosity.
   -v, --verbose              Increase verbosity.
   --help                     Show this message and exit.
@@ -777,7 +818,7 @@ Options:
 </div>
 </section>
 <section id="Adding-global-data-to-the-model">
-<h2>Adding global data to the model<a class="headerlink" href="#Adding-global-data-to-the-model" title="Permalink to this headline">¶</a></h2>
+<h2>Adding global data to the model<a class="headerlink" href="#Adding-global-data-to-the-model" title="Permalink to this heading">¶</a></h2>
 <p>Using HydroMT, it is quite easy to add additional emission data from already available global data. Here we will see an example where we <strong>add a cattle map (glw_cattle)</strong> from the <a class="reference external" href="https://dataverse.harvard.edu/dataverse/glw_3">GLW 3</a> data.</p>
 <p>You can see a list of all readily available data in HydroMT in the <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data.html#available-global-datasets">docs</a>.</p>
 <div class="nbinput docutils container">
@@ -795,9 +836,10 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-06-10 08:35:07,406 - update_model_emission - data_adapter - INFO - Downloading file to /home/runner/.hydromt_data/data/v0.0.6/data.tar.gz
-2022-06-10 08:35:07,885 - update_model_emission - data_adapter - DEBUG - Unpacking data from /home/runner/.hydromt_data/data/v0.0.6/data.tar.gz
-2022-06-10 08:35:08,767 - update_model_emission - data_adapter - INFO - Adding sample data v0.0.6 from artifacts
+2022-12-21 02:29:57,877 - update_model_emission - data_catalog - INFO - Reading data catalog artifact_data v0.0.7 from archive
+2022-12-21 02:29:58,329 - update_model_emission - data_catalog - INFO - Downloading data archive file to /home/runner/.hydromt_data/artifact_data/v0.0.7/data.tar.gz
+2022-12-21 02:29:59,713 - update_model_emission - data_catalog - DEBUG - Unpacking data from /home/runner/.hydromt_data/artifact_data/v0.0.7/data.tar.gz
+2022-12-21 02:30:00,614 - update_model_emission - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.7/data_catalog.yml
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -817,7 +859,7 @@ meta:
   source_license: CC 4.0
   source_url: https://dataverse.harvard.edu/dataverse/glw_3
   source_version: GLW 3, last downloaded 2020-06-11
-path: /home/runner/.hydromt_data/data/v0.0.6/glw_cattle.tif
+path: /home/runner/.hydromt_data/artifact_data/v0.0.7/glw_cattle.tif
 </pre></div></div>
 </div>
 <p>Here we can see that our cattle grid is a raster <em>.tif</em> file. The important properties for hydroMT are:</p>
@@ -829,7 +871,7 @@ path: /home/runner/.hydromt_data/data/v0.0.6/glw_cattle.tif
 <p>The rest are just additional <strong>meta</strong> information on the data source. You can notice that the <strong>crs</strong> property is not mentionned. This is because this data source has the same crs as the default hydroMT one EPS<em>4326</em>.</p>
 </section>
 <section id="Preparing-the-configuration-file">
-<h2>Preparing the configuration file<a class="headerlink" href="#Preparing-the-configuration-file" title="Permalink to this headline">¶</a></h2>
+<h2>Preparing the configuration file<a class="headerlink" href="#Preparing-the-configuration-file" title="Permalink to this heading">¶</a></h2>
 <p>As the <strong>glw_cattle</strong> data is a <strong>raster</strong> data, we will add it to our model using the <code class="docutils literal notranslate"><span class="pre">[setup_emission_raster]</span></code> component of hydroMT Delwaq.</p>
 <p>Let’s prepare a <strong>HydroMT configuration file</strong> with our options for preparing the cattle emission raster. All available options are available in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster.html">docs(setup_emission_raster)</a>.</p>
 <div class="nbinput docutils container">
@@ -884,7 +926,7 @@ area_division = True
 </ul>
 </section>
 <section id="Updating-the-model-with-the-cattle-grid">
-<h2>Updating the model with the cattle grid<a class="headerlink" href="#Updating-the-model-with-the-cattle-grid" title="Permalink to this headline">¶</a></h2>
+<h2>Updating the model with the cattle grid<a class="headerlink" href="#Updating-the-model-with-the-cattle-grid" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -899,34 +941,49 @@ area_division = True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-06-10 08:35:10,949 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
-2022-06-10 08:35:10,949 - update - log - INFO - HydroMT version: 0.4.6.dev
-2022-06-10 08:35:10,949 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave (r).
-2022-06-10 08:35:10,949 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
-2022-06-10 08:35:10,950 - update - main - INFO - User settings:
-2022-06-10 08:35:10,961 - update - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2022-06-10 08:35:10,962 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromt.log.
-2022-06-10 08:35:10,962 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2022-06-10 08:35:10,962 - update - delwaq - INFO - Reading model staticgeom files.
-2022-06-10 08:35:11,028 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/staticdata/staticmaps.nc
-2022-06-10 08:35:11,043 - update - delwaq - INFO - Model read
-2022-06-10 08:35:11,043 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
-2022-06-10 08:35:11,047 - update - model_api - INFO - setup_emission_raster.emission_fn: glw_cattle
-2022-06-10 08:35:11,047 - update - model_api - INFO - setup_emission_raster.scale_method: average
-2022-06-10 08:35:11,047 - update - model_api - INFO - setup_emission_raster.fillna_method: zero
-2022-06-10 08:35:11,047 - update - model_api - INFO - setup_emission_raster.fillna_value: 0.0
-2022-06-10 08:35:11,047 - update - model_api - INFO - setup_emission_raster.area_division: True
-2022-06-10 08:35:11,048 - update - data_adapter - INFO - Adding sample data v0.0.6 from artifacts
-2022-06-10 08:35:11,112 - update - delwaq - INFO - Preparing &#39;glw_cattle&#39; map.
-2022-06-10 08:35:11,116 - update - data_adapter - INFO - DataCatalog: Getting glw_cattle RasterDataset raster data from /home/runner/.hydromt_data/data/v0.0.6/glw_cattle.tif
-2022-06-10 08:35:11,127 - update - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2022-06-10 08:35:11,145 - update - emissions - INFO - Deriving None using average resampling (nodata=-1.7e+308).
-2022-06-10 08:35:11,170 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
-2022-06-10 08:35:11,186 - update - delwaq - INFO - Writing staticmap files.
-2022-06-10 08:35:11,231 - update - delwaq - INFO - Writing model staticgeom to file.
-2022-06-10 08:35:11,248 - update - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2022-06-10 08:35:11,248 - update - delwaq - INFO - Writing hydromap files.
-2022-06-10 08:35:11,330 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/workflows/basin_mask.py:9: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  import geopandas as gpd
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/io.py:14: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  from . import raster, vector, gis_utils, merge
+2022-12-21 02:30:02,206 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
+2022-12-21 02:30:02,206 - update - log - INFO - HydroMT version: 0.6.1.dev
+2022-12-21 02:30:02,206 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave (r).
+2022-12-21 02:30:02,206 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
+2022-12-21 02:30:02,206 - update - main - INFO - User settings:
+2022-12-21 02:30:02,226 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromt.log.
+2022-12-21 02:30:02,226 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-12-21 02:30:02,227 - update - delwaq - INFO - Reading model staticgeom files.
+2022-12-21 02:30:02,351 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/staticdata/staticmaps.nc
+2022-12-21 02:30:02,362 - update - delwaq - INFO - Model read
+2022-12-21 02:30:02,362 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
+2022-12-21 02:30:02,369 - update - model_api - INFO - setup_emission_raster.emission_fn: glw_cattle
+2022-12-21 02:30:02,369 - update - model_api - INFO - setup_emission_raster.scale_method: average
+2022-12-21 02:30:02,369 - update - model_api - INFO - setup_emission_raster.fillna_method: zero
+2022-12-21 02:30:02,369 - update - model_api - INFO - setup_emission_raster.fillna_value: 0.0
+2022-12-21 02:30:02,369 - update - model_api - INFO - setup_emission_raster.area_division: True
+2022-12-21 02:30:02,447 - update - data_catalog - INFO - Reading data catalog artifact_data v0.0.7 from archive
+2022-12-21 02:30:02,447 - update - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.7/data_catalog.yml
+2022-12-21 02:30:02,513 - update - delwaq - INFO - Preparing &#39;glw_cattle&#39; map.
+2022-12-21 02:30:02,518 - update - data_catalog - INFO - DataCatalog: Getting glw_cattle RasterDataset raster data from /home/runner/.hydromt_data/artifact_data/v0.0.7/glw_cattle.tif
+2022-12-21 02:30:02,536 - update - rasterdataset - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2022-12-21 02:30:02,559 - update - emissions - INFO - Deriving None using average resampling (nodata=-1.7e+308).
+2022-12-21 02:30:02,588 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
+2022-12-21 02:30:02,608 - update - delwaq - INFO - Writing staticmap files.
+2022-12-21 02:30:02,785 - update - delwaq - INFO - Writing model staticgeom to file.
+2022-12-21 02:30:02,810 - update - delwaq - INFO - Writing hydromap files.
+2022-12-21 02:30:02,879 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>
@@ -940,14 +997,14 @@ area_division = True
 </ul>
 </section>
 <section id="Visualization-of-the-new-emission-map">
-<h2>Visualization of the new emission map<a class="headerlink" href="#Visualization-of-the-new-emission-map" title="Permalink to this headline">¶</a></h2>
+<h2>Visualization of the new emission map<a class="headerlink" href="#Visualization-of-the-new-emission-map" title="Permalink to this heading">¶</a></h2>
 <p>We can now plot our newly created cattle grid.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the original and updated model with hydromt</span>
-<span class="n">mod</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;EM_piave_extended&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;EM_piave_extended&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1044,7 +1101,7 @@ area_division = True
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
     </div>
     

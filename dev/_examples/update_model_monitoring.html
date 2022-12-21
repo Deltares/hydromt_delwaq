@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Update monitoring locations &#8212; HydroMT delwaq  documentation</title>
     
@@ -25,7 +25,7 @@
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
     
     <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -33,7 +33,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/design-tabs.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -517,10 +519,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -664,12 +667,12 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Update-monitoring-locations">
-<h1>Update monitoring locations<a class="headerlink" href="#Update-monitoring-locations" title="Permalink to this headline">¶</a></h1>
+<h1>Update monitoring locations<a class="headerlink" href="#Update-monitoring-locations" title="Permalink to this heading">¶</a></h1>
 <p>Once you have a <strong>DELWAQ</strong> model, you may want to update your model in order to add new emission data, add sample locations, use different hydrological forcing data, create and run different scenarios etc.</p>
 <p>With HydroMT, you can easily read your model and update one or several components of your model using the <strong>update</strong> function of the command line interface (CLI). Here are the steps and some examples on how to <strong>update monitoring points and areas to your model</strong>.</p>
 <p>All lines in this notebook which starts with ! are executed from the command line. Within the notebook environment the logging messages are shown after completion. You can also copy these lines and paste them in your shell to get more feedback.</p>
 <section id="Import-packages">
-<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">¶</a></h2>
 <p>In this notebook, we will use some functions of HydroMT to plot the new monitoring points of the updated model. Here are the libraries to import to realize these steps.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -691,14 +694,38 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import hydromt</span>
 <span class="kn">import</span> <span class="nn">hydromt</span>
+<span class="kn">from</span> <span class="nn">hydromt_delwaq</span> <span class="kn">import</span> <span class="n">DelwaqModel</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/workflows/basin_mask.py:9: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  import geopandas as gpd
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/io.py:14: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  from . import raster, vector, gis_utils, merge
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -715,12 +742,12 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-06-10 08:36:24,582 - update_model_monitoring - log - INFO - HydroMT version: 0.4.6.dev
+2022-12-21 02:31:06,261 - update_model_monitoring - log - INFO - HydroMT version: 0.6.1.dev
 </pre></div></div>
 </div>
 </section>
 <section id="Locations-of-the-monitoring-points">
-<h2>Locations of the monitoring points<a class="headerlink" href="#Locations-of-the-monitoring-points" title="Permalink to this headline">¶</a></h2>
+<h2>Locations of the monitoring points<a class="headerlink" href="#Locations-of-the-monitoring-points" title="Permalink to this heading">¶</a></h2>
 <p>Adding monitoring points to your <strong>DELWAQ</strong> model can be quite useful. It allows you to directly extract model outputs at specific locations. For example for model validation, calibration, you can then directly compare model results to available observations.</p>
 <p>In our previous notebook, we built a DELWAQ model in which the locations of the Wflow basin outlets area added (from the <em>staticgeoms/gaiges.geojson</em>). If you have other observation data available, you can easily add them to your model using hydroMT. One way to do it is to prepare a csv table containing the ID, latitude and longitude of the available stations. An example <strong>examples_data/test_monpoints.csv</strong> has been prepared. Let’s have a look at it.</p>
 <div class="nbinput docutils container">
@@ -748,7 +775,7 @@ div.rendered_html tbody tr:hover {
 <p>Here we can see that we have defined three stations with an ID and the longitude (x) and latitude (y) coordinates, in the same EPSG system as our model (EPSG 4326). We can now add them to our model.</p>
 </section>
 <section id="hydroMT-CLI-update-interface">
-<h2>hydroMT CLI update interface<a class="headerlink" href="#hydroMT-CLI-update-interface" title="Permalink to this headline">¶</a></h2>
+<h2>hydroMT CLI update interface<a class="headerlink" href="#hydroMT-CLI-update-interface" title="Permalink to this heading">¶</a></h2>
 <p>Using the <code class="docutils literal notranslate"><span class="pre">hydroMT</span> <span class="pre">update</span></code> API, we can update one or several components of an already existing DELWAQ model. Let’s get an overview of the available options:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -764,6 +791,22 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/workflows/basin_mask.py:9: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  import geopandas as gpd
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/io.py:14: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  from . import raster, vector, gis_utils, merge
 Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
 
   Update a specific component of a model. Set an output directory to copy the
@@ -773,10 +816,10 @@ Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
   --------------
 
   Update (overwrite!) landuse-landcover based maps in a Wflow model
-  hydromt update wflow /path/to/model_root -c setup_lulcmaps --opt lulc_fn=vito -d /path/to/data_catalog.yaml -v
+  hydromt update wflow /path/to/model_root -c setup_lulcmaps --opt lulc_fn=vito -d /path/to/data_catalog.yml -v
 
   Update Wflow model components outlined in an .ini configuration file and write the model to a directory
-  hydromt update wflow /path/to/model_root -o /path/to/model_out -i /path/to/wflow_config.ini -d /path/to/data_catalog.yaml -v
+  hydromt update wflow /path/to/model_root -o /path/to/model_out -i /path/to/wflow_config.ini -d /path/to/data_catalog.yml -v
 
 Options:
   -o, --model-out DIRECTORY  Output model folder. Maps in MODEL_ROOT are
@@ -787,11 +830,9 @@ Options:
                              information about the arguments.
   -i, --config PATH          Path to hydroMT configuration file, for the model
                              specific implementation.
-  -d, --data PATH            File path to yml data sources file. See
-                             documentation for required yml file format.
-  --dd, --deltares-data      Parse default deltares data yml from
-                             https://github.com/DirkEilander/hydromt-
-                             artifacts/releases
+  -d, --data TEXT            Path to local yaml data catalog file OR name of
+                             predefined data catalog.
+  --dd, --deltares-data      Shortcut to add the &#34;deltares_data&#34; catalog
   -q, --quiet                Decrease verbosity.
   -v, --verbose              Increase verbosity.
   --help                     Show this message and exit.
@@ -800,7 +841,7 @@ Options:
 </div>
 </section>
 <section id="Update-Delwaq-monitoring-points">
-<h2>Update Delwaq monitoring points<a class="headerlink" href="#Update-Delwaq-monitoring-points" title="Permalink to this headline">¶</a></h2>
+<h2>Update Delwaq monitoring points<a class="headerlink" href="#Update-Delwaq-monitoring-points" title="Permalink to this heading">¶</a></h2>
 <p>Let’s prepare a <strong>HydroMT configuration file</strong> with new our options for monitoring points and areas. All available options are available in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_monitoring.html">docs(setup_monitoring)</a>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -855,33 +896,50 @@ mon_areas = compartment
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-06-10 08:36:29,189 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring/hydromt.log.
-2022-06-10 08:36:29,189 - update - log - INFO - HydroMT version: 0.4.6.dev
-2022-06-10 08:36:29,189 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave (r).
-2022-06-10 08:36:29,189 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring
-2022-06-10 08:36:29,189 - update - main - INFO - User settings:
-2022-06-10 08:36:29,200 - update - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2022-06-10 08:36:29,201 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave/hydromt.log.
-2022-06-10 08:36:29,201 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2022-06-10 08:36:29,201 - update - delwaq - INFO - Reading model staticgeom files.
-2022-06-10 08:36:29,276 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave/staticdata/staticmaps.nc
-2022-06-10 08:36:29,290 - update - delwaq - INFO - Model read
-2022-06-10 08:36:29,290 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring/hydromt.log.
-2022-06-10 08:36:29,294 - update - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
-2022-06-10 08:36:29,294 - update - model_api - INFO - setup_monitoring.mon_areas: compartment
-2022-06-10 08:36:29,294 - update - delwaq - INFO - Setting monitoring points and areas
-2022-06-10 08:36:29,294 - update - data_adapter - INFO - Adding sample data v0.0.6 from artifacts
-2022-06-10 08:36:29,359 - update - data_adapter - INFO - DataCatalog: Getting test_monpoints GeoDataFrame csv data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
-2022-06-10 08:36:29,360 - update - data_adapter - INFO - GeoDataFrame: Read csv data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
-2022-06-10 08:36:29,374 - update - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
-2022-06-10 08:36:29,375 - update - delwaq - INFO - No monitoring areas set in the config file, skipping
-2022-06-10 08:36:29,375 - update - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2022-06-10 08:36:29,375 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring
-2022-06-10 08:36:29,388 - update - delwaq - INFO - Writing staticmap files.
-2022-06-10 08:36:29,404 - update - delwaq - INFO - Writing model staticgeom to file.
-2022-06-10 08:36:29,422 - update - delwaq - INFO - Writing model config to file.
-2022-06-10 08:36:29,422 - update - delwaq - INFO - Writing hydromap files.
-2022-06-10 08:36:29,502 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/workflows/basin_mask.py:9: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  import geopandas as gpd
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/io.py:14: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  from . import raster, vector, gis_utils, merge
+2022-12-21 02:31:09,607 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring/hydromt.log.
+2022-12-21 02:31:09,607 - update - log - INFO - HydroMT version: 0.6.1.dev
+2022-12-21 02:31:09,607 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave (r).
+2022-12-21 02:31:09,607 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring
+2022-12-21 02:31:09,607 - update - main - INFO - User settings:
+2022-12-21 02:31:09,627 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave/hydromt.log.
+2022-12-21 02:31:09,627 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-12-21 02:31:09,628 - update - delwaq - INFO - Reading model staticgeom files.
+2022-12-21 02:31:09,766 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave/staticdata/staticmaps.nc
+2022-12-21 02:31:09,777 - update - delwaq - INFO - Model read
+2022-12-21 02:31:09,778 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring/hydromt.log.
+2022-12-21 02:31:09,784 - update - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
+2022-12-21 02:31:09,785 - update - model_api - INFO - setup_monitoring.mon_areas: compartment
+2022-12-21 02:31:09,785 - update - delwaq - INFO - Setting monitoring points and areas
+2022-12-21 02:31:09,851 - update - data_catalog - INFO - Reading data catalog artifact_data v0.0.7 from archive
+2022-12-21 02:31:09,852 - update - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.7/data_catalog.yml
+2022-12-21 02:31:09,919 - update - data_catalog - INFO - DataCatalog: Getting test_monpoints GeoDataFrame csv data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
+2022-12-21 02:31:09,921 - update - geodataframe - INFO - GeoDataFrame: Read csv data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
+2022-12-21 02:31:09,937 - update - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
+2022-12-21 02:31:09,938 - update - model_api - WARNING - Replacing staticmap: monpoints
+2022-12-21 02:31:09,939 - update - model_api - WARNING - Replacing geom: monpoints
+2022-12-21 02:31:09,939 - update - delwaq - INFO - No monitoring areas set in the config file, skipping
+2022-12-21 02:31:09,939 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring
+2022-12-21 02:31:09,956 - update - delwaq - INFO - Writing staticmap files.
+2022-12-21 02:31:10,108 - update - delwaq - INFO - Writing model staticgeom to file.
+2022-12-21 02:31:10,142 - update - delwaq - INFO - Writing model config to file.
+2022-12-21 02:31:10,142 - update - delwaq - INFO - Writing hydromap files.
+2022-12-21 02:31:10,226 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>
@@ -895,15 +953,15 @@ mon_areas = compartment
 </ul>
 </section>
 <section id="Visualization-of-the-monitoring-points">
-<h2>Visualization of the monitoring points<a class="headerlink" href="#Visualization-of-the-monitoring-points" title="Permalink to this headline">¶</a></h2>
+<h2>Visualization of the monitoring points<a class="headerlink" href="#Visualization-of-the-monitoring-points" title="Permalink to this heading">¶</a></h2>
 <p>We can now plot our newly created monitoring points.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the original and updated model with hydromt</span>
-<span class="n">mod0</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;WQ_piave&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
-<span class="n">mod1</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;WQ_piave_monitoring&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">mod0</span> <span class="o">=</span> <span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;WQ_piave&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">mod1</span> <span class="o">=</span> <span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;WQ_piave_monitoring&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1020,7 +1078,7 @@ mon_areas = compartment
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
     </div>
     

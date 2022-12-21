@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Build a water quality model &#8212; HydroMT delwaq  documentation</title>
     
@@ -25,7 +25,7 @@
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
     
     <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -33,7 +33,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/design-tabs.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -522,10 +524,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -669,11 +672,11 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Build-a-water-quality-model">
-<h1>Build a water quality model<a class="headerlink" href="#Build-a-water-quality-model" title="Permalink to this headline">¶</a></h1>
+<h1>Build a water quality model<a class="headerlink" href="#Build-a-water-quality-model" title="Permalink to this heading">¶</a></h1>
 <p>This notebook demonstrates how to prepare <strong>DELWAQ D-Water Quality</strong> model from scratch using the command line interace (CLI).</p>
 <p>All lines in this notebook which start with <code class="docutils literal notranslate"><span class="pre">!</span></code> are executed from the command line. Within the notebook environment the logging messages are shown after completion. You can also copy these lines and paste these in your shell to get more direct feedback.</p>
 <section id="hydroMT-CLI-build-interface">
-<h2>hydroMT CLI build interface<a class="headerlink" href="#hydroMT-CLI-build-interface" title="Permalink to this headline">¶</a></h2>
+<h2>hydroMT CLI build interface<a class="headerlink" href="#hydroMT-CLI-build-interface" title="Permalink to this heading">¶</a></h2>
 <p>In hydroMT, you can interact with <strong>DELWAQ models</strong> either to be used by <strong>D-Emissions (EM)</strong> or <strong>D-Water Quality (WQ)</strong>.</p>
 <p>Lets first check if the delwaq model is recognized by hydromt</p>
 <div class="nbinput docutils container">
@@ -690,7 +693,31 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-hydroMT model plugins: wflow (v0.1.5.dev0), wflow_sediment (v0.1.5.dev0), delwaq (v0.1.3.dev0)
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/workflows/basin_mask.py:9: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  import geopandas as gpd
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/io.py:14: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  from . import raster, vector, gis_utils, merge
+model plugins:
+ - delwaq (hydromt_delwaq 0.1.3.dev0)
+ - wflow (hydromt_wflow 0.2.2.dev0)
+ - wflow_sediment (hydromt_wflow 0.2.2.dev0)
+generic models (hydromt 0.6.1.dev):
+ - grid_model
+ - lumped_model
+ - network_model
+
 
 </pre></div></div>
 </div>
@@ -708,6 +735,22 @@ hydroMT model plugins: wflow (v0.1.5.dev0), wflow_sediment (v0.1.5.dev0), delwaq
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/workflows/basin_mask.py:9: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  import geopandas as gpd
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/io.py:14: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  from . import raster, vector, gis_utils, merge
 Usage: hydromt build [OPTIONS] MODEL MODEL_ROOT REGION
 
   Build models from scratch.
@@ -716,10 +759,10 @@ Usage: hydromt build [OPTIONS] MODEL MODEL_ROOT REGION
   --------------
 
   To build a wflow model for a subbasin using and point coordinates snapped to cells with stream order &gt;= 4
-  hydromt build wflow /path/to/model_root &#34;{&#39;subbasin&#39;: [-7.24, 62.09], &#39;strord&#39;: 4}&#34; -i /path/to/wflow_config.ini -d /path/to/data_catalog.yaml -v
+  hydromt build wflow /path/to/model_root &#34;{&#39;subbasin&#39;: [-7.24, 62.09], &#39;strord&#39;: 4}&#34; -i /path/to/wflow_config.ini -d deltares_data -d /path/to/data_catalog.yml -v
 
   To build a sfincs model based on a bbox
-  hydromt build sfincs /path/to/model_root &#34;{&#39;bbox&#39;: [4.6891,52.9750,4.9576,53.1994]}&#34; -i /path/to/sfincs_config.ini -d /path/to/data_catalog.yaml -v
+  hydromt build sfincs /path/to/model_root &#34;{&#39;bbox&#39;: [4.6891,52.9750,4.9576,53.1994]}&#34; -i /path/to/sfincs_config.ini -d /path/to/data_catalog.yml -v
 
 Options:
   -r, --res FLOAT             Model resolution in model src.
@@ -729,11 +772,9 @@ Options:
                               more information about the arguments.
   -i, --config PATH           Path to hydroMT configuration file, for the
                               model specific implementation.
-  -d, --data PATH             File path to yml data sources file. See
-                              documentation for required yml file format.
-  --dd, --deltares-data       Parse default deltares data yml from
-                              https://github.com/DirkEilander/hydromt-
-                              artifacts/releases
+  -d, --data TEXT             Path to local yaml data catalog file OR name of
+                              predefined data catalog.
+  --dd, --deltares-data       Shortcut to add the &#34;deltares_data&#34; catalog
   -q, --quiet                 Decrease verbosity.
   -v, --verbose               Increase verbosity.
   --help                      Show this message and exit.
@@ -742,7 +783,7 @@ Options:
 </div>
 </section>
 <section id="Setup-delwaq-EM-model-base-layers">
-<h2>Setup delwaq EM model base layers<a class="headerlink" href="#Setup-delwaq-EM-model-base-layers" title="Permalink to this headline">¶</a></h2>
+<h2>Setup delwaq EM model base layers<a class="headerlink" href="#Setup-delwaq-EM-model-base-layers" title="Permalink to this heading">¶</a></h2>
 <p>DELWAQ models are quite specific in the sense that they are usually added on top of an already existing hydrologic / hydraulic or hydrodynamic model. In hydroMT, for now, DELWAQ models (EM for D-Emissions and WQ for D-Water Quality) can only be built on top of <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/">Wflow</a> hydrologic models. You can find more information on this coupling in <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/advanced/coupling_wflow.html">docs(coupling_wflow)</a>.</p>
 <p>Here is how you can build a DELWAQ model:</p>
 <div class="nbinput docutils container">
@@ -759,28 +800,41 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-06-10 08:35:51,202 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base/hydromt.log.
-2022-06-10 08:35:51,202 - build - log - INFO - HydroMT version: 0.4.6.dev
-2022-06-10 08:35:51,203 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base.
-2022-06-10 08:35:51,203 - build - main - INFO - User settings:
-2022-06-10 08:35:51,213 - build - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2022-06-10 08:35:51,214 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2022-06-10 08:35:51,214 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2022-06-10 08:35:51,214 - build - model_api - INFO - setup_basemaps.include_soil: False
-2022-06-10 08:35:51,214 - build - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.5.dev0)
-2022-06-10 08:35:51,215 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2022-06-10 08:35:51,215 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.5.dev0).
-2022-06-10 08:35:51,215 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f8ec4e72be0&gt;}
-2022-06-10 08:35:51,215 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2022-06-10 08:35:51,217 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2022-06-10 08:35:51,217 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2022-06-10 08:35:52,150 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2022-06-10 08:35:52,150 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base
-2022-06-10 08:35:52,159 - build - delwaq - INFO - Writing staticmap files.
-2022-06-10 08:35:52,169 - build - delwaq - INFO - Writing model config to file.
-2022-06-10 08:35:52,169 - build - delwaq - INFO - Writing hydromap files.
-2022-06-10 08:35:52,205 - build - delwaq - INFO - Writting pointer file in root/config
-2022-06-10 08:35:52,220 - build - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/workflows/basin_mask.py:9: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  import geopandas as gpd
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/io.py:14: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  from . import raster, vector, gis_utils, merge
+2022-12-21 02:30:37,622 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base/hydromt.log.
+2022-12-21 02:30:37,623 - build - log - INFO - HydroMT version: 0.6.1.dev
+2022-12-21 02:30:37,623 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base.
+2022-12-21 02:30:37,623 - build - main - INFO - User settings:
+2022-12-21 02:30:37,643 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-12-21 02:30:37,643 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2022-12-21 02:30:37,643 - build - model_api - INFO - setup_basemaps.include_soil: False
+2022-12-21 02:30:37,644 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2022-12-21 02:30:37,644 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.2.2.dev0).
+2022-12-21 02:30:37,644 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7ff820b20520&gt;}
+2022-12-21 02:30:37,644 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2022-12-21 02:30:37,646 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2022-12-21 02:30:37,646 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2022-12-21 02:30:38,757 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base
+2022-12-21 02:30:38,769 - build - delwaq - INFO - Writing staticmap files.
+2022-12-21 02:30:38,918 - build - delwaq - INFO - Writing model config to file.
+2022-12-21 02:30:38,918 - build - delwaq - INFO - Writing hydromap files.
+2022-12-21 02:30:38,957 - build - delwaq - INFO - Writting pointer file in root/config
+2022-12-21 02:30:38,973 - build - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
 
 </pre></div></div>
 </div>
@@ -795,7 +849,7 @@ Options:
 <p>NOTE: As we did not specify a model configuration, only the base maps (grid, segment IDs) have been setup using default parameters. To build a complete model we need the use a configuraton ini-file.</p>
 </section>
 <section id="Model-setup-configuration">
-<h2>Model setup configuration<a class="headerlink" href="#Model-setup-configuration" title="Permalink to this headline">¶</a></h2>
+<h2>Model setup configuration<a class="headerlink" href="#Model-setup-configuration" title="Permalink to this heading">¶</a></h2>
 <p>The ini-file contains the model setup configuration and determines which components are build and in which order and optionally sets non-default arguments for each component. This configuration is passed to hydromt using <code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path_to_ini_file&gt;</span></code>. We have prepared several example ini-files which are available in the model repository <a class="reference external" href="https://github.com/Deltares/hydromt_delwaq/tree/main/examples">examples folder</a> and from the
 <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/build_configuration.html">docs(build_configuration)</a>.</p>
 <p>Each header as shown between <code class="docutils literal notranslate"><span class="pre">[...]</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">[setup_basemaps]</span></code>) corresponds to a model component. All model components are explained in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/components.html">docs(model_components)</a>.</p>
@@ -848,13 +902,13 @@ add_volume_offset = True                 # add a one-timestep offset to the volu
 <p>For more information on all the options used (resampling method, NaN values handling…), please check the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/components.html">docs(model_components)</a></p>
 </section>
 <section id="Data-for-model-setup">
-<h2>Data for model setup<a class="headerlink" href="#Data-for-model-setup" title="Permalink to this headline">¶</a></h2>
+<h2>Data for model setup<a class="headerlink" href="#Data-for-model-setup" title="Permalink to this heading">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">&lt;...&gt;_fn</span></code> arguments correspond to a data source from the <code class="docutils literal notranslate"><span class="pre">DataCatalog</span></code> which is based on a yml-file with references to the data paths/urls and how the data should be read. This file can be provided to hydromt using <code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">&lt;path_to_yml_file&gt;</span></code>.</p>
 <p>By default some example data for the Piave basin will be downloaded to <code class="docutils literal notranslate"><span class="pre">~/.hydromt_data/</span></code> which is also used for this example. An overview of the available example data is provided <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data.html#available-global-datasets">here</a> This example data is a based on the data which are available from the Deltares p-drive. If you have acces to this drive, a pre-configured catalog file can be loaded using the <code class="docutils literal notranslate"><span class="pre">--dd</span></code> flag.</p>
 <p>More background how to write a data catalog yml file can be found in the <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data.html">hydromt core docs</a></p>
 </section>
 <section id="Setup-complete-delwaq-WQ-model">
-<h2>Setup complete delwaq WQ model<a class="headerlink" href="#Setup-complete-delwaq-WQ-model" title="Permalink to this headline">¶</a></h2>
+<h2>Setup complete delwaq WQ model<a class="headerlink" href="#Setup-complete-delwaq-WQ-model" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -869,53 +923,67 @@ add_volume_offset = True                 # add a one-timestep offset to the volu
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2022-06-10 08:35:54,711 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full/hydromt.log.
-2022-06-10 08:35:54,711 - build - log - INFO - HydroMT version: 0.4.6.dev
-2022-06-10 08:35:54,711 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full.
-2022-06-10 08:35:54,711 - build - main - INFO - User settings:
-2022-06-10 08:35:54,723 - build - model_plugins - DEBUG - Loaded model plugin &#39;delwaq = hydromt_delwaq.delwaq.DelwaqModel&#39; (0.1.3.dev0)
-2022-06-10 08:35:54,727 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
-2022-06-10 08:35:54,727 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2022-06-10 08:35:54,727 - build - model_api - INFO - setup_basemaps.include_soil: False
-2022-06-10 08:35:54,728 - build - model_plugins - DEBUG - Loaded model plugin &#39;wflow = hydromt_wflow.wflow.WflowModel&#39; (0.1.5.dev0)
-2022-06-10 08:35:54,728 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2022-06-10 08:35:54,728 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.1.5.dev0).
-2022-06-10 08:35:54,728 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f469ff06820&gt;}
-2022-06-10 08:35:54,728 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2022-06-10 08:35:54,730 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2022-06-10 08:35:54,730 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2022-06-10 08:35:55,672 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2022-06-10 08:35:55,672 - build - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
-2022-06-10 08:35:55,672 - build - model_api - INFO - setup_monitoring.mon_areas: compartments
-2022-06-10 08:35:55,672 - build - delwaq - INFO - Setting monitoring points and areas
-2022-06-10 08:35:55,680 - build - data_adapter - INFO - DataCatalog: Getting gauges GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
-2022-06-10 08:35:55,681 - build - data_adapter - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
-2022-06-10 08:35:55,698 - build - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
-2022-06-10 08:35:55,706 - build - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
-2022-06-10 08:35:55,706 - build - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2022-06-10 08:35:55,706 - build - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2022-06-10 08:35:55,707 - build - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
-2022-06-10 08:35:55,707 - build - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
-2022-06-10 08:35:55,707 - build - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
-2022-06-10 08:35:55,707 - build - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
-2022-06-10 08:35:55,710 - build - data_adapter - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
-2022-06-10 08:35:55,735 - build - data_adapter - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2022-06-10 08:35:55,811 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full
-2022-06-10 08:35:55,827 - build - delwaq - INFO - Writing staticmap files.
-2022-06-10 08:35:55,840 - build - delwaq - INFO - Writing model staticgeom to file.
-2022-06-10 08:35:55,868 - build - delwaq - INFO - Writing model config to file.
-2022-06-10 08:35:55,869 - build - delwaq - INFO - Writing hydromap files.
-2022-06-10 08:35:55,904 - build - delwaq - INFO - Writting pointer file in root/config
-2022-06-10 08:35:55,932 - build - delwaq - INFO - Writing dynamicmap files.
-2022-06-10 08:35:55,932 - build - delwaq - INFO - Writting dynamic data for timestep 1/8
-2022-06-10 08:35:55,951 - build - delwaq - INFO - Writting dynamic data for timestep 2/8
-2022-06-10 08:35:55,968 - build - delwaq - INFO - Writting dynamic data for timestep 3/8
-2022-06-10 08:35:55,984 - build - delwaq - INFO - Writting dynamic data for timestep 4/8
-2022-06-10 08:35:56,000 - build - delwaq - INFO - Writting dynamic data for timestep 5/8
-2022-06-10 08:35:56,015 - build - delwaq - INFO - Writting dynamic data for timestep 6/8
-2022-06-10 08:35:56,031 - build - delwaq - INFO - Writting dynamic data for timestep 7/8
-2022-06-10 08:35:56,049 - build - delwaq - INFO - Writting dynamic data for timestep 8/8
-2022-06-10 08:35:56,067 - build - delwaq - INFO - Writting waqgeom.nc file
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/workflows/basin_mask.py:9: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  import geopandas as gpd
+/usr/share/miniconda/envs/hydromt-delwaq/lib/python3.9/site-packages/hydromt/io.py:14: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
+
+import os
+os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
+import geopandas
+
+In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
+  from . import raster, vector, gis_utils, merge
+2022-12-21 02:30:40,897 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full/hydromt.log.
+2022-12-21 02:30:40,897 - build - log - INFO - HydroMT version: 0.6.1.dev
+2022-12-21 02:30:40,897 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full.
+2022-12-21 02:30:40,897 - build - main - INFO - User settings:
+2022-12-21 02:30:40,918 - build - data_catalog - INFO - Parsing data catalog from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/local_sources.yml
+2022-12-21 02:30:40,922 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.1.3.dev0).
+2022-12-21 02:30:40,922 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2022-12-21 02:30:40,922 - build - model_api - INFO - setup_basemaps.include_soil: False
+2022-12-21 02:30:40,923 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2022-12-21 02:30:40,923 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.2.2.dev0).
+2022-12-21 02:30:40,923 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7ff1b81e0250&gt;}
+2022-12-21 02:30:40,923 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2022-12-21 02:30:40,926 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2022-12-21 02:30:40,926 - build - wflow - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2022-12-21 02:30:42,076 - build - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
+2022-12-21 02:30:42,077 - build - model_api - INFO - setup_monitoring.mon_areas: compartments
+2022-12-21 02:30:42,077 - build - delwaq - INFO - Setting monitoring points and areas
+2022-12-21 02:30:42,088 - build - data_catalog - INFO - DataCatalog: Getting gauges GeoDataFrame vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
+2022-12-21 02:30:42,089 - build - geodataframe - INFO - GeoDataFrame: Read vector data and clip to geom (epsg:4326) [11.775, 45.808, 12.742, 46.692].
+2022-12-21 02:30:42,126 - build - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
+2022-12-21 02:30:42,135 - build - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output
+2022-12-21 02:30:42,135 - build - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2022-12-21 02:30:42,135 - build - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2022-12-21 02:30:42,135 - build - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2022-12-21 02:30:42,135 - build - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
+2022-12-21 02:30:42,135 - build - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
+2022-12-21 02:30:42,135 - build - delwaq - INFO - Setting dynamic data from hydrology source wflow_output.
+2022-12-21 02:30:42,139 - build - data_catalog - INFO - DataCatalog: Getting wflow_output RasterDataset netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
+2022-12-21 02:30:42,205 - build - rasterdataset - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
+2022-12-21 02:30:42,292 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full
+2022-12-21 02:30:42,309 - build - delwaq - INFO - Writing staticmap files.
+2022-12-21 02:30:42,462 - build - delwaq - INFO - Writing model staticgeom to file.
+2022-12-21 02:30:42,497 - build - delwaq - INFO - Writing model config to file.
+2022-12-21 02:30:42,497 - build - delwaq - INFO - Writing hydromap files.
+2022-12-21 02:30:42,535 - build - delwaq - INFO - Writting pointer file in root/config
+2022-12-21 02:30:42,565 - build - delwaq - INFO - Writing dynamicmap files.
+2022-12-21 02:30:42,566 - build - delwaq - INFO - Writting dynamic data for timestep 1/8
+2022-12-21 02:30:42,584 - build - delwaq - INFO - Writting dynamic data for timestep 2/8
+2022-12-21 02:30:42,601 - build - delwaq - INFO - Writting dynamic data for timestep 3/8
+2022-12-21 02:30:42,618 - build - delwaq - INFO - Writting dynamic data for timestep 4/8
+2022-12-21 02:30:42,634 - build - delwaq - INFO - Writting dynamic data for timestep 5/8
+2022-12-21 02:30:42,651 - build - delwaq - INFO - Writting dynamic data for timestep 6/8
+2022-12-21 02:30:42,668 - build - delwaq - INFO - Writting dynamic data for timestep 7/8
+2022-12-21 02:30:42,685 - build - delwaq - INFO - Writting dynamic data for timestep 8/8
+2022-12-21 02:30:42,701 - build - delwaq - INFO - Writting waqgeom.nc file
 
 </pre></div></div>
 </div>
@@ -952,52 +1020,52 @@ add_volume_offset = True                 # add a one-timestep offset to the volu
 <div class="highlight"><pre>
 WQ_test_full
  - hydromt.log
-WQ_test_full/staticgeoms
- - monareas.geojson
- - monpoints.geojson
- - basins.geojson
 WQ_test_full/hydromodel
- - basins.tif
- - rivwth.tif
  - ldd.tif
- - modelmap.tif
+ - basins.tif
+ - rivlen.tif
  - ptid.tif
  - ptiddown.tif
- - rivlen.tif
+ - modelmap.tif
+ - rivwth.tif
+WQ_test_full/staticgeoms
+ - monpoints.geojson
+ - basins.geojson
+ - monareas.geojson
+WQ_test_full/config
+ - B3_nrofseg.inc
+ - B4_pointer.inc
+ - B5_boundlist.inc
+ - B2_nrofmon.inc
+ - B2_stations.inc
+ - B1_timestamp.inc
+ - B2_monareas.inc
+ - B3_attributes.inc
+ - B4_nrofexch.inc
+ - B2_stations-balance.inc
+ - B2_outputtimes.inc
+ - B2_timers_only.inc
+ - B4_pointer.poi
+ - B2_timers.inc
+ - B3_waqgeom.nc
+ - B2_sysclock.inc
 WQ_test_full/dynamicdata
  - flow.dat
  - volume.dat
 WQ_test_full/fews
 WQ_test_full/staticdata
- - slope.dat
- - staticmaps.nc
- - surface.dat
- - manning.dat
  - streamorder.dat
+ - surface.dat
+ - slope.dat
  - river.dat
-WQ_test_full/config
- - B3_attributes.inc
- - B4_nrofexch.inc
- - B2_monareas.inc
- - B2_timers_only.inc
- - B2_nrofmon.inc
- - B2_timers.inc
- - B3_nrofseg.inc
- - B1_timestamp.inc
- - B3_waqgeom.nc
- - B4_pointer.inc
- - B5_boundlist.inc
- - B2_outputtimes.inc
- - B2_stations-balance.inc
- - B2_stations.inc
- - B4_pointer.poi
- - B2_sysclock.inc
+ - manning.dat
+ - staticmaps.nc
 </pre></div></div>
 </div>
 <p>You can see that we didn’t create any emission data here. In some cases, you may require some additional GIS data in order to run a WQ model, for example, when you do not need to run the D-Emissions model beforehand, but include point sources that emit pollutants into the surface water directly. When this is the case, you can still use the various [setup_emission_*] components of hydroMT_delwaq.</p>
 </section>
 <section id="Visualize-and/or-inspect-model-schematization">
-<h2>Visualize and/or inspect model schematization<a class="headerlink" href="#Visualize-and/or-inspect-model-schematization" title="Permalink to this headline">¶</a></h2>
+<h2>Visualize and/or inspect model schematization<a class="headerlink" href="#Visualize-and/or-inspect-model-schematization" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>The <strong>delwaq plot</strong> example notebook contains scripts to visualize your model (staticdata, dynamicdata, hydromodel and staticgeoms).</p></li>
 </ul>
@@ -1073,7 +1141,7 @@ WQ_test_full/config
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
     </div>
     

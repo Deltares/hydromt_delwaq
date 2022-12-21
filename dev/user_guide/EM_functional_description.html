@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Detailed functional description &#8212; HydroMT delwaq  documentation</title>
     
@@ -25,7 +25,7 @@
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
     
     <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -33,7 +33,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/design-tabs.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -486,11 +488,11 @@
               <div>
                 
   <section id="detailed-functional-description">
-<span id="em-functional-description"></span><h1>Detailed functional description<a class="headerlink" href="#detailed-functional-description" title="Permalink to this headline">¶</a></h1>
+<span id="em-functional-description"></span><h1>Detailed functional description<a class="headerlink" href="#detailed-functional-description" title="Permalink to this heading">¶</a></h1>
 <section id="generic-single-substance-emission-model-em-gss">
-<span id="em-gss"></span><h2>Generic Single Substance Emission Model (EM_GSS)<a class="headerlink" href="#generic-single-substance-emission-model-em-gss" title="Permalink to this headline">¶</a></h2>
+<span id="em-gss"></span><h2>Generic Single Substance Emission Model (EM_GSS)<a class="headerlink" href="#generic-single-substance-emission-model-em-gss" title="Permalink to this heading">¶</a></h2>
 <section id="introduction">
-<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h3>
 <p>This process quantifies releases to various compartments and routes them to the final recipients: surface waters and soils. It is applied for a single substance.</p>
 <p>Releases are defined for:</p>
 <ul class="simple">
@@ -517,12 +519,12 @@
 </ul>
 </section>
 <section id="implementation">
-<h3>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h3>
+<h3>Implementation<a class="headerlink" href="#implementation" title="Permalink to this heading">¶</a></h3>
 <p>The EM is currently configured for 6 compartments.</p>
-<table class="colwidths-given table" id="em-compartments">
+<table class="table" id="em-compartments">
 <colgroup>
-<col style="width: 17%" />
-<col style="width: 83%" />
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Abbreviation</p></th>
@@ -554,9 +556,9 @@
 <p>As the mathematical concept of a “substance” is used to represent compartments, EM has been set up to run for one “true” substance at a time.</p>
 </section>
 <section id="formulation">
-<h3>Formulation<a class="headerlink" href="#formulation" title="Permalink to this headline">¶</a></h3>
+<h3>Formulation<a class="headerlink" href="#formulation" title="Permalink to this heading">¶</a></h3>
 <section id="releases">
-<h4>Releases<a class="headerlink" href="#releases" title="Permalink to this headline">¶</a></h4>
+<h4>Releases<a class="headerlink" href="#releases" title="Permalink to this heading">¶</a></h4>
 <p>Releases of substances are quantified per time step.
 Releases from atmospheric deposition are automatically allocated to the proper receiving compartment (paved surfaces, unpaved surfaces and surface waters) depending on the local conditions that follow from the supportive hydrology model.
 Releases from other sources need to be allocated to the proper receiving compartment by the user.
@@ -564,7 +566,7 @@ Optionally, a part of the releases can be <strong>preliminary</strong> allocated
 The subsequent allocation of the wastewater to receiving compartments can then be arranged by a supportive process <a class="reference internal" href="#genwwman"><span class="std std-ref">GenWWman</span></a>.</p>
 </section>
 <section id="paved-surfaces">
-<h4>Paved surfaces<a class="headerlink" href="#paved-surfaces" title="Permalink to this headline">¶</a></h4>
+<h4>Paved surfaces<a class="headerlink" href="#paved-surfaces" title="Permalink to this heading">¶</a></h4>
 <p>The figure below shows a schematic overview of the fate of releases to paved areas.
 Substances reaching paved areas undergo a decay process and can be washed off.
 The fraction that is not removed by runoff or decay remains in the paved emission pool.
@@ -586,10 +588,6 @@ k_{paved} M\]</div>
 \left( \frac{M}{\Delta t} + L - F_{loss} \right) * f_{runoff}\]</div>
 <p>where</p>
 <table class="table">
-<colgroup>
-<col style="width: 35%" />
-<col style="width: 65%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(f_{runoff}\)</span></p></td>
 <td><p>fraction washed off by surface runoff (-)</p></td>
@@ -624,7 +622,7 @@ k_{paved} M\]</div>
 </ul>
 </section>
 <section id="unpaved-surfaces">
-<h4>Unpaved surfaces<a class="headerlink" href="#unpaved-surfaces" title="Permalink to this headline">¶</a></h4>
+<h4>Unpaved surfaces<a class="headerlink" href="#unpaved-surfaces" title="Permalink to this heading">¶</a></h4>
 <p>The figure below presents a schematic overview of the simulated pathways for unpaved areas.
 The unpaved pool is undergoing burial and decay.
 Both processes remove substances from the simulation.
@@ -671,10 +669,6 @@ Kd_{unpaved} * \left( \frac{M}{\Delta t} + L - F_{loss} \right)\]</div>
 <span class="eqno">(14)<a class="headerlink" href="#equation-eq-unpaved10" title="Permalink to this equation">¶</a></span>\[F_{runoff} = F_{dis} * f_{mob} * f_{runoff}\]</div>
 <p>where</p>
 <table class="table">
-<colgroup>
-<col style="width: 31%" />
-<col style="width: 69%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(f_{erosion}\)</span></p></td>
 <td><p>fraction eroded by surface runoff (-)</p></td>
@@ -742,7 +736,7 @@ Kd_{unpaved} * \left( \frac{M}{\Delta t} + L - F_{loss} \right)\]</div>
 The infiltrating fraction is routed to the <em>Soi</em> compartment.</p>
 </section>
 <section id="combined-sewer-systems">
-<h4>Combined sewer systems<a class="headerlink" href="#combined-sewer-systems" title="Permalink to this headline">¶</a></h4>
+<h4>Combined sewer systems<a class="headerlink" href="#combined-sewer-systems" title="Permalink to this heading">¶</a></h4>
 <p>A flux from the Sew to surface water is defined that corresponds to leakages and combined sewer overflows (CSO’s).
 This is controlled by the parameter <em>SewLeakage</em>.
 If this parameter is a positive number, it represents a constant leakage fraction.
@@ -755,7 +749,7 @@ The fate of the substances in the influent is fixed by the parameters specifying
 These two parameters implicitly determine the removal by wastewater treatment (<em>1 - Eff_WWTP-Sld_WWTP</em>).</p>
 </section>
 <section id="separated-sewer-systems">
-<h4>Separated sewer systems<a class="headerlink" href="#separated-sewer-systems" title="Permalink to this headline">¶</a></h4>
+<h4>Separated sewer systems<a class="headerlink" href="#separated-sewer-systems" title="Permalink to this heading">¶</a></h4>
 <p>The parameters <em>LocSTW</em> and <em>RecSTW</em> allow a man-induced horizontal displacement of the collected water in the <em>Sew</em> and <em>Stw</em> compartments respectively.
 This is only relevant in small scale applications, e.g. in cities.</p>
 <p>The substances remaining in <em>Stw</em> can partly be retained.
@@ -764,13 +758,13 @@ These two parameters implicitly determine the retention (<em>1 - Eff_RS-Sld_RS</
 </section>
 </section>
 <section id="input">
-<h3>Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h3>
-<table class="colwidths-given table">
+<h3>Input<a class="headerlink" href="#input" title="Permalink to this heading">¶</a></h3>
+<table class="table">
 <colgroup>
-<col style="width: 18%" />
-<col style="width: 45%" />
-<col style="width: 18%" />
-<col style="width: 18%" />
+<col style="width: 18.2%" />
+<col style="width: 45.5%" />
+<col style="width: 18.2%" />
+<col style="width: 18.2%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name in model</p></th>
@@ -988,26 +982,26 @@ These two parameters implicitly determine the retention (<em>1 - Eff_RS-Sld_RS</
 </div>
 </section>
 <section id="output">
-<h3>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
+<h3>Output<a class="headerlink" href="#output" title="Permalink to this heading">¶</a></h3>
 <p>The simulated emissions to surface waters (<em>Emis_Sfw</em>; g/s) and to soils (<em>Emis_Soi</em>; g/s) are available for output.</p>
 </section>
 </section>
 <section id="waste-water-management-supportive-process-genwwman">
-<span id="genwwman"></span><h2>Waste water management supportive process (GenWWman)<a class="headerlink" href="#waste-water-management-supportive-process-genwwman" title="Permalink to this headline">¶</a></h2>
+<span id="genwwman"></span><h2>Waste water management supportive process (GenWWman)<a class="headerlink" href="#waste-water-management-supportive-process-genwwman" title="Permalink to this heading">¶</a></h2>
 <section id="id1">
-<h3>Introduction<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3>Introduction<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
 <p>This process supports the emission modelling as discussed in <a class="reference internal" href="#em-gss"><span class="std std-ref">EM_GSS</span></a> by providing the allocation of the substances released to wastewater to the receiving compartments (<em>WWtoSew</em>, etc.)
 and by providing the WWTP treatment parameters (<em>Eff_WWTP</em>, <em>Sld_WWTP</em>) as a spatially variable mix of up to three available treatment levels.</p>
 </section>
 <section id="id2">
-<h3>Implementation<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<h3>Implementation<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
 <p>The process is implemented for the compartments listed in Table <a class="reference internal" href="#em-compartments"><span class="std std-ref">EM compartments</span></a>.
 The local treatment capacity can be specified for up to three levels of treatment, each with different properties.</p>
 </section>
 <section id="id3">
-<h3>Formulation<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<h3>Formulation<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
 <section id="allocation-of-wastewater-to-receiving-compartments">
-<h4>Allocation of wastewater to receiving compartments<a class="headerlink" href="#allocation-of-wastewater-to-receiving-compartments" title="Permalink to this headline">¶</a></h4>
+<h4>Allocation of wastewater to receiving compartments<a class="headerlink" href="#allocation-of-wastewater-to-receiving-compartments" title="Permalink to this heading">¶</a></h4>
 <p>Wastewater is either collected in a sewer system (<em>FrSewered</em>), or in septic tanks (<em>FrSeptic</em>) or remains unmanaged (<em>1 - FrSewered - FrSeptic</em>).</p>
 <p>For the fraction collected in septic tanks, a loss to surface waters (<em>Eff_Septic</em>) and to soils (<em>Sld_Septic</em>) can be defined. The remaining part is assumed transported to treatment plants by other means than sewer systems.</p>
 <p>From the unmanaged wastewater, a fraction <em>fOpenWater</em> is allocated to surface waters, the remainder to soils.</p>
@@ -1020,7 +1014,7 @@ The local treatment capacity can be specified for up to three levels of treatmen
 <span class="eqno">(17)<a class="headerlink" href="#equation-eq-wwman3" title="Permalink to this equation">¶</a></span>\[WWtoSoi = FrUnManaged*(1-fOpenWater) + FrSeptic*Sld_Septic\]</div>
 </section>
 <section id="fate-of-substances-reaching-wwtps">
-<h4>Fate of substances reaching WWTPs<a class="headerlink" href="#fate-of-substances-reaching-wwtps" title="Permalink to this headline">¶</a></h4>
+<h4>Fate of substances reaching WWTPs<a class="headerlink" href="#fate-of-substances-reaching-wwtps" title="Permalink to this heading">¶</a></h4>
 <p>The fraction of wastewater treated at three individual levels can be indicated. The remainder is assumed untreated:</p>
 <div class="math notranslate nohighlight" id="equation-eq-wwman4">
 <span class="eqno">(18)<a class="headerlink" href="#equation-eq-wwman4" title="Permalink to this equation">¶</a></span>\[FrUnTreated = 1 - FrTreat1 - FrTreat2 - FrTreat3\]</div>
@@ -1045,13 +1039,13 @@ The remaining part is routed to soils in the main emission modelling process.</p
 </section>
 </section>
 <section id="id4">
-<h3>Input<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<table class="colwidths-given table">
+<h3>Input<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<table class="table">
 <colgroup>
-<col style="width: 20%" />
-<col style="width: 50%" />
-<col style="width: 10%" />
-<col style="width: 20%" />
+<col style="width: 20.0%" />
+<col style="width: 50.0%" />
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name in model</p></th>
@@ -1142,13 +1136,13 @@ The remaining part is routed to soils in the main emission modelling process.</p
 </div>
 </section>
 <section id="id5">
-<h3>Output<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<h3>Output<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
 <p>The supportive process produces the below output, that feeds directly into the main emission modelling process.</p>
-<table class="colwidths-given table">
+<table class="table">
 <colgroup>
-<col style="width: 14%" />
-<col style="width: 71%" />
-<col style="width: 14%" />
+<col style="width: 14.3%" />
+<col style="width: 71.4%" />
+<col style="width: 14.3%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name in model</p></th>
@@ -1223,7 +1217,7 @@ The remaining part is routed to soils in the main emission modelling process.</p
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
     </div>
     

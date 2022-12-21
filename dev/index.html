@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>HydroMT-delwaq: DELWAQ plugin for HydroMT &#8212; HydroMT delwaq  documentation</title>
     
@@ -25,7 +25,7 @@
     
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/pydata-sphinx-theme.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="_static/theme-deltares.css" />
     
     <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -33,7 +33,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/design-tabs.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -210,10 +212,10 @@
               <div>
                 
   <section id="hydromt-delwaq-delwaq-plugin-for-hydromt">
-<h1>HydroMT-delwaq: DELWAQ plugin for HydroMT<a class="headerlink" href="#hydromt-delwaq-delwaq-plugin-for-hydromt" title="Permalink to this headline">¶</a></h1>
+<h1>HydroMT-delwaq: DELWAQ plugin for HydroMT<a class="headerlink" href="#hydromt-delwaq-delwaq-plugin-for-hydromt" title="Permalink to this heading">¶</a></h1>
 <p><a class="reference external" href="https://pypi.org/project/hydromt_delwaq/"><img alt="Latest PyPI version" src="https://badge.fury.io/py/hydromt_delwaq.svg" /></a> <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest"><img alt="Latest developers docs" src="https://img.shields.io/badge/docs-latest-brightgreen.svg" /></a> <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/stable"><img alt="Stable docs last release" src="https://img.shields.io/badge/docs-stable-brightgreen.svg" /></a> <a class="reference external" href="https://codecov.io/gh/Deltares/hydromt_delwaq"><img alt="codecov" src="https://codecov.io/gh/Deltares/hydromt_delwaq/branch/main/graph/badge.svg?token=ss3EgmwHhH" /></a> <a class="reference external" href="https://github.com/Deltares/hydromt_delwaq/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/Deltares/hydromt_delwaq?style=flat" /></a> <a class="reference external" href="https://mybinder.org/v2/gh/Deltares/hydromt_delwaq/main?urlpath=lab/tree/examples"><img alt="binder" src="https://mybinder.org/badge_logo.svg" /></a></p>
 <section id="what-is-hydromt-delwaq">
-<h2>What is HydroMT-delwaq?<a class="headerlink" href="#what-is-hydromt-delwaq" title="Permalink to this headline">¶</a></h2>
+<h2>What is HydroMT-delwaq?<a class="headerlink" href="#what-is-hydromt-delwaq" title="Permalink to this heading">¶</a></h2>
 <p>HydroMT-delwaq is a plugin of the <a class="reference external" href="https://deltares.github.io/hydromt/latest/index.html#">HydroMT core</a>, a python package, developed by Deltares, to build
 and analyse environmental models. This plugin provides an implementation for the <a class="reference external" href="https://www.deltares.nl/en/software/module/d-water-quality/">DELWAQ</a> water quality engine.
 It details the different steps and explains how to use HydroMT to easily get started and work on your own DELWAQ model. WIth this plugin
@@ -237,7 +239,7 @@ between <a class="reference external" href="coupling_wflow">Wflow and DELWAQ</a>
 </ul>
 </section>
 <section id="why-hydromt-delwaq">
-<h2>Why HydroMT-delwaq?<a class="headerlink" href="#why-hydromt-delwaq" title="Permalink to this headline">¶</a></h2>
+<h2>Why HydroMT-delwaq?<a class="headerlink" href="#why-hydromt-delwaq" title="Permalink to this heading">¶</a></h2>
 <p>Setting up spatial geoscientific models typically requires many (manual) steps
 to process input data and might therefore be time consuming and hard to reproduce.
 Like the other HydroMT model plugins, this package aims to make the model building process <strong>fast</strong>, <strong>modular</strong> and <strong>reproducible</strong>
@@ -245,16 +247,16 @@ by configuring the model building process from a single <em>ini</em> configurati
 and <strong>model- and data-agnostic</strong> through a common model and data interface.</p>
 </section>
 <section id="how-to-use-hydromt-delwaq">
-<h2>How to use HydroMT-delwaq?<a class="headerlink" href="#how-to-use-hydromt-delwaq" title="Permalink to this headline">¶</a></h2>
+<h2>How to use HydroMT-delwaq?<a class="headerlink" href="#how-to-use-hydromt-delwaq" title="Permalink to this heading">¶</a></h2>
 <p>HydroMT-delwaq can be used as a <strong>command line</strong> application, which provides commands to <em>build</em>,
 and <em>update</em> DELWAQ model with a single line, in combination with the HydroMT core’s rich data processing capabilities.</p>
 </section>
 <section id="how-to-cite">
-<h2>How to cite?<a class="headerlink" href="#how-to-cite" title="Permalink to this headline">¶</a></h2>
+<h2>How to cite?<a class="headerlink" href="#how-to-cite" title="Permalink to this heading">¶</a></h2>
 <p>For publications, please cite our work using the DOI provided in the Zenodo badge <a class="reference external" href="https://zenodo.org/badge/latestdoi/348020332"><img alt="Zenodo" src="https://zenodo.org/badge/348020332.svg" /></a> that points to the latest release.</p>
 </section>
 <section id="how-to-contribe">
-<h2>How to contribe?<a class="headerlink" href="#how-to-contribe" title="Permalink to this headline">¶</a></h2>
+<h2>How to contribe?<a class="headerlink" href="#how-to-contribe" title="Permalink to this heading">¶</a></h2>
 <p>You can find information about contributing to HydroMT at our <a class="reference external" href="https://deltares.github.io/hydromt/latest/dev/contributing">Contributing page</a>.</p>
 <img alt="_images/D-emissions.png" src="_images/D-emissions.png" />
 <div class="toctree-wrapper compound">
@@ -295,7 +297,7 @@ and <em>update</em> DELWAQ model with a single line, in combination with the Hyd
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
     </div>
     
