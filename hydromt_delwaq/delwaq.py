@@ -730,9 +730,10 @@ class DelwaqModel(Model):
             Name of the column from the vector file to rasterize.
             Can be left empty if the selected method is set to "fraction".
         rasterize_method : str
-            Method to rasterize the vector data. Either {"value", "fraction"}.
+            Method to rasterize the vector data. Either {"value", "fraction", "area"}.
             If "value", the value from the col2raster is used directly in the raster.
             If "fraction", the fraction of the grid cell covered by the vector file is returned.
+            If "area", the area of the grid cell covered by the vector file is returned.
         """
         if emission_fn is None:
             self.logger.warning(

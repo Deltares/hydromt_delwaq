@@ -14,6 +14,11 @@ Added
 - New setup_sediment_forcing method to add eroded soil particles emissions as input to the river in the WQ component. 
   Different particles size can be taken into account.
 
+Changed
+^^^^^^^
+
+- Faster method for fraction calculation in setup_emission_vector
+
 Fixed
 ^^^^^
 
