@@ -5,8 +5,10 @@ All notable changes to this project will be documented in this page.
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
-[Unreleased]
-------------
+v0.2.0 (21 December 2022)
+-------------------------
+We now use rioxarray to read raster data. We recommend reinstalling your hydromt and hydromt_delwaq environment including the rioxarray package.
+Following an update in xarray, hydromt version should be >= 0.5.0.
 
 Added
 ^^^^^
@@ -18,6 +20,7 @@ Changed
 ^^^^^^^
 
 - Faster method for fraction calculation in setup_emission_vector
+- New area method for setup_emission_vector
 
 Fixed
 ^^^^^
