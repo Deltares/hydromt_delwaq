@@ -6,6 +6,7 @@ import warnings
 import pdb
 import numpy as np
 from hydromt_delwaq.delwaq import DelwaqModel
+import hydromt
 
 import logging
 
@@ -21,11 +22,23 @@ def test_setup_staticmaps():
     # Initialize model and read results
     mod = DelwaqModel(root=root, mode="r", data_libs="artifact_data", logger=logger)
 
-    # Tests on setup_staticmaps_from_raster
+    # Tests on setup_emission_vector
     mod.setup_emission_vector(
         emission_fn="hydro_lakes",
         rasterize_method="fraction",
     )
 
     assert "hydro_lakes" in mod.staticmaps
-    assert np.round(mod.staticmaps["hydro_lakes"].values.max(), 4) == 0.8608
+    assert np.round(mod.staticmaps["hydro_lakes"].values.max(), 4) == 0.8609
+
+    mod.setup_emission_vector(
+        emission_fn="hydro_reservoirs",
+        rasterize_method="area",
+    )
+
+    gdf_grid = mod.staticmaps.raster.vector_grid()
+    crs_utm = hydromt.gis_utils.parse_crs("utm", gdf_grid.to_crs(4326).total_bounds)
+    gdf_grid = gdf_grid.to_crs(crs_utm)
+
+    assert "hydro_reservoirs" in mod.staticmaps
+    assert mod.staticmaps["hydro_reservoirs"].values.max() <= gdf_grid.area.max()

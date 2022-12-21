@@ -128,7 +128,7 @@ def emission_vector(
         GeoDataFrame containing emission data.
     ds_like : xarray.DataArray
         Dataset at model resolution.
-    method : str {'value', 'fraction'}
+    method : str {'value', 'fraction', 'area'}
         Method for rasterizing.
     mask_name : str
         Name of a basin mask array in ds_like.
@@ -147,7 +147,7 @@ def emission_vector(
             dtype=None,
             sindex=False,
         )
-    elif method == "fraction":
+    elif method == "fraction" or method == "area":
         # Create vector grid (for calculating fraction and storage per grid cell)
         logger.debug(
             "Creating vector grid for calculating coverage fraction per grid cell"
@@ -161,8 +161,16 @@ def emission_vector(
         gdf = gdf.to_crs(gdf_grid.crs)
         gdf_intersect = gdf.overlay(gdf_grid, how="intersection")
 
+        # find the best UTM CRS for area computation
+        if gdf_intersect.crs.is_geographic:
+            crs_utm = gis_utils.parse_crs(
+                "utm", gdf_intersect.to_crs(4326).total_bounds
+            )
+        else:
+            crs_utm = gdf_intersect.crs
+
         # compute area using same crs for frac
-        gdf_intersect = gdf_intersect.to_crs(3857)
+        gdf_intersect = gdf_intersect.to_crs(crs_utm)
         gdf_intersect["area"] = gdf_intersect.area
         # convert to point (easier for stats)
         gdf_intersect["geometry"] = gdf_intersect.representative_point()
@@ -176,14 +184,18 @@ def emission_vector(
             merge_alg=MergeAlg.add,
         )
 
-        # Convert to frac using gdf grid in same crs (area error when using ds_like.raster.area_grid)
-        gdf_grid = gdf_grid.to_crs(3857)
-        gdf_grid["area"] = gdf_grid.area
-        da_gridarea = ds_like.raster.rasterize(
-            gdf_grid, col_name="area", nodata=0, all_touched=False
-        )
+        if method == "area":
+            da_out = da_area
+        else:  # fraction
+            # Convert to frac using gdf grid in same crs (area error when using ds_like.raster.area_grid)
+            gdf_grid = gdf_grid.to_crs(crs_utm)
+            gdf_grid["area"] = gdf_grid.area
+            da_gridarea = ds_like.raster.rasterize(
+                gdf_grid, col_name="area", nodata=0, all_touched=False
+            )
 
-        da_out = da_area / da_gridarea
+            da_out = da_area / da_gridarea
+
         da_out.raster.set_crs(ds_like.raster.crs)
         da_out = da_out.where(msktn != msktn.raster.nodata, -999)
         da_out.raster.set_nodata(-999)
