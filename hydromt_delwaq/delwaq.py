@@ -6,7 +6,6 @@ import glob
 import numpy as np
 import pandas as pd
 import xarray as xr
-import geopandas as gpd
 import pyproj
 import logging
 import struct

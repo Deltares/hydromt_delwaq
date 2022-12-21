@@ -1,5 +1,5 @@
 [build-system]
-requires = ["flit_core >=3.2.0,<3.3"]
+requires = ["flit_core >=3.4.0,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
@@ -9,8 +9,21 @@ authors = [
     {name = "Sibren Loos", email = "sibren.loos@deltares.nl"},
 ]
 dependencies = [
-    "hydromt",
-    "hydromt_wflow"
+    "hydromt >=0.5.0",
+    "hydromt_wflow >=0.2.0",
+    "dask",
+    "geopandas >=0.10.0",
+    "netcdf4",
+    "numpy",
+    "pandas",
+    "pyflwdir>=0.5.6",
+    "pygeos",
+    "pyproj",
+    "rasterio",
+    "rioxarray",
+    "scipy",
+    "shapely",
+    "xarray",
 ]
 requires-python = ">=3.8" # fix tests to support older versions
 readme = "README.rst"
@@ -27,20 +40,20 @@ dynamic = ['version', 'description']
 
 [project.optional-dependencies]
 test = [
-	"testpath",
-	"responses",
 	"pytest>=2.7.3",
 	"pytest-cov",
 	"black",
 ]
 doc = [
+    "nbsphinx",
     "sphinx",
     "sphinx_design",
     "pydata-sphinx-theme",
+    "sphinx_autosummary_accessors",
 ]
 
 [project.urls]
-Documentation = "https://deltares.github.io/hydromt_delwaq/"
+Documentation = "https://deltares.github.io/hydromt_delwaq/latest/"
 Source = "https://github.com/Deltares/hydromt_delwaq"
 
 [project.entry-points."hydromt.models"]
@@ -49,6 +62,10 @@ delwaq = "hydromt_delwaq.delwaq:DelwaqModel"
 [tool.black]
 line-length = 88
 target-version = ['py38']
+
+[tool.flit.sdist]
+include = ["hydromt_delwaq"]
+exclude = ["docs", "examples", "envs", "tests", ".github"]
 
 [tool.pytest.ini_options]
 filterwarnings = [
