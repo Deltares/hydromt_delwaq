@@ -211,10 +211,18 @@ def pointer(
 
     Returns
     -------
-    da_out : xarray.DataArray
-        DataArray containing the Delwaq segment IDs.
     nrofseg : int
         Number of segments.
+    da_ptid : xarray.DataArray
+        DataArray containing the Delwaq segment IDs.
+    da_ptiddown : xarray.DataArray
+        DataArray containing the Delwaq downstream segment IDs.
+    pointer: numpy.ndarray, optional
+        Delwaq pointer array (4 columns) for exchanges.
+    bd_id: numpy.array, optional
+        Array with Delwaq boundary IDs.
+    bd_type: numpy.array, optional
+        Array ith Delwaq boundary names.
     """
     if compartments is None:
         ncomp = 1
@@ -253,6 +261,41 @@ def pointer(
     nb_cell = nrofseg  # len(ptid)
     nrofseg = nrofseg * ncomp
 
+    ### Downstream IDs ###
+    # Start with searching for the ID of the downstream cells for lateral fluxes
+    flwdir = flw.flwdir_from_da(ds_hydro["ldd"], ftype="infer", mask=None)
+    # Boundaries
+    bd_id = []
+    bd_type = []
+    # Keep track of the lowest boundary id value
+    lowerid = 0
+
+    da_tot = []
+    np_ldd = ds_hydro["ldd"].values
+    nb_out = len(np_ldd[np_ldd == 5])
+    for i in range(1, ncomp + 1):
+        comp_label = compartments[i - 1]
+        ptiddown = flwdir.downstream(da_ptid.sel(comp=i)).astype(np.int32)
+        # Outlets are boundaries and ptiddown should be negative
+        outid = np.arange((-lowerid) + 1, (-lowerid) + nb_out + 1) * -1
+        ptiddown[np_ldd == 5] = outid
+        lowerid = outid[-1]
+        bd_id = np.append(bd_id, (outid * (-1)))
+        bd_type = np.append(bd_type, [f"{comp_label}>out{id}" for id in bd_id])
+        # Add ptiddown to xarray
+        da_ptiddown = xr.DataArray(
+            data=ptiddown,
+            coords=ds_hydro.raster.coords,
+            dims=ds_hydro.raster.dims,
+            attrs=dict(_FillValue=ptid_mv),
+        )
+        da_tot.append(da_ptiddown)
+    da_ptiddown = xr.concat(
+        da_tot,
+        pd.Index(np.arange(1, ncomp + 1, dtype=int), name="comp"),
+    ).transpose("comp", ...)
+    da_ptiddown.assign_coords(comp_labels=("comp", np.array(compartments)))
+
     # Build pointer
     if build_pointer:
         nbound = len(boundaries)
@@ -260,42 +303,6 @@ def pointer(
         logger.info(
             f"Preparing pointer with {ncomp} compartments, {nbound} boundaries and {nflux} fluxes."
         )
-
-        ### Downstream IDs ###
-        # Start with searching for the ID of the downstream cells for lateral fluxes
-        flwdir = flw.flwdir_from_da(ds_hydro["ldd"], ftype="infer", mask=None)
-        # Boundaries
-        bd_id = []
-        bd_type = []
-        # Keep track of the lowest boundary id value
-        lowerid = 0
-
-        da_tot = []
-        np_ldd = ds_hydro["ldd"].values
-        nb_out = len(np_ldd[np_ldd == 5])
-        for i in range(1, ncomp + 1):
-            comp_label = compartments[i - 1]
-            ptiddown = flwdir.downstream(da_ptid.sel(comp=i)).astype(np.int32)
-            # Outlets are boundaries and ptiddown should be negative
-            outid = np.arange((-lowerid) + 1, (-lowerid) + nb_out + 1) * -1
-            ptiddown[np_ldd == 5] = outid
-            lowerid = outid[-1]
-            bd_id = np.append(bd_id, (outid * (-1)))
-            bd_type = np.append(bd_type, [f"{comp_label}>out{id}" for id in bd_id])
-            # Add ptiddown to xarray
-            da_ptiddown = xr.DataArray(
-                data=ptiddown,
-                coords=ds_hydro.raster.coords,
-                dims=ds_hydro.raster.dims,
-                attrs=dict(_FillValue=ptid_mv),
-            )
-            da_tot.append(da_ptiddown)
-        da_ptiddown = xr.concat(
-            da_tot,
-            pd.Index(np.arange(1, ncomp + 1, dtype=int), name="comp"),
-        ).transpose("comp", ...)
-        da_ptiddown.assign_coords(comp_labels=("comp", np.array(compartments)))
-
         ### Add fluxes ###
         zeros = np.zeros((nb_cell, 1))
         pointer = None
@@ -357,7 +364,7 @@ def pointer(
 
         return nrofseg, da_ptid, da_ptiddown, pointer, bd_id, bd_type
     else:
-        return nrofseg, da_ptid
+        return nrofseg, da_ptid, da_ptiddown
 
 
 def extend_comp_with_zeros(ds1c: xr.Dataset, comp_ds1c: str, compartments: list):

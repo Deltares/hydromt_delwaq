@@ -12,6 +12,7 @@ import logging
 import struct
 from datetime import datetime
 import time as t
+from typing import List
 
 import hydromt
 from hydromt.models.model_api import Model
@@ -129,11 +130,14 @@ class DemissionModel(DelwaqModel):
         self.set_hydromaps(ds_hydro.rename(rmdict))
         self._hydromaps.coords["mask"] = ds_hydro["basmsk"]
 
-        # Build segment ID and add to hydromaps
-        nrofseg, da_ptid = segments.pointer(self.hydromaps, build_pointer=False)
+        # Build segment ID and segment ID down and add to hydromaps
+        nrofseg, da_ptid, da_ptiddown = segments.pointer(
+            self.hydromaps, build_pointer=False
+        )
         self.set_hydromaps(da_ptid, name="ptid")
+        self.set_hydromaps(da_ptiddown, name="ptiddown")
 
-        ### Initialise staticmaps with streamorder, river and slope ###
+        ### Initialise staticmaps with segment ID down, streamorder, river and slope ###
         ds_stat = (
             hydromodel.staticmaps[hydromodel._MAPS["strord"]]
             .rename("streamorder")
@@ -141,6 +145,7 @@ class DemissionModel(DelwaqModel):
         )
         ds_stat["slope"] = hydromodel.staticmaps[hydromodel._MAPS["lndslp"]]
         ds_stat["river"] = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
+        ds_stat["ptiddown"] = self.hydromaps["ptiddown"]
         self.set_staticmaps(ds_stat)
         self.staticmaps.coords["mask"] = self.hydromaps["modelmap"]
 
@@ -217,7 +222,6 @@ class DemissionModel(DelwaqModel):
         fillna_method: str = "zero",
         fillna_value: int = 0.0,
         area_division: bool = False,
-        comp_emi: str = "sfw",
     ):
         """Setup one or several emission map from raster data.
 
@@ -261,7 +265,6 @@ class DemissionModel(DelwaqModel):
         emission_fn: str,
         col2raster: str = "",
         rasterize_method: str = "value",
-        comp_emi: str = "sfw",
     ):
         """Setup emission map from vector data.
 
@@ -308,7 +311,6 @@ class DemissionModel(DelwaqModel):
         self,
         region_fn,
         mapping_fn=None,
-        comp_emi="sfw",
     ):
         """This component derives several emission maps based on administrative
         boundaries.
@@ -513,10 +515,11 @@ class DemissionModel(DelwaqModel):
 
     def setup_hydrology_forcing(
         self,
-        hydro_forcing_fn,
-        starttime,
-        endtime,
-        timestepsecs,
+        hydro_forcing_fn: str,
+        starttime: str,
+        endtime: str,
+        timestepsecs: int,
+        include_transport: bool = False,
         **kwargs,
     ):
         """Setup Demission hydrological fluxes.
@@ -538,7 +541,7 @@ class DemissionModel(DelwaqModel):
         hydro_forcing_fn : {'None', 'name in local_sources.yml'}
             Either None, or name in a local or global data_sources.yml file.
 
-            * Required variables for EM: ['time', 'precip', 'infilt', 'runPav', 'runUnp']
+            * Required variables for EM: ['time', 'precip', 'runPav', 'runUnp', 'infilt', 'exfilt*', 'q_land', 'q_ss']
 
         startime : str
             Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
@@ -546,6 +549,9 @@ class DemissionModel(DelwaqModel):
             Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS
         timestepsecs : int
             Model timestep in seconds.
+        include_transport : bool, optional
+            If False (default), only use the vertical fluxes for emission [precip, runPav, runUnp, infilt, totflw].
+            If True, includes additional fluxes for land and subsurface trasnport [precip, runPav, runUnp, infilt, exfilt, q_land, q_ss].
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
@@ -558,20 +564,27 @@ class DemissionModel(DelwaqModel):
         # read dynamic data
         # TODO when forcing workflow is ready nice clipping/resampling can be added
         # Normally region extent is by default exactly the same as hydromodel
-        ds = self.data_catalog.get_rasterdataset(
+        ds_in = self.data_catalog.get_rasterdataset(
             hydro_forcing_fn,
             geom=self.region,
         )
         # Select variables based on model type
-        ds = ds[["precip", "runPav", "runUnp", "infilt"]]
-        # Add total flow
-        ds["totflw"] = ds["precip"].copy()
-
-        #        # Check if latitude is from south to north
-        #        ys = ds.raster.ycoords
-        #        resy = np.mean(np.diff(ys.values))
-        #        if resy >= 0:
-        #            ds = ds.reindex({ds.raster.y_dim: ds[ds.raster.y_dim][::-1]})
+        ds = ds_in[["precip", "runPav", "runUnp", "infilt"]]
+        if include_transport:
+            ds["q_land"] = ds_in["q_land"]
+            ds["q_ss"] = ds_in["q_ss"]
+            # Add exfiltration (can be split into several variables)
+            # Check if the flux is split into several variables
+            ex_vars = [v for v in ds_in.data_vars if v.startswith("exfilt")]
+            if len(ex_vars) > 1:  # need to sum
+                attrs = ds_in[ex_vars[0]].attrs.copy()
+                ds["exfilt"] = ds_in[ex_vars].fillna(0).to_array().sum("variable")
+                ds["exfilt"].attrs.update(attrs)
+            else:
+                ds["exfilt"] = ds_in["exfilt"]
+        else:
+            # Add total flow
+            ds["totflw"] = ds["precip"].copy()
 
         # align forcing file with hydromaps
         ds = ds.raster.reproject_like(self.hydromaps)
@@ -665,7 +678,7 @@ class DemissionModel(DelwaqModel):
         # Add var info to config
         lines_ini = {
             "l1": "SEG_FUNCTIONS",
-            "l2": "Rainfall RunoffPav RunoffUnp Infiltr TotalFlow ",
+            "l2": "Rainfall RunoffPav RunoffUnp Infiltr Exfiltr SurfaceFlow SubsurfaceFlow ",
         }
         for option in lines_ini:
             self.set_config("B7_hydrology", option, lines_ini[option])
@@ -787,7 +800,19 @@ class DemissionModel(DelwaqModel):
             )
             fname = join(self.root, "dynamicdata", "hydrology.bin")
             datablock = []
-            for dvar in ["precip", "runPav", "runUnp", "infilt", "totflw"]:
+            if "totflw" in ds_out.data_vars:
+                dvars = ["precip", "runPav", "runUnp", "infilt", "totflw"]
+            else:
+                dvars = [
+                    "precip",
+                    "runPav",
+                    "runUnp",
+                    "infilt",
+                    "exfilt",
+                    "q_land",
+                    "q_ss",
+                ]
+            for dvar in dvars:
                 nodata = ds_out[dvar].raster.nodata
                 data = ds_out[dvar].isel(time=i).values.flatten()
                 data = data[data != nodata]

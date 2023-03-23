@@ -254,6 +254,7 @@ def admin(da, ds_like, source_name, fn_map, logger=logger):
     params = [p for p in df.columns if p.startswith("EM_")]
     # setup ds out
     ds_out = xr.Dataset(coords=ds_like.raster.coords)
+
     # setup reclass method
     def reclass(x):
         return np.vectorize(d.get)(x, nodata)
