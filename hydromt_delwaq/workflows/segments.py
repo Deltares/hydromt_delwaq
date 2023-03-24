@@ -4,6 +4,7 @@ import numpy as np
 import xarray as xr
 import pandas as pd
 import logging
+from typing import List
 
 from hydromt import flw
 from hydromt.raster import full_like
@@ -49,6 +50,7 @@ def hydromaps(
         hydromodel.staticmaps[hydromodel._MAPS["flwdir"]].rename("flwdir").to_dataset()
     )
     ds_out["basins"] = hydromodel.staticmaps[hydromodel._MAPS["basins"]]
+    ds_out["rivmsk"] = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
     ds_out["rivlen"] = hydromodel.staticmaps[hydromodel._MAPS["rivlen"]]
     ds_out["rivwth"] = hydromodel.staticmaps[hydromodel._MAPS["rivwth"]]
     ds_out["elevtn"] = hydromodel.staticmaps[hydromodel._MAPS["elevtn"]]
@@ -184,11 +186,11 @@ def geometrymaps(
 
 
 def pointer(
-    ds_hydro,
-    build_pointer=False,
-    compartments=None,
-    boundaries=None,
-    fluxes=None,
+    ds_hydro: xr.Dataset,
+    build_pointer: bool = False,
+    compartments: List[str] = None,
+    boundaries: List[str] = None,
+    fluxes: List[str] = None,
     logger=logger,
 ):
     """Returns map with Delwaq segment ID. As well as the pointer matrix if ``build_pointer`` is True.
@@ -231,14 +233,14 @@ def pointer(
         ncomp = len(compartments)
     comp_ids = np.arange(1, ncomp + 1, dtype=int)
 
-    ptid_mv = ds_hydro["basins"].raster.nodata
-    np_ptid = ds_hydro["basins"].values.flatten()
+    ptid_mv = 0
+    np_ptid = ds_hydro["mask"].values.flatten().astype(np.int32)
     ptid = np_ptid[np_ptid != ptid_mv]
     ptid = np.arange(1, len(ptid) + 1)
     nrofseg = np.amax(ptid)
     np_ptid[np_ptid != ptid_mv] = ptid
     np_ptid = np_ptid.reshape(
-        np.size(ds_hydro["basins"], 0), np.size(ds_hydro["basins"], 1)
+        np.size(ds_hydro["mask"], 0), np.size(ds_hydro["mask"], 1)
     )
     da_ptid = xr.DataArray(
         data=np_ptid,
@@ -276,6 +278,8 @@ def pointer(
     for i in range(1, ncomp + 1):
         comp_label = compartments[i - 1]
         ptiddown = flwdir.downstream(da_ptid.sel(comp=i)).astype(np.int32)
+        # Remask cells draining to rivers
+        ptiddown[np_ptid == ptid_mv] = ptid_mv
         # Outlets are boundaries and ptiddown should be negative
         outid = np.arange((-lowerid) + 1, (-lowerid) + nb_out + 1) * -1
         ptiddown[np_ldd == 5] = outid

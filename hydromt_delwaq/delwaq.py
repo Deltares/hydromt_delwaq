@@ -53,6 +53,13 @@ class DelwaqModel(Model):
         "strord": "streamorder",
         "thetaS": "porosity",
     }
+    _FORCING = {
+        "temp": "tempair",
+        "temp_dew": "temp_dew",
+        "ssr": "radsw",
+        "wind": "vwind",
+        "tcc": "cloudfrac",
+    }
     _FOLDERS = [
         "hydromodel",
         "staticdata",
@@ -98,6 +105,7 @@ class DelwaqModel(Model):
     def setup_basemaps(
         self,
         region,
+        mask="basins",
         compartments=["sfw"],
         boundaries=["bd"],
         fluxes=["sfw>sfw", "bd>sfw"],
@@ -129,7 +137,9 @@ class DelwaqModel(Model):
         ----------
         region : dict
             Dictionary describing region of interest.
-            Currently supported format is {'wflow': 'path/to/wflow_model'}        
+            Currently supported format is {'wflow': 'path/to/wflow_model'}
+        mask : str, optional
+            Mask to use to define Delwaq segments. Either "basins" (default) or "rivers".        
         compartments : list of str, optional
             List of names of compartments to include. By default one for surface waters called 'sfw'.
         boundaries: list of str, optional
@@ -166,7 +176,12 @@ class DelwaqModel(Model):
         ds_hydro = segments.hydromaps(hydromodel)
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_hydro.data_vars}
         self.set_hydromaps(ds_hydro.rename(rmdict))
-        self._hydromaps.coords["mask"] = ds_hydro["basmsk"]
+        # Add mask
+        if mask == "rivers":
+            da_mask = ds_hydro["rivmsk"]
+        else:
+            da_mask = ds_hydro["basmsk"]
+        self._hydromaps.coords["mask"] = da_mask
 
         # Build segment ID and add to hydromaps
         # Prepare delwaq pointer file for WAQ simulation (not needed with EM)
@@ -197,7 +212,11 @@ class DelwaqModel(Model):
         self.set_staticmaps(ds_stat.rename(rmdict))
 
         ### Add geometry ###
-        ds_geom = segments.geometrymaps(hydromodel, compartments, comp_attributes)
+        ds_geom = segments.geometrymaps(
+            hydromodel,
+            compartments=compartments,
+            comp_attributes=comp_attributes,
+        )
         self.set_staticmaps(ds_geom)
 
         ### Config ###
@@ -413,15 +432,8 @@ class DelwaqModel(Model):
             f"Setting dynamic data from hydrology source {hydro_forcing_fn}."
         )
         # read dynamic data
-        # TODO when forcing workflow is ready nice clipping/resampling can be added
         # Normally region extent is by default exactly the same as hydromodel
         ds = self.data_catalog.get_rasterdataset(hydro_forcing_fn, geom=self.region)
-        #        # Check if latitude is from south to north
-        #        ys = ds.raster.ycoords
-        #        resy = np.mean(np.diff(ys.values))
-        #        if resy >= 0:
-        #            ds = ds.reindex({ds.raster.y_dim: ds[ds.raster.y_dim][::-1]})
-
         # align forcing file with hydromaps
         ds = ds.raster.reproject_like(self.hydromaps)
 
@@ -440,12 +452,25 @@ class DelwaqModel(Model):
         dsvar = [v for v in ds.data_vars if v.startswith(self.fluxes[0])][0]
         ds_out = hydromt.raster.full_like(ds[dsvar], lazy=True).to_dataset()
         ds_out = ds_out.sel(time=slice(starttime, endtime))
+        da_zeros = xr.DataArray(
+            data=np.zeros(np.shape(ds_out[dsvar])),
+            coords=ds_out.coords,
+            dims=ds_out.dims,
+            attrs=dict(_FillValue=-999.0, units="m3/s"),
+        )
 
         ### Fluxes ###
         for flux in self.fluxes:
             # Check if the flux is split into several variables
             fl_vars = [v for v in ds.data_vars if v.startswith(flux)]
-            attrs = ds[fl_vars[0]].attrs.copy()
+            if len(fl_vars) > 0:  # flux not in ds
+                attrs = ds[fl_vars[0]].attrs.copy()
+            else:
+                self.logger.warning(
+                    f"Flux {flux} not found in hydro_forcing_fn. Using zeros."
+                )
+                ds[flux] = da_zeros
+                attrs = da_zeros.attrs.copy()
             if len(fl_vars) > 1:  # need to sum
                 ds[flux] = ds[fl_vars].fillna(0).to_array().sum("variable")
             # Unit conversion (from mm to m3/s)
@@ -689,6 +714,7 @@ class DelwaqModel(Model):
             geom=self.region,
             variables=climate_vars,
             time_tuple=(starttime, endtime),
+            single_var_as_array=False,
         )
         dem_forcing = None
         if dem_forcing_fn != None:
@@ -771,6 +797,9 @@ class DelwaqModel(Model):
             ds1c=ds_out, comp_ds1c=comp_sfw, compartments=self.compartments
         )
 
+        # Rename and add to forcing
+        rmdict = {k: v for k, v in self._FORCING.items() if k in ds_out.data_vars}
+        ds_out = ds_out.rename(rmdict)
         self.set_forcing(ds_out)
 
         lines_ini = {
@@ -1014,6 +1043,11 @@ class DelwaqModel(Model):
         fname = join(self.root, "staticdata", "staticmaps.nc")
         # Update attributes for gdal compliance
         # ds_out = ds_out.raster.gdal_compliant(rename_dims=False)
+        # Mask variables
+        for dvar in ds_out.data_vars:
+            ds_out[dvar] = ds_out[dvar].where(
+                ds_out["mask"], ds_out[dvar].raster.nodata
+            )
         ds_out.to_netcdf(path=fname)
 
         # Binary format

@@ -47,8 +47,13 @@ class DemissionModel(DelwaqModel):
     _CF = dict()  # configreader kwargs
     _GEOMS = {}
     _MAPS = {
-        "flwdir": "ldd",
         "basmsk": "modelmap",
+        "flwdir": "ldd",
+        "lndslp": "slope",
+        "N": "manning",
+        "rivmsk": "river",
+        "strord": "streamorder",
+        "thetaS": "porosity",
     }
     _FOLDERS = [
         "hydromodel",
@@ -84,6 +89,7 @@ class DemissionModel(DelwaqModel):
     def setup_basemaps(
         self,
         region,
+        maps=["rivmsk", "lndslp", "strord"],
     ):
         """
         Setup the demission model schematization using the hydromodel region and resolution.
@@ -107,6 +113,9 @@ class DemissionModel(DelwaqModel):
         region : dict
             Dictionary describing region of interest.
             Currently supported format is {'wflow': 'path/to/wflow_model'}
+        maps: list of str
+            List of variables from hydromodel to add to staticmaps.
+            By default ['rivmsk', 'lndslp', 'strord'].
         """
         # Initialise hydromodel from region
         kind, region = workflows.parse_region(region, logger=self.logger)
@@ -138,15 +147,13 @@ class DemissionModel(DelwaqModel):
         self.set_hydromaps(da_ptiddown, name="ptiddown")
 
         ### Initialise staticmaps with segment ID down, streamorder, river and slope ###
-        ds_stat = (
-            hydromodel.staticmaps[hydromodel._MAPS["strord"]]
-            .rename("streamorder")
-            .to_dataset()
+        ds_stat = segments.maps_from_hydromodel(
+            hydromodel, compartments=self.compartments, maps=maps
         )
-        ds_stat["slope"] = hydromodel.staticmaps[hydromodel._MAPS["lndslp"]]
-        ds_stat["river"] = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
-        ds_stat["ptiddown"] = self.hydromaps["ptiddown"]
-        self.set_staticmaps(ds_stat)
+        ds_stat["ptiddown"] = self.hydromaps["ptiddown"].squeeze(drop=True)
+
+        rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
+        self.set_staticmaps(ds_stat.rename(rmdict))
         self.staticmaps.coords["mask"] = self.hydromaps["modelmap"]
 
         ### Geometry data ###
@@ -678,7 +685,7 @@ class DemissionModel(DelwaqModel):
         # Add var info to config
         lines_ini = {
             "l1": "SEG_FUNCTIONS",
-            "l2": "Rainfall RunoffPav RunoffUnp Infiltr Exfiltr SurfaceFlow SubsurfaceFlow ",
+            "l2": "Rainfall RunoffPav RunoffUnp Infiltr Exfiltr Overland Subsurface ",
         }
         for option in lines_ini:
             self.set_config("B7_hydrology", option, lines_ini[option])
@@ -800,18 +807,11 @@ class DemissionModel(DelwaqModel):
             )
             fname = join(self.root, "dynamicdata", "hydrology.bin")
             datablock = []
+            dvars = ["precip", "runPav", "runUnp", "infilt"]
             if "totflw" in ds_out.data_vars:
-                dvars = ["precip", "runPav", "runUnp", "infilt", "totflw"]
+                dvars.extend(["totflw"])
             else:
-                dvars = [
-                    "precip",
-                    "runPav",
-                    "runUnp",
-                    "infilt",
-                    "exfilt",
-                    "q_land",
-                    "q_ss",
-                ]
+                dvars.extend(["exfilt", "q_land", "q_ss"])
             for dvar in dvars:
                 nodata = ds_out[dvar].raster.nodata
                 data = ds_out[dvar].isel(time=i).values.flatten()
@@ -820,6 +820,42 @@ class DemissionModel(DelwaqModel):
             self.dw_WriteSegmentOrExchangeData(
                 timestepstamp[i], fname, datablock, 1, WriteAscii=False
             )
+            # sediment
+            if "B7_sediment" in self.config:
+                sedname = join(self.root, "dynamicdata", "sediment.dat")
+                sed_vars = self.get_config("B7_sediment.l2").split(" ")
+                sedblock = []
+                for dvar in sed_vars:
+                    nodata = ds_out[dvar].raster.nodata
+                    data = (
+                        ds_out[dvar]
+                        .isel(time=i)
+                        .transpose("comp", ...)
+                        .values.flatten()
+                    )
+                    data = data[data != nodata]
+                    sedblock = np.append(sedblock, data)
+                self.dw_WriteSegmentOrExchangeData(
+                    timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
+                )
+            # climate
+            if "B7_climate" in self.config:
+                climname = join(self.root, "dynamicdata", "climate.dat")
+                clim_vars = self.get_config("B7_climate.l2").split(" ")
+                climblock = []
+                for dvar in clim_vars:
+                    nodata = ds_out[dvar].raster.nodata
+                    data = (
+                        ds_out[dvar]
+                        .isel(time=i)
+                        .transpose("comp", ...)
+                        .values.flatten()
+                    )
+                    data = data[data != nodata]
+                    climblock = np.append(climblock, data)
+                self.dw_WriteSegmentOrExchangeData(
+                    timestepstamp[i], climname, climblock, 1, WriteAscii=False
+                )
 
         # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
         self.logger.info("Writting waqgeom.nc file")
@@ -856,3 +892,7 @@ class DemissionModel(DelwaqModel):
             ncomp = 1
             self.set_pointer(ncomp, "nrofexch")
         return ncomp
+
+    @property
+    def compartments(self):
+        return ["em"]
