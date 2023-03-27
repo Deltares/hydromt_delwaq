@@ -61,7 +61,7 @@ def gridlength_gridwidth(ds):
         coords=ds.raster.coords,
         dims=ds.raster.dims,
     )
-    da_len.raster.set_nodata(0)
+    da_len.raster.set_nodata(-9999.0)
     da_len.raster.set_crs(ds.raster.crs)
     da_len.attrs.update(unit="m")
     da_width = xr.DataArray(
@@ -69,7 +69,7 @@ def gridlength_gridwidth(ds):
         coords=ds.raster.coords,
         dims=ds.raster.dims,
     )
-    da_width.raster.set_nodata(0)
+    da_width.raster.set_nodata(-9999.0)
     da_width.raster.set_crs(ds.raster.crs)
     da_width.attrs.update(unit="m")
 

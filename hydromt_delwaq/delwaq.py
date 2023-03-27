@@ -45,7 +45,7 @@ class DelwaqModel(Model):
     _CF = dict()  # configreader kwargs
     _GEOMS = {}
     _MAPS = {
-        "basmsk": "modelmap",
+        # "mask": "modelmap",
         "flwdir": "ldd",
         "lndslp": "slope",
         "N": "manning",
@@ -174,14 +174,18 @@ class DelwaqModel(Model):
         ### Select and build hydromaps from model ###
         # Initialise hydromaps
         ds_hydro = segments.hydromaps(hydromodel)
-        rmdict = {k: v for k, v in self._MAPS.items() if k in ds_hydro.data_vars}
-        self.set_hydromaps(ds_hydro.rename(rmdict))
         # Add mask
         if mask == "rivers":
             da_mask = ds_hydro["rivmsk"]
         else:
             da_mask = ds_hydro["basmsk"]
-        self._hydromaps.coords["mask"] = da_mask
+        ds_hydro = ds_hydro.drop_vars(["rivmsk", "basmsk"])
+        ds_hydro.coords["mask"] = da_mask
+        ds_hydro["modelmap"] = da_mask.astype(np.int32)
+        ds_hydro["modelmap"].raster.set_nodata(0)
+        # Add to hydromaps
+        rmdict = {k: v for k, v in self._MAPS.items() if k in ds_hydro.data_vars}
+        self.set_hydromaps(ds_hydro.rename(rmdict))
 
         # Build segment ID and add to hydromaps
         # Prepare delwaq pointer file for WAQ simulation (not needed with EM)
@@ -203,10 +207,8 @@ class DelwaqModel(Model):
 
         ### Initialise staticmaps with streamorder, river and slope ###
         ds_stat = segments.maps_from_hydromodel(hydromodel, compartments, maps=maps)
-        mask = segments.extend_comp_with_duplicates(
-            self.hydromaps["modelmap"].to_dataset(), compartments
-        )
-        ds_stat["mask"] = mask["modelmap"]
+        mask = segments.extend_comp_with_duplicates(da_mask.to_dataset(), compartments)
+        ds_stat["mask"] = mask[da_mask.name]
         ds_stat = ds_stat.set_coords("mask")
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
         self.set_staticmaps(ds_stat.rename(rmdict))
@@ -334,7 +336,7 @@ class DelwaqModel(Model):
                 nb_areas = self.nrofcomp
                 for i in np.arange(1, self.nrofcomp + 1):
                     monareas_tot.append(
-                        xr.where(self.hydromaps["modelmap"], i, mv).astype(np.int32)
+                        xr.where(self.hydromaps["mask"], i, mv).astype(np.int32)
                     )
             else:  # subcatch
                 # Number or monitoring areas
@@ -523,7 +525,7 @@ class DelwaqModel(Model):
         ds_out.coords["mask"] = xr.DataArray(
             dims=ds_out.raster.dims,
             coords=ds_out.raster.coords,
-            data=self.hydromaps["modelmap"].values,
+            data=self.hydromaps["mask"].values,
             attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
         )
 
@@ -634,7 +636,7 @@ class DelwaqModel(Model):
         ds.coords["mask"] = xr.DataArray(
             dims=ds.raster.dims,
             coords=ds.raster.coords,
-            data=self.hydromaps["modelmap"].values,
+            data=self.hydromaps["mask"].values,
             attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
         )
         # Add _FillValue to the data attributes
@@ -708,7 +710,6 @@ class DelwaqModel(Model):
         mask = self.hydromaps["modelmap"].values > 0
 
         # read dynamic data
-
         ds = self.data_catalog.get_rasterdataset(
             climate_fn,
             geom=self.region,
@@ -777,7 +778,7 @@ class DelwaqModel(Model):
         ds_out.coords["mask"] = xr.DataArray(
             dims=ds_out.raster.dims,
             coords=ds_out.raster.coords,
-            data=self.hydromaps["modelmap"].values,
+            data=self.hydromaps["mask"].values,
             attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
         )
         # Add _FillValue to the data attributes
@@ -1043,11 +1044,6 @@ class DelwaqModel(Model):
         fname = join(self.root, "staticdata", "staticmaps.nc")
         # Update attributes for gdal compliance
         # ds_out = ds_out.raster.gdal_compliant(rename_dims=False)
-        # Mask variables
-        for dvar in ds_out.data_vars:
-            ds_out[dvar] = ds_out[dvar].where(
-                ds_out["mask"], ds_out[dvar].raster.nodata
-            )
         ds_out.to_netcdf(path=fname)
 
         # Binary format
@@ -1055,8 +1051,8 @@ class DelwaqModel(Model):
             if dvar != "monpoints" and dvar != "monareas":
                 fname = join(self.root, "staticdata", dvar + ".dat")
                 data = ds_out[dvar].values.flatten()
-                mask = ds_out["mask"].values.flatten()
-                data = data[mask]
+                nodata = ds_out[dvar].raster.nodata
+                data = data[data != nodata]
                 self.dw_WriteSegmentOrExchangeData(
                     0, fname, data, 1, WriteAscii=False, mode="w"
                 )
@@ -1114,8 +1110,7 @@ class DelwaqModel(Model):
             self._hydromaps = io.open_mfraster(fns, **kwargs)
         if self._hydromaps.raster.crs is None and crs is not None:
             self.set_crs(crs)
-        self._hydromaps["modelmap"] = self._hydromaps["modelmap"].astype(bool)
-        self._hydromaps.coords["mask"] = self._hydromaps["modelmap"]
+        self._hydromaps.coords["mask"] = self._hydromaps["modelmap"].astype(bool)
 
     def write_hydromaps(self):
         """Write hydromaps at <root/hydromodel> in PCRaster maps format."""
@@ -1203,7 +1198,7 @@ class DelwaqModel(Model):
         for dvar in ds_out.data_vars:
             # nodata = ds_out[dvar].raster.nodata
             # Change the novalue outside of mask for julia compatibilty
-            ds_out[dvar] = xr.where(ds_out["mask"], ds_out[dvar], -9999.0)
+            ds_out[dvar] = ds_out[dvar].where(ds_out["mask"], -9999.0)
             ds_out[dvar].attrs.update(_FillValue=-9999.0)
 
         self.logger.info("Writing dynamicmap files.")

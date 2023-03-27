@@ -35,6 +35,7 @@ def hydromaps(
     - basins
     - basmsk
     - elevtn
+    - rivmsk
     
     Parameters
     ----------
@@ -50,7 +51,7 @@ def hydromaps(
         hydromodel.staticmaps[hydromodel._MAPS["flwdir"]].rename("flwdir").to_dataset()
     )
     ds_out["basins"] = hydromodel.staticmaps[hydromodel._MAPS["basins"]]
-    ds_out["rivmsk"] = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
+    ds_out["river"] = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
     ds_out["rivlen"] = hydromodel.staticmaps[hydromodel._MAPS["rivlen"]]
     ds_out["rivwth"] = hydromodel.staticmaps[hydromodel._MAPS["rivwth"]]
     ds_out["elevtn"] = hydromodel.staticmaps[hydromodel._MAPS["elevtn"]]
@@ -59,7 +60,13 @@ def hydromaps(
     ds_out["basmsk"] = xr.Variable(
         dims=ds_out.raster.dims,
         data=(ds_out["basins"] != basins_mv),
-        attrs=dict(_FillValue=0),
+        attrs=dict(_FillValue=False),
+    )
+    river_mv = ds_out["river"].raster.nodata
+    ds_out["rivmsk"] = xr.Variable(
+        dims=ds_out.raster.dims,
+        data=(ds_out["river"] != river_mv),
+        attrs=dict(_FillValue=False),
     )
 
     return ds_out
@@ -140,7 +147,7 @@ def geometrymaps(
     """
     ### Geometry data ###
     surface = emissions.gridarea(hydromodel.staticmaps)
-    surface.raster.set_nodata(0)
+    surface.raster.set_nodata(-9999.0)
     surface = surface.rename("surface")
     length, width = emissions.gridlength_gridwidth(hydromodel.staticmaps)
     surface_tot = []
@@ -152,15 +159,15 @@ def geometrymaps(
             rivwth = hydromodel.staticmaps[hydromodel._MAPS["rivwth"]]
             rivmsk = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
             # surface
-            rivsurface = xr.where(rivmsk, rivlen * rivwth, surface)
+            rivsurface = surface.where(rivmsk == False, rivlen * rivwth)
             rivsurface = rivsurface.rename("surface")
             surface_tot.append(rivsurface)
             # length
-            rivlength = xr.where(rivmsk, rivlen, length)
+            rivlength = rivlen.where(rivmsk, rivlen)
             rivlength = rivlength.rename("length")
             length_tot.append(rivlength)
             # width
-            rivwidth = xr.where(rivmsk, rivwth, width)
+            rivwidth = rivwth.where(rivmsk, width)
             rivwidth = rivwidth.rename("width")
             width_tot.append(rivwidth)
         else:  # other use direct cell surface
