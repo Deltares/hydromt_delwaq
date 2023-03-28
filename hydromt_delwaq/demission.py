@@ -135,9 +135,15 @@ class DemissionModel(DelwaqModel):
         ### Select and build hydromaps from model ###
         # Initialise hydromaps
         ds_hydro = segments.hydromaps(hydromodel)
+        # Add mask
+        da_mask = ds_hydro["basmsk"]
+        ds_hydro = ds_hydro.drop_vars(["rivmsk", "basmsk"])
+        ds_hydro.coords["mask"] = da_mask
+        ds_hydro["modelmap"] = da_mask.astype(np.int32)
+        ds_hydro["modelmap"].raster.set_nodata(0)
+        # Add to hydromaps
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_hydro.data_vars}
         self.set_hydromaps(ds_hydro.rename(rmdict))
-        self._hydromaps.coords["mask"] = ds_hydro["basmsk"]
 
         # Build segment ID and segment ID down and add to hydromaps
         nrofseg, da_ptid, da_ptiddown = segments.pointer(
@@ -154,7 +160,7 @@ class DemissionModel(DelwaqModel):
 
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
         self.set_staticmaps(ds_stat.rename(rmdict))
-        self.staticmaps.coords["mask"] = self.hydromaps["modelmap"]
+        self.staticmaps.coords["mask"] = self.hydromaps["mask"]
 
         ### Geometry data ###
         surface = emissions.gridarea(hydromodel.staticmaps)
@@ -585,8 +591,12 @@ class DemissionModel(DelwaqModel):
             ex_vars = [v for v in ds_in.data_vars if v.startswith("exfilt")]
             if len(ex_vars) > 1:  # need to sum
                 attrs = ds_in[ex_vars[0]].attrs.copy()
+                nodata = ds_in[ex_vars[0]].raster.nodata
+                # Cover exfilt with zeros (some negative zeros in wflow outputs?)
                 ds["exfilt"] = ds_in[ex_vars].fillna(0).to_array().sum("variable")
+                ds["exfilt"] = ds["exfilt"].where(ds["exfilt"] > 0.0, 0.0)
                 ds["exfilt"].attrs.update(attrs)
+                ds["exfilt"].raster.set_nodata(nodata)
             else:
                 ds["exfilt"] = ds_in["exfilt"]
         else:
