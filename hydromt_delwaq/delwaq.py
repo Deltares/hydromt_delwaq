@@ -12,6 +12,7 @@ import logging
 import struct
 from datetime import datetime
 import time as t
+import matplotlib.pyplot as plt
 
 import hydromt
 from hydromt.models.model_api import Model
@@ -329,7 +330,7 @@ class DelwaqModel(Model):
 
         # Monitoring areas domain
         monareas = None
-        if mon_areas == "subcatch" or mon_areas == "compartments":
+        if mon_areas != None:
             monareas = self.hydromaps["basins"].copy()
             monareas_tot = []
             if mon_areas == "compartments":
@@ -338,7 +339,7 @@ class DelwaqModel(Model):
                     monareas_tot.append(
                         xr.where(self.hydromaps["mask"], i, mv).astype(np.int32)
                     )
-            else:  # subcatch
+            elif mon_areas == "subcatch":  # subcatch
                 # Number or monitoring areas
                 areas = monareas.values.flatten()
                 areas = areas[areas != mv]
@@ -346,6 +347,19 @@ class DelwaqModel(Model):
                 nb_areas = nb_sub * self.nrofcomp
                 for i in range(self.nrofcomp):
                     monareas_tot.append(monareas + (i * nb_sub))
+            else:  # riverland
+                # seperate areas for land cells (1) and river cells (2)
+                lr_areas = xr.where(self.hydromaps["river"], 2, xr.where(self.hydromaps["basins"], 1, mv)).astype(np.int32)
+                # Number or monitoring areas
+                ##plt.imshow(lr_areas)
+                ##plt.show()
+                ##plt.savefig('filename.png')
+                areas = lr_areas.values.flatten()
+                areas = areas[areas != mv]
+                nb_sub = len(np.unique(areas))
+                nb_areas = nb_sub * self.nrofcomp
+                for i in np.arange(1, self.nrofcomp + 1):
+                    monareas_tot.append(lr_areas + ((i-1) * nb_sub))
             monareas = xr.concat(
                 monareas_tot,
                 pd.Index(np.arange(1, self.nrofcomp + 1, dtype=int), name="comp"),
@@ -353,6 +367,7 @@ class DelwaqModel(Model):
             # Add to staticmaps
             self.set_staticmaps(monareas.rename("monareas"))
             self.staticmaps["monareas"].attrs.update(_FillValue=mv)
+            self.staticmaps["monareas"].attrs['mon_areas'] = mon_areas
 
             # Add to staticgeoms (only first compartments)
             gdf_areas = self.staticmaps["monareas"].sel(comp=1).raster.vectorize()
@@ -1625,8 +1640,13 @@ class DelwaqModel(Model):
                 areai_1 = id_areasi[0 : NCOMP * 50].reshape(NCOMP, 50)
                 areai_2 = id_areasi[NCOMP * 50 : NTOT]
                 areai_2 = areai_2.reshape(1, len(areai_2))
-
-                print(f"'{i}'        {NTOT}", file=exfile)
+                if monareas.attrs['mon_areas'] == "riverland":
+                    if i == 1:
+                        print(f"'{'land'}'        {NTOT}", file=exfile)
+                    else: # i = 2
+                        print(f"'{'river'}'        {NTOT}", file=exfile)
+                else: # 'subcatch' or 'compartments'
+                    print(f"'{i}'        {NTOT}", file=exfile)
                 np.savetxt(exfile, areai_1, fmt="%10.20s")
                 np.savetxt(exfile, areai_2, fmt="%10.20s")
             exfile.close()
