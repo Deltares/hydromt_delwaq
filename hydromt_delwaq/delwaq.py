@@ -349,7 +349,11 @@ class DelwaqModel(Model):
                     monareas_tot.append(monareas + (i * nb_sub))
             else:  # riverland
                 # seperate areas for land cells (1) and river cells (2)
-                lr_areas = xr.where(self.hydromaps["river"], 2, xr.where(self.hydromaps["basins"], 1, mv)).astype(np.int32)
+                lr_areas = xr.where(
+                    self.hydromaps["river"],
+                    2,
+                    xr.where(self.hydromaps["basins"], 1, mv),
+                ).astype(np.int32)
                 # Number or monitoring areas
                 ##plt.imshow(lr_areas)
                 ##plt.show()
@@ -359,7 +363,7 @@ class DelwaqModel(Model):
                 nb_sub = len(np.unique(areas))
                 nb_areas = nb_sub * self.nrofcomp
                 for i in np.arange(1, self.nrofcomp + 1):
-                    monareas_tot.append(lr_areas + ((i-1) * nb_sub))
+                    monareas_tot.append(lr_areas + ((i - 1) * nb_sub))
             monareas = xr.concat(
                 monareas_tot,
                 pd.Index(np.arange(1, self.nrofcomp + 1, dtype=int), name="comp"),
@@ -367,7 +371,7 @@ class DelwaqModel(Model):
             # Add to staticmaps
             self.set_staticmaps(monareas.rename("monareas"))
             self.staticmaps["monareas"].attrs.update(_FillValue=mv)
-            self.staticmaps["monareas"].attrs['mon_areas'] = mon_areas
+            self.staticmaps["monareas"].attrs["mon_areas"] = mon_areas
 
             # Add to staticgeoms (only first compartments)
             gdf_areas = self.staticmaps["monareas"].sel(comp=1).raster.vectorize()
@@ -685,7 +689,7 @@ class DelwaqModel(Model):
         starttime: str,
         endtime: str,
         timestepsecs: int,
-        climate_vars: list = ["temp", "temp_dew", "ssr", "wind_u", "wind_v", "tcc"],
+        climate_vars: list = ["temp", "temp_dew", "ssr", "wind10_u", "wind10_v", "tcc"],
         temp_correction: bool = False,
         dem_forcing_fn: str = None,
         **kwargs,
@@ -728,6 +732,7 @@ class DelwaqModel(Model):
         ds = self.data_catalog.get_rasterdataset(
             climate_fn,
             geom=self.region,
+            buffer=2,
             variables=climate_vars,
             time_tuple=(starttime, endtime),
             single_var_as_array=False,
@@ -744,15 +749,15 @@ class DelwaqModel(Model):
         ds_out = xr.Dataset()
 
         # Start with wind
-        if "wind_u" in climate_vars and "wind_v" in climate_vars:
+        if "wind10_u" in climate_vars and "wind10_v" in climate_vars:
             ds_out["wind"] = hydromt.workflows.forcing.wind(
                 self.hydromaps,
-                wind_u=ds["wind_u"],
-                wind_v=ds["wind_v"],
+                wind_u=ds["wind10_u"],
+                wind_v=ds["wind10_v"],
                 altitude_correction=False,
             )
-            climate_vars.remove("wind_u")
-            climate_vars.remove("wind_v")
+            climate_vars.remove("wind10_u")
+            climate_vars.remove("wind10_v")
         elif "wind" in climate_vars:
             ds_out["wind"] = hydromt.workflows.forcing.wind(
                 self.hydromaps,
@@ -1640,12 +1645,12 @@ class DelwaqModel(Model):
                 areai_1 = id_areasi[0 : NCOMP * 50].reshape(NCOMP, 50)
                 areai_2 = id_areasi[NCOMP * 50 : NTOT]
                 areai_2 = areai_2.reshape(1, len(areai_2))
-                if monareas.attrs['mon_areas'] == "riverland":
+                if monareas.attrs["mon_areas"] == "riverland":
                     if i == 1:
                         print(f"'{'land'}'        {NTOT}", file=exfile)
-                    else: # i = 2
+                    else:  # i = 2
                         print(f"'{'river'}'        {NTOT}", file=exfile)
-                else: # 'subcatch' or 'compartments'
+                else:  # 'subcatch' or 'compartments'
                     print(f"'{i}'        {NTOT}", file=exfile)
                 np.savetxt(exfile, areai_1, fmt="%10.20s")
                 np.savetxt(exfile, areai_2, fmt="%10.20s")

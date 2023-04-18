@@ -801,10 +801,8 @@ class DemissionModel(DelwaqModel):
         # Netcdf format
         if write_nc:
             fname = join(self.root, "dynamicdata", "dynamicmaps.nc")
-            if os.path.isfile(fname):
-                ds_out.to_netcdf(path=fname, mode="a")
-            else:
-                ds_out.to_netcdf(path=fname)
+            ds_out = ds_out.drop_vars(["mask", "spatial_ref"], errors="ignore")
+            ds_out.to_netcdf(path=fname)
 
         # Binary format
         timesteps = np.arange(0, len(ds_out.time.values))
@@ -905,4 +903,4 @@ class DemissionModel(DelwaqModel):
 
     @property
     def compartments(self):
-        return ["em"]
+        return ["EM"]
