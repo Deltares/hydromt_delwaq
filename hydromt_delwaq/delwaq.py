@@ -13,6 +13,7 @@ import struct
 from datetime import datetime
 import time as t
 import matplotlib.pyplot as plt
+import xugrid as xu
 
 import hydromt
 from hydromt.models.model_api import Model
@@ -1669,307 +1670,25 @@ class DelwaqModel(Model):
         ptid = xr.where(ptid == ptid_mv, -1, ptid - 1)
         np_ptid = ptid.values
         # Wflow map dimensions
-        k, m, n = np_ptid.shape
+        m, n = np_ptid.shape
         # Number of segments in horizontal dimension
         nosegh = int(np.max(np_ptid)) + 1  # because of the zero based
         # Get LDD map
         np_ldd = self.hydromaps["ldd"].values
         np_ldd[np_ldd == self.hydromaps["ldd"].raster.nodata] = 0
 
-        # Get  grid coordinates
-        res_x, res_y = self.res
-        xcoords = ptid.raster.xcoords.values
-        ycoords = ptid.raster.ycoords.values
-        left = xcoords - res_x / 2.0
-        right = xcoords + res_x / 2.0
-        top = ycoords - res_y / 2.0
-        bottom = ycoords + res_y / 2.0
+        #print("Input DataArray: ")
+        #print(ptid.dims, ptid)
+        ptid = xr.where(ptid == -1, np.nan, ptid)
+        ptid = ptid.rename({"lat": "y", "lon": "x"})
+        da_ptid = xu.UgridDataArray.from_structured(ptid)
+        da_ptid = da_ptid.dropna(dim=da_ptid.ugrid.grid.face_dimension)
+        da_ptid.ugrid.set_crs(crs=self.crs) #"EPSG:4326"
+        uda_waqgeom = da_ptid.ugrid.to_dataset(optional_attributes=True)#.to_netcdf("updated_ugrid.nc")
+        uda_waqgeom.coords["projected_coordinate_system"]=-2147483647
 
-        xxul = np.tile(left, len(ycoords)).reshape((len(ycoords), len(xcoords)))
-        xxlr = np.tile(right, len(ycoords)).reshape((len(ycoords), len(xcoords)))
-        yyul = np.repeat(top, len(xcoords)).reshape((len(ycoords), len(xcoords)))
-        yylr = np.repeat(bottom, len(xcoords)).reshape((len(ycoords), len(xcoords)))
-
-        # Waqgeom dimensions
-        n_net_node = 0
-        n_net_link = 0
-        n_net_link_pts = 2
-        n_net_elem = nosegh
-        n_net_elem_max_node = 4  # all elements are rectangles
-        n_flow_link = nosegh - 1  # one per element, except for outlet
-        n_flow_link_pts = 2
-
-        # Prepare waqgeom data structures
-        nodes_x = []
-        nodes_y = []
-        nodes_z = []
-        net_links = []
-        elem_nodes = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.int32)
-        face_x_bnd = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.double)
-        face_y_bnd = np.zeros((n_net_elem, n_net_elem_max_node), dtype=np.double)
-        flow_links = np.zeros((n_flow_link, n_flow_link_pts), dtype=np.int32)
-        flow_link_type = np.repeat(2, n_flow_link)
-        flow_link_x = np.zeros((n_flow_link), dtype=np.float32)
-        flow_link_y = np.zeros((n_flow_link), dtype=np.float32)
-
-        # prepare all coordinates for grid csv
-        nodes_x_all = []
-        nodes_y_all = []
-        # Keep track of nodes and links as dataset grows
-        i_node = 0  # index of last node
-        i_flink = 0  # index of last flow link
-
-        # Helper function
-        def add_node(i, j, corner):
-            # Get coordinates
-            if corner == UL:
-                x = xxul[i, j]
-                y = yyul[i, j]
-            elif corner == LR:
-                x = xxlr[i, j]
-                y = yylr[i, j]
-            elif corner == UR:
-                x = xxlr[i, j]
-                y = yyul[i, j]
-            elif corner == LL:
-                x = xxul[i, j]
-                y = yylr[i, j]
-            else:
-                assert 0
-            # Add node coordinates
-            nodes_x.append(x)
-            nodes_y.append(y)
-            nodes_z.append(0)
-
-        def add_all_nodes(i, j, corner):
-            # Get coordinates
-            if corner == UL:
-                x = xxul[i, j]
-                y = yyul[i, j]
-            elif corner == LR:
-                x = xxlr[i, j]
-                y = yylr[i, j]
-            elif corner == UR:
-                x = xxlr[i, j]
-                y = yyul[i, j]
-            elif corner == LL:
-                x = xxul[i, j]
-                y = yylr[i, j]
-            else:
-                assert 0
-            # Add node coordinates
-            nodes_x_all.append(x)
-            nodes_y_all.append(y)
-
-        # Cell corners
-        UL, UR, LR, LL = 0, 1, 2, 3
-
-        # Process all cells from upper-left to lower-right
-        for i in range(m):
-            for j in range(n):
-                # Current element index
-                i_elem = int(np_ptid[0, i, j])
-                if i_elem < 0:
-                    # Skip inactive segment
-                    continue
-
-                # Get index of neighbouring elements that could have been processed before
-                if i == 0:
-                    i_elem_up_left = -1
-                    i_elem_up = -1
-                    i_elem_up_right = -1
-                elif j == 0:
-                    i_elem_up_left = -1
-                    i_elem_up = int(np_ptid[0, i - 1, j])
-                    i_elem_up_right = int(np_ptid[0, i - 1, j + 1])
-                elif j == n - 1:
-                    i_elem_up_left = int(np_ptid[0, i - 1, j - 1])
-                    i_elem_up = int(np_ptid[0, i - 1, j])
-                    i_elem_up_right = -1
-                else:
-                    i_elem_up_left = int(np_ptid[0, i - 1, j - 1])
-                    i_elem_up = int(np_ptid[0, i - 1, j])
-                    i_elem_up_right = int(np_ptid[0, i - 1, j + 1])
-
-                if j == 0:
-                    i_elem_left = -1
-                else:
-                    i_elem_left = int(np_ptid[0, i, j - 1])
-
-                # Update nodes:
-                # If left or upper neighbours are active, some nodes of current cell
-                # have been added already.
-
-                # UL node
-                if i_elem_left < 0 and i_elem_up_left < 0 and i_elem_up < 0:
-                    add_node(i, j, UL)
-                    elem_nodes[i_elem, UL] = i_node
-                    i_node += 1
-                elif i_elem_left >= 0:
-                    elem_nodes[i_elem, UL] = elem_nodes[i_elem_left, UR]
-                elif i_elem_up_left >= 0:
-                    elem_nodes[i_elem, UL] = elem_nodes[i_elem_up_left, LR]
-                elif i_elem_up >= 0:
-                    elem_nodes[i_elem, UL] = elem_nodes[i_elem_up, LL]
-
-                # UR node
-                if i_elem_up < 0 and i_elem_up_right < 0:
-                    add_node(i, j, UR)
-                    elem_nodes[i_elem, UR] = i_node
-                    i_node += 1
-                elif i_elem_up >= 0:
-                    elem_nodes[i_elem, UR] = elem_nodes[i_elem_up, LR]
-                elif i_elem_up_right >= 0:
-                    elem_nodes[i_elem, UR] = elem_nodes[i_elem_up_right, LL]
-                if i_elem_up < 0:
-                    # add UL-UR link
-                    net_links.append((elem_nodes[i_elem, UL], elem_nodes[i_elem, UR]))
-
-                # LL node
-                if i_elem_left < 0:
-                    add_node(i, j, LL)
-                    elem_nodes[i_elem, LL] = i_node
-                    i_node += 1
-                    # add UL-LL link
-                    net_links.append((elem_nodes[i_elem, UL], elem_nodes[i_elem, LL]))
-                else:
-                    elem_nodes[i_elem, LL] = elem_nodes[i_elem_left, LR]
-
-                # LR node
-                add_node(i, j, LR)
-                add_all_nodes(i, j, LR)
-                elem_nodes[i_elem, LR] = i_node
-                i_node += 1
-                # add LL-LR link
-                net_links.append((elem_nodes[i_elem, LL], elem_nodes[i_elem, LR]))
-                # add UR-LR link
-                net_links.append((elem_nodes[i_elem, UR], elem_nodes[i_elem, LR]))
-
-                # Update flow links based on local drain direction
-                # TODO: diagonal flow links between cells that have only one node in common?
-
-                direction = np_ldd[i, j]
-                i_other = -1
-                if direction == 1:
-                    i_other = np_ptid[0, i + 1, j - 1]  # to lower left
-                elif direction == 2:
-                    i_other = np_ptid[0, i + 1, j]  # to lower
-                elif direction == 3:
-                    i_other = np_ptid[0, i + 1, j + 1]  # to lower right
-                elif direction == 4:
-                    i_other = np_ptid[0, i, j - 1]  # to left
-                elif direction == 6:
-                    i_other = np_ptid[0, i, j + 1]  # to right
-                elif direction == 7:
-                    i_other = np_ptid[0, i - 1, j - 1]  # to upper right
-                elif direction == 8:
-                    i_other = np_ptid[0, i - 1, j]  # to upper
-                elif direction == 9:
-                    i_other = np_ptid[0, i - 1, j + 1]  # to upper left
-                if i_other >= 0:
-                    flow_links[i_flink, :] = i_elem, i_other
-                    i_flink += 1
-
-        # Convert data to numpy arrays
-        nodes_x_all = np.array(nodes_x_all)
-        nodes_y_all = np.array(nodes_y_all)
-
-        nodes_x = np.array(nodes_x)
-        nodes_y = np.array(nodes_y)
-        nodes_z = np.array(nodes_z)
-        net_links = np.array(net_links)
-
-        # Proces all cells to derive mesh_face_x_bnd and mesh_face_y_bnd
-        for bnd in range(0, n_net_elem):
-            # UL, UR, LR, LL = 0, 1, 2, 3
-            face_x_bnd[bnd, UL] = nodes_x[elem_nodes[bnd][UL]]
-            face_x_bnd[bnd, UR] = nodes_x[elem_nodes[bnd][UR]]
-            face_x_bnd[bnd, LR] = nodes_x[elem_nodes[bnd][LR]]
-            face_x_bnd[bnd, LL] = nodes_x[elem_nodes[bnd][LL]]
-            face_y_bnd[bnd, UL] = nodes_y[elem_nodes[bnd][UL]]
-            face_y_bnd[bnd, UR] = nodes_y[elem_nodes[bnd][UR]]
-            face_y_bnd[bnd, LR] = nodes_y[elem_nodes[bnd][LR]]
-            face_y_bnd[bnd, LL] = nodes_y[elem_nodes[bnd][LL]]
-
-        # Update dimensions
-        n_net_node = nodes_x.shape[0]
-        n_net_link = net_links.shape[0]
-
-        # Info for the global xarray attributes
-        time_string = t.strftime("%b %d %Y, %H:%M:%S")
-        offset_s = -t.altzone
-        offset_m = int((offset_s % 3600) / 60)
-        offset_h = int((offset_s / 60 - offset_m) / 60)
-        time_string2 = t.strftime("%Y-%m-%dT%H:%M:%S") + "+%02i%02i" % (
-            offset_h,
-            offset_m,
-        )
-
-        # Create xr dataset
-        # TODO: mesh_face_x and mesh_face_y now based on LR node, correct?
-        # TODO: add mesh_edge* to dataset
-        ds_out = xr.Dataset(
-            data_vars=dict(
-                mesh=(["dim"], [-2147483647]),
-                # projected_coordinate_system=(["dim"], [-2147483647]),
-                # NetNode_x=(["nNetNode"], nodes_x),
-                # NetNode_y=(["nNetNode"], nodes_y),
-                # NetNode_z=(["nNetNode"], nodes_z),
-                mesh_node_x=(["nNetNode"], nodes_x),
-                mesh_node_y=(["nNetNode"], nodes_y),
-                mesh_node_z=(["nNetNode"], nodes_z),
-                mesh_face_x=(["nmesh_face"], nodes_x_all),
-                mesh_face_y=(["nmesh_face"], nodes_y_all),
-                NetLink=(["nNetLink", "nNetLinkPts"], (net_links + 1)),
-                mesh_face_nodes=(
-                    ["nmesh_face", "max_mesh_face_nodes"],
-                    (elem_nodes + 1),
-                ),
-                mesh_face_x_bnd=(["nmesh_face", "max_mesh_face_nodes"], (face_x_bnd)),
-                mesh_face_y_bnd=(["nmesh_face", "max_mesh_face_nodes"], (face_y_bnd)),
-                FlowLink=(["nFlowLink", "nFlowLinkPts"], (flow_links + 1)),
-                FlowLinkType=(["nFlowLink"], flow_link_type),
-                FlowLink_xu=(["nFlowLink"], flow_link_x),
-                FlowLink_yu=(["nFlowLink"], flow_link_y),
-            ),
-            coords=dict(
-                # dim = [1],
-                projected_coordinate_system=[-2147483647],
-                # nNetNode = [n_net_node],
-                # nNetLink = [n_net_link],
-                # nNetLinkPts = [n_net_link_pts],
-                # nNetElem = [n_net_elem],
-                # nNetElemMaxNode = [n_net_elem_max_node],
-                # nFlowLink= [n_flow_link],
-                # nFlowLinkPts = [n_flow_link_pts],
-            ),
-            attrs=dict(
-                institution="Deltares",
-                references="http://www.deltares.nl",
-                source=f"Wflow, Deltares, {time_string}.",
-                history=f"Created on {time_string2}, wflow_delwaq.py",
-                Conventions="CF-1.6 UGRID-0.9",
-            ),
-        )
-        # Update variables attributes
-        ds_out["mesh"].attrs.update(
-            dict(
-                long_name="Delft3D FM aggregated mesh",
-                cf_role="mesh_topology",
-                topology_dimension=2,
-                node_coordinates="NetNode_x NetNode_y",
-                face_node_connectivity="mesh_face_nodes",
-                edge_node_connectivity="NetLink",
-                edge_face_connectivity="FlowLink",
-                face_dimension="nmesh_face",
-                edge_dimension="nNetLink",
-                node_dimension="nNetNode",
-                face_coordinates="mesh_face_x mesh_face_y",
-                edge_coordinates="FlowLink_xu FlowLink_yu",
-            )
-        )
         epsg_nb = int(self.crs.to_epsg())
-        ds_out["projected_coordinate_system"].attrs.update(
+        uda_waqgeom["projected_coordinate_system"].attrs.update(
             dict(
                 epsg=epsg_nb,
                 grid_mapping_name="Unknown projected",
@@ -1979,134 +1698,21 @@ class DelwaqModel(Model):
                 value="value is equal to EPSG code",
             )
         )
-        # ds_out["NetNode_x"].attrs.update(
-        #     dict(
-        #         units="degrees_east",
-        #         standard_name="longitude",
-        #         long_name="longitude",
-        #         mesh="mesh",
-        #         location="node",
-        #     )
-        # )
-        # ds_out["NetNode_y"].attrs.update(
-        #     dict(
-        #         units="degrees_north",
-        #         standard_name="latitude",
-        #         long_name="latitude",
-        #         mesh="mesh",
-        #         location="node",
-        #     )
-        # )
-        # ds_out["NetNode_z"].attrs.update(
-        #     dict(
-        #         units="m",
-        #         positive="up",
-        #         standard_name="sea_floor_depth",
-        #         long_name="Bottom level at net nodes (flow element's corners)",
-        #         coordinates="NetNode_x NetNode_y",
-        #     )
-        # )
-        ds_out["mesh_node_x"].attrs.update(
-            dict(
-                units="degrees_east",
-                standard_name="longitude",
-                long_name="longitude",
-                mesh="mesh",
-                location="node",
-            )
-        )
-        ds_out["mesh_node_y"].attrs.update(
-            dict(
-                units="degrees_north",
-                standard_name="latitude",
-                long_name="latitude",
-                mesh="mesh",
-                location="node",
-            )
-        )
-        ds_out["mesh_face_x"].attrs.update(
-            dict(
-                units="degrees_east",
-                standard_name="longitude",
-                long_name="longitude",
-                mesh="mesh",
-                location="face",
-            )
-        )
-        ds_out["mesh_face_y"].attrs.update(
-            dict(
-                units="degrees_north",
-                standard_name="latitude",
-                long_name="latitude",
-                mesh="mesh",
-                location="face",
-            )
-        )
-        ds_out["NetLink"].attrs.update(
-            dict(
-                long_name="link between two netnodes",
-                start_index=1,
-            )
-        )
-        ds_out["mesh_face_nodes"].attrs.update(
-            dict(
-                long_name="Mapping from every face to its corner nodes (counterclockwise)",
-                cf_role="face_node_connectivity",
-                mesh="mesh",
-                location="face",
-                start_index=1,
-                _FillValue=0,
-            )
-        )
-        ds_out["mesh_face_x_bnd"].attrs.update(
-            dict(
-                units="m",
-                standard_name="projection_x_coordinate",
-                long_name="x-coordinate bounds of 2D mesh face (i.e. corner coordinates)",
-                mesh="mesh",
-                location="face",
-                start_index=1,
-            )
-        )
-        ds_out["mesh_face_y_bnd"].attrs.update(
-            dict(
-                units="m",
-                standard_name="projection_y_coordinate",
-                long_name="y-coordinate bounds of 2D mesh face (i.e. corner coordinates)",
-                mesh="mesh",
-                location="face",
-                start_index=1,
-            )
-        )
-        ds_out["FlowLink"].attrs.update(
-            dict(
-                long_name="link/interface between two flow elements",
-                start_index=1,
-            )
-        )
-        ds_out["FlowLinkType"].attrs.update(
-            dict(
-                long_name="type of flowlink",
-                valid_range=[1, 2],
-                flag_values=[1, 2],
-                flag_meanings="link_between_1D_flow_elements link_between_2D_flow_elements",
-            )
-        )
-        ds_out["FlowLink_xu"].attrs.update(
-            dict(
-                units="degrees_east",
-                standard_name="longitude",
-                long_name="x-Coordinate of velocity point on flow link.",
-            )
-        )
-        ds_out["FlowLink_yu"].attrs.update(
-            dict(
-                units="degrees_north",
-                standard_name="latitude",
-                long_name="y-Coordinate of velocity point on flow link.",
-            )
-        )
-
+		
         # Write the waqgeom.nc file
         fname = join(self.root, "config", "B3_waqgeom.nc")
-        ds_out.to_netcdf(path=fname, mode="w", format="NETCDF3_CLASSIC")
+        uda_waqgeom.to_netcdf(path=fname, mode="w")
+        #uda_waqgeom.to_netcdf("updated_ugrid.nc")
+        ##plot pointerId grid
+        #da_ptid.ugrid.plot()
+        #plt.show()
+        ##CHECK resulting DataSet
+        #print("CRS: ")
+        #print(da_ptid.ugrid.crs)		
+        #print("Output DataSet: ")
+        #print(uda_waqgeom)
+        ##CHECK resulting NC file
+        #ds = xu.open_dataset(fname)
+        #uda = ds["ptid"]
+        #uda.ugrid.plot()#uda.plot()
+        #plt.show()
