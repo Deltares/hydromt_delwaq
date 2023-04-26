@@ -865,10 +865,6 @@ class DemissionModel(DelwaqModel):
                     timestepstamp[i], climname, climblock, 1, WriteAscii=False
                 )
 
-        # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
-        self.logger.info("Writting waqgeom.nc file")
-        self.dw_WriteWaqGeom()
-
     @property
     def nrofseg(self):
         """Fast accessor to nrofseg property of pointer"""

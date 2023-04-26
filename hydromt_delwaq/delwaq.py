@@ -1068,12 +1068,12 @@ class DelwaqModel(Model):
         ds_out.to_netcdf(path=fname)
 
         # Binary format
+        mask = ds_out["mask"].values.flatten()
         for dvar in ds_out.data_vars:
             if dvar != "monpoints" and dvar != "monareas":
                 fname = join(self.root, "staticdata", dvar + ".dat")
                 data = ds_out[dvar].values.flatten()
-                nodata = ds_out[dvar].raster.nodata
-                data = data[data != nodata]
+                data = data[mask]
                 self.dw_WriteSegmentOrExchangeData(
                     0, fname, data, 1, WriteAscii=False, mode="w"
                 )
@@ -1298,11 +1298,6 @@ class DelwaqModel(Model):
                 self.dw_WriteSegmentOrExchangeData(
                     timestepstamp[i], climname, climblock, 1, WriteAscii=False
                 )
-
-        # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
-        # TODO: Update for several layers
-        # self.logger.info("Writting waqgeom.nc file")
-        # self.dw_WriteWaqGeom()
 
     def read_states(self):
         """Read states at <root/?/> and parse to dict of xr.DataArray"""
@@ -1662,9 +1657,16 @@ class DelwaqModel(Model):
             print(";Written by hydroMT: no monitoring areas were set.", file=exfile)
             exfile.close()
 
-    def dw_WriteWaqGeom(self):
+    def write_waqgeom(self):
         """Writes Delwaq netCDF geometry file (config/B3_waqgeom.nc)."""
+        # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
+        # TODO: Update for several layers
+        self.logger.info("Writting waqgeom.nc file")
         ptid = self.hydromaps["ptid"].copy()
+        # For now only 1 comp is supported
+        ptid = ptid.squeeze(drop=True)
+        if len(ptid.dims) != 2:
+            raise ValueError("Only 2D (1 comp) supported for waqgeom.nc")
         ptid_mv = ptid.raster.nodata
         # PCR cell id's start at 1, we need it zero based, and NaN set to -1
         ptid = xr.where(ptid == ptid_mv, -1, ptid - 1)
@@ -1674,18 +1676,20 @@ class DelwaqModel(Model):
         # Number of segments in horizontal dimension
         nosegh = int(np.max(np_ptid)) + 1  # because of the zero based
         # Get LDD map
-        np_ldd = self.hydromaps["ldd"].values
+        np_ldd = self.hydromaps["ldd"].squeeze(drop=True).values
         np_ldd[np_ldd == self.hydromaps["ldd"].raster.nodata] = 0
 
-        #print("Input DataArray: ")
-        #print(ptid.dims, ptid)
+        # print("Input DataArray: ")
+        # print(ptid.dims, ptid)
         ptid = xr.where(ptid == -1, np.nan, ptid)
         ptid = ptid.rename({"lat": "y", "lon": "x"})
         da_ptid = xu.UgridDataArray.from_structured(ptid)
         da_ptid = da_ptid.dropna(dim=da_ptid.ugrid.grid.face_dimension)
-        da_ptid.ugrid.set_crs(crs=self.crs) #"EPSG:4326"
-        uda_waqgeom = da_ptid.ugrid.to_dataset(optional_attributes=True)#.to_netcdf("updated_ugrid.nc")
-        uda_waqgeom.coords["projected_coordinate_system"]=-2147483647
+        da_ptid.ugrid.set_crs(crs=self.crs)  # "EPSG:4326"
+        uda_waqgeom = da_ptid.ugrid.to_dataset(
+            optional_attributes=True
+        )  # .to_netcdf("updated_ugrid.nc")
+        uda_waqgeom.coords["projected_coordinate_system"] = -2147483647
 
         epsg_nb = int(self.crs.to_epsg())
         uda_waqgeom["projected_coordinate_system"].attrs.update(
@@ -1698,21 +1702,21 @@ class DelwaqModel(Model):
                 value="value is equal to EPSG code",
             )
         )
-		
+
         # Write the waqgeom.nc file
         fname = join(self.root, "config", "B3_waqgeom.nc")
         uda_waqgeom.to_netcdf(path=fname, mode="w")
-        #uda_waqgeom.to_netcdf("updated_ugrid.nc")
+        # uda_waqgeom.to_netcdf("updated_ugrid.nc")
         ##plot pointerId grid
-        #da_ptid.ugrid.plot()
-        #plt.show()
+        # da_ptid.ugrid.plot()
+        # plt.show()
         ##CHECK resulting DataSet
-        #print("CRS: ")
-        #print(da_ptid.ugrid.crs)		
-        #print("Output DataSet: ")
-        #print(uda_waqgeom)
+        # print("CRS: ")
+        # print(da_ptid.ugrid.crs)
+        # print("Output DataSet: ")
+        # print(uda_waqgeom)
         ##CHECK resulting NC file
-        #ds = xu.open_dataset(fname)
-        #uda = ds["ptid"]
-        #uda.ugrid.plot()#uda.plot()
-        #plt.show()
+        # ds = xu.open_dataset(fname)
+        # uda = ds["ptid"]
+        # uda.ugrid.plot()#uda.plot()
+        # plt.show()
