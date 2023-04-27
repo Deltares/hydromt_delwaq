@@ -70,6 +70,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autosummary",
     "sphinx.ext.githubpages",
+    "sphinx.ext.intersphinx",
     "IPython.sphinxext.ipython_directive",
     "IPython.sphinxext.ipython_console_highlighting",
     "nbsphinx",
@@ -111,6 +112,7 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 html_theme = "pydata_sphinx_theme"
+html_logo = "_static/hydromt-logo.jpg"
 autodoc_member_order = "bysource"  # overwrite default alphabetical sort
 autoclass_content = "both"
 
@@ -131,9 +133,21 @@ html_theme_options = {
     "use_edit_page_button": True,
     "icon_links": [
         {
+            "name": "GitHub",
+            "url": "https://github.com/Deltares/hydromt_delwaq",  # required
+            "icon": "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg",
+            "type": "url",
+        },
+        {
+            "name": "DELWAQ",
+            "url": "https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality",
+            "icon": "_static/delwaq_logo.png",
+            "type": "local",
+        },
+        {
             "name": "Deltares",
             "url": "https://deltares.nl/en/",
-            "icon": "_static/deltares-white.svg",
+            "icon": "_static/deltares-blue.svg",
             "type": "local",
         },
     ],
@@ -143,21 +157,36 @@ html_theme_options = {
             "url": "https://deltares.github.io/hydromt/latest/index.html",
         },
     ],
+    "logo": {
+        "text": "HydroMT DELWAQ",
+    },
+    "navbar_end": ["navbar-icon-links"],  # remove dark mode switch
 }
 
 html_context = {
     "github_url": "https://github.com",  # or your GitHub Enterprise interprise
     "github_user": "Deltares",
     "github_repo": "hydromt_delwaq",
-    "github_version": "new_docs",  # FIXME
+    "github_version": "main",  # FIXME
     "doc_path": "docs",
+    "default_mode": "light",
 }
+
+remove_from_toctrees = ["_generated/*"]
+
+# no sidebar in api section
+
+# html_sidebars = {
+#   "api": [],
+#   "_generated/*": []
+
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
 #
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
+
 # html_sidebars = {
 #     "**": [
 #         "relations.html",  # needs 'show_related': True theme option to display
@@ -228,3 +257,35 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
+
+# -- INTERSPHINX -----------------------------------------------------------
+
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3/", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
+    # "numpy": ("https://numpy.org/doc/stable", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy", None),
+    # "numba": ("https://numba.pydata.org/numba-doc/latest", None),
+    # "matplotlib": ("https://matplotlib.org/stable/", None),
+    # "dask": ("https://docs.dask.org/en/latest", None),
+    "rasterio": ("https://rasterio.readthedocs.io/en/latest", None),
+    "geopandas": ("https://geopandas.org/en/stable", None),
+    "xarray": ("https://xarray.pydata.org/en/stable", None),
+    "hydromt": ("https://deltares.github.io/hydromt/latest/", None),
+}
+
+# -- NBSPHINX --------------------------------------------------------------
+
+# This is processed by Jinja2 and inserted before each notebook
+nbsphinx_prolog = r"""
+{% set docname = env.doc2path(env.docname, base=None).split('\\')[-1].split('/')[-1] %}
+
+.. TIP::
+
+    .. raw:: html
+
+        <div>
+            For an interactive online version click here: 
+            <a href="https://mybinder.org/v2/gh/Deltares/hydromt_delwaq/main?urlpath=lab/tree/examples/{{ docname|e }}" target="_blank" rel="noopener noreferrer"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg"></a>
+        </div>
+"""

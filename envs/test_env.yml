@@ -37,10 +37,11 @@ dependencies:
   - scipy
   - shapely
   - sphinx # docs
-  - pydata-sphinx-theme==0.8.0 # docs
+  - pydata-sphinx-theme # docs
   - xarray
   - zarr
   - pip:
+    - sphinx_design  # docs
     - git+https://github.com/Deltares/hydromt.git
     - git+https://github.com/Deltares/hydromt_wflow.git
 
