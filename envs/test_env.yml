@@ -26,7 +26,6 @@ dependencies:
   - pandas
   - pip
   - pyflwdir>=0.5.5
-  - pygeos>=0.8
   - pytest # tests
   - pytest-cov # tests
   - pytest-benchmark # tests
@@ -35,7 +34,7 @@ dependencies:
   - requests
   - rioxarray
   - scipy
-  - shapely
+  - shapely>=2.0.0
   - sphinx # docs
   - pydata-sphinx-theme # docs
   - xarray

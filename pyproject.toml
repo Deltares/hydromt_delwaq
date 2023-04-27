@@ -17,7 +17,7 @@ dependencies = [
     "pyproj",
     "rasterio",
     "scipy",
-    "shapely",
+    "shapely" >=2.0.0,
     "xarray",
 ]
 requires-python = ">=3.8" # fix tests to support older versions

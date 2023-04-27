@@ -24,16 +24,8 @@ file contained in the repository:
     $ conda activate hydromt-delwaq
 
 Finally, create a developer installation of HydroMT-delwaq.
-This is possible using the `flit <https://flit.readthedocs.io/en/latest/>`_ package and install command.
-
-For Windows:
+This can be done with:
 
 .. code-block:: console
 
-    $ flit install --pth-file
-
-For Linux:
-
-.. code-block:: console
-
-    $ flit install -s
+    $ pip install -e .
