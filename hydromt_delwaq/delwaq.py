@@ -285,10 +285,10 @@ class DelwaqModel(Model):
                 monpoints = self.hydromaps["ptid"]
             else:
                 kwargs = {}
-                if isfile(mon_points) and str(mon_points).endswith(".csv"):
+                if isfile(mon_points):
                     kwargs.update(crs=self.crs)
                 gdf = self.data_catalog.get_geodataframe(
-                    str(mon_points), geom=self.basins, assert_gtype="Point", **kwargs
+                    mon_points, geom=self.basins, assert_gtype="Point", **kwargs
                 )
                 gdf = gdf.to_crs(self.crs)
                 if gdf.index.size == 0:

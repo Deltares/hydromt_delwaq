@@ -3,16 +3,14 @@
 from os.path import dirname, join, abspath
 
 
-__version__ = "0.2.1.dev"
+__version__ = "0.2.1"
 
 DATADIR = join(dirname(abspath(__file__)), "data")
 
-try:
-    import pygeos
-    import geopandas as gpd
+# Set environment variables (this will be temporary)
+# to use shapely 2.0 in favor of pygeos (if installed)
+import os
 
-    gpd.options.use_pygeos = True
-except ImportError:
-    pass
+os.environ["USE_PYGEOS"] = "0"
 
 from .delwaq import *

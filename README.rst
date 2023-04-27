@@ -5,7 +5,7 @@ HydroMT-delwaq: DELWAQ plugin for HydroMT
 
 What is HydroMT-delwaq?
 -----------------------
-HydroMT-delwaq is a plugin of the `HydroMT core <https://deltares.github.io/hydromt/latest/index.html#>`_, a python package, developed by Deltares, to build 
+HydroMT-delwaq is a plugin of the `HydroMT core <https://deltares.github.io/hydromt/latest/index.html>`_, a python package, developed by Deltares, to build 
 and analyse environmental models. This plugin provides an implementation for the `DELWAQ <https://www.deltares.nl/en/software/module/d-water-quality/>`_ water quality engine. 
 It details the different steps and explains how to use HydroMT to easily get started and work on your own DELWAQ model. WIth this plugin 
 you can interact with both classic **D-Water Quality** models as well as **D-Emission** models.

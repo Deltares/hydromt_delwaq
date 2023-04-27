@@ -6,17 +6,10 @@ All notable changes to this project will be documented in this page.
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
-Unreleased
-==========
-
-Added
------
-
-Changed
--------
-
-Fixed
------
+v0.2.1 (27 April 2023)
+======================
+Small changes to release on conda-forge and update the example notebooks to hydromt version >= 0.7.0 (region argument is optional and artifact_data not read by default).
+The documentation was also update to the new light theme style.
 
 v0.2.0 (21 December 2022)
 =========================

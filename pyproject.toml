@@ -11,18 +11,13 @@ authors = [
 dependencies = [
     "hydromt >=0.5.0",
     "hydromt_wflow >=0.2.0",
-    "dask",
-    "geopandas >=0.10.0",
-    "netcdf4",
+    "geopandas >=0.10",
     "numpy",
     "pandas",
-    "pyflwdir>=0.5.6",
-    "pygeos",
     "pyproj",
     "rasterio",
-    "rioxarray",
     "scipy",
-    "shapely",
+    "shapely >=2.0.0",
     "xarray",
 ]
 requires-python = ">=3.8" # fix tests to support older versions
