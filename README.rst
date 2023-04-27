@@ -1,7 +1,7 @@
 HydroMT-delwaq: DELWAQ plugin for HydroMT
 #########################################
 
-|pypi| |docs_latest| |docs_stable| |codecov| |license| |binder|
+|pypi| |conda_forge| |docs_latest| |docs_stable| |codecov| |license| |binder|
 
 What is HydroMT-delwaq?
 -----------------------
@@ -58,6 +58,10 @@ You can find information about contributing to HydroMT at our `Contributing page
 .. |pypi| image:: https://badge.fury.io/py/hydromt_delwaq.svg
     :target: https://pypi.org/project/hydromt_delwaq/
     :alt: Latest PyPI version
+
+.. |conda_forge| image:: https://anaconda.org/conda-forge/hydromt_delwaq/badges/version.svg
+    :target: https://anaconda.org/conda-forge/hydromt_delwaq
+    :alt: Conda-Forge
 
 .. |docs_latest| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
     :target: https://deltares.github.io/hydromt_delwaq/latest

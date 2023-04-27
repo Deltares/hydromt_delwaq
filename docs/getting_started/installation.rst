@@ -22,41 +22,45 @@ also needs to be installed (example HydroMT-Wflow).
 Installation
 ============
 
-HydroMT-delwaq is available from pypi and in the near future also installation from conda-forge will be supported.
-
-Install HydroMT-delwaq in a new environment
--------------------------------------------
-.. Tip::
-
-    This is our recommended way of installing HydroMT!
-
-To create a new environment called `hydromt-delwaq` from conda-forge with HydroMT and for example HydroMT-Wflow plugin installed, do:
-
-.. code-block:: console
-
-    $ conda create -n hydromt-delwaq -c conda-forge hydromt hydromt_wflow
-
-Then activate your new environment and install HydroMT-delwaq using pip.
-
-.. code-block:: console
-
-    $ conda activate hydromt-delwaq
-    $ pip install hydromt_delwaq
-
-Install HydroMT-delwaq in an existing environment
--------------------------------------------------
-To install HydroMT Wflow **using mamba or conda** execute the command below after activating the correct environment. 
-Note that if some dependencies are not installed from conda-forge the installation may fail. As HydroMT-delwaq is not 
-available yet from conda-forge, we recommend to first install HydroMT and the required hydrology/hydrodynamic plugins:
-
-.. code-block:: console
-
-    $ conda install -c conda-forge hydromt hydromt_wflow
-    $ pip install hydromt_delwaq
+HydroMT-delwaq is available from pypi and conda-forge. We recommend installing using mamba from conda-forge in a new environment.
 
 .. Note::
 
-    HydroMT-delwaq is available from pypi and we are working on adding a release from conda-forge (ongoing).
+    In the commands below you can exchange `mamba` for `conda`, see
+    `here <https://deltares.github.io/hydromt/latest/getting_started/installation.html#installation-guide>`_ 
+    for the difference between both.
+
+Install HydroMT-delwaq in a new environment
+-------------------------------------------
+You can install HydroMT-delwaq in a new environment called `hydromt-delwaq` together with 
+all optional (see above) and a few additional dependencies with:
+
+.. code-block:: console
+
+  $ mamba env create -f https://raw.githubusercontent.com/Deltares/hydromt_delwaq/main/environment.yml
+
+Then, activate the environment (as stated by mamba/conda) to start making use of HydroMT-Delwaq:
+
+.. code-block:: console
+
+  conda activate hydromt-delwaq
+
+.. Tip::
+
+    If you already have this environment with this name either remove it with 
+    `conda env remove -n hydromt-delwaq` **or** set a new name for the environment 
+    by adding `-n <name>` to the line below. 
+
+Install HydroMT-delwaq in an existing environment
+-------------------------------------------------
+To install HydroMT-delwaq in an existing environment execute the command below 
+where you replace `<environment_name>` with the name of the existing environment. 
+Note that if some dependencies are not installed from conda-forge but from other 
+channels the installation may fail.
+
+.. code-block:: console
+
+   $ mamba install -c conda-forge hydromt_delwaq -n <environment_name>
 
 Developer install
 -----------------
