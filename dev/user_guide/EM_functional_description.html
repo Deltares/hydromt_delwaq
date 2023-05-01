@@ -1,498 +1,482 @@
 
+
 <!DOCTYPE html>
 
-<html lang="en">
+
+<html lang="en" data-theme="light">
+
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Detailed functional description &#8212; HydroMT delwaq  documentation</title>
-    
-    <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
   
-    
-    <link rel="stylesheet"
-      href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
   
-    
-      
   
-    
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
-    
-    <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
   
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/design-tabs.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/EM_functional_description';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Running D-Emissions" href="generic_delwaq_EM_run.html" />
     <link rel="prev" title="Editing the EM run information" href="generic_delwaq_EM_prepare.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en">
-    
-
-    <!-- Google Analytics -->
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
-    <div class="container-fluid" id="banner"></div>
-
-    
-    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
-
-  <div id="navbar-start">
-    
-    
-<a class="navbar-brand" href="../index.html">
-<p class="title">HydroMT delwaq</p>
-</a>
-
-    
-  </div>
-
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
 
   
-  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
-    <div id="navbar-center" class="mr-auto">
-      
-      <div class="navbar-center-item">
-        <ul id="navbar-main-elements" class="navbar-nav">
-    <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="../getting_started/intro.html">
-  Getting Started
- </a>
-</li>
-
-<li class="toctree-l1 current active nav-item">
- <a class="reference internal nav-link" href="intro.html">
-  User Guide
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="../api.html">
-  API reference
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="../dev/intro.html">
-  Developments
- </a>
-</li>
-
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
     
-    <li class="nav-item">
-        <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">HydroMT core<i class="fas fa-external-link-alt"></i></a>
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/hydromt-logo.jpg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/hydromt-logo.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">HydroMT DELWAQ</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../getting_started/intro.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="intro.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../dev/intro.html">
+                        Developments
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+                    HydroMT core
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../getting_started/intro.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="intro.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../dev/intro.html">
+                        Developments
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+                    HydroMT core
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="generic_delwaq_EM.html">Working with the D-Emissions model</a><input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="EM_model.html">D-Emission model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_EM_substances.html">Selection of substance(s) and sources</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="build_config_EM.html">Building a model</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/build_EM_model.html">Example: Build D-Emission model</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="update_config_EM.html">Updating a model</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/adding_global_emission.html">Example: Add (global) emission data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/adding_local_emission.html">Example: Add (local) emission data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/update_model_forcing.html">Example: Update forcing data</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="generic_delwaq_EM_prepare.html">Editing the EM run information</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Further reading: Detailed functional description</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_EM_run.html">Running D-Emissions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generic_delwaq_WQ.html">Working with the D-Water Quality model</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="WQ_model.html">D-Water Quality model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_substances.html">Selection of substance(s) and processes</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="build_config_WQ.html">Building a model</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/build_WQ_model.html">Example: Build D-Water Quality model</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="update_config_WQ.html">Updating a model</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/update_model_monitoring.html">Example: Update monitoring data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_prepare.html">Editing the WQ run information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_run.html">Running D-Water Quality</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="process_analyze.html">Postprocessing and visualization</a><input checked class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/plot_delwaq.html">Example: Plot DELWAQ staticmaps</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="coupling_main.html">Reading more about coupling the individual modules</a><input checked class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="coupling_wflow.html">Explaining the Wflow - DELWAQ coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coupling_delwaq.html">Explaining the D-Emission - D-Water Quality coupling</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
     </li>
     
-</ul>
-      </div>
-      
-    </div>
-
-    <div id="navbar-end">
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-        <li class="nav-item">
-          <a class="nav-link" href="https://deltares.nl/en/" rel="noopener" target="_blank" title="Deltares"><img src="../_static/deltares-white.svg" class="icon-link-image" alt="Deltares"/></a>
-        </li>
-      </ul>
-      </div>
-      
-    </div>
-  </div>
-</div>
-    </nav>
+    <li class="breadcrumb-item"><a href="intro.html" class="nav-link">User Guide</a></li>
     
-
-    <div class="container-xl">
-      <div class="row">
-          
-            
-            <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar">
-              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-  <div class="bd-toc-item active">
-    <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="generic_delwaq_EM.html">
-   Working with the D-Emissions model
-  </a>
-  <input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="EM_model.html">
-     D-Emission model components
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="generic_delwaq_EM_substances.html">
-     Selection of substance(s) and sources
-    </a>
-   </li>
-   <li class="toctree-l2 has-children">
-    <a class="reference internal" href="build_config_EM.html">
-     Building a model
-    </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../_examples/build_EM_model.html">
-       Example: Build D-Emission model
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toctree-l2 has-children">
-    <a class="reference internal" href="update_config_EM.html">
-     Updating a model
-    </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-    <label for="toctree-checkbox-3">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../_examples/adding_global_emission.html">
-       Example: Add (global) emission data
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../_examples/adding_local_emission.html">
-       Example: Add (local) emission data
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../_examples/update_model_forcing.html">
-       Example: Update forcing data
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toctree-l2 current active has-children">
-    <a class="reference internal" href="generic_delwaq_EM_prepare.html">
-     Editing the EM run information
-    </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-    <label for="toctree-checkbox-4">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul class="current">
-     <li class="toctree-l3 current active">
-      <a class="current reference internal" href="#">
-       Further reading: Detailed functional description
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="generic_delwaq_EM_run.html">
-     Running D-Emissions
-    </a>
-   </li>
+    
+    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    
+    
+    <li class="breadcrumb-item"><a href="generic_delwaq_EM_prepare.html" class="nav-link">Editing the EM run information</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Detailed functional description</li>
   </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="generic_delwaq_WQ.html">
-   Working with the D-Water Quality model
-  </a>
-  <input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="WQ_model.html">
-     D-Water Quality model components
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="generic_delwaq_WQ_substances.html">
-     Selection of substance(s) and processes
-    </a>
-   </li>
-   <li class="toctree-l2 has-children">
-    <a class="reference internal" href="build_config_WQ.html">
-     Building a model
-    </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-    <label for="toctree-checkbox-6">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../_examples/build_WQ_model.html">
-       Example: Build D-Water Quality model
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toctree-l2 has-children">
-    <a class="reference internal" href="update_config_WQ.html">
-     Updating a model
-    </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-    <label for="toctree-checkbox-7">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../_examples/update_model_monitoring.html">
-       Example: Update monitoring data
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="generic_delwaq_WQ_prepare.html">
-     Editing the WQ run information
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="generic_delwaq_WQ_run.html">
-     Running D-Water Quality
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="process_analyze.html">
-   Postprocessing and visualization
-  </a>
-  <input checked class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-  <label for="toctree-checkbox-8">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../_examples/plot_delwaq.html">
-     Example: Plot DELWAQ staticmaps
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="coupling_main.html">
-   Reading more about coupling the individual modules
-  </a>
-  <input checked class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-  <label for="toctree-checkbox-9">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="coupling_wflow.html">
-     Explaining the Wflow - DELWAQ coupling
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="coupling_delwaq.html">
-     Explaining the D-Emission - D-Water Quality coupling
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-  </div>
 </nav>
-              </div>
-              <div class="sidebar-end-items">
-              </div>
-            </div>
-            
-          
-
-          
-          <div class="d-none d-xl-block col-xl-2 bd-toc">
-            
-              
-              <div class="toc-item">
-                
-<div class="tocsection onthispage pt-5 pb-3">
-    <i class="fas fa-list"></i> On this page
 </div>
-
-<nav id="bd-toc-nav">
-    <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#generic-single-substance-emission-model-em-gss">
-   Generic Single Substance Emission Model (EM_GSS)
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#introduction">
-     Introduction
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#implementation">
-     Implementation
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#formulation">
-     Formulation
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#releases">
-       Releases
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#paved-surfaces">
-       Paved surfaces
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#unpaved-surfaces">
-       Unpaved surfaces
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#combined-sewer-systems">
-       Combined sewer systems
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#separated-sewer-systems">
-       Separated sewer systems
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#input">
-     Input
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#output">
-     Output
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#waste-water-management-supportive-process-genwwman">
-   Waste water management supportive process (GenWWman)
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id1">
-     Introduction
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id2">
-     Implementation
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id3">
-     Formulation
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#allocation-of-wastewater-to-receiving-compartments">
-       Allocation of wastewater to receiving compartments
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#fate-of-substances-reaching-wwtps">
-       Fate of substances reaching WWTPs
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id4">
-     Input
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id5">
-     Output
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-</nav>
-              </div>
-              
-              <div class="toc-item">
-                
-
-<div class="tocsection editthispage">
-    <a href="https://github.com/Deltares/hydromt_delwaq/edit/new_docs/docs/user_guide/EM_functional_description.rst">
-        <i class="fas fa-pencil-alt"></i> Edit this page
-    </a>
+      
+    </div>
+  
+  
 </div>
-
-              </div>
+</div>
               
-            
-          </div>
-          
-
-          
-          
-            
-          
-          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
               
-              <div>
+              
                 
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <section id="detailed-functional-description">
-<span id="em-functional-description"></span><h1>Detailed functional description<a class="headerlink" href="#detailed-functional-description" title="Permalink to this heading">¶</a></h1>
+<span id="em-functional-description"></span><h1>Detailed functional description<a class="headerlink" href="#detailed-functional-description" title="Permalink to this heading">#</a></h1>
 <section id="generic-single-substance-emission-model-em-gss">
-<span id="em-gss"></span><h2>Generic Single Substance Emission Model (EM_GSS)<a class="headerlink" href="#generic-single-substance-emission-model-em-gss" title="Permalink to this heading">¶</a></h2>
+<span id="em-gss"></span><h2>Generic Single Substance Emission Model (EM_GSS)<a class="headerlink" href="#generic-single-substance-emission-model-em-gss" title="Permalink to this heading">#</a></h2>
 <section id="introduction">
-<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h3>
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h3>
 <p>This process quantifies releases to various compartments and routes them to the final recipients: surface waters and soils. It is applied for a single substance.</p>
 <p>Releases are defined for:</p>
 <ul class="simple">
@@ -502,7 +486,7 @@
 </ul>
 <p>The quantification of the releases of polutants associated to the various sources proceeds by the emission factor method. A variable collection of sources can be considered. Releases (<span class="math notranslate nohighlight">\(L\)</span>) of a pollutant “p” for a certain socio-economic activity “a” are calculated by multiplying an activity rate (<span class="math notranslate nohighlight">\(AR_a\)</span>) by an emission factor for this activity and a certain pollutant (<span class="math notranslate nohighlight">\(EF_{p,a}\)</span>):</p>
 <div class="math notranslate nohighlight" id="equation-eq-release-polutant">
-<span class="eqno">(1)<a class="headerlink" href="#equation-eq-release-polutant" title="Permalink to this equation">¶</a></span>\[L_{p,a} = AR_a * EF_{p,a}\]</div>
+<span class="eqno">(1)<a class="headerlink" href="#equation-eq-release-polutant" title="Permalink to this equation">#</a></span>\[L_{p,a} = AR_a * EF_{p,a}\]</div>
 <p>Releases are distributed in space according to two alternative methods:</p>
 <ol class="upperalpha simple">
 <li><p>The activity rate is known for a larger geographic area (region, country). The releases are first calculated at this aggregated level and then distributed in space using an auxiliary spatial variable called a “locator”.</p></li>
@@ -519,7 +503,7 @@
 </ul>
 </section>
 <section id="implementation">
-<h3>Implementation<a class="headerlink" href="#implementation" title="Permalink to this heading">¶</a></h3>
+<h3>Implementation<a class="headerlink" href="#implementation" title="Permalink to this heading">#</a></h3>
 <p>The EM is currently configured for 6 compartments.</p>
 <table class="table" id="em-compartments">
 <colgroup>
@@ -556,9 +540,9 @@
 <p>As the mathematical concept of a “substance” is used to represent compartments, EM has been set up to run for one “true” substance at a time.</p>
 </section>
 <section id="formulation">
-<h3>Formulation<a class="headerlink" href="#formulation" title="Permalink to this heading">¶</a></h3>
+<h3>Formulation<a class="headerlink" href="#formulation" title="Permalink to this heading">#</a></h3>
 <section id="releases">
-<h4>Releases<a class="headerlink" href="#releases" title="Permalink to this heading">¶</a></h4>
+<h4>Releases<a class="headerlink" href="#releases" title="Permalink to this heading">#</a></h4>
 <p>Releases of substances are quantified per time step.
 Releases from atmospheric deposition are automatically allocated to the proper receiving compartment (paved surfaces, unpaved surfaces and surface waters) depending on the local conditions that follow from the supportive hydrology model.
 Releases from other sources need to be allocated to the proper receiving compartment by the user.
@@ -566,7 +550,7 @@ Optionally, a part of the releases can be <strong>preliminary</strong> allocated
 The subsequent allocation of the wastewater to receiving compartments can then be arranged by a supportive process <a class="reference internal" href="#genwwman"><span class="std std-ref">GenWWman</span></a>.</p>
 </section>
 <section id="paved-surfaces">
-<h4>Paved surfaces<a class="headerlink" href="#paved-surfaces" title="Permalink to this heading">¶</a></h4>
+<h4>Paved surfaces<a class="headerlink" href="#paved-surfaces" title="Permalink to this heading">#</a></h4>
 <p>The figure below shows a schematic overview of the fate of releases to paved areas.
 Substances reaching paved areas undergo a decay process and can be washed off.
 The fraction that is not removed by runoff or decay remains in the paved emission pool.
@@ -578,13 +562,13 @@ This relation is fixed in the model code.</p>
 The fate of the release is either runoff to storm water or decay and thereby removal from the model.</em></p>
 <p>In formulas:</p>
 <div class="math notranslate nohighlight" id="equation-eq-paved1">
-<span class="eqno">(2)<a class="headerlink" href="#equation-eq-paved1" title="Permalink to this equation">¶</a></span>\[f_{runoff} =
+<span class="eqno">(2)<a class="headerlink" href="#equation-eq-paved1" title="Permalink to this equation">#</a></span>\[f_{runoff} =
 max \left( min \left( \frac{RO - 2}{5 - 2},1  \right),0 \right)\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-paved2">
-<span class="eqno">(3)<a class="headerlink" href="#equation-eq-paved2" title="Permalink to this equation">¶</a></span>\[F_{loss} =
+<span class="eqno">(3)<a class="headerlink" href="#equation-eq-paved2" title="Permalink to this equation">#</a></span>\[F_{loss} =
 k_{paved} M\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-paved3">
-<span class="eqno">(4)<a class="headerlink" href="#equation-eq-paved3" title="Permalink to this equation">¶</a></span>\[F_{runoff} =
+<span class="eqno">(4)<a class="headerlink" href="#equation-eq-paved3" title="Permalink to this equation">#</a></span>\[F_{runoff} =
 \left( \frac{M}{\Delta t} + L - F_{loss} \right) * f_{runoff}\]</div>
 <p>where</p>
 <table class="table">
@@ -622,7 +606,7 @@ k_{paved} M\]</div>
 </ul>
 </section>
 <section id="unpaved-surfaces">
-<h4>Unpaved surfaces<a class="headerlink" href="#unpaved-surfaces" title="Permalink to this heading">¶</a></h4>
+<h4>Unpaved surfaces<a class="headerlink" href="#unpaved-surfaces" title="Permalink to this heading">#</a></h4>
 <p>The figure below presents a schematic overview of the simulated pathways for unpaved areas.
 The unpaved pool is undergoing burial and decay.
 Both processes remove substances from the simulation.
@@ -641,32 +625,32 @@ The fate of the bound fraction is erosion.
 Both fractions will experience burial and decay and thereby removal from the model.</em></p>
 <p>In formulas:</p>
 <div class="math notranslate nohighlight" id="equation-eq-unpaved1">
-<span class="eqno">(5)<a class="headerlink" href="#equation-eq-unpaved1" title="Permalink to this equation">¶</a></span>\[f_{erosion} =
+<span class="eqno">(5)<a class="headerlink" href="#equation-eq-unpaved1" title="Permalink to this equation">#</a></span>\[f_{erosion} =
 max \left( min \left( \frac{RA - 10}{20 - 10},1  \right),0 \right)\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-unpaved2">
-<span class="eqno">(6)<a class="headerlink" href="#equation-eq-unpaved2" title="Permalink to this equation">¶</a></span>\[f_{mob} =
+<span class="eqno">(6)<a class="headerlink" href="#equation-eq-unpaved2" title="Permalink to this equation">#</a></span>\[f_{mob} =
 max \left( min \left( \frac{RO + INF}{7},1  \right),0 \right)\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-unpaved3">
-<span class="eqno">(7)<a class="headerlink" href="#equation-eq-unpaved3" title="Permalink to this equation">¶</a></span>\[f_{runoff} =
+<span class="eqno">(7)<a class="headerlink" href="#equation-eq-unpaved3" title="Permalink to this equation">#</a></span>\[f_{runoff} =
 max \left( min \left( \frac{RO}{RO + INF},1  \right),0 \right)\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-unpaved4">
-<span class="eqno">(8)<a class="headerlink" href="#equation-eq-unpaved4" title="Permalink to this equation">¶</a></span>\[f_{infilt} =
+<span class="eqno">(8)<a class="headerlink" href="#equation-eq-unpaved4" title="Permalink to this equation">#</a></span>\[f_{infilt} =
 max \left( min \left( \frac{INF}{RO + INF},1  \right),0 \right)\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-unpaved5">
-<span class="eqno">(9)<a class="headerlink" href="#equation-eq-unpaved5" title="Permalink to this equation">¶</a></span>\[F_{loss} =
+<span class="eqno">(9)<a class="headerlink" href="#equation-eq-unpaved5" title="Permalink to this equation">#</a></span>\[F_{loss} =
 \left( k_{unpaved} + b \right) M\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-unpaved6">
-<span class="eqno">(10)<a class="headerlink" href="#equation-eq-unpaved6" title="Permalink to this equation">¶</a></span>\[F_{part} =
+<span class="eqno">(10)<a class="headerlink" href="#equation-eq-unpaved6" title="Permalink to this equation">#</a></span>\[F_{part} =
 Kd_{unpaved} * \left( \frac{M}{\Delta t} + L - F_{loss} \right)\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-unpaved7">
-<span class="eqno">(11)<a class="headerlink" href="#equation-eq-unpaved7" title="Permalink to this equation">¶</a></span>\[F_{dis} =
+<span class="eqno">(11)<a class="headerlink" href="#equation-eq-unpaved7" title="Permalink to this equation">#</a></span>\[F_{dis} =
 \left(1 - Kd_{unpaved} \right) * \left( \frac{M}{\Delta t} + L - F_{loss} \right)\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-unpaved8">
-<span class="eqno">(12)<a class="headerlink" href="#equation-eq-unpaved8" title="Permalink to this equation">¶</a></span>\[F_{erosion} = F_{part} * f_{erosion}\]</div>
+<span class="eqno">(12)<a class="headerlink" href="#equation-eq-unpaved8" title="Permalink to this equation">#</a></span>\[F_{erosion} = F_{part} * f_{erosion}\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-unpaved9">
-<span class="eqno">(13)<a class="headerlink" href="#equation-eq-unpaved9" title="Permalink to this equation">¶</a></span>\[F_{infilt} = F_{dis} * f_{mob} * f_{infilt}\]</div>
+<span class="eqno">(13)<a class="headerlink" href="#equation-eq-unpaved9" title="Permalink to this equation">#</a></span>\[F_{infilt} = F_{dis} * f_{mob} * f_{infilt}\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-unpaved10">
-<span class="eqno">(14)<a class="headerlink" href="#equation-eq-unpaved10" title="Permalink to this equation">¶</a></span>\[F_{runoff} = F_{dis} * f_{mob} * f_{runoff}\]</div>
+<span class="eqno">(14)<a class="headerlink" href="#equation-eq-unpaved10" title="Permalink to this equation">#</a></span>\[F_{runoff} = F_{dis} * f_{mob} * f_{runoff}\]</div>
 <p>where</p>
 <table class="table">
 <tbody>
@@ -736,7 +720,7 @@ Kd_{unpaved} * \left( \frac{M}{\Delta t} + L - F_{loss} \right)\]</div>
 The infiltrating fraction is routed to the <em>Soi</em> compartment.</p>
 </section>
 <section id="combined-sewer-systems">
-<h4>Combined sewer systems<a class="headerlink" href="#combined-sewer-systems" title="Permalink to this heading">¶</a></h4>
+<h4>Combined sewer systems<a class="headerlink" href="#combined-sewer-systems" title="Permalink to this heading">#</a></h4>
 <p>A flux from the Sew to surface water is defined that corresponds to leakages and combined sewer overflows (CSO’s).
 This is controlled by the parameter <em>SewLeakage</em>.
 If this parameter is a positive number, it represents a constant leakage fraction.
@@ -749,7 +733,7 @@ The fate of the substances in the influent is fixed by the parameters specifying
 These two parameters implicitly determine the removal by wastewater treatment (<em>1 - Eff_WWTP-Sld_WWTP</em>).</p>
 </section>
 <section id="separated-sewer-systems">
-<h4>Separated sewer systems<a class="headerlink" href="#separated-sewer-systems" title="Permalink to this heading">¶</a></h4>
+<h4>Separated sewer systems<a class="headerlink" href="#separated-sewer-systems" title="Permalink to this heading">#</a></h4>
 <p>The parameters <em>LocSTW</em> and <em>RecSTW</em> allow a man-induced horizontal displacement of the collected water in the <em>Sew</em> and <em>Stw</em> compartments respectively.
 This is only relevant in small scale applications, e.g. in cities.</p>
 <p>The substances remaining in <em>Stw</em> can partly be retained.
@@ -758,7 +742,7 @@ These two parameters implicitly determine the retention (<em>1 - Eff_RS-Sld_RS</
 </section>
 </section>
 <section id="input">
-<h3>Input<a class="headerlink" href="#input" title="Permalink to this heading">¶</a></h3>
+<h3>Input<a class="headerlink" href="#input" title="Permalink to this heading">#</a></h3>
 <table class="table">
 <colgroup>
 <col style="width: 18.2%" />
@@ -982,64 +966,64 @@ These two parameters implicitly determine the retention (<em>1 - Eff_RS-Sld_RS</
 </div>
 </section>
 <section id="output">
-<h3>Output<a class="headerlink" href="#output" title="Permalink to this heading">¶</a></h3>
+<h3>Output<a class="headerlink" href="#output" title="Permalink to this heading">#</a></h3>
 <p>The simulated emissions to surface waters (<em>Emis_Sfw</em>; g/s) and to soils (<em>Emis_Soi</em>; g/s) are available for output.</p>
 </section>
 </section>
 <section id="waste-water-management-supportive-process-genwwman">
-<span id="genwwman"></span><h2>Waste water management supportive process (GenWWman)<a class="headerlink" href="#waste-water-management-supportive-process-genwwman" title="Permalink to this heading">¶</a></h2>
+<span id="genwwman"></span><h2>Waste water management supportive process (GenWWman)<a class="headerlink" href="#waste-water-management-supportive-process-genwwman" title="Permalink to this heading">#</a></h2>
 <section id="id1">
-<h3>Introduction<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<h3>Introduction<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
 <p>This process supports the emission modelling as discussed in <a class="reference internal" href="#em-gss"><span class="std std-ref">EM_GSS</span></a> by providing the allocation of the substances released to wastewater to the receiving compartments (<em>WWtoSew</em>, etc.)
 and by providing the WWTP treatment parameters (<em>Eff_WWTP</em>, <em>Sld_WWTP</em>) as a spatially variable mix of up to three available treatment levels.</p>
 </section>
 <section id="id2">
-<h3>Implementation<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<h3>Implementation<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
 <p>The process is implemented for the compartments listed in Table <a class="reference internal" href="#em-compartments"><span class="std std-ref">EM compartments</span></a>.
 The local treatment capacity can be specified for up to three levels of treatment, each with different properties.</p>
 </section>
 <section id="id3">
-<h3>Formulation<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<h3>Formulation<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
 <section id="allocation-of-wastewater-to-receiving-compartments">
-<h4>Allocation of wastewater to receiving compartments<a class="headerlink" href="#allocation-of-wastewater-to-receiving-compartments" title="Permalink to this heading">¶</a></h4>
+<h4>Allocation of wastewater to receiving compartments<a class="headerlink" href="#allocation-of-wastewater-to-receiving-compartments" title="Permalink to this heading">#</a></h4>
 <p>Wastewater is either collected in a sewer system (<em>FrSewered</em>), or in septic tanks (<em>FrSeptic</em>) or remains unmanaged (<em>1 - FrSewered - FrSeptic</em>).</p>
 <p>For the fraction collected in septic tanks, a loss to surface waters (<em>Eff_Septic</em>) and to soils (<em>Sld_Septic</em>) can be defined. The remaining part is assumed transported to treatment plants by other means than sewer systems.</p>
 <p>From the unmanaged wastewater, a fraction <em>fOpenWater</em> is allocated to surface waters, the remainder to soils.</p>
 <p>Thus, the allocation of wastewater to the modelled compartments is:</p>
 <div class="math notranslate nohighlight" id="equation-eq-wwman1">
-<span class="eqno">(15)<a class="headerlink" href="#equation-eq-wwman1" title="Permalink to this equation">¶</a></span>\[WWtoSew = FrSewered + FrSeptic*(1-Eff\_Septic-Sld\_Septic)\]</div>
+<span class="eqno">(15)<a class="headerlink" href="#equation-eq-wwman1" title="Permalink to this equation">#</a></span>\[WWtoSew = FrSewered + FrSeptic*(1-Eff\_Septic-Sld\_Septic)\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-wwman2">
-<span class="eqno">(16)<a class="headerlink" href="#equation-eq-wwman2" title="Permalink to this equation">¶</a></span>\[WWtoSfw = FrUnManaged*fOpenWater + FrSeptic*Eff_Septic\]</div>
+<span class="eqno">(16)<a class="headerlink" href="#equation-eq-wwman2" title="Permalink to this equation">#</a></span>\[WWtoSfw = FrUnManaged*fOpenWater + FrSeptic*Eff_Septic\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-wwman3">
-<span class="eqno">(17)<a class="headerlink" href="#equation-eq-wwman3" title="Permalink to this equation">¶</a></span>\[WWtoSoi = FrUnManaged*(1-fOpenWater) + FrSeptic*Sld_Septic\]</div>
+<span class="eqno">(17)<a class="headerlink" href="#equation-eq-wwman3" title="Permalink to this equation">#</a></span>\[WWtoSoi = FrUnManaged*(1-fOpenWater) + FrSeptic*Sld_Septic\]</div>
 </section>
 <section id="fate-of-substances-reaching-wwtps">
-<h4>Fate of substances reaching WWTPs<a class="headerlink" href="#fate-of-substances-reaching-wwtps" title="Permalink to this heading">¶</a></h4>
+<h4>Fate of substances reaching WWTPs<a class="headerlink" href="#fate-of-substances-reaching-wwtps" title="Permalink to this heading">#</a></h4>
 <p>The fraction of wastewater treated at three individual levels can be indicated. The remainder is assumed untreated:</p>
 <div class="math notranslate nohighlight" id="equation-eq-wwman4">
-<span class="eqno">(18)<a class="headerlink" href="#equation-eq-wwman4" title="Permalink to this equation">¶</a></span>\[FrUnTreated = 1 - FrTreat1 - FrTreat2 - FrTreat3\]</div>
+<span class="eqno">(18)<a class="headerlink" href="#equation-eq-wwman4" title="Permalink to this equation">#</a></span>\[FrUnTreated = 1 - FrTreat1 - FrTreat2 - FrTreat3\]</div>
 <p>For each of the three treatment levels, the fraction of the influent reaching the effluent and the sludge respectively is specified.
 For the untreated fraction all influent reaches the effluent.</p>
 <p>For the complete treatment system, the fractions reaching the effluent and the sludge equal:</p>
 <div class="math notranslate nohighlight" id="equation-eq-wwman5">
-<span class="eqno">(19)<a class="headerlink" href="#equation-eq-wwman5" title="Permalink to this equation">¶</a></span>\[\begin{split}Eff_WWTP =
+<span class="eqno">(19)<a class="headerlink" href="#equation-eq-wwman5" title="Permalink to this equation">#</a></span>\[\begin{split}Eff_WWTP =
 FrUnTreated +
 FrTreat1*Eff_Treat1 +\\
 FrTreat2*Eff_Treat2 +
 FrTreat3*Eff_Treat3\end{split}\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-wwman6">
-<span class="eqno">(20)<a class="headerlink" href="#equation-eq-wwman6" title="Permalink to this equation">¶</a></span>\[\begin{split}Sld_WWTP =
+<span class="eqno">(20)<a class="headerlink" href="#equation-eq-wwman6" title="Permalink to this equation">#</a></span>\[\begin{split}Sld_WWTP =
 FrTreat1*Sld_Treat1 +
 FrTreat2*Sld_Treat2 +\\
 FrTreat3*Sld_Treat3\end{split}\]</div>
 <p>In a final step, the fraction reaching sludge is corrected for “removal” of sludge by incineration and isolation.
 The remaining part is routed to soils in the main emission modelling process.</p>
 <div class="math notranslate nohighlight" id="equation-eq-wwman7">
-<span class="eqno">(21)<a class="headerlink" href="#equation-eq-wwman7" title="Permalink to this equation">¶</a></span>\[Sld_WWTP = Sld_WWTP*(1-fSldgRem)\]</div>
+<span class="eqno">(21)<a class="headerlink" href="#equation-eq-wwman7" title="Permalink to this equation">#</a></span>\[Sld_WWTP = Sld_WWTP*(1-fSldgRem)\]</div>
 </section>
 </section>
 <section id="id4">
-<h3>Input<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<h3>Input<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
 <table class="table">
 <colgroup>
 <col style="width: 20.0%" />
@@ -1136,7 +1120,7 @@ The remaining part is routed to soils in the main emission modelling process.</p
 </div>
 </section>
 <section id="id5">
-<h3>Output<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<h3>Output<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
 <p>The supportive process produces the below output, that feeds directly into the main emission modelling process.</p>
 <table class="table">
 <colgroup>
@@ -1178,50 +1162,155 @@ The remaining part is routed to soils in the main emission modelling process.</p
 </section>
 
 
-              </div>
+                </article>
               
               
-              <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="generic_delwaq_EM_prepare.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Editing the EM run information</p>
-        </div>
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="generic_delwaq_EM_prepare.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Editing the EM run information</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="generic_delwaq_EM_run.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="generic_delwaq_EM_run.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Running D-Emissions</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
-</div>
-              
-          </main>
-          
-
       </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generic-single-substance-emission-model-em-gss">Generic Single Substance Emission Model (EM_GSS)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formulation">Formulation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#releases">Releases</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#paved-surfaces">Paved surfaces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#unpaved-surfaces">Unpaved surfaces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#combined-sewer-systems">Combined sewer systems</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#separated-sewer-systems">Separated sewer systems</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#input">Input</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output">Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#waste-water-management-supportive-process-genwwman">Waste water management supportive process (GenWWman)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Introduction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Implementation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Formulation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#allocation-of-wastewater-to-receiving-compartments">Allocation of wastewater to receiving compartments</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fate-of-substances-reaching-wwtps">Fate of substances reaching WWTPs</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Input</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Output</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/user_guide/EM_functional_description.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/user_guide/EM_functional_description.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright Deltares.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    <br/>
+  </p>
+</div>
+      
     </div>
   
-    <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
-  <div class="container">
-    
-    <div class="footer-item">
-      <p class="copyright">
-    &copy; Copyright Deltares.<br>
-</p>
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
     </div>
-    
-    <div class="footer-item">
-      <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
-</p>
-    </div>
-    
-  </div>
-</footer>
+  
+</div>
+
+  </footer>
   </body>
 </html>
