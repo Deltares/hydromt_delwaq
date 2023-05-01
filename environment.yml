@@ -8,10 +8,9 @@ dependencies:
   - descartes # to run examples
   - hydromt>=0.7.0
   - hydromt_wflow>=0.2.1
+  - hydromt_delwaq>=0.2.1
   - jupyter # to run examples
   - matplotlib # to run examples
   - pip
   - python=3.10 # fixing python version for binder
-  - pip:
-    - hydromt_delwaq>=0.2.0
 
