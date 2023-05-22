@@ -38,6 +38,7 @@ dependencies:
   - sphinx # docs
   - sphinx_rtd_theme # docs
   - xarray
+  - xugrid
   - zarr
   - pip:
     - git+https://github.com/Deltares/hydromt.git

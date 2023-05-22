@@ -474,12 +474,10 @@ class DelwaqModel(Model):
         dsvar = [v for v in ds.data_vars if v.startswith(self.fluxes[0])][0]
         ds_out = hydromt.raster.full_like(ds[dsvar], lazy=True).to_dataset()
         ds_out = ds_out.sel(time=slice(starttime, endtime))
-        da_zeros = xr.DataArray(
-            data=np.zeros(np.shape(ds_out[dsvar])),
-            coords=ds_out.coords,
-            dims=ds_out.dims,
-            attrs=dict(_FillValue=-999.0, units="m3/s"),
-        )
+        # Array of zeros
+        da_zeros = ds_out[dsvar] * 0.0
+        da_zeros.attrs.update(units="m3/s")
+        da_zeros.raster.set_nodata(-999.0)
 
         ### Fluxes ###
         for flux in self.fluxes:

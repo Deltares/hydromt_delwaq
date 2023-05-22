@@ -280,7 +280,10 @@ def pointer(
     lowerid = 0
 
     da_tot = []
-    np_ldd = ds_hydro["ldd"].values
+    # Apply mask to ldd
+    da_ldd = ds_hydro["ldd"].where(ds_hydro["mask"], ds_hydro["ldd"].raster.nodata)
+    np_ldd = da_ldd.values
+    # Number of outlets
     nb_out = len(np_ldd[np_ldd == 5])
     for i in range(1, ncomp + 1):
         comp_label = compartments[i - 1]

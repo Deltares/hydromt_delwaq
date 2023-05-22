@@ -39,5 +39,6 @@ dependencies:
   - sphinx # docs
   - sphinx_rtd_theme # docs
   - xarray
+  - xugrid
   - zarr
 

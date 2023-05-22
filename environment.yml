@@ -19,6 +19,7 @@ dependencies:
   - python=3.10
   - sphinx # docs
   - sphinx_rtd_theme # docs
+  - xugrid
   - pip:
     - hydromt_delwaq>=0.2.0
 
