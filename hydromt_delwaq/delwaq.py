@@ -475,7 +475,7 @@ class DelwaqModel(Model):
         ds_out = hydromt.raster.full_like(ds[dsvar], lazy=True).to_dataset()
         ds_out = ds_out.sel(time=slice(starttime, endtime))
         # Array of zeros
-        da_zeros = ds_out[dsvar] * 0.0
+        da_zeros = ds[dsvar] * 0.0
         da_zeros.attrs.update(units="m3/s")
         da_zeros.raster.set_nodata(-999.0)
 
@@ -1232,6 +1232,7 @@ class DelwaqModel(Model):
         timestepstamp = np.arange(
             0, (len(ds_out.time.values) + 1) * int(self.timestepsecs), self.timestepsecs
         )
+
         for i in timesteps:
             self.logger.info(
                 f"Writting dynamic data for timestep {i+1}/{len(timesteps)}"
