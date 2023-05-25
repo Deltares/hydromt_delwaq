@@ -575,36 +575,60 @@ class DemissionModel(DelwaqModel):
             f"Setting dynamic data from hydrology source {hydro_forcing_fn}."
         )
         # read dynamic data
-        # TODO when forcing workflow is ready nice clipping/resampling can be added
         # Normally region extent is by default exactly the same as hydromodel
         ds_in = self.data_catalog.get_rasterdataset(
             hydro_forcing_fn,
             geom=self.region,
+            time_tuple=(starttime, endtime),
         )
+
         # Select variables based on model type
-        ds = ds_in[["precip", "runPav", "runUnp", "infilt"]]
+        vars = ["precip", "runPav", "runUnp", "infilt"]
         if include_transport:
-            ds["q_land"] = ds_in["q_land"]
-            ds["q_ss"] = ds_in["q_ss"]
+            vars.extend(["q_land", "q_ss"])
+            ex_vars = [v for v in ds_in.data_vars if v.startswith("exfilt")]
+            vars.extend(ex_vars)
+        ds = ds_in[vars]
+
+        # Update model timestepsecs attribute
+        self.timestepsecs = timestepsecs
+
+        # Unit conversion (from mm to m3/s)
+        for dvar in ds.data_vars.keys():
+            if ds[dvar].attrs.get("units") == "mm":
+                attrs = ds[dvar].attrs.copy()
+                surface = emissions.gridarea(ds)
+                ds[dvar] = ds[dvar] * surface / (1000 * self.timestepsecs)
+                ds[dvar].attrs.update(attrs)  # set original attributes
+                ds[dvar].attrs.update(units="m3/s")
+
+        # Sum up exfiltrattion or add totflw depending on include_transport
+        if include_transport:
             # Add exfiltration (can be split into several variables)
             # Check if the flux is split into several variables
-            ex_vars = [v for v in ds_in.data_vars if v.startswith("exfilt")]
+            ex_vars = [v for v in ds.data_vars if v.startswith("exfilt")]
             if len(ex_vars) > 1:  # need to sum
-                attrs = ds_in[ex_vars[0]].attrs.copy()
-                nodata = ds_in[ex_vars[0]].raster.nodata
+                attrs = ds[ex_vars[0]].attrs.copy()
+                nodata = ds[ex_vars[0]].raster.nodata
                 # Cover exfilt with zeros (some negative zeros in wflow outputs?)
-                ds["exfilt"] = ds_in[ex_vars].fillna(0).to_array().sum("variable")
+                ds["exfilt"] = ds[ex_vars].fillna(0).to_array().sum("variable")
                 ds["exfilt"] = ds["exfilt"].where(ds["exfilt"] > 0.0, 0.0)
                 ds["exfilt"].attrs.update(attrs)
                 ds["exfilt"].raster.set_nodata(nodata)
-            else:
-                ds["exfilt"] = ds_in["exfilt"]
+                ds = ds.drop_vars(ex_vars)
+            elif ex_vars[0] != "exfilt":
+                ds = ds.rename({ex_vars[0]: "exfilt"})
         else:
             # Add total flow
             ds["totflw"] = ds["precip"].copy()
 
         # align forcing file with hydromaps
-        ds = ds.raster.reproject_like(self.hydromaps)
+        # as hydro forcing comes from hydro model, it should be aligned with hydromaps
+        if not ds.raster.identical_grid(self.hydromaps):
+            self.logger.warning(
+                "hydro_forcing_fn and model grid are not identical. Reprojecting."
+            )
+            ds = ds.raster.reproject_like(self.hydromaps)
 
         # Add _FillValue to the data attributes
         for dvar in ds.data_vars.keys():
@@ -614,20 +638,7 @@ class DemissionModel(DelwaqModel):
             else:
                 ds[dvar].attrs.update(_FillValue=-9999.0)
 
-        # Update model timestepsecs attribute
-        self.timestepsecs = timestepsecs
-        # Select times
-        ds = ds.sel(time=slice(starttime, endtime))
-
-        # Unit conversion (from mm to m3/s)
-        for dvar in ds.data_vars.keys():
-            if ds[dvar].attrs.get("units") == "mm":
-                attrs = ds[dvar].attrs.copy()
-                surface = emissions.gridarea(ds)
-                ds[dvar] = ds[dvar] * surface / (1000 * self.timestepsecs)
-                ds[dvar].attrs.update(attrs)  # set original attributes
-                ds[dvar].attrs.update(unit="m3/s")
-
+        # Add mask
         ds.coords["mask"] = xr.DataArray(
             dims=ds.raster.dims,
             coords=ds.raster.coords,
@@ -635,6 +646,7 @@ class DemissionModel(DelwaqModel):
             attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
         )
 
+        # Add to forcing
         self.set_forcing(ds)
 
         # Add time info to config

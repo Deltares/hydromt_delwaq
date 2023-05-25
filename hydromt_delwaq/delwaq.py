@@ -456,8 +456,13 @@ class DelwaqModel(Model):
         # read dynamic data
         # Normally region extent is by default exactly the same as hydromodel
         ds = self.data_catalog.get_rasterdataset(hydro_forcing_fn, geom=self.region)
-        # align forcing file with hydromaps
-        ds = ds.raster.reproject_like(self.hydromaps)
+        # If needed reproject forcing data to model grid
+        # As forcing should come from hydromodel the grids should already be identical
+        if not ds.raster.identical_grid(self.hydromaps):
+            self.logger.warning(
+                "hydro_forcing_fn and model grid are not identical. Reprojecting."
+            )
+            ds = ds.raster.reproject_like(self.hydromaps)
 
         # Add _FillValue to the data attributes
         for dvar in ds.data_vars.keys():
@@ -647,8 +652,13 @@ class DelwaqModel(Model):
         ds = ds.sel(time=slice(starttime, endtime))
         sed_vars = [f"Erod{x}" for x in particle_class]
         ds = ds[sed_vars]
-        # align forcing file with hydromaps
-        ds = ds.raster.reproject_like(self.hydromaps)
+        # If needed reproject forcing data to model grid
+        # As forcing should come from hydromodel the grids should already be identical
+        if not ds.raster.identical_grid(self.hydromaps):
+            self.logger.warning(
+                "hydro_forcing_fn and model grid are not identical. Reprojecting."
+            )
+            ds = ds.raster.reproject_like(self.hydromaps)
 
         # Add basin mask
         ds.coords["mask"] = xr.DataArray(
