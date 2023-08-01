@@ -920,11 +920,12 @@ class DelwaqModel(Model):
             area_division=area_division,
             logger=self.logger,
         )
+        ds_emi = ds_emi.to_dataset(name=emission_fn)
         # Attribute to comp_emi compartment and add zeros for the others
         ds_emi = segments.extend_comp_with_zeros(
             ds1c=ds_emi, comp_ds1c=comp_emi, compartments=self.compartments
         )
-        self.set_staticmaps(ds_emi.rename(emission_fn))
+        self.set_staticmaps(ds_emi)
 
     def setup_emission_vector(
         self,
@@ -972,11 +973,12 @@ class DelwaqModel(Model):
                 mask_name="mask",
                 logger=self.logger,
             )
+        ds_emi = ds_emi.to_dataset(name=emission_fn)
         # Attribute to comp_emi compartment and add zeros for the others
         ds_emi = segments.extend_comp_with_zeros(
             ds1c=ds_emi, comp_ds1c=comp_emi, compartments=self.compartments
         )
-        self.set_staticmaps(ds_emi.rename(emission_fn))
+        self.set_staticmaps(ds_emi)
 
     def setup_emission_mapping(
         self,
