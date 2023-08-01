@@ -56,6 +56,13 @@ def hydromaps(
     ds_out["rivwth"] = hydromodel.staticmaps[hydromodel._MAPS["rivwth"]]
     ds_out["elevtn"] = hydromodel.staticmaps[hydromodel._MAPS["elevtn"]]
 
+    # Surface area maps
+    ds_out["rivarea"] = ds_out["rivlen"] * ds_out["rivwth"]
+    if "LakeArea" in hydromodel.staticmaps:
+        ds_out["lakearea"] = hydromodel.staticmaps["LakeArea"]
+    if "ResSimpleArea" in hydromodel.staticmaps:
+        ds_out["resarea"] = hydromodel.staticmaps["ResSimpleArea"]
+
     basins_mv = ds_out["basins"].raster.nodata
     ds_out["basmsk"] = xr.Variable(
         dims=ds_out.raster.dims,

@@ -398,6 +398,7 @@ class DelwaqModel(Model):
         timestepsecs,
         add_volume_offset=True,
         min_volume=0.1,
+        override=[],
         **kwargs,
     ):
         """Setup Delwaq hydrological fluxes.
@@ -408,10 +409,15 @@ class DelwaqModel(Model):
 
         If several sub-variables in ``hydro_forcing_fn`` need to be summed up to get the expected flux in pointer,
         they can be named {flux_name_in_pointer}_{number} (eg "sfw>sfw_1" and "sfw>sfw_2" to get "sfw>sfw") and the
-        function will sum them on the fly. To remove (- instead of +) use unit_mult attribute of tha data catalog
+        function will sum them on the fly. To remove (- instead of +) use unit_mult attribute of the data catalog
         with -1 for the sub-variables of interest.
+        To override rather than sum fluxes, use the ``override`` argument and name of the concerned flux (eg "sfw>sfw").
+        The flux are overwritten (excluding nodata) in the order of the list, so the last one will be the one used.
 
-        Unit conversions are possible (after the sum!) from mm/day to m3/s for fluxes, volumes should be provided directly in m3.
+        Unit conversions are possible from mm/area to m3/s for fluxes, volumes should be provided directly in m3.
+        For conversion from mm to m3/s, it is possible to specify over wich surface area the mm are calculated.
+        If 'mm' (default), the cellarea is assumed. Else, you can use 'mm/{surfacearea}' where {surfacearea} should be a map
+        available in hydromaps (rivarea, lakearea, resarea).
 
         Adds model layers:
 
@@ -444,6 +450,8 @@ class DelwaqModel(Model):
             an offset of one timestep needs to be added for consistency.
         min_volume : float, optional
             Add a minimum value to all the volumes in Delwaq to avoid zeros. Default is 0.1m3.
+        override : list, optional
+            List of fluxes/volumes to override for non nodata values rather than sum. The last one (based on _number) has priority.
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
@@ -485,9 +493,26 @@ class DelwaqModel(Model):
         da_zeros.raster.set_nodata(-999.0)
 
         ### Fluxes ###
-        for flux in self.fluxes:
+        for flux in self.fluxes:          
             # Check if the flux is split into several variables
             fl_vars = [v for v in ds.data_vars if v.startswith(flux)]
+            # Sort the list of flux by name, important for override type of sum
+            fl_vars.sort()
+            # Unit conversion (from mm to m3/s)
+            for fl in fl_vars:
+                # Assume by default mm/cellarea
+                unit = ds[fl].attrs.get("units")
+                if unit == "mm":
+                    surface = emissions.gridarea(ds)
+                    ds[fl] = ds[fl] * surface / (1000 * self.timestepsecs)
+                # For other area eg river, lake, reservoir
+                elif unit.startswith('mm/'):
+                    surfacemap = unit.split('/')[1]
+                    if surfacemap in self.hydromaps:
+                        ds[fl] = ds[fl] * self.hydromaps[surfacemap] / (1000 * self.timestepsecs)
+                    else:
+                        surface_fns = [f for f in self.hydromaps.keys() if f.endswith('area')]
+                        self.logger.error(f"Map {surfacemap} not found in hydromaps to convert unit {unit}. Allowed names are {surface_fns}.")
             if len(fl_vars) > 0:  # flux not in ds
                 attrs = ds[fl_vars[0]].attrs.copy()
             else:
@@ -496,12 +521,13 @@ class DelwaqModel(Model):
                 )
                 ds[flux] = da_zeros
                 attrs = da_zeros.attrs.copy()
-            if len(fl_vars) > 1:  # need to sum
-                ds[flux] = ds[fl_vars].fillna(0).to_array().sum("variable")
-            # Unit conversion (from mm to m3/s)
-            if ds[flux].attrs.get("units") == "mm":
-                surface = emissions.gridarea(ds)
-                ds[flux] = ds[flux] * surface / (1000 * self.timestepsecs)
+            if len(fl_vars) > 1:  # need to sum or override
+                if flux not in override:
+                    ds[flux] = ds[fl_vars].fillna(0).to_array().sum("variable")
+                else:
+                    ds[flux] = ds[fl_vars[0]]
+                    for fl in fl_vars[1:]:
+                        ds[flux] = ds[flux].where(ds[fl].isnull(), ds[fl])
             ds_out[flux] = ds[flux].sel(time=slice(starttime, endtime))
             ds_out[flux].attrs.update(attrs)
             ds_out[flux].attrs.update(unit="m3/s")
@@ -516,13 +542,27 @@ class DelwaqModel(Model):
         for vol in self.compartments:
             # Check if the flux is split into several variables
             vol_vars = [v for v in ds.data_vars if v.startswith(vol)]
+            # Unit conversion (from mm to m3)
+            for vl in vol_vars:
+                if ds[vl].attrs.get("units") == "mm":
+                    surface = emissions.gridarea(ds)
+                    ds[vl] = ds[vl] * surface / (1000 * self.timestepsecs)
+                # For other area eg river, lake, reservoir
+                elif unit.startswith('mm/'):
+                    surfacemap = unit.split('/')[1]
+                    if surfacemap in self.hydromaps:
+                        ds[vl] = ds[vl] * self.hydromaps[surfacemap] / (1000 * self.timestepsecs)
+                    else:
+                        surface_fns = [f for f in self.hydromaps.keys() if f.endswith('area')]
+                        self.logger.error(f"Map {surfacemap} not found in hydromaps to convert unit {unit}. Allowed names are {surface_fns}.")
             attrs = ds[vol_vars[0]].attrs.copy()
             if len(vol_vars) > 1:  # need to sum
-                ds[vol] = ds[vol_vars].fillna(0).to_array().sum("variable")
-            # Unit conversion (from mm to m3)
-            if ds[vol].attrs.get("units") == "mm":
-                surface = emissions.gridarea(ds)
-                ds[vol] = ds[vol] * surface / (1000 * self.timestepsecs)
+                if vol not in override:
+                    ds[vol] = ds[vol_vars].fillna(0).to_array().sum("variable")
+                else:
+                    ds[vol] = ds[vol_vars[0]]
+                    for vl in vol_vars[1:]:
+                        ds[vol] = ds[vol].where(ds[vl].isnull(), ds[vl])
             # In order to avoid zero volumes, a basic minimum value of 0.0001 m3 is added to all volumes
             ds[vol] = ds[vol] + min_volume
             # Add offset for the volumes if needed
@@ -541,9 +581,6 @@ class DelwaqModel(Model):
         variables = self.fluxes.copy()
         variables.extend(self.compartments)
         ds_out = ds_out[variables]
-
-        # Sell times to starttime and endtime
-        # ds = ds.sel(time=slice(starttime, endtime))
 
         ds_out.coords["mask"] = xr.DataArray(
             dims=ds_out.raster.dims,
