@@ -112,8 +112,18 @@ def maps_from_hydromodel(
         elif m in hydromodel._MAPS:
             if hydromodel._MAPS[m] in hydromodel.staticmaps:
                 ds_out[m] = hydromodel.staticmaps[hydromodel._MAPS[m]]
-        else:
+        elif m in hydromodel.staticmaps:
             ds_out[m] = hydromodel.staticmaps[m]
+        else:
+            logger.warning(f"Map {m} not found in hydromodel, skipping.")
+        # Check if m is 3D and split into several variables
+        if m in ds_out and len(ds_out[m].shape) == 3:
+            # Find the name of the extra dimension
+            dim0 = ds_out[m].raster.dim0
+            dim0_values = ds_out[dim0].values
+            for i in range(ds_out[m].shape[0]):
+                ds_out[f"{m}_{dim0}_{dim0_values[i]}"] = ds_out[m][i]
+            ds_out = ds_out.drop_vars([m, dim0])
 
     # surface water comp
     ds_out = extend_comp_with_duplicates(ds1c=ds_out, compartments=compartments)
@@ -133,10 +143,6 @@ def geometrymaps(
     - surface
     - length
     - width
-    - slope
-    - river
-    - streamorder
-    - manning
     
     Parameters
     ----------

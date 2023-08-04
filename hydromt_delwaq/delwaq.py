@@ -14,6 +14,7 @@ from datetime import datetime
 import time as t
 import matplotlib.pyplot as plt
 import xugrid as xu
+from typing import List
 
 import hydromt
 from hydromt.models.model_api import Model
@@ -22,7 +23,7 @@ from hydromt import workflows, flw, io
 
 from hydromt_wflow.wflow import WflowModel
 
-from .workflows import emissions, segments
+from .workflows import emissions, segments, hydrology
 from . import DATADIR
 
 __all__ = ["DelwaqModel"]
@@ -54,6 +55,8 @@ class DelwaqModel(Model):
         "rivmsk": "river",
         "strord": "streamorder",
         "thetaS": "porosity",
+        "reslocs": "reservoirs",
+        "lakelocs": "lakes",
     }
     _FORCING = {
         "temp": "tempair",
@@ -159,7 +162,7 @@ class DelwaqModel(Model):
         # Only list of str allowed in config
         comp_attributes = [int(i) for i in comp_attributes]
         # Initialise hydromodel from region
-        kind, region = workflows.parse_region(region, logger=self.logger)
+        kind, region = workflows.parse_region(region)  # , logger=self.logger)
         if kind != "model":
             raise ValueError("Delwaq model can only be built from 'model' region.")
         hydromodel = region["mod"]
@@ -208,7 +211,9 @@ class DelwaqModel(Model):
         self.set_pointer(fluxes, name="fluxes")
 
         ### Initialise staticmaps with streamorder, river and slope ###
-        ds_stat = segments.maps_from_hydromodel(hydromodel, compartments, maps=maps)
+        ds_stat = segments.maps_from_hydromodel(
+            hydromodel, compartments, maps=maps, logger=self.logger
+        )
         mask = segments.extend_comp_with_duplicates(da_mask.to_dataset(), compartments)
         ds_stat["mask"] = mask[da_mask.name]
         ds_stat = ds_stat.set_coords("mask")
@@ -390,16 +395,72 @@ class DelwaqModel(Model):
         for option in lines_ini:
             self.set_config("B2_nrofmon", option, lines_ini[option])
 
+    def setup_flooding(
+        self,
+        hydro_fn: str,
+        from_volume: bool = True,
+        bankfull_rp: int = 2,
+        **kwargs,
+    ):
+        """
+        Addionnally, if floodplain processes need to be modelled, the bankfull volume to characterise flooding thresholds
+        can be derived from hydrolgy timeseries data.
+        The bankfull volume is defined as the volume corresponding to a return period of 2 years (default).
+        xclim.indices.stats.frequency_analysis is used to get bankfull volume based on annual maxima method.
+
+        If volume timeseries are not available, the bankfull volume can be derived from discharge timeseries data
+        using the flag from_volume=False.
+
+        Parameters
+        ----------
+        hydro_fn : str
+            Path to the discharge forcing file.
+
+            * Required variable: ["volume"] or ["discharge"]
+
+        from_volume : bool, optional
+            If True, bankfull volume is derived from volume timeseries data.
+        **kwargs
+            Keywords arguments for either bankfull_volume or bankfull_volume_from_discharge.
+        """
+        # Read data
+        # Normally region extent is by default exactly the same as hydromodel
+        if from_volume:
+            da_v = self.data_catalog.get_rasterdataset(
+                hydro_fn, geom=self.region, variables=["volume"]
+            )
+
+            # Derive bankfull discharge / depth / volume
+            self.logger.info("Deriving flooding characteristics from volume.")
+            ds_bankfull = hydrology.bankfull_volume(
+                da_v=da_v,
+                **kwargs,
+            )
+        else:
+            da_q = self.data_catalog.get_rasterdataset(
+                hydro_fn, geom=self.region, variables=["discharge"]
+            )
+
+            # Derive bankfull discharge / depth / volume
+            self.logger.info("Deriving flooding characteristics from discharge.")
+            ds_bankfull = hydrology.bankfull_volume_from_discharge(
+                da_q=da_q,
+                ds_model=self.staticmaps,
+                **kwargs,
+            )
+
+        # Add to staticmaps
+        self.set_staticmaps(ds_bankfull)
+
     def setup_hydrology_forcing(
         self,
-        hydro_forcing_fn,
-        starttime,
-        endtime,
-        timestepsecs,
-        add_volume_offset=True,
-        min_volume=0.1,
-        override=[],
-        **kwargs,
+        hydro_forcing_fn: str,
+        starttime: str,
+        endtime: str,
+        timestepsecs: int,
+        add_volume_offset: bool = True,
+        min_volume: float = 0.1,
+        override: List = [],
     ):
         """Setup Delwaq hydrological fluxes.
 
@@ -464,132 +525,24 @@ class DelwaqModel(Model):
         # read dynamic data
         # Normally region extent is by default exactly the same as hydromodel
         ds = self.data_catalog.get_rasterdataset(hydro_forcing_fn, geom=self.region)
-        # If needed reproject forcing data to model grid
-        # As forcing should come from hydromodel the grids should already be identical
-        if not ds.raster.identical_grid(self.hydromaps):
-            self.logger.warning(
-                "hydro_forcing_fn and model grid are not identical. Reprojecting."
-            )
-            ds = ds.raster.reproject_like(self.hydromaps)
 
-        # Add _FillValue to the data attributes
-        for dvar in ds.data_vars.keys():
-            nodata = ds[dvar].raster.nodata
-            if nodata is not None:
-                ds[dvar].attrs.update(_FillValue=nodata)
-            else:
-                ds[dvar].attrs.update(_FillValue=-9999.0)
+        # Prepare hydrology forcing
+        ds_out = hydrology.hydrology_forcing(
+            ds=ds,
+            ds_model=self.hydromaps,
+            timestepsecs=timestepsecs,
+            time_tuple=(starttime, endtime),
+            fluxes=self.fluxes,
+            compartments=self.compartments,
+            add_volume_offset=add_volume_offset,
+            min_volume=min_volume,
+            override=override,
+            logger=self.logger,
+        )
+        self.set_forcing(ds_out)
 
         # Update model timestepsecs attribute
         self.timestepsecs = timestepsecs
-
-        # Copy of ds to be filled
-        dsvar = [v for v in ds.data_vars if v.startswith(self.fluxes[0])][0]
-        ds_out = hydromt.raster.full_like(ds[dsvar], lazy=True).to_dataset()
-        ds_out = ds_out.sel(time=slice(starttime, endtime))
-        # Array of zeros
-        da_zeros = ds[dsvar] * 0.0
-        da_zeros.attrs.update(units="m3/s")
-        da_zeros.raster.set_nodata(-999.0)
-
-        ### Fluxes ###
-        for flux in self.fluxes:          
-            # Check if the flux is split into several variables
-            fl_vars = [v for v in ds.data_vars if v.startswith(flux)]
-            # Sort the list of flux by name, important for override type of sum
-            fl_vars.sort()
-            # Unit conversion (from mm to m3/s)
-            for fl in fl_vars:
-                # Assume by default mm/cellarea
-                unit = ds[fl].attrs.get("units")
-                if unit == "mm":
-                    surface = emissions.gridarea(ds)
-                    ds[fl] = ds[fl] * surface / (1000 * self.timestepsecs)
-                # For other area eg river, lake, reservoir
-                elif unit.startswith('mm/'):
-                    surfacemap = unit.split('/')[1]
-                    if surfacemap in self.hydromaps:
-                        ds[fl] = ds[fl] * self.hydromaps[surfacemap] / (1000 * self.timestepsecs)
-                    else:
-                        surface_fns = [f for f in self.hydromaps.keys() if f.endswith('area')]
-                        self.logger.error(f"Map {surfacemap} not found in hydromaps to convert unit {unit}. Allowed names are {surface_fns}.")
-            if len(fl_vars) > 0:  # flux not in ds
-                attrs = ds[fl_vars[0]].attrs.copy()
-            else:
-                self.logger.warning(
-                    f"Flux {flux} not found in hydro_forcing_fn. Using zeros."
-                )
-                ds[flux] = da_zeros
-                attrs = da_zeros.attrs.copy()
-            if len(fl_vars) > 1:  # need to sum or override
-                if flux not in override:
-                    ds[flux] = ds[fl_vars].fillna(0).to_array().sum("variable")
-                else:
-                    ds[flux] = ds[fl_vars[0]]
-                    for fl in fl_vars[1:]:
-                        ds[flux] = ds[flux].where(ds[fl].isnull(), ds[fl])
-            ds_out[flux] = ds[flux].sel(time=slice(starttime, endtime))
-            ds_out[flux].attrs.update(attrs)
-            ds_out[flux].attrs.update(unit="m3/s")
-
-        ### Volumes ###
-        # Add offset for the volumes if needed
-        if add_volume_offset:
-            # Get the freq of ds and add + 1 offset
-            times = pd.to_datetime(ds["time"].values)
-            times.freq = pd.infer_freq(times)
-            times_offset = times + times.freq
-        for vol in self.compartments:
-            # Check if the flux is split into several variables
-            vol_vars = [v for v in ds.data_vars if v.startswith(vol)]
-            # Unit conversion (from mm to m3)
-            for vl in vol_vars:
-                if ds[vl].attrs.get("units") == "mm":
-                    surface = emissions.gridarea(ds)
-                    ds[vl] = ds[vl] * surface / (1000 * self.timestepsecs)
-                # For other area eg river, lake, reservoir
-                elif unit.startswith('mm/'):
-                    surfacemap = unit.split('/')[1]
-                    if surfacemap in self.hydromaps:
-                        ds[vl] = ds[vl] * self.hydromaps[surfacemap] / (1000 * self.timestepsecs)
-                    else:
-                        surface_fns = [f for f in self.hydromaps.keys() if f.endswith('area')]
-                        self.logger.error(f"Map {surfacemap} not found in hydromaps to convert unit {unit}. Allowed names are {surface_fns}.")
-            attrs = ds[vol_vars[0]].attrs.copy()
-            if len(vol_vars) > 1:  # need to sum
-                if vol not in override:
-                    ds[vol] = ds[vol_vars].fillna(0).to_array().sum("variable")
-                else:
-                    ds[vol] = ds[vol_vars[0]]
-                    for vl in vol_vars[1:]:
-                        ds[vol] = ds[vol].where(ds[vl].isnull(), ds[vl])
-            # In order to avoid zero volumes, a basic minimum value of 0.0001 m3 is added to all volumes
-            ds[vol] = ds[vol] + min_volume
-            # Add offset for the volumes if needed
-            if add_volume_offset:
-                da_vol = ds[vol].copy()
-                ds = ds.drop_vars(vol)
-                da_vol["time"] = times_offset
-                # ds = ds.merge(da_vol)
-            else:
-                da_vol = ds[vol]
-            ds_out[vol] = da_vol.sel(time=slice(starttime, endtime))
-            ds_out[vol].attrs.update(attrs)
-            ds_out[vol].attrs.update(unit="m3")
-
-        # Select variables, needed??
-        variables = self.fluxes.copy()
-        variables.extend(self.compartments)
-        ds_out = ds_out[variables]
-
-        ds_out.coords["mask"] = xr.DataArray(
-            dims=ds_out.raster.dims,
-            coords=ds_out.raster.coords,
-            data=self.hydromaps["mask"].values,
-            attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
-        )
-
-        self.set_forcing(ds_out)
 
         # Add time info to config
         ST = datetime.strptime(starttime, "%Y-%m-%d %H:%M:%S")

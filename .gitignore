@@ -70,6 +70,8 @@ instance/
 docs/_build/
 docs/generated/
 docs/examples/examples
+docs/_examples
+docs/_generated
 
 # PyBuilder
 target/
