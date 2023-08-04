@@ -595,12 +595,12 @@ class DemissionModel(DelwaqModel):
 
         # Unit conversion (from mm to m3/s)
         for dvar in ds.data_vars.keys():
-            if ds[dvar].attrs.get("units") == "mm":
+            if ds[dvar].attrs.get("unit") == "mm":
                 attrs = ds[dvar].attrs.copy()
                 surface = emissions.gridarea(ds)
                 ds[dvar] = ds[dvar] * surface / (1000 * self.timestepsecs)
                 ds[dvar].attrs.update(attrs)  # set original attributes
-                ds[dvar].attrs.update(units="m3/s")
+                ds[dvar].attrs.update(unit="m3/s")
 
         # Sum up exfiltrattion or add totflw depending on include_transport
         if include_transport:
