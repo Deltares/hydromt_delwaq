@@ -6,7 +6,6 @@ import glob
 import numpy as np
 import pandas as pd
 import xarray as xr
-import geopandas as gpd
 import pyproj
 import logging
 import struct
@@ -305,10 +304,10 @@ class DelwaqModel(Model):
                 monpoints = self.hydromaps["ptid"]
             else:  # TODO update for several compartements
                 kwargs = {}
-                if isfile(mon_points) and str(mon_points).endswith(".csv"):
+                if isfile(mon_points):
                     kwargs.update(crs=self.crs)
                 gdf = self.data_catalog.get_geodataframe(
-                    str(mon_points), geom=self.basins, assert_gtype="Point", **kwargs
+                    mon_points, geom=self.basins, assert_gtype="Point", **kwargs
                 )
                 gdf = gdf.to_crs(self.crs)
                 if gdf.index.size == 0:
@@ -901,9 +900,10 @@ class DelwaqModel(Model):
             Name of the column from the vector file to rasterize.
             Can be left empty if the selected method is set to "fraction".
         rasterize_method : str
-            Method to rasterize the vector data. Either {"value", "fraction"}.
+            Method to rasterize the vector data. Either {"value", "fraction", "area"}.
             If "value", the value from the col2raster is used directly in the raster.
             If "fraction", the fraction of the grid cell covered by the vector file is returned.
+            If "area", the area of the grid cell covered by the vector file is returned.
         comp_emi: str
             Name of the model compartment recaiving the emission data (by default surface water 'sfw').
         """

@@ -9,12 +9,12 @@ dependencies:
   - black
   - bottleneck
   - cartopy # to run examples
-  - dask>=2.30
+  - dask
   - descartes # to run examples
   - entrypoints
-  - flit>=3.2
+  - flit>=3.4
   - gdal>=3.1
-  - geopandas
+  - geopandas>=0.10
   - git
   - jupyter # to run examples
   - netcdf4
@@ -25,8 +25,7 @@ dependencies:
   - openpyxl
   - pandas
   - pip
-  - pyflwdir>=0.4.7
-  - pygeos>=0.8
+  - pyflwdir>=0.5.5
   - pytest # tests
   - pytest-cov # tests
   - pytest-benchmark # tests
@@ -35,12 +34,14 @@ dependencies:
   - requests
   - rioxarray
   - scipy
+  - shapely>=2.0.0
   - sphinx # docs
-  - sphinx_rtd_theme # docs
+  - pydata-sphinx-theme # docs
   - xarray
   - xugrid
   - zarr
   - pip:
+    - sphinx_design  # docs
     - git+https://github.com/Deltares/hydromt.git
     - git+https://github.com/Deltares/hydromt_wflow.git
 

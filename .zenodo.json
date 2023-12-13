@@ -1,0 +1,17 @@
+{
+    "title": "HydroMT delwaq",
+    "description": "Automated and reproducible model building plugin for water quality applications",
+    "upload_type": "software",
+    "creators": [
+        {
+            "affiliation": "Deltares",
+            "name": "Boisgontier, Hélène"
+        },
+        {
+            "affiliation": "Deltares",
+            "name": "Loos, Sibren"
+        }
+    ],
+    "access_right": "open",
+    "license": "GPLv3"
+}

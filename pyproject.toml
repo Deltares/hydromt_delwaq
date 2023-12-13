@@ -1,5 +1,5 @@
 [build-system]
-requires = ["flit_core >=3.2.0,<3.3"]
+requires = ["flit_core >=3.4.0,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
@@ -9,8 +9,16 @@ authors = [
     {name = "Sibren Loos", email = "sibren.loos@deltares.nl"},
 ]
 dependencies = [
-    "hydromt",
-    "hydromt_wflow"
+    "hydromt >=0.5.0",
+    "hydromt_wflow >=0.2.0",
+    "geopandas >=0.10",
+    "numpy",
+    "pandas",
+    "pyproj",
+    "rasterio",
+    "scipy",
+    "shapely >=2.0.0",
+    "xarray",
 ]
 requires-python = ">=3.8" # fix tests to support older versions
 readme = "README.rst"
@@ -20,26 +28,27 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Hydrology",
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Programming Language :: Python :: 3",
 ]
 dynamic = ['version', 'description']
 
 [project.optional-dependencies]
 test = [
-	"testpath",
-	"responses",
 	"pytest>=2.7.3",
 	"pytest-cov",
+	"black",
 ]
 doc = [
-	"sphinx",
-	"sphinx_rtd_theme",
-	"black",
+    "nbsphinx",
+    "sphinx",
+    "sphinx_design",
+    "pydata-sphinx-theme",
+    "sphinx_autosummary_accessors",
 ]
 
 [project.urls]
-Documentation = "https://deltares.github.io/hydromt_delwaq/"
+Documentation = "https://deltares.github.io/hydromt_delwaq/latest/"
 Source = "https://github.com/Deltares/hydromt_delwaq"
 
 [project.entry-points."hydromt.models"]
@@ -49,6 +58,10 @@ demission = "hydromt_delwaq.demission:DemissionModel"
 [tool.black]
 line-length = 88
 target-version = ['py38']
+
+[tool.flit.sdist]
+include = ["hydromt_delwaq"]
+exclude = ["docs", "examples", "envs", "tests", ".github"]
 
 [tool.pytest.ini_options]
 filterwarnings = [

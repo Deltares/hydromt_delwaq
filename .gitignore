@@ -72,6 +72,8 @@ docs/generated/
 docs/examples/examples
 docs/_examples
 docs/_generated
+docs/_examples
+docs/clean.py
 
 # PyBuilder
 target/

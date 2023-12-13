@@ -56,7 +56,19 @@ def test_model_build(tmpdir, model):
     # region = "{'wflow': '../examples/wflow_piave'}"
     # Build model
     r = CliRunner().invoke(
-        hydromt_cli, ["build", "delwaq", root, region, "-i", config, "-vv"]
+        hydromt_cli,
+        [
+            "build",
+            "delwaq",
+            root,
+            "-r",
+            region,
+            "-i",
+            config,
+            "-d",
+            "artifact_data",
+            "-vv",
+        ],
     )
     assert r.exit_code == 0
 
@@ -107,6 +119,18 @@ def test_model_update(tmpdir, model):
     delwaq_path = str(delwaq_path).replace("\\", "/")
     # Update model
     r = CliRunner().invoke(
-        hydromt_cli, ["update", "delwaq", delwaq_path, "-o", root, "-i", config, "-vv"]
+        hydromt_cli,
+        [
+            "update",
+            "delwaq",
+            delwaq_path,
+            "-o",
+            root,
+            "-i",
+            config,
+            "-d",
+            "artifact_data",
+            "-vv",
+        ],
     )
     assert r.exit_code == 0

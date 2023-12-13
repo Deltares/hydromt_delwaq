@@ -1,10 +1,8 @@
 .. _coupling_wflow:
 
-Coupling with Wflow
-===================
+Explaining the Wflow - DELWAQ coupling
+--------------------------------------
 
-Concepts of the Wflow - Delwaq coupling
----------------------------------------
 Water quality and emission, fate and transport of pollutants through the landscape is very much linked to the water movements. In most cases, pollutants are emitted on land and 
 either leach into the soil or are picked up by water during rain events and transported towards and into the rivers. In order to model water quality is it therefore essential to first understand and assess the hydrology of the catchment / region of interests.
 
@@ -16,12 +14,12 @@ A full hydrology - water quality modelling suite is in general separated in thre
 
 .. image:: ../img/wflow-Delwaq.jpg
 
-For the purpose of modelling catchment water quality, the wflow_sbm model has been linked to EM and WQ (both based on Delwaq, Deltares water quality software) using a "coupling" function integrated in the 
-HydroMT-Delwaq plugin.
+For the purpose of modelling catchment water quality, the wflow_sbm model has been linked to EM and WQ (both based on DELWAQ, Deltares water quality software) using a "coupling" function integrated in the 
+HydroMT-delwaq plugin.
 
-The wflow-Delwaq coupling function in hydroMT:
+The wflow-DELWAQ coupling function in HydroMT:
 
--  translates wflow schematization to Delwaq schematization;
+-  translates wflow schematization to DELWAQ schematization;
 -  prepares static inputs needed for water quality modelling (emission sources, locators...);
 -  prepares dynamic inputs needed for water quality modelling (different water fluxes and volumes);
 -  supports the modelling of different types of pollutants.
@@ -44,7 +42,7 @@ C)  Fate and transport modelling with D-Water Quality
 -  Edit the WQ run info and run D-Water Quality (WQ-Plugin)
 
 Hydrological forcing from Wflow
--------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In order to determine how and where substances are emitted and how they move through the landscape via the surface water, water quality modelling requires certain 
 hydrological information.
@@ -62,9 +60,9 @@ For a WQ type of model (fate and transport of substances in the surface waters),
 -  **Surface water volumes**
 -  **Total water entering the surface waters** (e.g. precipitation, exfiltration from the soil, evaporation...) in order to close the surface water mass balance.
 
-Wflow separates and routes water for three different components, the surface waters on the land, the river surface water and the water in the soil. Delwaq uses only the one surface water components 
-and therefore the river and land surface waters from wflow are saved together for Delwaq. The corresponding water balances for the river and land surface waters in wflow are shown in the Figure below. 
-In order to prepare hydrological fluxes for Delwaq from wflow, Wflow should be run and the required fluxes saved (same order as above):
+Wflow separates and routes water for three different components, the surface waters on the land, the river surface water and the water in the soil. DELWAQ uses only the one surface water components 
+and therefore the river and land surface waters from wflow are saved together for DELWAQ. The corresponding water balances for the river and land surface waters in wflow are shown in the Figure below. 
+In order to prepare hydrological fluxes for DELWAQ from wflow, Wflow should be run and the required fluxes saved (same order as above):
 
 -  vertical.precipitation (precipitation input)
 -  vertical.actinfilt (infiltration in the soil)
