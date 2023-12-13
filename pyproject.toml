@@ -18,6 +18,7 @@ dependencies = [
     "rasterio",
     "scipy",
     "shapely >=2.0.0",
+    "tqdm",
     "xarray",
 ]
 requires-python = ">=3.8" # fix tests to support older versions
@@ -34,6 +35,10 @@ classifiers = [
 dynamic = ['version', 'description']
 
 [project.optional-dependencies]
+extra = [
+    "xclim",
+]
+
 test = [
 	"pytest>=2.7.3",
 	"pytest-cov",

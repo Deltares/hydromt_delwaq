@@ -36,7 +36,9 @@ dependencies:
   - rioxarray
   - scipy
   - shapely>=2.0.0
+  - tqdm
   - xarray
+  - xclim
   - xugrid
   - zarr
 

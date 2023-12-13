@@ -12,5 +12,6 @@ dependencies:
   - jupyter # to run examples
   - matplotlib # to run examples
   - python<=3.11
+  - tqdm # progress bar
   - xugrid
 

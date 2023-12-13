@@ -10,17 +10,13 @@ import pyproj
 import logging
 import struct
 from datetime import datetime
-import time as t
-import matplotlib.pyplot as plt
 import xugrid as xu
 from typing import List
+from tqdm import tqdm
 
 import hydromt
 from hydromt.models.model_api import Model
-from hydromt import workflows, flw, io
-
-
-from hydromt_wflow.wflow import WflowModel
+from hydromt import workflows, io
 
 from .workflows import emissions, segments, hydrology
 from . import DATADIR
@@ -60,7 +56,7 @@ class DelwaqModel(Model):
     _FORCING = {
         "temp": "tempair",
         "temp_dew": "temp_dew",
-        "ssr": "radsw",
+        "ssr": "rad",
         "wind": "vwind",
         "tcc": "cloudfrac",
     }
@@ -1230,15 +1226,17 @@ class DelwaqModel(Model):
             ds_out.to_netcdf(path=fname)
 
         # Binary format
-        timesteps = np.arange(0, len(ds_out.time.values))
+        # timesteps = np.arange(0, len(ds_out.time.values))
         timestepstamp = np.arange(
             0, (len(ds_out.time.values) + 1) * int(self.timestepsecs), self.timestepsecs
         )
 
-        for i in timesteps:
-            self.logger.info(
-                f"Writting dynamic data for timestep {i+1}/{len(timesteps)}"
-            )
+        for i in tqdm(
+            np.arange(0, len(ds_out.time.values)), desc="Writing dynamic data"
+        ):
+            # self.logger.info(
+            #    f"Writting dynamic data for timestep {i+1}/{len(timesteps)}"
+            # )
             # Flow
             flname = join(self.root, "dynamicdata", "flow.dat")
             flow_vars = self.get_config("B7_fluxes.l2").split(" ")
@@ -1683,7 +1681,11 @@ class DelwaqModel(Model):
         # print("Input DataArray: ")
         # print(ptid.dims, ptid)
         ptid = xr.where(ptid == -1, np.nan, ptid)
-        ptid = ptid.rename({"lat": "y", "lon": "x"})
+        if ptid.raster.y_dim != "y":
+            ptid = ptid.rename({ptid.raster.y_dim: "y"})
+        if ptid.raster.x_dim != "x":
+            ptid = ptid.rename({ptid.raster.x_dim: "x"})
+        # ptid = ptid.rename({"lat": "y", "lon": "x"})
         da_ptid = xu.UgridDataArray.from_structured(ptid)
         da_ptid = da_ptid.dropna(dim=da_ptid.ugrid.grid.face_dimension)
         da_ptid.ugrid.set_crs(crs=self.crs)  # "EPSG:4326"
