@@ -26,7 +26,6 @@ __all__ = [
 
 def hydromaps(
     hydromodel,
-    logger=logger,
 ):
     """Returns base information maps from hydromodel.
 
@@ -79,18 +78,15 @@ def hydromaps(
 
 def maps_from_hydromodel(
     hydromodel,
-    compartments,
     maps=["rivmsk", "lndslp", "strord", "N", "SoilThickness", "thetaS"],
     logger=logger,
 ):
-    """Returns maps from hydromodel and extend to all compartments.
+    """Returns maps from hydromodel.
 
     Parameters
     ----------
     hydromodel : HydroMT Model
         HydroMT Model class containing the hydromodel to get geometry data from from.
-    compartments : list of str, optional
-        List of names of compartments to include. By default one for surface waters called 'sfw'.
     maps: list of str
         List of variables from hydromodel to extract and extend.
         By default ['rivmsk', 'lndslp', 'strord', 'N', 'SoilThickness', 'thetaS'].
@@ -98,7 +94,7 @@ def maps_from_hydromodel(
     Returns
     -------
     ds_out : xarray.Dataset
-        Dataset containing gridded geometry map at model resolution for all compartments.
+        Dataset containing gridded maps at model resolution.
     """
     ds_out = xr.Dataset()
     for m in maps:
@@ -123,19 +119,13 @@ def maps_from_hydromodel(
                 ds_out[f"{m}_{dim0}_{dim0_values[i]}"] = ds_out[m][i]
             ds_out = ds_out.drop_vars([m, dim0])
 
-    # surface water comp
-    ds_out = extend_comp_with_duplicates(ds1c=ds_out, compartments=compartments)
-
     return ds_out
 
 
 def geometrymaps(
     hydromodel,
-    compartments,
-    comp_attributes,
-    logger=logger,
 ):
-    """Returns geometry information maps for all compartments from hydromodel.
+    """Returns geometry information maps from hydromodel.
 
     The following basemaps are extracted:\
     - surface
@@ -146,59 +136,34 @@ def geometrymaps(
     ----------
     hydromodel : HydroMT Model
         HydroMT Model class containing the hydromodel to get geometry data from from.
-    compartments : list of str, optional
-        List of names of compartments to include. By default one for surface waters called 'sfw'.
-    comp_attributes: list of int
-        Attribute 1 value of the B3_attributes config file. 1 or 0 for surface water. Also used to compute surface variable.
- 
+
     Returns
     -------
     ds_out : xarray.Dataset
-        Dataset containing gridded geometry map at model resolution for all compartments.
+        Dataset containing gridded geometry map at model resolution.
     """
     ### Geometry data ###
     surface = emissions.gridarea(hydromodel.grid)
     surface.raster.set_nodata(-9999.0)
     surface = surface.rename("surface")
     length, width = emissions.gridlength_gridwidth(hydromodel.grid)
-    surface_tot = []
-    length_tot = []
-    width_tot = []
-    for i in range(len(compartments)):
-        if comp_attributes[i] == 0:  # surface water
-            rivlen = hydromodel.grid[hydromodel._MAPS["rivlen"]]
-            rivwth = hydromodel.grid[hydromodel._MAPS["rivwth"]]
-            rivmsk = hydromodel.grid[hydromodel._MAPS["rivmsk"]]
-            # surface
-            rivsurface = surface.where(rivmsk == False, rivlen * rivwth)
-            rivsurface = rivsurface.rename("surface")
-            surface_tot.append(rivsurface)
-            # length
-            rivlength = rivlen.where(rivmsk, rivlen)
-            rivlength = rivlength.rename("length")
-            length_tot.append(rivlength)
-            # width
-            rivwidth = rivwth.where(rivmsk, width)
-            rivwidth = rivwidth.rename("width")
-            width_tot.append(rivwidth)
-        else:  # other use direct cell surface
-            surface_tot.append(surface)
-            length_tot.append(length)
-            width_tot.append(width)
-    ds_out = (
-        xr.concat(
-            surface_tot,
-            pd.Index(np.arange(1, len(compartments) + 1, dtype=int), name="comp"),
-        ).transpose("comp", ...)
-    ).to_dataset()
-    ds_out["length"] = xr.concat(
-        length_tot,
-        pd.Index(np.arange(1, len(compartments) + 1, dtype=int), name="comp"),
-    ).transpose("comp", ...)
-    ds_out["width"] = xr.concat(
-        width_tot,
-        pd.Index(np.arange(1, len(compartments) + 1, dtype=int), name="comp"),
-    ).transpose("comp", ...)
+
+    rivlen = hydromodel.grid[hydromodel._MAPS["rivlen"]]
+    rivwth = hydromodel.grid[hydromodel._MAPS["rivwth"]]
+    rivmsk = hydromodel.grid[hydromodel._MAPS["rivmsk"]]
+    # surface
+    surface = surface.where(rivmsk == False, rivlen * rivwth)
+    surface = surface.rename("surface")
+    # length
+    length = rivlen.where(rivmsk, length)
+    length = length.rename("length")
+    # width
+    width = rivwth.where(rivmsk, width)
+    width = width.rename("width")
+
+    ds_out = surface.to_dataset()
+    ds_out["length"] = length
+    ds_out["width"] = width
 
     return ds_out
 
@@ -206,12 +171,13 @@ def geometrymaps(
 def pointer(
     ds_hydro: xr.Dataset,
     build_pointer: bool = False,
-    compartments: List[str] = None,
-    boundaries: List[str] = None,
-    fluxes: List[str] = None,
+    surface_water: str = "sfw",
+    boundaries: List[str] = ["bd"],
+    fluxes: List[str] = ["sfw>sfw", "bd>sfw"],
     logger=logger,
 ):
-    """Returns map with Delwaq segment ID. As well as the pointer matrix if ``build_pointer`` is True.
+    """Returns map with Delwaq segment ID. As well as the pointer matrix if
+    ``build_pointer`` is True.
 
     Parameters
     ----------
@@ -220,14 +186,17 @@ def pointer(
     build_pointer: boolean, optional
         Boolean to build a pointer file (delwaq) or not (demission).
         If True, compartments, boundaries and fluxes lists must be provided.
-    compartments : list of str, optional
-        List of names of compartments to include. By default one for surface waters called 'sfw'.
+    surface_water : str, optional
+        Name of the surface water layer. By default 'sfw'.
     boundaries: list of str, optional
-        List of names of boundaries to include. By default a unique boundary called 'bd'.
+        List of names of boundaries to include. By default a unique boundary called
+        'bd'.
     fluxes: list of str
-        List of fluxes to include between compartments/boundaries. Name convention is '{compartment_name}>{boundary_name}'
-        for a flux from a compartment to a boundary, ex 'sfw>bd'. By default ['sfw>sfw', 'bd>sfw'] for runoff and inwater.
-        Names in the fluxes list should match name in the hydrology_fn source in setup_hydrology_forcing.
+        List of fluxes to include between surface water/boundaries. Name convention
+        is '{surface_water_name}>{boundary_name}' for a flux from the surface water to a
+        boundary, ex 'sfw>bd'. By default ['sfw>sfw', 'bd>sfw'] for runoff and inwater.
+        Names in the fluxes list should match name in the hydrology_fn source in
+        setup_hydrology_forcing.
 
     Returns
     -------
@@ -244,13 +213,7 @@ def pointer(
     bd_type: numpy.array, optional
         Array ith Delwaq boundary names.
     """
-    if compartments is None:
-        ncomp = 1
-        compartments = ["em"]
-    else:
-        ncomp = len(compartments)
-    comp_ids = np.arange(1, ncomp + 1, dtype=int)
-
+    # Prepare segments ID layer ptid based on mask of active cells
     ptid_mv = 0
     np_ptid = ds_hydro["mask"].values.flatten().astype(np.int32)
     ptid = np_ptid[np_ptid != ptid_mv]
@@ -267,20 +230,6 @@ def pointer(
         attrs=dict(_FillValue=ptid_mv),
     )
 
-    # Add other compartments
-    da_tot = [da_ptid]
-    for i in np.arange(1, ncomp):
-        da_comp = xr.where(da_ptid == ptid_mv, 0, da_ptid + (i * nrofseg))
-        da_tot.append(da_comp)
-    da_ptid = xr.concat(
-        da_tot,
-        pd.Index(comp_ids, name="comp"),
-    ).transpose("comp", ...)
-    da_ptid.assign_coords(comp_labels=("comp", np.array(compartments)))
-    # Update cells/segments/ptid based on ncomp
-    nb_cell = nrofseg  # len(ptid)
-    nrofseg = nrofseg * ncomp
-
     ### Downstream IDs ###
     # Start with searching for the ID of the downstream cells for lateral fluxes
     flwdir = flw.flwdir_from_da(ds_hydro["ldd"], ftype="infer", mask=None)
@@ -290,46 +239,36 @@ def pointer(
     # Keep track of the lowest boundary id value
     lowerid = 0
 
-    da_tot = []
     # Apply mask to ldd
     da_ldd = ds_hydro["ldd"].where(ds_hydro["mask"], ds_hydro["ldd"].raster.nodata)
     np_ldd = da_ldd.values
     # Number of outlets
     nb_out = len(np_ldd[np_ldd == 5])
-    for i in range(1, ncomp + 1):
-        comp_label = compartments[i - 1]
-        ptiddown = flwdir.downstream(da_ptid.sel(comp=i)).astype(np.int32)
-        # Remask cells draining to rivers
-        ptiddown[np_ptid == ptid_mv] = ptid_mv
-        # Outlets are boundaries and ptiddown should be negative
-        outid = np.arange((-lowerid) + 1, (-lowerid) + nb_out + 1) * -1
-        ptiddown[np_ldd == 5] = outid
-        lowerid = outid[-1]
-        bd_id = np.append(bd_id, (outid * (-1)))
-        bd_type = np.append(bd_type, [f"{comp_label}>out{id}" for id in bd_id])
-        # Add ptiddown to xarray
-        da_ptiddown = xr.DataArray(
-            data=ptiddown,
-            coords=ds_hydro.raster.coords,
-            dims=ds_hydro.raster.dims,
-            attrs=dict(_FillValue=ptid_mv),
-        )
-        da_tot.append(da_ptiddown)
-    da_ptiddown = xr.concat(
-        da_tot,
-        pd.Index(np.arange(1, ncomp + 1, dtype=int), name="comp"),
-    ).transpose("comp", ...)
-    da_ptiddown.assign_coords(comp_labels=("comp", np.array(compartments)))
+
+    ptiddown = flwdir.downstream(da_ptid).astype(np.int32)
+    # Remask cells draining to rivers
+    ptiddown[np_ptid == ptid_mv] = ptid_mv
+    # Outlets are boundaries and ptiddown should be negative
+    outid = np.arange((-lowerid) + 1, (-lowerid) + nb_out + 1) * -1
+    ptiddown[np_ldd == 5] = outid
+    lowerid = outid[-1]
+    bd_id = np.append(bd_id, (outid * (-1)))
+    bd_type = np.append(bd_type, [f"{surface_water}>out{id}" for id in bd_id])
+    # Add ptiddown to xarray
+    da_ptiddown = xr.DataArray(
+        data=ptiddown,
+        coords=ds_hydro.raster.coords,
+        dims=ds_hydro.raster.dims,
+        attrs=dict(_FillValue=ptid_mv),
+    )
 
     # Build pointer
     if build_pointer:
         nbound = len(boundaries)
         nflux = len(fluxes)
-        logger.info(
-            f"Preparing pointer with {ncomp} compartments, {nbound} boundaries and {nflux} fluxes."
-        )
+        logger.info(f"Preparing pointer with {nbound} boundaries and {nflux} fluxes.")
         ### Add fluxes ###
-        zeros = np.zeros((nb_cell, 1))
+        zeros = np.zeros((nrofseg, 1))
         pointer = None
         for flux in fluxes:
             flux0 = flux.split(">")[0]
@@ -337,11 +276,10 @@ def pointer(
             # Lateral flux (runoff)
             if flux0 == flux1:
                 # Start building pointer with lateral fluxes (runoff)
-                comp_id = comp_ids[compartments.index(flux0)]
-                ptid = da_ptid.sel(comp=comp_id).values
-                ptid = ptid[ptid != ptid_mv].reshape(nb_cell, 1)
-                ptiddown = da_ptiddown.sel(comp=comp_id).values
-                ptiddown = ptiddown[ptiddown != ptid_mv].reshape(nb_cell, 1)
+                ptid = da_ptid.values
+                ptid = ptid[ptid != ptid_mv].reshape(nrofseg, 1)
+                ptiddown = da_ptiddown.values
+                ptiddown = ptiddown[ptiddown != ptid_mv].reshape(nrofseg, 1)
                 if pointer is None:
                     pointer = np.hstack((ptid, ptiddown, zeros, zeros))
                 else:
@@ -349,22 +287,17 @@ def pointer(
                         (pointer, np.hstack((ptid, ptiddown, zeros, zeros)))
                     )
             # Flux from/to boundaries
-            elif flux0 not in compartments or flux1 not in compartments:
+            elif flux0 != surface_water or flux1 != surface_water:
                 # The boundary cells all have the same ID
                 boundid = lowerid - 1
                 lowerid = boundid
                 bd_id = np.append(bd_id, ([boundid * (-1)]))
                 bd_type = np.append(bd_type, ([flux]))
-                boundid = np.repeat(boundid, nb_cell).reshape(nb_cell, 1)
+                boundid = np.repeat(boundid, nrofseg).reshape(nrofseg, 1)
                 # Flux from boundaries
-                if flux0 not in compartments:
-                    comp_id = comp_ids[compartments.index(flux1)]
-                # Flux to boundaries
-                else:
-                    comp_id = comp_ids[compartments.index(flux0)]
-                ptid = da_ptid.sel(comp=comp_id).values
-                ptid = ptid[ptid != ptid_mv].reshape(nb_cell, 1)
-                if flux0 not in compartments:
+                ptid = da_ptid.values
+                ptid = ptid[ptid != ptid_mv].reshape(nrofseg, 1)
+                if flux0 != surface_water:
                     pointerbd = np.hstack((boundid, ptid, zeros, zeros))
                 else:
                     pointerbd = np.hstack((ptid, boundid, zeros, zeros))
@@ -372,106 +305,12 @@ def pointer(
                     pointer = pointerbd
                 else:
                     pointer = np.vstack((pointer, pointerbd))
-            # Flux from comp to comp
             else:
-                comp_id0 = comp_ids[compartments.index(flux0)]
-                ptid0 = da_ptid.sel(comp=comp_id0).values
-                ptid0 = ptid0[ptid0 != ptid_mv].reshape(nb_cell, 1)
-                comp_id1 = comp_ids[compartments.index(flux1)]
-                ptid1 = da_ptid.sel(comp=comp_id1).values
-                ptid1 = ptid1[ptid1 != ptid_mv].reshape(nb_cell, 1)
-                if pointer is None:
-                    pointer = np.hstack((ptid0, ptid1, zeros, zeros))
-                else:
-                    pointer = np.vstack(
-                        (pointer, np.hstack((ptid0, ptid1, zeros, zeros)))
-                    )
+                raise ValueError(
+                    f"Flux {flux} should be of type{surface_water}>{surface_water}"
+                    f"or {surface_water}>boundary or boundary>{surface_water}."
+                )
 
         return nrofseg, da_ptid, da_ptiddown, pointer, bd_id, bd_type
     else:
         return nrofseg, da_ptid, da_ptiddown
-
-
-def extend_comp_with_zeros(ds1c: xr.Dataset, comp_ds1c: str, compartments: list):
-    """
-    Transform 2D data (y_dim, x_dim) into 3D data (comp, y_dim, x_dim).
-    Data from ds1c is assign to comp named comp_ds1c and other compartments are filled with zeros.
-
-    Parameters
-    ----------
-    ds1c: xr.Dataset
-        2D gridded data
-    comp_ds1c: str
-        Compartment name in compartments to which data in ds1c is assigned to.
-    compartemnts: list
-        List with compartments names.
-
-    Returns
-    -------
-    3D gridded data with zeros for compartments other than comp_ds1c
-
-    """
-    for var in ds1c.data_vars:
-        da_zeros = full_like(ds1c[var], lazy=True)
-        da_zeros = da_zeros.where(ds1c[var] == ds1c[var].raster.nodata, 0)
-        da_tot = []
-        for i in range(len(compartments)):
-            if compartments[i] == comp_ds1c:  # compartment with input
-                da_tot.append(ds1c[var])
-            else:  # other compartments to fill with zeros
-                da_tot.append(da_zeros)
-        da = xr.concat(
-            da_tot,
-            pd.Index(np.arange(1, len(compartments) + 1, dtype=int), name="comp"),
-        ).transpose("comp", ...)
-        ds1c[var] = da
-
-    return ds1c
-
-
-def extend_comp_with_duplicates(ds1c, compartments):
-    """
-    Transform 2D data (y_dim, x_dim) into 3D data (comp, y_dim, x_dim).
-    Data from ds1c is duplicated for all compartments.
-
-    Parameters
-    ----------
-    ds1c: xr.Dataset
-        2D gridded data
-    compartemnts: list
-        List with compartments names.
-
-    Returns
-    -------
-    3D gridded data with ds1c duplicated for all compartments
-
-    """
-    for var in ds1c.data_vars:
-        da_tot = []
-        for i in range(len(compartments)):
-            da_tot.append(ds1c[var])
-        da = xr.concat(
-            da_tot,
-            pd.Index(np.arange(1, len(compartments) + 1, dtype=int), name="comp"),
-        ).transpose("comp", ...)
-        ds1c[var] = da
-
-    return ds1c
-
-
-def sfwcomp(compartments: list, config: dict):
-    """Finds and return surface water compartment based on B3_attributes config"""
-    nl = 7
-    sfw = None
-    attributes = config.get("B3_attributes")
-    for i in range(len(compartments)):
-        cp = attributes.get(
-            f"l{nl}",
-            "     1*01 ; sfw",
-        )
-        issfw = cp.split("*")[1][0:2]
-        if int(issfw) == 1:
-            sfw = cp.split(";")[1][1:]
-        nl += 1
-
-    return sfw

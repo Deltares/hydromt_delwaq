@@ -1,17 +1,19 @@
 """Implement delwaq model class"""
 
 import os
-from os.path import join, isfile, basename
+from os.path import join, isfile
+from pathlib import Path
 import glob
 import numpy as np
 import pandas as pd
+import geopandas as gpd
 import xarray as xr
 import pyproj
 import logging
 import struct
 from datetime import datetime
 import xugrid as xu
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Dict
 from tqdm import tqdm
 
 import hydromt
@@ -104,13 +106,12 @@ class DelwaqModel(GridModel):
 
     def setup_basemaps(
         self,
-        region,
-        mask="basins",
-        compartments=["sfw"],
-        boundaries=["bd"],
-        fluxes=["sfw>sfw", "bd>sfw"],
-        comp_attributes=["0"],
-        maps=["rivmsk", "lndslp", "strord", "N"],
+        region: Dict,
+        mask: str = "basins",
+        surface_water: str = "sfw",
+        boundaries: List[str] = ["bd"],
+        fluxes: List[str] = ["sfw>sfw", "bd>sfw"],
+        maps: List[str] = ["rivmsk", "lndslp", "strord", "N"],
     ):
         """Setup the delwaq model schematization using the hydromodel region and
         resolution. 
@@ -118,7 +119,7 @@ class DelwaqModel(GridModel):
         Maps used and derived from the hydromodel are stored in a specific\ 
         hydromodel attribute. Build a D-Water Quality ("WQ") case.\
         The pointer will be created based on the ``fluxes`` list
-        between model compartments and boundaries.
+        between surface water and boundaries.
         
         Adds model layers:
         
@@ -139,23 +140,24 @@ class DelwaqModel(GridModel):
             Dictionary describing region of interest.
             Currently supported format is {'wflow': 'path/to/wflow_model'}
         mask : str, optional
-            Mask to use to define Delwaq segments. Either "basins" (default) or "rivers".        
-        compartments : list of str, optional
-            List of names of compartments to include. By default one for surface waters called 'sfw'.
+            Mask used to define Delwaq segments. Either "basins" (default) or "rivers".        
+        surface_water : str, optional
+            Name of the surface water layer. Used to identify fluxes to and from surface 
+            waters in the fluxes list. By default 'sfw'.
         boundaries: list of str, optional
-            List of names of boundaries to include. By default a unique boundary called 'bd'.
+            List of names of boundaries to include. By default a unique boundary called
+            'bd'.
         fluxes: list of str
-            List of fluxes to include between compartments/boundaries. Name convention is '{compartment_name}>{boundary_name}'
-            for a flux from a compartment to a boundary, ex 'sfw>bd'. By default ['sfw>sfw', 'bd>sfw'] for runoff and inwater.
-            Names in the fluxes list should match name in the hydrology_fn source in setup_hydrology_forcing.
-        comp_attributes: list of int
-            Attribute 1 value of the B3_attributes config file. 1 or 0 for surface water. Also used to compute surface variable.
+            List of fluxes to include between surface water/boundaries. Name convention 
+            is '{surface_water}>{boundary_name}' for a flux from athe surface water to a 
+            boundary, ex 'sfw>bd'. By default ['sfw>sfw', 'bd>sfw'] for runoff and 
+            inwater.
+            Names in the fluxes list should match name in the hydrology_fn source in 
+            setup_hydrology_forcing.
         maps: list of str
             List of variables from hydromodel to add to grid. 
             By default ['rivmsk', 'lndslp', 'strord', 'N'].
         """
-        # Only list of str allowed in config
-        comp_attributes = [int(i) for i in comp_attributes]
         # Initialise hydromodel from region
         kind, region = workflows.parse_region(region)  # , logger=self.logger)
         if kind != "model":
@@ -192,7 +194,7 @@ class DelwaqModel(GridModel):
         nrofseg, da_ptid, da_ptiddown, pointer, bd_id, bd_type = segments.pointer(
             self.hydromaps,
             build_pointer=True,
-            compartments=compartments,
+            surface_water=surface_water,
             boundaries=boundaries,
             fluxes=fluxes,
         )
@@ -201,15 +203,14 @@ class DelwaqModel(GridModel):
         # Initialise pointer object with schematisation attributes
         self.set_pointer(pointer, name="pointer")
         self.set_pointer(nrofseg, name="nrofseg")
-        self.set_pointer(compartments, name="compartments")
+        self.set_pointer(surface_water, name="surface_water")
         self.set_pointer(bd_type, name="boundaries")
         self.set_pointer(fluxes, name="fluxes")
 
         ### Initialise grid river and slope ###
         ds_stat = segments.maps_from_hydromodel(
-            hydromodel, compartments, maps=maps, logger=self.logger
+            hydromodel, maps=maps, logger=self.logger
         )
-        mask = segments.extend_comp_with_duplicates(da_mask.to_dataset(), compartments)
         ds_stat["mask"] = mask[da_mask.name]
         ds_stat = ds_stat.set_coords("mask")
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
@@ -218,13 +219,10 @@ class DelwaqModel(GridModel):
         ### Add geometry ###
         ds_geom = segments.geometrymaps(
             hydromodel,
-            compartments=compartments,
-            comp_attributes=comp_attributes,
         )
         self.set_grid(ds_geom)
 
         ### Config ###
-        nrofcomp = len(compartments)
         # B3_nrofseg
         lines_ini = {
             "l1": f"{nrofseg} ; nr of segments",
@@ -239,14 +237,9 @@ class DelwaqModel(GridModel):
             "l4": "     1     2",
             "l5": " 1    ; file option in this file",
             "l6": " 1    ; option without defaults",
+            "l7": f"     {nrofseg}*01 ; {surface_water}",
+            "l8": " 0    ; no time dependent attributes",
         }
-        nl = 7
-        for i in range(nrofcomp):
-            lines_ini[
-                f"l{nl}"
-            ] = f"     {int(nrofseg/nrofcomp)}*{comp_attributes[i]}1 ; {compartments[i]}"
-            nl += 1
-        lines_ini[f"l{nl}"] = " 0    ; no time dependent attributes"
         for option in lines_ini:
             self.set_config("B3_attributes", option, lines_ini[option])
         # B4_nrofexch
@@ -288,8 +281,8 @@ class DelwaqModel(GridModel):
         mon_points : {'None', 'segments', 'data_source', 'path to station location'}
             Either None, source from DataCatalog, path to a station location dataset
             or if segments, all segments are monitored.
-        mon_areas : str {'None', 'compartments', 'subcatch'}
-            Either None, subcatch from hydromodel or by compartments.
+        mon_areas : str {'None', 'subcatch', 'riverland'}
+            Either None, subcatch from hydromodel.
         """
         self.logger.info("Setting monitoring points and areas")
         monpoints = None
@@ -298,7 +291,7 @@ class DelwaqModel(GridModel):
         if mon_points is not None:
             if mon_points == "segments":
                 monpoints = self.hydromaps["ptid"]
-            else:  # TODO update for several compartements
+            else:
                 kwargs = {}
                 if isfile(mon_points):
                     kwargs.update(crs=self.crs)
@@ -332,22 +325,13 @@ class DelwaqModel(GridModel):
         # Monitoring areas domain
         monareas = None
         if mon_areas != None:
-            monareas = self.hydromaps["basins"].copy()
-            monareas_tot = []
-            if mon_areas == "compartments":
-                nb_areas = self.nrofcomp
-                for i in np.arange(1, self.nrofcomp + 1):
-                    monareas_tot.append(
-                        xr.where(self.hydromaps["mask"], i, mv).astype(np.int32)
-                    )
-            elif mon_areas == "subcatch":  # subcatch
+            if mon_areas == "subcatch":  # subcatch
+                basins = self.hydromaps["basins"].copy()
                 # Number or monitoring areas
-                areas = monareas.values.flatten()
+                areas = basins.values.flatten()
                 areas = areas[areas != mv]
-                nb_sub = len(np.unique(areas))
-                nb_areas = nb_sub * self.nrofcomp
-                for i in range(self.nrofcomp):
-                    monareas_tot.append(monareas + (i * nb_sub))
+                nb_areas = len(np.unique(areas))
+                monareas = areas
             else:  # riverland
                 # seperate areas for land cells (1) and river cells (2)
                 lr_areas = xr.where(
@@ -356,19 +340,11 @@ class DelwaqModel(GridModel):
                     xr.where(self.hydromaps["basins"], 1, mv),
                 ).astype(np.int32)
                 # Number or monitoring areas
-                ##plt.imshow(lr_areas)
-                ##plt.show()
-                ##plt.savefig('filename.png')
                 areas = lr_areas.values.flatten()
                 areas = areas[areas != mv]
-                nb_sub = len(np.unique(areas))
-                nb_areas = nb_sub * self.nrofcomp
-                for i in np.arange(1, self.nrofcomp + 1):
-                    monareas_tot.append(lr_areas + ((i - 1) * nb_sub))
-            monareas = xr.concat(
-                monareas_tot,
-                pd.Index(np.arange(1, self.nrofcomp + 1, dtype=int), name="comp"),
-            ).transpose("comp", ...)
+                nb_areas = len(np.unique(areas))
+                monareas = lr_areas
+
             # Add to grid
             self.set_grid(monareas.rename("monareas"))
             self.grid["monareas"].attrs.update(_FillValue=mv)
@@ -398,13 +374,18 @@ class DelwaqModel(GridModel):
         **kwargs,
     ):
         """
-        Addionnally, if floodplain processes need to be modelled, the bankfull volume to characterise flooding thresholds
-        can be derived from hydrolgy timeseries data.
-        The bankfull volume is defined as the volume corresponding to a return period of 2 years (default).
-        xclim.indices.stats.frequency_analysis is used to get bankfull volume based on annual maxima method.
+        Derive bankfull volume from either discharge or volume timeseries.
 
-        If volume timeseries are not available, the bankfull volume can be derived from discharge timeseries data
-        using the flag from_volume=False.
+        Addionnally, if floodplain processes need to be modelled, the bankfull volume
+        to characterise flooding thresholds can be derived from hydrology timeseries
+        data.
+        The bankfull volume is defined as the volume corresponding to a return period of
+        2 years (default).
+        xclim.indices.stats.frequency_analysis is used to get bankfull volume based on
+        annual maxima method.
+
+        If volume timeseries are not available, the bankfull volume can be derived from
+        discharge timeseries data using the flag from_volume=False.
 
         Parameters
         ----------
@@ -416,7 +397,8 @@ class DelwaqModel(GridModel):
         from_volume : bool, optional
             If True, bankfull volume is derived from volume timeseries data.
         **kwargs
-            Keywords arguments for either bankfull_volume or bankfull_volume_from_discharge.
+            Keywords arguments for either bankfull_volume or
+            bankfull_volume_from_discharge.
         """
         # Read data
         # Normally region extent is by default exactly the same as hydromodel
@@ -429,6 +411,7 @@ class DelwaqModel(GridModel):
             self.logger.info("Deriving flooding characteristics from volume.")
             ds_bankfull = hydrology.bankfull_volume(
                 da_v=da_v,
+                bankfull_rp=bankfull_rp,
                 **kwargs,
             )
         else:
@@ -441,6 +424,7 @@ class DelwaqModel(GridModel):
             ds_bankfull = hydrology.bankfull_volume_from_discharge(
                 da_q=da_q,
                 ds_model=self.grid,
+                bankfull_rp=bankfull_rp,
                 **kwargs,
             )
 
@@ -459,21 +443,25 @@ class DelwaqModel(GridModel):
     ):
         """Setup Delwaq hydrological fluxes.
 
-        As the fluxes order should precisely macth the pointer defined in setup_basemaps, the variables names
-        in ``hydro_forcing_fn`` should match names defined in the ``fluxes`` argument of setup_basemaps.
-        These names should also have been saved in the file config/B7_fluxes.inc.
+        As the fluxes order should precisely macth the pointer defined in
+        setup_basemaps, the variables names in ``hydro_forcing_fn`` should match names
+        defined in the ``fluxes`` argument of setup_basemaps. These names should also
+        have been saved in the file config/B7_fluxes.inc.
 
-        If several sub-variables in ``hydro_forcing_fn`` need to be summed up to get the expected flux in pointer,
-        they can be named {flux_name_in_pointer}_{number} (eg "sfw>sfw_1" and "sfw>sfw_2" to get "sfw>sfw") and the
-        function will sum them on the fly. To remove (- instead of +) use unit_mult attribute of the data catalog
-        with -1 for the sub-variables of interest.
-        To override rather than sum fluxes, use the ``override`` argument and name of the concerned flux (eg "sfw>sfw").
-        The flux are overwritten (excluding nodata) in the order of the list, so the last one will be the one used.
+        If several sub-variables in ``hydro_forcing_fn`` need to be summed up to get
+        the expected flux in pointer, they can be named {flux_name_in_pointer}_{number}
+        (eg "sfw>sfw_1" and "sfw>sfw_2" to get "sfw>sfw") and the function will sum them
+        on the fly. To remove (- instead of +) use unit_mult attribute of the data
+        catalogwith -1 for the sub-variables of interest.
+        To override rather than sum fluxes, use the ``override`` argument and name of
+        the concerned flux (eg "sfw>sfw"). The flux are overwritten (excluding nodata)
+        in the order of the list, so the last one will be the one used.
 
-        Unit conversions are possible from mm/area to m3/s for fluxes, volumes should be provided directly in m3.
-        For conversion from mm to m3/s, it is possible to specify over wich surface area the mm are calculated.
-        If 'mm' (default), the cellarea is assumed. Else, you can use 'mm/{surfacearea}' where {surfacearea} should be a map
-        available in hydromaps (rivarea, lakearea, resarea).
+        Unit conversions are possible from mm/area to m3/s for fluxes, volumes should be
+        provided directly in m3. For conversion from mm to m3/s, it is possible to
+        specify over wich surface area the mm are calculated. If 'mm' (default), the
+        cellarea is assumed. Else, you can use 'mm/{surfacearea}' where {surfacearea}
+        should be a map available in hydromaps (rivarea, lakearea, resarea).
 
         Adds model layers:
 
@@ -490,7 +478,8 @@ class DelwaqModel(GridModel):
         ----------
         hydro_forcing_fn : {'None', 'name in local_sources.yml'}
             Either None, or name in a local or global data_sources.yml file.
-            Names of fluxes should match those as set in the ``fluxes`` list of setup_basemaps methods (pointer creation).
+            Names of fluxes should match those as set in the ``fluxes`` list of
+            setup_basemaps methods (pointer creation).
 
             * Required variables (to be deprecated): ['time', 'run', 'vol' or 'lev', 'inwater']
 
@@ -502,16 +491,19 @@ class DelwaqModel(GridModel):
             Model timestep in seconds.
         add_volume_offset : bool, optional
             Delwaq needs water volumes at the beginning of the timestep.
-            In some models, like wflow, volumes are written at the end of the timestep and therefore
-            an offset of one timestep needs to be added for consistency.
+            In some models, like wflow, volumes are written at the end of the timestep
+            and therefore an offset of one timestep needs to be added for consistency.
         min_volume : float, optional
-            Add a minimum value to all the volumes in Delwaq to avoid zeros. Default is 0.1m3.
+            Add a minimum value to all the volumes in Delwaq to avoid zeros. Default is
+            0.1m3.
         override : list, optional
-            List of fluxes/volumes to override for non nodata values rather than sum. The last one (based on _number) has priority.
+            List of fluxes/volumes to override for non nodata values rather than sum.
+            The last one (based on _number) has priority.
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
-                f"None or Invalid source '{hydro_forcing_fn}', skipping setup_hydrology_forcing."
+                f"None or Invalid source '{hydro_forcing_fn} ",
+                "skipping setup_hydrology_forcing.",
             )
             return
         self.logger.info(
@@ -528,7 +520,7 @@ class DelwaqModel(GridModel):
             timestepsecs=timestepsecs,
             time_tuple=(starttime, endtime),
             fluxes=self.fluxes,
-            compartments=self.compartments,
+            surface_water=self.surface_water,
             add_volume_offset=add_volume_offset,
             min_volume=min_volume,
             override=override,
@@ -596,24 +588,24 @@ class DelwaqModel(GridModel):
 
     def setup_sediment_forcing(
         self,
-        sediment_fn,
-        starttime,
-        endtime,
-        particle_class=["IM1", "IM2", "IM3", "IM4", "IM5"],
-        **kwargs,
+        sediment_fn: Union[str, xr.Dataset],
+        starttime: str,
+        endtime: str,
+        particle_class: List[str] = ["IM1", "IM2", "IM3", "IM4", "IM5"],
     ):
         """Setup Delwaq hydrological fluxes.
 
         Adds model layers:
 
-        * **sediment.bin** dynmap: sediment particles from land erosion (fErodIM*) [g/timestep]
+        * **sediment.bin** dynmap: sediment particles from land erosion (fErodIM*)
+          [g/timestep]
         * **B7_sediment.inc** config: names of sediment fluxes included in sediment.bin
 
         Parameters
         ----------
         sediment_fn : {'None', 'name in local_sources.yml'}
-            Either None, or name in a local or global data_sources.yml file. Can contain several
-            particule sizes (IM1, IM2 etc)
+            Either None, or name in a local or global data_sources.yml file. Can contai
+            several particule sizes (IM1, IM2 etc)
 
             * Required variables: ['ErodIM*']
         startime : str
@@ -621,11 +613,13 @@ class DelwaqModel(GridModel):
         endtime : str
             Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS
         particle_class : str list, optional
-            List of particle classes to consider. By default 5 classes: ['IM1', 'IM2', 'IM3', 'IM4', 'IM5']
+            List of particle classes to consider. By default 5 classes: ['IM1', 'IM2',
+            'IM3', 'IM4', 'IM5']
         """
         if sediment_fn not in self.data_catalog:
             self.logger.warning(
-                f"None or Invalid source '{sediment_fn}', skipping setup_sediment_forcing."
+                f"None or Invalid source '{sediment_fn}', "
+                "skipping setup_sediment_forcing."
             )
             return
         self.logger.info(f"Setting dynamic data from sediment source {sediment_fn}.")
@@ -662,12 +656,6 @@ class DelwaqModel(GridModel):
             # Fill with zeros inside mask and keep NaN outside
             ds[dvar] = ds[dvar].fillna(0).where(ds["mask"], ds[dvar].raster.nodata)
 
-        # Add zeros to the non surface water compartments
-        comp_sfw = segments.sfwcomp(self.compartments, self.config)
-        ds = segments.extend_comp_with_zeros(
-            ds1c=ds, comp_ds1c=comp_sfw, compartments=self.compartments
-        )
-
         self.set_forcing(ds)
 
         lines_ini = {
@@ -679,14 +667,13 @@ class DelwaqModel(GridModel):
 
     def setup_climate_forcing(
         self,
-        climate_fn: str,
+        climate_fn: Union[str, xr.Dataset],
         starttime: str,
         endtime: str,
         timestepsecs: int,
         climate_vars: list = ["temp", "temp_dew", "ssr", "wind10_u", "wind10_v", "tcc"],
         temp_correction: bool = False,
         dem_forcing_fn: str = None,
-        **kwargs,
     ):
         """Setup Delwaq climate fluxes.
 
@@ -710,12 +697,12 @@ class DelwaqModel(GridModel):
         climate_vars : str list, optional
             List of climate_vars to consider. By default ["temp", "temp_dew", "ssr", "wind_u", "wind_v", "tcc"]
         temp_correction : bool, optional
-             If True temperature are corrected using elevation lapse rate,
-             by default False.
+            If True temperature are corrected using elevation lapse rate,
+            by default False.
         dem_forcing_fn : str, default None
-             Elevation data source with coverage of entire meteorological forcing domain.
-             If temp_correction is True and dem_forcing_fn is provided this is used in
-             combination with elevation at model resolution to correct the temperature.
+            Elevation data source with coverage of entire meteorological forcing domain.
+            If temp_correction is True and dem_forcing_fn is provided this is used in
+            combination with elevation at model resolution to correct the temperature.
         """
         self.logger.info(f"Setting dynamic data from climate source {climate_fn}.")
         # TODO function to get times
@@ -806,11 +793,6 @@ class DelwaqModel(GridModel):
             ds_out[dvar] = (
                 ds_out[dvar].fillna(0).where(ds_out["mask"], ds_out[dvar].raster.nodata)
             )
-        # Add zeros to the non surface water compartments
-        comp_sfw = segments.sfwcomp(self.compartments, self.config)
-        ds_out = segments.extend_comp_with_zeros(
-            ds1c=ds_out, comp_ds1c=comp_sfw, compartments=self.compartments
-        )
 
         # Rename and add to forcing
         rmdict = {k: v for k, v in self._FORCING.items() if k in ds_out.data_vars}
@@ -826,12 +808,11 @@ class DelwaqModel(GridModel):
 
     def setup_emission_raster(
         self,
-        emission_fn: str,
+        emission_fn: Union[str, xr.DataArray],
         scale_method: str = "average",
         fillna_method: str = "zero",
         fillna_value: int = 0.0,
         area_division: bool = False,
-        comp_emi: str = "sfw",
     ):
         """Setup one or several emission map from raster data.
 
@@ -846,13 +827,13 @@ class DelwaqModel(GridModel):
         scale_method : str {'nearest', 'average', 'mode'}
             Method for resampling
         fillna_method : str {'nearest', 'zero', 'value'}
-            Method to fill NaN values. Either nearest neighbour, zeros or user defined value.
+            Method to fill NaN values. Either nearest neighbour, zeros or user defined
+            value.
         fillna_value : float
-            If fillna_method is set to 'value', NaNs in the emission maps will be replaced by this value.
+            If fillna_method is set to 'value', NaNs in the emission maps will be
+            replaced by this value.
         area_division : boolean
             If needed do the resampling in cap/m2 (True) instead of cap (False)
-        comp_emi: str
-            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
         """
         self.logger.info(f"Preparing '{emission_fn}' map.")
         # process raster emission maps
@@ -869,18 +850,13 @@ class DelwaqModel(GridModel):
             logger=self.logger,
         )
         ds_emi = ds_emi.to_dataset(name=emission_fn)
-        # Attribute to comp_emi compartment and add zeros for the others
-        ds_emi = segments.extend_comp_with_zeros(
-            ds1c=ds_emi, comp_ds1c=comp_emi, compartments=self.compartments
-        )
         self.set_grid(ds_emi)
 
     def setup_emission_vector(
         self,
-        emission_fn: str,
+        emission_fn: Union[str, xr.DataArray],
         col2raster: str = "",
         rasterize_method: str = "value",
-        comp_emi: str = "sfw",
     ):
         """Setup emission map from vector data.
 
@@ -898,10 +874,9 @@ class DelwaqModel(GridModel):
         rasterize_method : str
             Method to rasterize the vector data. Either {"value", "fraction", "area"}.
             If "value", the value from the col2raster is used directly in the raster.
-            If "fraction", the fraction of the grid cell covered by the vector file is returned.
+            If "fraction", the fraction of the grid cell covered by the vector file is
+            returned.
             If "area", the area of the grid cell covered by the vector file is returned.
-        comp_emi: str
-            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
         """
         self.logger.info(f"Preparing '{emission_fn}' map.")
         gdf_org = self.data_catalog.get_geodataframe(
@@ -909,7 +884,8 @@ class DelwaqModel(GridModel):
         )
         if gdf_org.empty:
             self.logger.warning(
-                f"No shapes of {emission_fn} found within region, setting to default value."
+                f"No shapes of {emission_fn} found within region, "
+                "setting to default value."
             )
             ds_emi = self.hydromaps["basins"].copy() * 0.0
             ds_emi.attrs.update(_FillValue=0.0)
@@ -923,20 +899,15 @@ class DelwaqModel(GridModel):
                 logger=self.logger,
             )
         ds_emi = ds_emi.to_dataset(name=emission_fn)
-        # Attribute to comp_emi compartment and add zeros for the others
-        ds_emi = segments.extend_comp_with_zeros(
-            ds1c=ds_emi, comp_ds1c=comp_emi, compartments=self.compartments
-        )
         self.set_grid(ds_emi)
 
     def setup_emission_mapping(
         self,
-        region_fn,
-        mapping_fn=None,
-        comp_emi="sfw",
+        region_fn: Union[str, gpd.GeoDataFrame],
+        mapping_fn: Union[str, Path] = None,
     ):
-        """This component derives several emission maps based on administrative
-        boundaries.
+        """
+        Derive several emission maps based on administrative boundaries.
 
         For several emission types administrative classes ('fid' column) are
         remapped to model parameter values based on lookup tables. The data is
@@ -956,12 +927,8 @@ class DelwaqModel(GridModel):
             * Required variables: ['ID']
         mapping_fn : str, optional
             Path to the emission mapping file corresponding to region_fn.
-        comp_emi: str
-            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
         """
-        self.logger.info(
-            f"Preparing administrative boundaries related parameter maps for {region_fn}."
-        )
+        self.logger.info(f"Preparing region_fn related parameter maps for {region_fn}.")
         if mapping_fn is None:
             self.logger.warning(f"Using default mapping file.")
             mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
@@ -969,12 +936,11 @@ class DelwaqModel(GridModel):
         gdf_org = self.data_catalog.get_geodataframe(
             region_fn, geom=self.basins, dst_crs=self.crs
         )
-        # Rasterize the GeoDataFrame to get the areas mask of administrative boundaries with their ids
+        # Rasterize the GeoDataFrame to get the areas mask of
+        # administrative boundaries with their ids
         gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
-        # make sure index_col always has name fid in source dataset (use rename in data_sources.yml or
-        # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not fid:
-        # rename:
-        #   INDEXCOL: fid)\
+        # make sure index_col always has name fid in source dataset (use rename in
+        # data_sources.yml or local_sources.yml to rename column used for mapping
         ds_admin = self.hydromaps.raster.rasterize(
             gdf_org,
             col_name="ID",
@@ -993,10 +959,6 @@ class DelwaqModel(GridModel):
             logger=self.logger,
         )
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars}
-        # Attribute to comp_emi compartment and add zeros for the others
-        ds_admin_maps = segments.extend_comp_with_zeros(
-            ds1c=ds_admin_maps, comp_ds1c=comp_emi, compartments=self.compartments
-        )
         self.set_grid(ds_admin_maps.rename(rmdict))
 
     # I/O
@@ -1228,12 +1190,7 @@ class DelwaqModel(GridModel):
                 sedblock = []
                 for dvar in sed_vars:
                     nodata = ds_out[dvar].raster.nodata
-                    data = (
-                        ds_out[dvar]
-                        .isel(time=i)
-                        .transpose("comp", ...)
-                        .values.flatten()
-                    )
+                    data = ds_out[dvar].isel(time=i).values.flatten()
                     data = data[data != nodata]
                     sedblock = np.append(sedblock, data)
                 self.dw_WriteSegmentOrExchangeData(
@@ -1246,12 +1203,7 @@ class DelwaqModel(GridModel):
                 climblock = []
                 for dvar in clim_vars:
                     nodata = ds_out[dvar].raster.nodata
-                    data = (
-                        ds_out[dvar]
-                        .isel(time=i)
-                        .transpose("comp", ...)
-                        .values.flatten()
-                    )
+                    data = ds_out[dvar].isel(time=i).values.flatten()
                     data = data[data != nodata]
                     climblock = np.append(climblock, data)
                 self.dw_WriteSegmentOrExchangeData(
@@ -1341,8 +1293,8 @@ class DelwaqModel(GridModel):
         --------
         pointer: np.array
             Model pointer defining exchanges between segments
-        compartments: list of str
-            List of model compartments names
+        surface_water: list of str
+            Name of the surface water layer
         boundaries: list of str
             List of model boundaries names
         fluxes: list of str
@@ -1351,8 +1303,6 @@ class DelwaqModel(GridModel):
             number of segments
         nrofexch: int
             number of exchanges
-        nrofcomp: int
-            number of compartments
         """
         if not self._pointer:
             # not implemented yet, fix later
@@ -1370,13 +1320,13 @@ class DelwaqModel(GridModel):
                     "pointer values in self.pointer should be a np.ndarray with four columns."
                 )
                 return
-        elif np.isin(name, ["compartments", "boundaries", "fluxes"]):
+        elif np.isin(name, ["csurface_water", "boundaries", "fluxes"]):
             if not isinstance(attr, list):
                 self.logger.warning(
                     f"{name} object in self.pointer should be a list of names."
                 )
                 return
-        elif np.isin(name, ["nrofseg", "nrofexch", "nrofcomp"]):
+        elif np.isin(name, ["nrofseg", "nrofexch"]):
             if not isinstance(attr, int):
                 self.logger.warning(
                     f"{name} object in self.pointer should be an integer."
@@ -1418,43 +1368,20 @@ class DelwaqModel(GridModel):
         return nexch
 
     @property
-    def nrofcomp(self):
-        """Fast accessor to nrofcomp property of pointer"""
-        if "nrofcomp" in self.pointer:
-            ncomp = self.pointer["nrofcomp"]
-        elif "compartments" in self.pointer:
-            ncomp = len(self.pointer["compartments"])
-            self.set_pointer(ncomp, "nrofcomp")
-        else:
-            # from config
-            ncomp = self.get_config(
-                "B3_attributes.l7",
-                "     1*01 ; sfw",
-            )
-            ncells = int(ncomp.split("*")[0])
-            ncomp = int(self.nrofseg / ncells)
-            self.set_pointer(ncomp, "nrofexch")
-        return ncomp
-
-    @property
-    def compartments(self):
-        """Fast accessor to compartments property of pointer"""
-        if "compartments" in self.pointer:
-            comp = self.pointer["compartments"]
+    def surface_water(self):
+        """Fast accessor to surface_water name property of pointer"""
+        if "surface_water" in self.pointer:
+            sfw = self.pointer["surface_water"]
         else:
             # from config
             nl = 7
-            comp = []
-            for i in range(self.nrofcomp):
-                cp = self.get_config(
-                    f"B3_attributes.l{nl}",
-                    "     1*01 ; sfw",
-                )
-                cp = cp.split(";")[0][1:-1]
-                comp.append(cp)
-                nl += 1
-            self.set_pointer(comp, "compartments")
-        return comp
+            sfw = self.get_config(
+                f"B3_attributes.l{nl}",
+                "     1*01 ; sfw",
+            )
+            sfw = sfw.split(";")[0][1:-1]
+            self.set_pointer(sfw, "surface_water")
+        return sfw
 
     @property
     def fluxes(self):
@@ -1658,17 +1585,3 @@ class DelwaqModel(GridModel):
         # Write the waqgeom.nc file
         fname = join(self.root, "config", "B3_waqgeom.nc")
         uda_waqgeom.to_netcdf(path=fname, mode="w")
-        # uda_waqgeom.to_netcdf("updated_ugrid.nc")
-        ##plot pointerId grid
-        # da_ptid.ugrid.plot()
-        # plt.show()
-        ##CHECK resulting DataSet
-        # print("CRS: ")
-        # print(da_ptid.ugrid.crs)
-        # print("Output DataSet: ")
-        # print(uda_waqgeom)
-        ##CHECK resulting NC file
-        # ds = xu.open_dataset(fname)
-        # uda = ds["ptid"]
-        # uda.ugrid.plot()#uda.plot()
-        # plt.show()

@@ -1,5 +1,3 @@
-import os
-import numpy as np
 import pandas as pd
 import xarray as xr
 import logging
@@ -7,7 +5,6 @@ from typing import List
 from xclim.indices.stats import frequency_analysis
 
 import hydromt
-from hydromt.stats import extremes
 
 from . import emissions
 
@@ -26,7 +23,7 @@ def hydrology_forcing(
     time_tuple: tuple,
     timestepsecs: int,
     fluxes: List,
-    compartments: List,
+    surface_water: str = "sfw",
     add_volume_offset: bool = True,
     min_volume: float = 0.1,
     override: List = [],
@@ -34,20 +31,24 @@ def hydrology_forcing(
 ):
     """Calculate hydrology forcing data.
 
-    As the fluxes order should precisely macth the pointer defined in setup_basemaps, the variables names
-    in ``hydro_forcing_fn`` should match names defined in the ``fluxes`` argument of setup_basemaps.
-    These names should also have been saved in the file config/B7_fluxes.inc.
+    As the fluxes order should precisely macth the pointer defined in setup_basemaps,
+    the variables names in ``hydro_forcing_fn`` should match names defined in the
+    ``fluxes`` argument of setup_basemaps. These names should also have been saved in
+    the file config/B7_fluxes.inc.
 
-    If several sub-variables in ``hydro_forcing_fn`` need to be summed up to get the expected flux in pointer,
-    they can be named {flux_name_in_pointer}_{number} (eg "sfw>sfw_1" and "sfw>sfw_2" to get "sfw>sfw") and the
-    function will sum them on the fly. To remove (- instead of +) use unit_mult attribute of the data catalog
-    with -1 for the sub-variables of interest.
-    To override rather than sum fluxes, use the ``override`` argument and name of the concerned flux (eg "sfw>sfw").
-    The flux are overwritten (excluding nodata) in the order of the list, so the last one will be the one used.
+    If several sub-variables in ``hydro_forcing_fn`` need to be summed up to get the
+    expected flux in pointer, they can be named {flux_name_in_pointer}_{number}
+    (eg "sfw>sfw_1" and "sfw>sfw_2" to get "sfw>sfw") and the function will sum them on
+    the fly. To remove (- instead of +) use unit_mult attribute of the data catalog with
+    -1 for the sub-variables of interest.
+    To override rather than sum fluxes, use the ``override`` argument and name of the
+    concerned flux (eg "sfw>sfw"). The flux are overwritten (excluding nodata) in the
+    order of the list, so the last one will be the one used.
 
-    Unit conversions are possible from mm/area to m3/s for fluxes, volumes should be provided directly in m3.
-    For conversion from mm to m3/s, it is possible to specify over wich surface area the mm are calculated.
-    If 'mm' (default), the cellarea is assumed. Else, you can use 'mm/{surfacearea}' where {surfacearea} should be a map
+    Unit conversions are possible from mm/area to m3/s for fluxes, volumes should be
+    provided directly in m3. For conversion from mm to m3/s, it is possible to specify
+    over wich surface area the mm are calculated. If 'mm' (default), the cellarea is
+    assumed. Else, you can use 'mm/{surfacearea}' where {surfacearea} should be a map
     available in hydromaps (rivarea, lakearea, resarea).
 
     Parameters
@@ -67,14 +68,15 @@ def hydrology_forcing(
         Timestep of the simulation in seconds
     fluxes : list
         List of fluxes to be calculated
-    compartments : list
-        List of compartments / volumes to be calculated
+    surface_water : str, optional
+        Name of the surface water layer to calculate volume. By default "sfw".
     add_volume_offset : bool, optional
         Add time offset of one timestepsecs to the volumes, by default True.
     min_volume : float, optional
         Minimum volume to be considered, by default 0.1 to avoid zero volumes.
     override : list, optional
-        List of fluxes to be overriden if several fluxes varibales are found, by default [].
+        List of fluxes to be overriden if several fluxes varibales are found, by default
+        [].
     logger : logging.Logger, optional
         Logger object, by default logger
 
@@ -155,25 +157,26 @@ def hydrology_forcing(
         times = pd.to_datetime(ds["time"].values)
         times.freq = pd.infer_freq(times)
         times_offset = times + times.freq
-    for vol in compartments:
-        # Check if the flux is split into several variables
-        vol_vars = [v for v in ds.data_vars if v.startswith(vol)]
-        # Unit conversion (from mm to m3)
-        for vl in vol_vars:
-            unit = ds[vl].attrs.get("unit")
-            if unit == "mm":
-                surface = emissions.gridarea(ds)
-                ds[vl] = ds[vl] * surface / (1000 * timestepsecs)
-            # For other area eg river, lake, reservoir
-            elif unit.startswith("mm/"):
-                surfacemap = unit.split("/")[1]
-                if surfacemap in ds_model:
-                    ds[vl] = ds[vl] * ds_model[surfacemap] / (1000 * timestepsecs)
-                else:
-                    surface_fns = [f for f in ds_model.keys() if f.endswith("area")]
-                    logger.error(
-                        f"Map {surfacemap} not found in hydromaps to convert unit {unit}. Allowed names are {surface_fns}."
-                    )
+    vol = surface_water
+    # Check if the flux is split into several variables
+    vol_vars = [v for v in ds.data_vars if v.startswith(vol)]
+    # Unit conversion (from mm to m3)
+    for vl in vol_vars:
+        unit = ds[vl].attrs.get("unit")
+        if unit == "mm":
+            surface = emissions.gridarea(ds)
+            ds[vl] = ds[vl] * surface / (1000 * timestepsecs)
+        # For other area eg river, lake, reservoir
+        elif unit.startswith("mm/"):
+            surfacemap = unit.split("/")[1]
+            if surfacemap in ds_model:
+                ds[vl] = ds[vl] * ds_model[surfacemap] / (1000 * timestepsecs)
+            else:
+                surface_fns = [f for f in ds_model.keys() if f.endswith("area")]
+                logger.error(
+                    f"Map {surfacemap} not found in hydromaps to convert unit {unit}."
+                    f"Allowed names are {surface_fns}."
+                )
         attrs = ds[vol_vars[0]].attrs.copy()
         if len(vol_vars) > 1:  # need to sum
             if vol not in override:
@@ -182,14 +185,14 @@ def hydrology_forcing(
                 ds[vol] = ds[vol_vars[0]]
                 for vl in vol_vars[1:]:
                     ds[vol] = ds[vol].where(ds[vl].isnull(), ds[vl])
-        # In order to avoid zero volumes, a basic minimum value of 0.0001 m3 is added to all volumes
+        # In order to avoid zero volumes
+        # a basic minimum value of 0.0001 m3 is added to all volumes
         ds[vol] = ds[vol] + min_volume
         # Add offset for the volumes if needed
         if add_volume_offset:
             da_vol = ds[vol].copy()
             ds = ds.drop_vars(vol)
             da_vol["time"] = times_offset
-            # ds = ds.merge(da_vol)
         else:
             da_vol = ds[vol]
         ds_out[vol] = da_vol.sel(time=slice(*time_tuple))
@@ -198,7 +201,7 @@ def hydrology_forcing(
 
     # Select variables, needed??
     variables = fluxes.copy()
-    variables.extend(compartments)
+    variables.extend([surface_water])
     ds_out = ds_out[variables]
 
     ds_out.coords["mask"] = xr.DataArray(

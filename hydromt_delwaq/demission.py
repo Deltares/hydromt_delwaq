@@ -1,26 +1,18 @@
 """Implement demission model class"""
 
 import os
-from os.path import join, isfile, basename
-import glob
+from os.path import join
 import numpy as np
 import pandas as pd
 import xarray as xr
 import geopandas as gpd
-import pyproj
 import logging
-import struct
 from datetime import datetime
-import time as t
-from typing import List
+from typing import List, Union, Dict
 
-import hydromt
 from hydromt import workflows
 
-
-from hydromt_wflow.wflow import WflowModel
 from .delwaq import DelwaqModel
-
 from .workflows import emissions, segments, roads
 from . import DATADIR
 
@@ -87,11 +79,11 @@ class DemissionModel(DelwaqModel):
 
     def setup_basemaps(
         self,
-        region,
-        maps=["rivmsk", "lndslp", "strord"],
+        region: Dict,
+        maps: List[str] = ["rivmsk", "lndslp", "strord"],
     ):
         """
-        Setup the demission model schematization using the hydromodel region and resolution.
+        Setup demission model schematization using the hydromodel region and resolution.
 
         Maps used and derived from the hydromodel are stored in a specific
         hydromodel attribute. Depending on the global option ``type``, build a
@@ -153,7 +145,7 @@ class DemissionModel(DelwaqModel):
 
         ### Initialise grid with segment ID down, streamorder, river and slope ###
         ds_stat = segments.maps_from_hydromodel(
-            hydromodel, compartments=self.compartments, maps=maps
+            hydromodel, maps=maps, logger=self.logger
         )
         ds_stat["ptiddown"] = self.hydromaps["ptiddown"].squeeze(drop=True)
 
@@ -186,8 +178,6 @@ class DemissionModel(DelwaqModel):
         )
 
         ### Config ###
-        # For now, only one compartment in EM and WQ
-        nrofcomp = 1
         # B3_nrofseg
         lines_ini = {
             "l1": f"{nrofseg} ; nr of segments",
@@ -202,7 +192,7 @@ class DemissionModel(DelwaqModel):
             "l4": "     1     2",
             "l5": " 1    ; file option in this file",
             "l6": " 1    ; option without defaults",
-            "l7": f"     {int(nrofseg/nrofcomp)}*01 ; EM",
+            "l7": f"     {int(nrofseg)}*01 ; EM",
             "l8": " 0    ; no time dependent attributes",
         }
         for option in lines_ini:
@@ -227,179 +217,26 @@ class DemissionModel(DelwaqModel):
         for option in lines_ini:
             self.set_config("B7_surf", option, lines_ini[option])
 
-    def setup_emission_raster(
-        self,
-        emission_fn: str,
-        scale_method: str = "average",
-        fillna_method: str = "zero",
-        fillna_value: int = 0.0,
-        area_division: bool = False,
-    ):
-        """Setup one or several emission map from raster data.
-
-        Adds model layer:
-
-        * **emission_fn** map: emission data map
-
-        Parameters
-        ----------
-        emission_fn : {'GHS-POP_2015'...}
-            Name of raster emission map source.
-        scale_method : str {'nearest', 'average', 'mode'}
-            Method for resampling
-        fillna_method : str {'nearest', 'zero', 'value'}
-            Method to fill NaN values. Either nearest neighbour, zeros or user defined value.
-        fillna_value : float
-            If fillna_method is set to 'value', NaNs in the emission maps will be replaced by this value.
-        area_division : boolean
-            If needed do the resampling in cap/m2 (True) instead of cap (False)
-        comp_emi: str
-            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
-        """
-        self.logger.info(f"Preparing '{emission_fn}' map.")
-        # process raster emission maps
-        da = self.data_catalog.get_rasterdataset(
-            emission_fn, geom=self.region, buffer=2
-        )
-        ds_emi = emissions.emission_raster(
-            da=da,
-            ds_like=self.grid,
-            method=scale_method,
-            fillna_method=fillna_method,
-            fillna_value=fillna_value,
-            area_division=area_division,
-            logger=self.logger,
-        )
-        self.set_grid(ds_emi.rename(emission_fn))
-
-    def setup_emission_vector(
-        self,
-        emission_fn: str,
-        col2raster: str = "",
-        rasterize_method: str = "value",
-    ):
-        """Setup emission map from vector data.
-
-        Adds model layer:
-
-        * **emission_fn** map: emission data map
-
-        Parameters
-        ----------
-        emission_fn : {'GDP_world'...}
-            Name of raster emission map source.
-        col2raster : str
-            Name of the column from the vector file to rasterize.
-            Can be left empty if the selected method is set to "fraction".
-        rasterize_method : str
-            Method to rasterize the vector data. Either {"value", "fraction"}.
-            If "value", the value from the col2raster is used directly in the raster.
-            If "fraction", the fraction of the grid cell covered by the vector file is returned.
-        comp_emi: str
-            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
-        """
-        self.logger.info(f"Preparing '{emission_fn}' map.")
-        gdf_org = self.data_catalog.get_geodataframe(
-            emission_fn, geom=self.basins, dst_crs=self.crs
-        )
-        if gdf_org.empty:
-            self.logger.warning(
-                f"No shapes of {emission_fn} found within region, setting to default value."
-            )
-            ds_emi = self.hydromaps["basins"].copy() * 0.0
-            ds_emi.attrs.update(_FillValue=0.0)
-        else:
-            ds_emi = emissions.emission_vector(
-                gdf=gdf_org,
-                ds_like=self.grid,
-                col_name=col2raster,
-                method=rasterize_method,
-                mask_name="mask",
-                logger=self.logger,
-            )
-        self.set_grid(ds_emi.rename(emission_fn))
-
-    def setup_emission_mapping(
-        self,
-        region_fn,
-        mapping_fn=None,
-    ):
-        """This component derives several emission maps based on administrative
-        boundaries.
-
-        For several emission types administrative classes ('fid' column) are
-        remapped to model parameter values based on lookup tables. The data is
-        remapped at its original resolution and then resampled to the model
-        resolution based using the average value, unless noted differently.
-
-        Adds model layers:
-
-        * **region_fn** map: emission data with classification from source_name [-]
-        * **emission factor X** map: emission data from mapping file to classification
-
-        Parameters
-        ----------
-        region_fn : {["gadm_level1", "gadm_level2", "gadm_level3"]}
-            Name or list of names of data source in data_sources.yml file.
-
-            * Required variables: ['ID']
-        mapping_fn : str, optional
-            Path to the emission mapping file corresponding to region_fn.
-        comp_emi: str
-            Name of the model compartment recaiving the emission data (by default surface water 'sfw').
-        """
-        self.logger.info(
-            f"Preparing administrative boundaries related parameter maps for {region_fn}."
-        )
-        if mapping_fn is None:
-            self.logger.warning(f"Using default mapping file.")
-            mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
-        # process emission factor maps
-        gdf_org = self.data_catalog.get_geodataframe(
-            region_fn, geom=self.basins, dst_crs=self.crs
-        )
-        # Rasterize the GeoDataFrame to get the areas mask of administrative boundaries with their ids
-        gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
-        # make sure index_col always has name fid in source dataset (use rename in data_sources.yml or
-        # local_sources.yml to rename column used for mapping (INDEXCOL), if INDEXCOL name is not fid:
-        # rename:
-        #   INDEXCOL: fid)\
-        ds_admin = self.hydromaps.raster.rasterize(
-            gdf_org,
-            col_name="ID",
-            nodata=0,
-            all_touched=True,
-            dtype=None,
-            sindex=False,
-        )
-
-        # add admin_bound map
-        ds_admin_maps = emissions.admin(
-            da=ds_admin,
-            ds_like=self.grid,
-            source_name=region_fn,
-            fn_map=mapping_fn,
-            logger=self.logger,
-        )
-        rmdict = {k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars}
-        self.set_grid(ds_admin_maps.rename(rmdict))
-
     def setup_roads(
         self,
-        roads_fn,
-        highway_list,
-        country_list,
-        non_highway_list=None,
-        country_fn=None,
+        roads_fn: Union[str, gpd.GeoDataFrame],
+        highway_list: Union[str, List[str]],
+        country_list: Union[str, List[str]],
+        non_highway_list: Union[str, List[str]] = None,
+        country_fn: Union[str, gpd.GeoDataFrame] = None,
     ):
         """Setup roads statistics needed for emission modelling.
 
         Adds model layers:
 
-        * **km_highway_country** map: emission data with for each grid cell the total km of highway for the country the grid cell is in [km highway/country]
-        * **km_other_country** map: emission data with for each grid cell the total km of non highway roads for the country the grid cell is in [km other road/country]
-        * **km_highway_cell** map: emission data containing highway length per cell [km highway/cell]
-        * **km_other_cell** map:
+        * **km_highway_country** map: emission data with for each grid cell the total km
+          of highway for the country the grid cell is in [km highway/country]
+        * **km_other_country** map: emission data with for each grid cell the total km
+          of non highway roads for the country the grid cell is in [km other road/country]
+        * **km_highway_cell** map: emission data containing highway length per cell
+          [km highway/cell]
+        * **km_other_cell** map: emission data containing non-highway length per cell
+          [km non-highway/cell]
         * **emission factor X** map: emission data from mapping file to classification
 
         Parameters
@@ -413,20 +250,17 @@ class DemissionModel(DelwaqModel):
         highway_list: str or list of str
             List of highway roads in the type variable of roads_fn.
         non_highway_list: str or list of str, optional.
-            List of non highway roads in the type variable of roads_fn. If not provided takes every roads except the ones in highway_list.
+            List of non highway roads in the type variable of roads_fn. If not provided
+            takes every roads except the ones in highway_list.
         country_list: str or list of str, optional.
-            List of countries for the model area in country_fn and optionnally in country_code variable of roads_fn.
+            List of countries for the model area in country_fn and optionnally in
+            country_code variable of roads_fn.
         country_fn: str, optional.
             Name of country boundaries data source in data_sources.yml file.
 
             * Required variables: ['country_code']
 
         """
-        if roads_fn is None:
-            return
-        if roads_fn not in self.data_catalog:
-            self.logger.warning(f"Invalid source '{roads_fn}', skipping setup_roads.")
-            return
         # Convert string to lists
         if not isinstance(highway_list, list):
             highway_list = [highway_list]
@@ -439,7 +273,6 @@ class DemissionModel(DelwaqModel):
         gdf_country = gdf_country.iloc[
             np.isin(gdf_country["country_code"], country_list)
         ]
-        # bbox = gdf_country.total_bounds
 
         # Read the roads data and mask with country geom
         gdf_roads = self.data_catalog.get_geodataframe(
@@ -527,12 +360,11 @@ class DemissionModel(DelwaqModel):
 
     def setup_hydrology_forcing(
         self,
-        hydro_forcing_fn: str,
+        hydro_forcing_fn: Union[str, xr.Dataset],
         starttime: str,
         endtime: str,
         timestepsecs: int,
         include_transport: bool = False,
-        **kwargs,
     ):
         """Setup Demission hydrological fluxes.
 
@@ -545,7 +377,8 @@ class DemissionModel(DelwaqModel):
 
         In EM mode, adds:
 
-        * **hydrology.bin** dynmap: fluxes for EM (Rainfall RunoffPav  RunoffUnp Infiltr TotalFlow) [mm]
+        * **hydrology.bin** dynmap: fluxes for EM (Rainfall RunoffPav  RunoffUnp Infiltr
+          TotalFlow) [mm]
         * **B7_hydrology.inc** config: names of fluxes included in hydrology.bin
 
         Parameters
@@ -553,7 +386,8 @@ class DemissionModel(DelwaqModel):
         hydro_forcing_fn : {'None', 'name in local_sources.yml'}
             Either None, or name in a local or global data_sources.yml file.
 
-            * Required variables for EM: ['time', 'precip', 'runPav', 'runUnp', 'infilt', 'exfilt*', 'q_land', 'q_ss']
+            * Required variables for EM: ['time', 'precip', 'runPav', 'runUnp',
+              'infilt', 'exfilt*', 'q_land', 'q_ss']
 
         startime : str
             Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
@@ -562,12 +396,15 @@ class DemissionModel(DelwaqModel):
         timestepsecs : int
             Model timestep in seconds.
         include_transport : bool, optional
-            If False (default), only use the vertical fluxes for emission [precip, runPav, runUnp, infilt, totflw].
-            If True, includes additional fluxes for land and subsurface trasnport [precip, runPav, runUnp, infilt, exfilt, q_land, q_ss].
+            If False (default), only use the vertical fluxes for emission [precip,
+            runPav, runUnp, infilt, totflw].
+            If True, includes additional fluxes for land and subsurface trasnport
+            [precip, runPav, runUnp, infilt, exfilt, q_land, q_ss].
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
-                f"None or Invalid source '{hydro_forcing_fn}', skipping setup_hydrology_forcing."
+                f"None or Invalid source '{hydro_forcing_fn}', "
+                "skipping setup_hydrology_forcing."
             )
             return
         self.logger.info(
@@ -713,7 +550,7 @@ class DemissionModel(DelwaqModel):
 
     # I/O
     def read(self):
-        """Method to read the complete model schematization and configuration from file."""
+        """Read the complete model schematization and configuration from file."""
         # self.read_config()
         self.read_geoms()
         self.read_hydromaps()
@@ -724,7 +561,7 @@ class DemissionModel(DelwaqModel):
         self.logger.info("Model read")
 
     def write(self):
-        """Method to write the complete model schematization and configuration to file."""
+        """Write the complete model schematization and configuration to file."""
         self.logger.info(f"Write model data to {self.root}")
         # if in r, r+ mode, only write updated components
         self.write_grid()
@@ -771,7 +608,10 @@ class DemissionModel(DelwaqModel):
             fpa.close()
 
     def write_forcing(self, write_nc=False):
-        """Write forcing at <root/dynamicdata> in binary format and NetCDF (if write_nc is True)."""
+        """Write forcing at <root/dynamicdata> in binary format.
+
+        Can also write a netcdf copy if ``write_nc`` is True.
+        """
         self._assert_write_mode()
         if len(self.forcing) == 0:
             self.logger.debug("No forcing data found, skip writing.")
@@ -885,17 +725,3 @@ class DemissionModel(DelwaqModel):
             nexch = self.nrofseg * 5
             self.set_pointer(nexch, "nrofexch")
         return nexch
-
-    @property
-    def nrofcomp(self):
-        """Fast accessor to nrofcomp property of pointer"""
-        if "nrofcomp" in self.pointer:
-            ncomp = self.pointer["nrofcomp"]
-        else:
-            ncomp = 1
-            self.set_pointer(ncomp, "nrofexch")
-        return ncomp
-
-    @property
-    def compartments(self):
-        return ["EM"]
