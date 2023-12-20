@@ -15,7 +15,7 @@ from typing import List
 from tqdm import tqdm
 
 import hydromt
-from hydromt.models.model_api import Model
+from hydromt.models.model_grid import GridModel
 from hydromt import workflows, io
 
 from .workflows import emissions, segments, hydrology
@@ -34,7 +34,7 @@ PCR_VS_MAP = {
 }
 
 
-class DelwaqModel(Model):
+class DelwaqModel(GridModel):
     """This is the delwaq model class"""
 
     _NAME = "delwaq"
@@ -63,7 +63,7 @@ class DelwaqModel(Model):
     _FOLDERS = [
         "hydromodel",
         "staticdata",
-        "staticgeoms",
+        "geoms",
         "config",
         "dynamicdata",
         "fews",
@@ -93,7 +93,7 @@ class DelwaqModel(Model):
         self.hydromodel_name = hydromodel_name
         self.hydromodel_root = hydromodel_root
 
-        self._hydromaps = xr.Dataset()  # extract of hydromodel staticmaps
+        self._hydromaps = xr.Dataset()  # extract of hydromodel grid
         self._pointer = (
             None  # dictionnary of pointer values and related model attributes
         )
@@ -151,7 +151,7 @@ class DelwaqModel(Model):
         comp_attributes: list of int
             Attribute 1 value of the B3_attributes config file. 1 or 0 for surface water. Also used to compute surface variable.
         maps: list of str
-            List of variables from hydromodel to add to staticmaps. 
+            List of variables from hydromodel to add to grid. 
             By default ['rivmsk', 'lndslp', 'strord', 'N'].
         """
         # Only list of str allowed in config
@@ -205,7 +205,7 @@ class DelwaqModel(Model):
         self.set_pointer(bd_type, name="boundaries")
         self.set_pointer(fluxes, name="fluxes")
 
-        ### Initialise staticmaps with streamorder, river and slope ###
+        ### Initialise grid river and slope ###
         ds_stat = segments.maps_from_hydromodel(
             hydromodel, compartments, maps=maps, logger=self.logger
         )
@@ -213,7 +213,7 @@ class DelwaqModel(Model):
         ds_stat["mask"] = mask[da_mask.name]
         ds_stat = ds_stat.set_coords("mask")
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
-        self.set_staticmaps(ds_stat.rename(rmdict))
+        self.set_grid(ds_stat.rename(rmdict))
 
         ### Add geometry ###
         ds_geom = segments.geometrymaps(
@@ -221,7 +221,7 @@ class DelwaqModel(Model):
             compartments=compartments,
             comp_attributes=comp_attributes,
         )
-        self.set_staticmaps(ds_geom)
+        self.set_grid(ds_geom)
 
         ### Config ###
         nrofcomp = len(compartments)
@@ -312,19 +312,19 @@ class DelwaqModel(Model):
                     )
                 else:
                     gdf.index.name = "index"
-                    monpoints = self.staticmaps.raster.rasterize(
+                    monpoints = self.grid.raster.rasterize(
                         gdf, col_name="index", nodata=mv
                     )
             self.logger.info(f"Gauges locations read from {mon_points}")
-            # Add to staticmaps
-            self.set_staticmaps(monpoints.rename("monpoints"))
+            # Add to grid
+            self.set_grid(monpoints.rename("monpoints"))
             # Number of monitoring points
             points = monpoints.values.flatten()
             points = points[points != mv]
             nb_points = len(points)
-            # Add to staticgeoms if mon_points is not segments
+            # Add to geoms if mon_points is not segments
             if mon_points != "segments":
-                self.set_staticgeoms(gdf, name="monpoints")
+                self.set_geoms(gdf, name="monpoints")
         else:
             self.logger.info("No monitoring points set in the config file, skipping")
             nb_points = 0
@@ -369,14 +369,14 @@ class DelwaqModel(Model):
                 monareas_tot,
                 pd.Index(np.arange(1, self.nrofcomp + 1, dtype=int), name="comp"),
             ).transpose("comp", ...)
-            # Add to staticmaps
-            self.set_staticmaps(monareas.rename("monareas"))
-            self.staticmaps["monareas"].attrs.update(_FillValue=mv)
-            self.staticmaps["monareas"].attrs["mon_areas"] = mon_areas
+            # Add to grid
+            self.set_grid(monareas.rename("monareas"))
+            self.grid["monareas"].attrs.update(_FillValue=mv)
+            self.grid["monareas"].attrs["mon_areas"] = mon_areas
 
-            # Add to staticgeoms (only first compartments)
-            gdf_areas = self.staticmaps["monareas"].sel(comp=1).raster.vectorize()
-            self.set_staticgeoms(gdf_areas, name="monareas")
+            # Add to geoms (only first compartments)
+            gdf_areas = self.grid["monareas"].sel(comp=1).raster.vectorize()
+            self.set_geoms(gdf_areas, name="monareas")
         else:
             self.logger.info("No monitoring areas set in the config file, skipping")
             nb_areas = 0
@@ -440,12 +440,12 @@ class DelwaqModel(Model):
             self.logger.info("Deriving flooding characteristics from discharge.")
             ds_bankfull = hydrology.bankfull_volume_from_discharge(
                 da_q=da_q,
-                ds_model=self.staticmaps,
+                ds_model=self.grid,
                 **kwargs,
             )
 
-        # Add to staticmaps
-        self.set_staticmaps(ds_bankfull)
+        # Add to grid
+        self.set_grid(ds_bankfull)
 
     def setup_hydrology_forcing(
         self,
@@ -861,7 +861,7 @@ class DelwaqModel(Model):
         )
         ds_emi = emissions.emission_raster(
             da=da,
-            ds_like=self.staticmaps,
+            ds_like=self.grid,
             method=scale_method,
             fillna_method=fillna_method,
             fillna_value=fillna_value,
@@ -873,7 +873,7 @@ class DelwaqModel(Model):
         ds_emi = segments.extend_comp_with_zeros(
             ds1c=ds_emi, comp_ds1c=comp_emi, compartments=self.compartments
         )
-        self.set_staticmaps(ds_emi)
+        self.set_grid(ds_emi)
 
     def setup_emission_vector(
         self,
@@ -916,7 +916,7 @@ class DelwaqModel(Model):
         else:
             ds_emi = emissions.emission_vector(
                 gdf=gdf_org,
-                ds_like=self.staticmaps,
+                ds_like=self.grid,
                 col_name=col2raster,
                 method=rasterize_method,
                 mask_name="mask",
@@ -927,7 +927,7 @@ class DelwaqModel(Model):
         ds_emi = segments.extend_comp_with_zeros(
             ds1c=ds_emi, comp_ds1c=comp_emi, compartments=self.compartments
         )
-        self.set_staticmaps(ds_emi)
+        self.set_grid(ds_emi)
 
     def setup_emission_mapping(
         self,
@@ -987,7 +987,7 @@ class DelwaqModel(Model):
         # add admin_bound map
         ds_admin_maps = emissions.admin(
             da=ds_admin,
-            ds_like=self.staticmaps,
+            ds_like=self.grid,
             source_name=region_fn,
             fn_map=mapping_fn,
             logger=self.logger,
@@ -997,16 +997,16 @@ class DelwaqModel(Model):
         ds_admin_maps = segments.extend_comp_with_zeros(
             ds1c=ds_admin_maps, comp_ds1c=comp_emi, compartments=self.compartments
         )
-        self.set_staticmaps(ds_admin_maps.rename(rmdict))
+        self.set_grid(ds_admin_maps.rename(rmdict))
 
     # I/O
     def read(self):
         """Method to read the complete model schematization and configuration from file."""
         # self.read_config()
-        self.read_staticgeoms()
+        self.read_geoms()
         self.read_hydromaps()
         # self.read_pointer()
-        self.read_staticmaps()
+        self.read_grid()
         # self.read_fewsadapter()
         # self.read_forcing()
         self.logger.info("Model read")
@@ -1015,42 +1015,26 @@ class DelwaqModel(Model):
         """Method to write the complete model schematization and configuration to file."""
         self.logger.info(f"Write model data to {self.root}")
         # if in r, r+ mode, only write updated components
-        if self._staticmaps or not self._read:
-            self.write_staticmaps()
-        if self._staticgeoms or not self._read:
-            self.write_staticgeoms()
-        if self._config or not self._read:
-            self.write_config()
-        if self._hydromaps or not self._read:
-            self.write_hydromaps()
-        if self._pointer is not None or not self._read:
-            self.write_pointer()
-        #        if self._fewsadapter or not self._read:
-        #            self.write_fewsadapter()
-        if self._forcing or not self._read:
-            self.write_forcing()
+        self.write_grid()
+        self.write_geoms()
+        self.write_config()
+        self.write_hydromaps()
+        self.write_pointer()
+        self.write_forcing()
 
-    def read_staticmaps(self, crs=None, **kwargs):
-        """Read staticmaps at <root/staticdata> and parse to xarray"""
-        fn = join(self.root, "staticdata", "staticmaps.nc")
-        if not self._write:
-            # start fresh in read-only mode
-            self._staticmaps = xr.Dataset()
-        if fn is not None and isfile(fn):
-            self.logger.info(f"Read staticmaps from {fn}")
-            # FIXME: we need a smarter (lazy) solution for big models which also
-            # works when overwriting / apending data in thet same source!
-            ds = xr.open_dataset(
-                fn, mask_and_scale=False, decode_coords="all", **kwargs
-            ).load()
-            ds.close()
-            self.set_staticmaps(ds)
+    def read_grid(self, **kwargs):
+        """Read grid at <root/staticdata> and parse to xarray"""
+        fn = join(self.root, "staticdata", "staticdata.nc")
+        super().read_grid(fn, **kwargs)
 
-    def write_staticmaps(self):
-        """Write staticmaps at <root/staticdata> in NetCDF and binary format."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
-        ds_out = self.staticmaps
+    def write_grid(self):
+        """Write grid at <root/staticdata> in NetCDF and binary format."""
+        if len(self.grid) == 0:
+            self.logger.debug("No grid data found, skip writing.")
+            return
+
+        self._assert_write_mode()
+        ds_out = self.grid
 
         # Filter data with mask
         for dvar in ds_out.data_vars:
@@ -1058,7 +1042,7 @@ class DelwaqModel(Model):
 
         self.logger.info("Writing staticmap files.")
         # Netcdf format
-        fname = join(self.root, "staticdata", "staticmaps.nc")
+        fname = join(self.root, "staticdata", "staticdata.nc")
         # Update attributes for gdal compliance
         # ds_out = ds_out.raster.gdal_compliant(rename_dims=False)
         ds_out.to_netcdf(path=fname)
@@ -1083,32 +1067,18 @@ class DelwaqModel(Model):
             monareas = ds_out["monareas"]
         self.write_monitoring(monpoints, monareas)
 
-    def read_staticgeoms(self):
-        """Read and staticgeoms at <root/staticgeoms> and parse to geopandas"""
-        if not self._write:
-            self._staticgeoms = dict()  # fresh start in read-only mode
-        fns = glob.glob(join(self.root, "staticgeoms", "*.geojson"))
-        if len(fns) > 1:
-            self.logger.info("Reading model staticgeom files.")
-        for fn in fns:
-            name = basename(fn).split(".")[0]
-            self.set_staticgeoms(io.open_vector(fn), name=name)
+    def read_geoms(self):
+        """Read and geoms at <root/geoms> and parse to geopandas"""
+        super.read_geoms(fn="geoms/*.geojson")
 
-    def write_staticgeoms(self):
-        """Write staticmaps at <root/staticgeoms> in model ready format"""
-        # to write use self.staticgeoms[var].to_file()
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
-        if self.staticgeoms:
-            self.logger.info("Writing model staticgeom to file.")
-            for name, gdf in self.staticgeoms.items():
-                fn_out = join(self.root, "staticgeoms", f"{name}.geojson")
-                gdf.to_file(fn_out, driver="GeoJSON")
+    def write_geoms(self):
+        """Write grid at <root/geoms> in model ready format"""
+        # to write use self.geoms[var].to_file()
+        super.write_geoms(fn="geoms/{name}.geojson", driver="GeoJSON")
 
     def write_config(self):
         """Write config files in ASCII format at <root/config>."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
+        self._assert_write_mode()
         if self.config:
             self.logger.info("Writing model config to file.")
             for name, lines in self.config.items():
@@ -1120,33 +1090,28 @@ class DelwaqModel(Model):
 
     def read_hydromaps(self, crs=None, **kwargs):
         """Read hydromaps at <root/hydromodel> and parse to xarray"""
-        if self._read and "chunks" not in kwargs:
+        self._assert_read_mode()
+        if "chunks" not in kwargs:
             kwargs.update(chunks={"y": -1, "x": -1})
+        # Load grid data in r+ mode to allow overwritting netcdf files
+        if self._read and self._write:
+            kwargs["load"] = True
         fns = glob.glob(join(self.root, "hydromodel", f"*.tif"))
         if len(fns) > 0:
-            self._hydromaps = io.open_mfraster(fns, **kwargs)
-        if self._hydromaps.raster.crs is None and crs is not None:
-            self.set_crs(crs)
-        self._hydromaps.coords["mask"] = self._hydromaps["modelmap"].astype(bool)
+            ds_hydromaps = io.open_mfraster(fns, **kwargs)
+        if ds_hydromaps.raster.crs is None and crs is not None:
+            ds_hydromaps.raster.set_crs(crs)
+        ds_hydromaps.coords["mask"] = ds_hydromaps["modelmap"].astype(bool)
+        self.set_hydromaps(ds_hydromaps)
 
     def write_hydromaps(self):
         """Write hydromaps at <root/hydromodel> in PCRaster maps format."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
+        self._assert_write_mode()
+        if len(self.hydromaps) == 0:
+            self.logger.debug("No grid data found, skip writing.")
+            return
+
         ds_out = self.hydromaps
-        if self._read:
-            # only write loaded maps in 'r+' mode
-            dvars = [
-                dvar
-                for dvar in self.hydromaps.data_vars.keys()
-                if isinstance(self.hydromaps[dvar].data, np.ndarray)
-            ]
-            if len(dvars) > 0:
-                ds_out = ds_out[dvars]
-                self.logger.debug(f"Updated maps: {dvars}")
-            else:
-                self.logger.warning(f"No updated maps. Skipping writing to file.")
-                return
         self.logger.info("Writing hydromap files.")
         # Convert bool dtype before writting
         for var in ds_out.raster.vars:
@@ -1190,7 +1155,7 @@ class DelwaqModel(Model):
         # raise NotImplementedError()
 
     def write_forcing(self, write_nc=False):
-        """Write staticmaps at <root/staticdata> in binary format and NetCDF (if write_nc is True)."""
+        """Write grid at <root/staticdata> in binary format and NetCDF (if write_nc is True)."""
         if not self._write:
             raise IOError("Model opened in read-only mode")
         if not self.forcing:
@@ -1328,12 +1293,12 @@ class DelwaqModel(Model):
 
     @property
     def basins(self):
-        if "basins" in self.staticgeoms:
-            gdf = self.staticgeoms["basins"]
+        if "basins" in self.geoms:
+            gdf = self.geoms["basins"]
         elif "basins" in self.hydromaps:
             gdf = self.hydromaps["basins"].raster.vectorize()
             gdf.crs = pyproj.CRS.from_user_input(self.crs)
-            self.set_staticgeoms(gdf, name="basins")
+            self.set_geoms(gdf, name="basins")
         return gdf
 
     @property
@@ -1347,7 +1312,7 @@ class DelwaqModel(Model):
         return self._hydromaps
 
     def set_hydromaps(self, data, name=None):
-        """Add data to hydromaps re-using the set_staticmaps method"""
+        """Add data to hydromaps re-using the set_grid method"""
         if name is None:
             if isinstance(data, xr.DataArray) and data.name is not None:
                 name = data.name
@@ -1371,7 +1336,7 @@ class DelwaqModel(Model):
         else:
             if isinstance(data, np.ndarray):
                 if data.shape != self.shape:
-                    raise ValueError("Shape of data and staticmaps do not match")
+                    raise ValueError("Shape of data and grid do not match")
                 data = xr.DataArray(dims=self.dims, data=data, name=name).to_dataset()
             for dvar in data.data_vars.keys():
                 if dvar in self._hydromaps:
