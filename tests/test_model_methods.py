@@ -14,7 +14,7 @@ TESTDATADIR = join(dirname(abspath(__file__)), "data")
 EXAMPLEDIR = join(dirname(abspath(__file__)), "..", "examples")
 
 
-def test_setup_staticmaps():
+def test_setup_grid():
     logger = logging.getLogger(__name__)
     # read model from examples folder
     root = join(EXAMPLEDIR, "WQ_piave")
@@ -28,17 +28,17 @@ def test_setup_staticmaps():
         rasterize_method="fraction",
     )
 
-    assert "hydro_lakes" in mod.staticmaps
-    assert np.round(mod.staticmaps["hydro_lakes"].values.max(), 4) == 0.8609
+    assert "hydro_lakes" in mod.grid
+    assert np.round(mod.grid["hydro_lakes"].values.max(), 4) == 0.8609
 
     mod.setup_emission_vector(
         emission_fn="hydro_reservoirs",
         rasterize_method="area",
     )
 
-    gdf_grid = mod.staticmaps.raster.vector_grid()
+    gdf_grid = mod.grid.raster.vector_grid()
     crs_utm = hydromt.gis_utils.parse_crs("utm", gdf_grid.to_crs(4326).total_bounds)
     gdf_grid = gdf_grid.to_crs(crs_utm)
 
-    assert "hydro_reservoirs" in mod.staticmaps
-    assert mod.staticmaps["hydro_reservoirs"].values.max() <= gdf_grid.area.max()
+    assert "hydro_reservoirs" in mod.grid
+    assert mod.grid["hydro_reservoirs"].values.max() <= gdf_grid.area.max()

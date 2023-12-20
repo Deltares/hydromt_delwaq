@@ -48,8 +48,8 @@ Attributes
    DelwaqModel.res
    DelwaqModel.root
    DelwaqModel.config
-   DelwaqModel.staticmaps
-   DelwaqModel.staticgeoms
+   DelwaqModel.grid
+   DelwaqModel.geoms
    DelwaqModel.forcing
    DelwaqModel.basins
    DelwaqModel.hydromaps
@@ -79,13 +79,13 @@ General methods
    DelwaqModel.read_config
    DelwaqModel.write_config
 
-   DelwaqModel.set_staticmaps
-   DelwaqModel.read_staticmaps
-   DelwaqModel.write_staticmaps
+   DelwaqModel.set_grid
+   DelwaqModel.read_grid
+   DelwaqModel.write_grid
 
-   DelwaqModel.set_staticgeoms
-   DelwaqModel.read_staticgeoms
-   DelwaqModel.write_staticgeoms
+   DelwaqModel.set_geoms
+   DelwaqModel.read_geoms
+   DelwaqModel.write_geoms
 
    DelwaqModel.set_forcing
    DelwaqModel.read_forcing

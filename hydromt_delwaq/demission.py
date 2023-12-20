@@ -58,7 +58,7 @@ class DemissionModel(DelwaqModel):
     _FOLDERS = [
         "hydromodel",
         "staticdata",
-        "staticgeoms",
+        "geoms",
         "config",
         "dynamicdata",
         "fews",
@@ -114,7 +114,7 @@ class DemissionModel(DelwaqModel):
             Dictionary describing region of interest.
             Currently supported format is {'wflow': 'path/to/wflow_model'}
         maps: list of str
-            List of variables from hydromodel to add to staticmaps.
+            List of variables from hydromodel to add to grid.
             By default ['rivmsk', 'lndslp', 'strord'].
         """
         # Initialise hydromodel from region
@@ -152,29 +152,29 @@ class DemissionModel(DelwaqModel):
         self.set_hydromaps(da_ptid, name="ptid")
         self.set_hydromaps(da_ptiddown, name="ptiddown")
 
-        ### Initialise staticmaps with segment ID down, streamorder, river and slope ###
+        ### Initialise grid with segment ID down, streamorder, river and slope ###
         ds_stat = segments.maps_from_hydromodel(
             hydromodel, compartments=self.compartments, maps=maps
         )
         ds_stat["ptiddown"] = self.hydromaps["ptiddown"].squeeze(drop=True)
 
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
-        self.set_staticmaps(ds_stat.rename(rmdict))
-        self.staticmaps.coords["mask"] = self.hydromaps["mask"]
+        self.set_grid(ds_stat.rename(rmdict))
+        self.grid.coords["mask"] = self.hydromaps["mask"]
 
         ### Geometry data ###
-        surface = emissions.gridarea(hydromodel.staticmaps)
+        surface = emissions.gridarea(hydromodel.grid)
         surface.raster.set_nodata(np.nan)
         geom = surface.rename("surface").to_dataset()
         # For EM type build a pointer like object and add to self.geometry
-        geom["fPaved"] = hydromodel.staticmaps["PathFrac"]
-        geom["fOpenWater"] = hydromodel.staticmaps["WaterFrac"]
+        geom["fPaved"] = hydromodel.grid["PathFrac"]
+        geom["fOpenWater"] = hydromodel.grid["WaterFrac"]
         geom["fUnpaved"] = (
             (geom["fPaved"] * 0.0 + 1.0) - geom["fPaved"] - geom["fOpenWater"]
         )
         geom["fUnpaved"] = xr.where(geom["fUnpaved"] < 0.0, 0.0, geom["fUnpaved"])
 
-        mask = self.staticmaps["mask"].values.flatten()
+        mask = self.grid["mask"].values.flatten()
         for dvar in ["surface", "fPaved", "fUnpaved", "fOpenWater"]:
             data = geom[dvar].values.flatten()
             data = data[mask].reshape(nrofseg, 1)
@@ -264,14 +264,14 @@ class DemissionModel(DelwaqModel):
         )
         ds_emi = emissions.emission_raster(
             da=da,
-            ds_like=self.staticmaps,
+            ds_like=self.grid,
             method=scale_method,
             fillna_method=fillna_method,
             fillna_value=fillna_value,
             area_division=area_division,
             logger=self.logger,
         )
-        self.set_staticmaps(ds_emi.rename(emission_fn))
+        self.set_grid(ds_emi.rename(emission_fn))
 
     def setup_emission_vector(
         self,
@@ -312,13 +312,13 @@ class DemissionModel(DelwaqModel):
         else:
             ds_emi = emissions.emission_vector(
                 gdf=gdf_org,
-                ds_like=self.staticmaps,
+                ds_like=self.grid,
                 col_name=col2raster,
                 method=rasterize_method,
                 mask_name="mask",
                 logger=self.logger,
             )
-        self.set_staticmaps(ds_emi.rename(emission_fn))
+        self.set_grid(ds_emi.rename(emission_fn))
 
     def setup_emission_mapping(
         self,
@@ -377,13 +377,13 @@ class DemissionModel(DelwaqModel):
         # add admin_bound map
         ds_admin_maps = emissions.admin(
             da=ds_admin,
-            ds_like=self.staticmaps,
+            ds_like=self.grid,
             source_name=region_fn,
             fn_map=mapping_fn,
             logger=self.logger,
         )
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars}
-        self.set_staticmaps(ds_admin_maps.rename(rmdict))
+        self.set_grid(ds_admin_maps.rename(rmdict))
 
     def setup_roads(
         self,
@@ -488,17 +488,17 @@ class DemissionModel(DelwaqModel):
             # Rasterize statistics
             da_emi = emissions.emission_vector(
                 gdf=gdf_country,
-                ds_like=self.staticmaps,
+                ds_like=self.grid,
                 col_name=f"{name}_length_sum",
                 method="value",
                 mask_name="mask",
                 logger=self.logger,
             )
-            self.set_staticmaps(da_emi.rename(f"{name}_length_sum_country"))
+            self.set_grid(da_emi.rename(f"{name}_length_sum_country"))
 
         ### Road statistics per segment ###
         # Filter road gdf with model mask
-        mask = self.staticmaps["mask"].astype("int32").raster.vectorize()
+        mask = self.grid["mask"].astype("int32").raster.vectorize()
         gdf_roads = self.data_catalog.get_geodataframe(
             roads_fn, dst_crs=self.crs, geom=mask, variables=["road_type"]
         )
@@ -515,7 +515,7 @@ class DemissionModel(DelwaqModel):
             ]
             ds_roads = roads.zonal_stats_grid(
                 gdf=subset_roads,
-                ds_like=self.staticmaps,
+                ds_like=self.grid,
                 variables=["length"],
                 stats=["sum"],
                 mask_name="mask",
@@ -524,7 +524,7 @@ class DemissionModel(DelwaqModel):
             # Convert from m to km and rename
             ds_roads[f"{name}_length"] = ds_roads["length_sum"] / 1000
             ds_roads[f"{name}_length"].attrs.update(_FillValue=0)
-            self.set_staticmaps(ds_roads)
+            self.set_grid(ds_roads)
 
     def setup_hydrology_forcing(
         self,
@@ -716,10 +716,10 @@ class DemissionModel(DelwaqModel):
     def read(self):
         """Method to read the complete model schematization and configuration from file."""
         # self.read_config()
-        self.read_staticgeoms()
+        self.read_geoms()
         self.read_hydromaps()
         # self.read_pointer()
-        self.read_staticmaps()
+        self.read_grid()
         # self.read_fewsadapter()
         # self.read_forcing()
         self.logger.info("Model read")
@@ -728,10 +728,10 @@ class DemissionModel(DelwaqModel):
         """Method to write the complete model schematization and configuration to file."""
         self.logger.info(f"Write model data to {self.root}")
         # if in r, r+ mode, only write updated components
-        if self._staticmaps or not self._read:
-            self.write_staticmaps()
-        if self._staticgeoms or not self._read:
-            self.write_staticgeoms()
+        if self._grid or not self._read:
+            self.write_grid()
+        if self._geoms or not self._read:
+            self.write_geoms()
         if self._config or not self._read:
             self.write_config()
         if self._hydromaps or not self._read:
@@ -781,7 +781,7 @@ class DemissionModel(DelwaqModel):
             fpa.close()
 
     def write_forcing(self, write_nc=False):
-        """Write staticmaps at <root/staticdata> in binary format and NetCDF (if write_nc is True)."""
+        """Write grid at <root/staticdata> in binary format and NetCDF (if write_nc is True)."""
         if not self._write:
             raise IOError("Model opened in read-only mode")
         if not self.forcing:

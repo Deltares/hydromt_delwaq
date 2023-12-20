@@ -80,21 +80,21 @@ def test_model_build(tmpdir, model):
     mod1.read()
     # check maps
     invalid_maps = []
-    if len(mod0._staticmaps) > 0:
-        maps = mod0.staticmaps.raster.vars
+    if len(mod0._grid) > 0:
+        maps = mod0.grid.raster.vars
         assert np.all(mod0.crs == mod1.crs), f"map crs mismatch"
         for name in maps:
-            map0 = mod0.staticmaps[name].fillna(0)
-            map1 = mod1.staticmaps[name].fillna(0)
+            map0 = mod0.grid[name].fillna(0)
+            map1 = mod1.grid[name].fillna(0)
             if not np.allclose(map0, map1):
                 invalid_maps.append(name)
     invalid_map_str = ", ".join(invalid_maps)
     assert len(invalid_maps) == 0, f"invalid maps: {invalid_map_str}"
     # check geoms
-    if mod0._staticgeoms:
-        for name in mod0.staticgeoms:
-            geom0 = mod0.staticgeoms[name]
-            geom1 = mod1.staticgeoms[name]
+    if mod0._geoms:
+        for name in mod0.geoms:
+            geom0 = mod0.geoms[name]
+            geom1 = mod1.geoms[name]
             assert geom0.index.size == geom1.index.size and np.all(
                 geom0.index == geom1.index
             ), f"geom index {name}"

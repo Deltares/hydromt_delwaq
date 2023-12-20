@@ -47,21 +47,19 @@ def hydromaps(
     ds_out : xarray.Dataset
         Dataset containing gridded emission map at model resolution.
     """
-    ds_out = (
-        hydromodel.staticmaps[hydromodel._MAPS["flwdir"]].rename("flwdir").to_dataset()
-    )
-    ds_out["basins"] = hydromodel.staticmaps[hydromodel._MAPS["basins"]]
-    ds_out["river"] = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
-    ds_out["rivlen"] = hydromodel.staticmaps[hydromodel._MAPS["rivlen"]]
-    ds_out["rivwth"] = hydromodel.staticmaps[hydromodel._MAPS["rivwth"]]
-    ds_out["elevtn"] = hydromodel.staticmaps[hydromodel._MAPS["elevtn"]]
+    ds_out = hydromodel.grid[hydromodel._MAPS["flwdir"]].rename("flwdir").to_dataset()
+    ds_out["basins"] = hydromodel.grid[hydromodel._MAPS["basins"]]
+    ds_out["river"] = hydromodel.grid[hydromodel._MAPS["rivmsk"]]
+    ds_out["rivlen"] = hydromodel.grid[hydromodel._MAPS["rivlen"]]
+    ds_out["rivwth"] = hydromodel.grid[hydromodel._MAPS["rivwth"]]
+    ds_out["elevtn"] = hydromodel.grid[hydromodel._MAPS["elevtn"]]
 
     # Surface area maps
     ds_out["rivarea"] = ds_out["rivlen"] * ds_out["rivwth"]
-    if "LakeArea" in hydromodel.staticmaps:
-        ds_out["lakearea"] = hydromodel.staticmaps["LakeArea"]
-    if "ResSimpleArea" in hydromodel.staticmaps:
-        ds_out["resarea"] = hydromodel.staticmaps["ResSimpleArea"]
+    if "LakeArea" in hydromodel.grid:
+        ds_out["lakearea"] = hydromodel.grid["LakeArea"]
+    if "ResSimpleArea" in hydromodel.grid:
+        ds_out["resarea"] = hydromodel.grid["ResSimpleArea"]
 
     basins_mv = ds_out["basins"].raster.nodata
     ds_out["basmsk"] = xr.Variable(
@@ -104,16 +102,16 @@ def maps_from_hydromodel(
     """
     ds_out = xr.Dataset()
     for m in maps:
-        if f"{m}_River" in hydromodel.staticmaps:
-            ds_out[m] = hydromodel.staticmaps[f"{m}_River"].where(
-                hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]],
-                hydromodel.staticmaps[m],
+        if f"{m}_River" in hydromodel.grid:
+            ds_out[m] = hydromodel.grid[f"{m}_River"].where(
+                hydromodel.grid[hydromodel._MAPS["rivmsk"]],
+                hydromodel.grid[m],
             )
         elif m in hydromodel._MAPS:
-            if hydromodel._MAPS[m] in hydromodel.staticmaps:
-                ds_out[m] = hydromodel.staticmaps[hydromodel._MAPS[m]]
-        elif m in hydromodel.staticmaps:
-            ds_out[m] = hydromodel.staticmaps[m]
+            if hydromodel._MAPS[m] in hydromodel.grid:
+                ds_out[m] = hydromodel.grid[hydromodel._MAPS[m]]
+        elif m in hydromodel.grid:
+            ds_out[m] = hydromodel.grid[m]
         else:
             logger.warning(f"Map {m} not found in hydromodel, skipping.")
         # Check if m is 3D and split into several variables
@@ -159,18 +157,18 @@ def geometrymaps(
         Dataset containing gridded geometry map at model resolution for all compartments.
     """
     ### Geometry data ###
-    surface = emissions.gridarea(hydromodel.staticmaps)
+    surface = emissions.gridarea(hydromodel.grid)
     surface.raster.set_nodata(-9999.0)
     surface = surface.rename("surface")
-    length, width = emissions.gridlength_gridwidth(hydromodel.staticmaps)
+    length, width = emissions.gridlength_gridwidth(hydromodel.grid)
     surface_tot = []
     length_tot = []
     width_tot = []
     for i in range(len(compartments)):
         if comp_attributes[i] == 0:  # surface water
-            rivlen = hydromodel.staticmaps[hydromodel._MAPS["rivlen"]]
-            rivwth = hydromodel.staticmaps[hydromodel._MAPS["rivwth"]]
-            rivmsk = hydromodel.staticmaps[hydromodel._MAPS["rivmsk"]]
+            rivlen = hydromodel.grid[hydromodel._MAPS["rivlen"]]
+            rivwth = hydromodel.grid[hydromodel._MAPS["rivwth"]]
+            rivmsk = hydromodel.grid[hydromodel._MAPS["rivmsk"]]
             # surface
             rivsurface = surface.where(rivmsk == False, rivlen * rivwth)
             rivsurface = rivsurface.rename("surface")
