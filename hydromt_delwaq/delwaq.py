@@ -40,6 +40,7 @@ class DelwaqModel(GridModel):
     """This is the delwaq model class"""
 
     _NAME = "delwaq"
+    _CLI_ARGS = {"region": "setup_basemaps"}
     _CONF = "delwaq.inp"
     _DATADIR = DATADIR
     _CF = dict()  # configreader kwargs
@@ -79,7 +80,6 @@ class DelwaqModel(GridModel):
         hydromodel_name="wflow",
         hydromodel_root=None,
         data_libs=None,
-        deltares_data=False,
         logger=logger,
     ):
         super().__init__(
@@ -87,7 +87,6 @@ class DelwaqModel(GridModel):
             mode=mode,
             config_fn=config_fn,
             data_libs=data_libs,
-            deltares_data=deltares_data,
             logger=logger,
         )
 
@@ -267,7 +266,7 @@ class DelwaqModel(GridModel):
         for option in lines_ini:
             self.set_config("B7_fluxes", option, lines_ini[option])
 
-    def setup_monitoring(self, mon_points, mon_areas, **kwargs):
+    def setup_monitoring(self, mon_points: str = None, mon_areas: str = None, **kwargs):
         """Setup Delwaq monitoring points and areas options.
 
         Adds model layers:
@@ -278,11 +277,12 @@ class DelwaqModel(GridModel):
 
         Parameters
         ----------
-        mon_points : {'None', 'segments', 'data_source', 'path to station location'}
-            Either None, source from DataCatalog, path to a station location dataset
+        mon_points : {'segments', 'data_source', 'path to station location'}
+            Either source from DataCatalog, path to a station location dataset
             or if segments, all segments are monitored.
-        mon_areas : str {'None', 'subcatch', 'riverland'}
-            Either None, subcatch from hydromodel.
+        mon_areas : str {'subcatch', 'riverland'}
+            Either subcatch from hydromodel or 'riverland' to split river and land
+            cells.
         """
         self.logger.info("Setting monitoring points and areas")
         monpoints = None
@@ -350,8 +350,8 @@ class DelwaqModel(GridModel):
             self.grid["monareas"].attrs.update(_FillValue=mv)
             self.grid["monareas"].attrs["mon_areas"] = mon_areas
 
-            # Add to geoms (only first compartments)
-            gdf_areas = self.grid["monareas"].sel(comp=1).raster.vectorize()
+            # Add to geoms
+            gdf_areas = self.grid["monareas"].raster.vectorize()
             self.set_geoms(gdf_areas, name="monareas")
         else:
             self.logger.info("No monitoring areas set in the config file, skipping")
@@ -1031,12 +1031,12 @@ class DelwaqModel(GridModel):
 
     def read_geoms(self):
         """Read and geoms at <root/geoms> and parse to geopandas"""
-        super.read_geoms(fn="geoms/*.geojson")
+        super().read_geoms(fn="geoms/*.geojson")
 
     def write_geoms(self):
         """Write grid at <root/geoms> in model ready format"""
         # to write use self.geoms[var].to_file()
-        super.write_geoms(fn="geoms/{name}.geojson", driver="GeoJSON")
+        super().write_geoms(fn="geoms/{name}.geojson", driver="GeoJSON")
 
     def write_config(self):
         """Write config files in ASCII format at <root/config>."""

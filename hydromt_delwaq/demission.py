@@ -63,7 +63,6 @@ class DemissionModel(DelwaqModel):
         hydromodel_name="wflow",
         hydromodel_root=None,
         data_libs=None,
-        deltares_data=False,
         logger=logger,
     ):
         super().__init__(
@@ -73,7 +72,6 @@ class DemissionModel(DelwaqModel):
             hydromodel_name=hydromodel_name,
             hydromodel_root=hydromodel_root,
             data_libs=data_libs,
-            deltares_data=deltares_data,
             logger=logger,
         )
 

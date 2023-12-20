@@ -18,9 +18,6 @@ __all__ = [
     "hydromaps",
     "geometrymaps",
     "pointer",
-    "extend_comp_with_zeros",
-    "extend_comp_with_duplicates",
-    "sfwcomp",
 ]
 
 
