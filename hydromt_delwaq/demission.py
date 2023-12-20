@@ -15,8 +15,7 @@ import time as t
 from typing import List
 
 import hydromt
-from hydromt.models.model_api import Model
-from hydromt import workflows, flw, io
+from hydromt import workflows
 
 
 from hydromt_wflow.wflow import WflowModel
@@ -728,20 +727,12 @@ class DemissionModel(DelwaqModel):
         """Method to write the complete model schematization and configuration to file."""
         self.logger.info(f"Write model data to {self.root}")
         # if in r, r+ mode, only write updated components
-        if self._grid or not self._read:
-            self.write_grid()
-        if self._geoms or not self._read:
-            self.write_geoms()
-        if self._config or not self._read:
-            self.write_config()
-        if self._hydromaps or not self._read:
-            self.write_hydromaps()
-        if self._geometry is not None or not self._read:
-            self.write_geometry()
-        #        if self._fewsadapter or not self._read:
-        #            self.write_fewsadapter()
-        if self._forcing or not self._read:
-            self.write_forcing()
+        self.write_grid()
+        self.write_geoms()
+        self.write_config()
+        self.write_hydromaps()
+        self.write_geometry()
+        self.write_forcing()
 
     def read_geometry(self):
         """Read Delwaq EM geometry file"""

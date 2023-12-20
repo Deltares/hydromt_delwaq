@@ -15,7 +15,7 @@ from typing import List
 from tqdm import tqdm
 
 import hydromt
-from hydromt.models.model_api import Model
+from hydromt.models.model_grid import GridModel
 from hydromt import workflows, io
 
 from .workflows import emissions, segments, hydrology
@@ -34,7 +34,7 @@ PCR_VS_MAP = {
 }
 
 
-class DelwaqModel(Model):
+class DelwaqModel(GridModel):
     """This is the delwaq model class"""
 
     _NAME = "delwaq"
@@ -1015,41 +1015,25 @@ class DelwaqModel(Model):
         """Method to write the complete model schematization and configuration to file."""
         self.logger.info(f"Write model data to {self.root}")
         # if in r, r+ mode, only write updated components
-        if self._grid or not self._read:
-            self.write_grid()
-        if self._geoms or not self._read:
-            self.write_geoms()
-        if self._config or not self._read:
-            self.write_config()
-        if self._hydromaps or not self._read:
-            self.write_hydromaps()
-        if self._pointer is not None or not self._read:
-            self.write_pointer()
-        #        if self._fewsadapter or not self._read:
-        #            self.write_fewsadapter()
-        if self._forcing or not self._read:
-            self.write_forcing()
+        self.write_grid()
+        self.write_geoms()
+        self.write_config()
+        self.write_hydromaps()
+        self.write_pointer()
+        self.write_forcing()
 
-    def read_grid(self, crs=None, **kwargs):
+    def read_grid(self, **kwargs):
         """Read grid at <root/staticdata> and parse to xarray"""
         fn = join(self.root, "staticdata", "staticdata.nc")
-        if not self._write:
-            # start fresh in read-only mode
-            self._grid = xr.Dataset()
-        if fn is not None and isfile(fn):
-            self.logger.info(f"Read grid from {fn}")
-            # FIXME: we need a smarter (lazy) solution for big models which also
-            # works when overwriting / apending data in thet same source!
-            ds = xr.open_dataset(
-                fn, mask_and_scale=False, decode_coords="all", **kwargs
-            ).load()
-            ds.close()
-            self.set_grid(ds)
+        super().read_grid(fn, **kwargs)
 
     def write_grid(self):
         """Write grid at <root/staticdata> in NetCDF and binary format."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
+        if len(self.grid) == 0:
+            self.logger.debug("No grid data found, skip writing.")
+            return
+
+        self._assert_write_mode()
         ds_out = self.grid
 
         # Filter data with mask
@@ -1085,30 +1069,16 @@ class DelwaqModel(Model):
 
     def read_geoms(self):
         """Read and geoms at <root/geoms> and parse to geopandas"""
-        if not self._write:
-            self._geoms = dict()  # fresh start in read-only mode
-        fns = glob.glob(join(self.root, "geoms", "*.geojson"))
-        if len(fns) > 1:
-            self.logger.info("Reading model staticgeom files.")
-        for fn in fns:
-            name = basename(fn).split(".")[0]
-            self.set_geoms(io.open_vector(fn), name=name)
+        super.read_geoms(fn="geoms/*.geojson")
 
     def write_geoms(self):
         """Write grid at <root/geoms> in model ready format"""
         # to write use self.geoms[var].to_file()
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
-        if self.geoms:
-            self.logger.info("Writing model staticgeom to file.")
-            for name, gdf in self.geoms.items():
-                fn_out = join(self.root, "geoms", f"{name}.geojson")
-                gdf.to_file(fn_out, driver="GeoJSON")
+        super.write_geoms(fn="geoms/{name}.geojson", driver="GeoJSON")
 
     def write_config(self):
         """Write config files in ASCII format at <root/config>."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
+        self._assert_write_mode()
         if self.config:
             self.logger.info("Writing model config to file.")
             for name, lines in self.config.items():
@@ -1120,33 +1090,28 @@ class DelwaqModel(Model):
 
     def read_hydromaps(self, crs=None, **kwargs):
         """Read hydromaps at <root/hydromodel> and parse to xarray"""
-        if self._read and "chunks" not in kwargs:
+        self._assert_read_mode()
+        if "chunks" not in kwargs:
             kwargs.update(chunks={"y": -1, "x": -1})
+        # Load grid data in r+ mode to allow overwritting netcdf files
+        if self._read and self._write:
+            kwargs["load"] = True
         fns = glob.glob(join(self.root, "hydromodel", f"*.tif"))
         if len(fns) > 0:
-            self._hydromaps = io.open_mfraster(fns, **kwargs)
-        if self._hydromaps.raster.crs is None and crs is not None:
-            self.set_crs(crs)
-        self._hydromaps.coords["mask"] = self._hydromaps["modelmap"].astype(bool)
+            ds_hydromaps = io.open_mfraster(fns, **kwargs)
+        if ds_hydromaps.raster.crs is None and crs is not None:
+            ds_hydromaps.raster.set_crs(crs)
+        ds_hydromaps.coords["mask"] = ds_hydromaps["modelmap"].astype(bool)
+        self.set_hydromaps(ds_hydromaps)
 
     def write_hydromaps(self):
         """Write hydromaps at <root/hydromodel> in PCRaster maps format."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
+        self._assert_write_mode()
+        if len(self.hydromaps) == 0:
+            self.logger.debug("No grid data found, skip writing.")
+            return
+
         ds_out = self.hydromaps
-        if self._read:
-            # only write loaded maps in 'r+' mode
-            dvars = [
-                dvar
-                for dvar in self.hydromaps.data_vars.keys()
-                if isinstance(self.hydromaps[dvar].data, np.ndarray)
-            ]
-            if len(dvars) > 0:
-                ds_out = ds_out[dvars]
-                self.logger.debug(f"Updated maps: {dvars}")
-            else:
-                self.logger.warning(f"No updated maps. Skipping writing to file.")
-                return
         self.logger.info("Writing hydromap files.")
         # Convert bool dtype before writting
         for var in ds_out.raster.vars:
