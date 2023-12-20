@@ -54,6 +54,14 @@ def test_model_build(tmpdir, model):
     # Config
     config = join(EXAMPLEDIR, _model["ini"])
     opt = parse_config(config)
+    if "global" in opt:
+        kwargs = opt.pop("global")
+        if "data_libs" in kwargs:
+            cats = kwargs["data_libs"]
+            cats.extend(["artifact_data"])
+            kwargs["data_libs"] = cats
+    else:
+        kwargs = {"data_libs": ["artifact_data"]}
     # Region
     wflow_path = join(EXAMPLEDIR, "wflow_piave")
     # Transform the path to be processed by CLI runner and json.load
@@ -62,7 +70,7 @@ def test_model_build(tmpdir, model):
 
     # Build model
     model_type = _model["model_type"]
-    mod1 = model_type(root=root, mode="w", data_libs="artifact_data")
+    mod1 = model_type(root=root, mode="w", **kwargs)
     mod1.build(region=region, opt=opt)
     # Check if model is api compliant
     non_compliant_list = mod1._test_model_api()

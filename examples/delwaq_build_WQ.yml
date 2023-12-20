@@ -3,7 +3,7 @@ global:
     - local_sources.yml
 
 setup_basemaps:
-  mas: rivers
+  mask: rivers
   surface_water: sfw
   boundaries: 
     - land

@@ -210,7 +210,7 @@ class DelwaqModel(GridModel):
         ds_stat = segments.maps_from_hydromodel(
             hydromodel, maps=maps, logger=self.logger
         )
-        ds_stat["mask"] = mask[da_mask.name]
+        ds_stat["mask"] = da_mask
         ds_stat = ds_stat.set_coords("mask")
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
         self.set_grid(ds_stat.rename(rmdict))
@@ -331,7 +331,7 @@ class DelwaqModel(GridModel):
                 areas = basins.values.flatten()
                 areas = areas[areas != mv]
                 nb_areas = len(np.unique(areas))
-                monareas = areas
+                monareas = basins
             else:  # riverland
                 # seperate areas for land cells (1) and river cells (2)
                 lr_areas = xr.where(
@@ -1053,6 +1053,7 @@ class DelwaqModel(GridModel):
     def read_hydromaps(self, crs=None, **kwargs):
         """Read hydromaps at <root/hydromodel> and parse to xarray"""
         self._assert_read_mode()
+        self._initialize_hydromaps(skip_read=True)
         if "chunks" not in kwargs:
             kwargs.update(chunks={"y": -1, "x": -1})
         # Load grid data in r+ mode to allow overwritting netcdf files
@@ -1248,10 +1249,15 @@ class DelwaqModel(GridModel):
     def hydromaps(self):
         """xarray.dataset representation of all hydrology maps"""
         if self._hydromaps is None:
-            self._hydromaps = xr.Dataset()
-            if self._read:
-                self.read_hydromaps()
+            self._initialize_hydromaps()
         return self._hydromaps
+
+    def _initialize_hydromaps(self, skip_read=False) -> None:
+        """Initialize grid object."""
+        if self._hydromaps is None:
+            self._hydromaps = xr.Dataset()
+            if self._read and not skip_read:
+                self.read_hydromaps()
 
     def set_hydromaps(
         self,
@@ -1259,6 +1265,7 @@ class DelwaqModel(GridModel):
         name: Optional[str] = None,
     ):
         """Add data to hydromaps re-using the set_grid method"""
+        self._initialize_hydromaps()
         name_required = isinstance(data, np.ndarray) or (
             isinstance(data, xr.DataArray) and data.name is None
         )
@@ -1275,7 +1282,7 @@ class DelwaqModel(GridModel):
         elif not isinstance(data, xr.Dataset):
             raise ValueError(f"cannot set data of type {type(data).__name__}")
         # force read in r+ mode
-        if len(self.hydromaps) == 0:  # trigger init / read
+        if len(self._hydromaps) == 0:  # empty hydromaps
             self._hydromaps = data
         else:
             for dvar in data.data_vars:
