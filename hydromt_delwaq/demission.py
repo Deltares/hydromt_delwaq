@@ -740,8 +740,7 @@ class DemissionModel(DelwaqModel):
 
     def write_geometry(self):
         """Write geometry at <root/staticdata> in ASCII and binary format."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
+        self._assert_write_mode()
         if self._geometry is not None:
             self.logger.info("Writting geometry file in root/staticdata")
             fname = join(self.root, "config", "B7_geometry")
@@ -773,12 +772,9 @@ class DemissionModel(DelwaqModel):
 
     def write_forcing(self, write_nc=False):
         """Write forcing at <root/dynamicdata> in binary format and NetCDF (if write_nc is True)."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
-        if not self.forcing:
-            self.logger.warning(
-                "Warning: no forcing available, skipping write_forcing."
-            )
+        self._assert_write_mode()
+        if len(self.forcing) == 0:
+            self.logger.debug("No forcing data found, skip writing.")
             return
 
         # Go from dictionnary to xr.DataSet

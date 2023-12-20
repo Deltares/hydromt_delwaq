@@ -11,7 +11,7 @@ import logging
 import struct
 from datetime import datetime
 import xugrid as xu
-from typing import List
+from typing import List, Union, Optional
 from tqdm import tqdm
 
 import hydromt
@@ -93,7 +93,7 @@ class DelwaqModel(GridModel):
         self.hydromodel_name = hydromodel_name
         self.hydromodel_root = hydromodel_root
 
-        self._hydromaps = xr.Dataset()  # extract of hydromodel grid
+        self._hydromaps = None  # extract of hydromodel grid
         self._pointer = (
             None  # dictionnary of pointer values and related model attributes
         )
@@ -1128,8 +1128,7 @@ class DelwaqModel(GridModel):
 
     def write_pointer(self):
         """Write pointer at <root/dynamicdata> in ASCII and binary format."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
+        self._assert_write_mode()
         if self._pointer is not None:
             pointer = self.pointer["pointer"]
             self.logger.info("Writting pointer file in root/config")
@@ -1149,19 +1148,15 @@ class DelwaqModel(GridModel):
 
     def read_forcing(self):
         """Read and forcing at <root/?/> and parse to dict of xr.DataArray"""
-        if not self._write:
-            # start fresh in read-only mode
-            self._forcing = dict()
+        self._assert_read_mode()
+        self._forcing = dict()
         # raise NotImplementedError()
 
     def write_forcing(self, write_nc=False):
         """Write grid at <root/staticdata> in binary format and NetCDF (if write_nc is True)."""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
-        if not self.forcing:
-            self.logger.warning(
-                "Warning: no forcing available, skipping write_forcing."
-            )
+        self._assert_write_mode()
+        if len(self.forcing) == 0:
+            self.logger.debug("No forcing data found, skip writing.")
             return
 
         # Go from dictionnary to xr.DataSet
@@ -1265,28 +1260,24 @@ class DelwaqModel(GridModel):
 
     def read_states(self):
         """Read states at <root/?/> and parse to dict of xr.DataArray"""
-        if not self._write:
-            # start fresh in read-only mode
-            self._states = dict()
+        self._assert_read_mode()
+        self._states = dict()
         # raise NotImplementedError()
 
     def write_states(self):
         """write states at <root/?/> in model ready format"""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
+        self._assert_write_mode()
         raise NotImplementedError()
 
     def read_results(self):
         """Read results at <root/?/> and parse to dict of xr.DataArray"""
-        if not self._write:
-            # start fresh in read-only mode
-            self._results = dict()
+        self._assert_read_mode()
+        self._results = dict()
         # raise NotImplementedError()
 
     def write_results(self):
         """write results at <root/?/> in model ready format"""
-        if not self._write:
-            raise IOError("Model opened in read-only mode")
+        self._assert_write_mode()
         raise NotImplementedError()
 
     ## DELWAQ specific data and methods
@@ -1304,48 +1295,41 @@ class DelwaqModel(GridModel):
     @property
     def hydromaps(self):
         """xarray.dataset representation of all hydrology maps"""
-        if len(self._hydromaps) == 0:
+        if self._hydromaps is None:
+            self._hydromaps = xr.Dataset()
             if self._read:
                 self.read_hydromaps()
-            else:
-                raise ValueError("No hydromaps defined")
         return self._hydromaps
 
-    def set_hydromaps(self, data, name=None):
+    def set_hydromaps(
+        self,
+        data: Union[xr.DataArray, xr.Dataset, np.ndarray],
+        name: Optional[str] = None,
+    ):
         """Add data to hydromaps re-using the set_grid method"""
-        if name is None:
-            if isinstance(data, xr.DataArray) and data.name is not None:
-                name = data.name
-            elif not isinstance(data, xr.Dataset):
-                raise ValueError("Setting a map requires a name")
-        elif name is not None and isinstance(data, xr.Dataset):
-            data_vars = list(data.data_vars)
-            if len(data_vars) == 1 and name not in data_vars:
-                data = data.rename_vars({data_vars[0]: name})
-            elif name not in data_vars:
-                raise ValueError("Name not found in DataSet")
-            else:
-                data = data[[name]]
+        name_required = isinstance(data, np.ndarray) or (
+            isinstance(data, xr.DataArray) and data.name is None
+        )
+        if name is None and name_required:
+            raise ValueError(f"Unable to set {type(data).__name__} data without a name")
+        if isinstance(data, np.ndarray):
+            if data.shape != self.hydromaps.raster.shape:
+                raise ValueError("Shape of data and hydromaps do not match")
+            data = xr.DataArray(dims=self.hydromaps.raster.dims, data=data, name=name)
         if isinstance(data, xr.DataArray):
-            data.name = name
+            if name is not None:  # rename
+                data.name = name
             data = data.to_dataset()
-        if len(self._hydromaps) == 0:  # new data
-            if not isinstance(data, xr.Dataset):
-                raise ValueError("First parameter map(s) should xarray.Dataset")
+        elif not isinstance(data, xr.Dataset):
+            raise ValueError(f"cannot set data of type {type(data).__name__}")
+        # force read in r+ mode
+        if len(self.hydromaps) == 0:  # trigger init / read
             self._hydromaps = data
         else:
-            if isinstance(data, np.ndarray):
-                if data.shape != self.shape:
-                    raise ValueError("Shape of data and grid do not match")
-                data = xr.DataArray(dims=self.dims, data=data, name=name).to_dataset()
-            for dvar in data.data_vars.keys():
-                if dvar in self._hydromaps:
-                    if not self._write:
-                        raise IOError(
-                            f"Cannot overwrite staticmap {dvar} in read-only mode"
-                        )
-                    elif self._read:
-                        self.logger.warning(f"Overwriting staticmap: {dvar}")
+            for dvar in data.data_vars:
+                if dvar in self.hydromaps:
+                    if self._read:
+                        self.logger.warning(f"Replacing hydromap: {dvar}")
                 self._hydromaps[dvar] = data[dvar]
 
     @property
