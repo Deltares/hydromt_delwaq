@@ -781,7 +781,7 @@ class DemissionModel(DelwaqModel):
             fpa.close()
 
     def write_forcing(self, write_nc=False):
-        """Write grid at <root/staticdata> in binary format and NetCDF (if write_nc is True)."""
+        """Write forcing at <root/dynamicdata> in binary format and NetCDF (if write_nc is True)."""
         if not self._write:
             raise IOError("Model opened in read-only mode")
         if not self.forcing:
