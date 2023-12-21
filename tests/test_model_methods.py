@@ -1,9 +1,6 @@
 """Unit tests for hydromt_delwaq methods and workflows"""
 
-import pytest
 from os.path import join, dirname, abspath
-import warnings
-import pdb
 import numpy as np
 from hydromt_delwaq.delwaq import DelwaqModel
 import hydromt

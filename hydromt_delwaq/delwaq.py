@@ -16,11 +16,10 @@ import xugrid as xu
 from typing import List, Union, Optional, Dict
 from tqdm import tqdm
 
-import hydromt
 from hydromt.models.model_grid import GridModel
 from hydromt import workflows, io
 
-from .workflows import emissions, segments, hydrology
+from .workflows import emissions, segments, hydrology, forcing
 from . import DATADIR
 
 __all__ = ["DelwaqModel"]
@@ -514,7 +513,7 @@ class DelwaqModel(GridModel):
         ds = self.data_catalog.get_rasterdataset(hydro_forcing_fn, geom=self.region)
 
         # Prepare hydrology forcing
-        ds_out = hydrology.hydrology_forcing(
+        ds_out = forcing.hydrology_forcing(
             ds=ds,
             ds_model=self.hydromaps,
             timestepsecs=timestepsecs,
@@ -594,7 +593,7 @@ class DelwaqModel(GridModel):
         timestepsecs: int = 86400,
         particle_class: List[str] = ["IM1", "IM2", "IM3", "IM4", "IM5"],
     ):
-        """Setup Delwaq hydrological fluxes.
+        """Setup Delwaq sediment fluxes.
 
         Adds model layers:
 
@@ -620,62 +619,26 @@ class DelwaqModel(GridModel):
             'IM3', 'IM4', 'IM5']
         """
         self.logger.info(f"Setting dynamic data from sediment source {sediment_fn}.")
-
-        # read dynamic data
-        ds = self.data_catalog.get_rasterdataset(sediment_fn, geom=self.region)
-
-        # Select time and particle classes
-        freq = pd.to_timedelta(timestepsecs, unit="s")
-        # Sell times to starttime and endtime
-        ds = ds.sel(time=slice(starttime, endtime))
+        # select particle classes
         sed_vars = [f"Erod{x}" for x in particle_class]
-        ds = ds[sed_vars]
-
-        # Select time and particle classes
-        freq = pd.to_timedelta(timestepsecs, unit="s")
-        # Sell times to starttime and endtime
-        ds = ds.sel(time=slice(starttime, endtime))
-        # Resample in time if needed
-        ds_out = xr.Dataset()
-        for var in ds.data_vars:
-            ds_out[var] = hydromt.workflows.forcing.resample_time(
-                ds[var],
-                freq,
-                upsampling="bfill",  # we assume right labeled original data
-                downsampling="sum",
-                conserve_mass=True,
-                logger=self.logger,
-            )
-
-        # If needed reproject forcing data to model grid
-        # As forcing should come from hydromodel the grids should already be identical
-        if not ds_out.raster.identical_grid(self.hydromaps):
-            self.logger.warning(
-                "hydro_forcing_fn and model grid are not identical. Reprojecting."
-            )
-            ds_out = ds_out.raster.reproject_like(self.hydromaps)
-
-        # Add basin mask
-        ds_out.coords["mask"] = xr.DataArray(
-            dims=ds_out.raster.dims,
-            coords=ds_out.raster.coords,
-            data=self.hydromaps["mask"].values,
-            attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
+        # read data
+        ds = self.data_catalog.get_rasterdataset(
+            sediment_fn,
+            geom=self.region,
+            time_tuple=(starttime, endtime),
+            variables=sed_vars,
         )
-        # Add _FillValue to the data attributes
-        for dvar in ds_out.data_vars.keys():
-            nodata = ds_out[dvar].raster.nodata
-            if nodata is not None:
-                ds_out[dvar].attrs.update(_FillValue=nodata)
-            else:
-                ds_out[dvar].attrs.update(_FillValue=-9999.0)
-            # Fill with zeros inside mask and keep NaN outside
-            ds_out[dvar] = (
-                ds_out[dvar].fillna(0).where(ds_out["mask"], ds_out[dvar].raster.nodata)
-            )
-
+        # Prepare sediment forcing
+        ds_out = forcing.sediment_forcing(
+            ds=ds,
+            ds_model=self.hydromaps,
+            timestepsecs=timestepsecs,
+            logger=self.logger,
+        )
+        # Add to forcing
         self.set_forcing(ds_out)
 
+        # Update config
         lines_ini = {
             "l1": "SEG_FUNCTIONS",
             "l2": " ".join(str(x) for x in sed_vars),
@@ -724,9 +687,6 @@ class DelwaqModel(GridModel):
             combination with elevation at model resolution to correct the temperature.
         """
         self.logger.info(f"Setting dynamic data from climate source {climate_fn}.")
-        # TODO function to get times
-        freq = pd.to_timedelta(timestepsecs, unit="s")
-        mask = self.hydromaps["modelmap"].values > 0
 
         # read dynamic data
         ds = self.data_catalog.get_rasterdataset(
@@ -746,78 +706,20 @@ class DelwaqModel(GridModel):
                 variables=["elevtn"],
             ).squeeze()
 
-        ds_out = xr.Dataset()
-
-        # Start with wind
-        if "wind10_u" in climate_vars and "wind10_v" in climate_vars:
-            ds_out["wind"] = hydromt.workflows.forcing.wind(
-                self.hydromaps,
-                wind_u=ds["wind10_u"],
-                wind_v=ds["wind10_v"],
-                altitude_correction=False,
-            )
-            climate_vars.remove("wind10_u")
-            climate_vars.remove("wind10_v")
-        elif "wind" in climate_vars:
-            ds_out["wind"] = hydromt.workflows.forcing.wind(
-                self.hydromaps,
-                wind=ds_out["wind"],
-                altitude_correction=False,
-            )
-            climate_vars.remove("wind")
-        # Add other variables
-        temp_vars = [v for v in climate_vars if v.startswith("temp")]
-        for v in climate_vars:
-            if v in temp_vars:
-                temp_v = hydromt.workflows.forcing.temp(
-                    ds[v],
-                    dem_model=self.hydromaps["elevtn"],
-                    dem_forcing=dem_forcing,
-                    lapse_correction=temp_correction,
-                    logger=self.logger,
-                    freq=freq,
-                    reproj_method="nearest_index",
-                    lapse_rate=-0.0065,
-                    resample_kwargs=dict(label="right", closed="right"),
-                )
-                ds_out[v] = temp_v
-            else:
-                da_out = ds[v].raster.reproject_like(
-                    self.hydromaps, method="nearest_index"
-                )
-                da_out = hydromt.workflows.forcing.resample_time(
-                    da_out,
-                    freq,
-                    upsampling="bfill",  # we assume right labeled original data
-                    downsampling="mean",
-                    conserve_mass=False,
-                    logger=self.logger,
-                )
-                ds_out[v] = da_out
-        # Add basin mask
-        ds_out.coords["mask"] = xr.DataArray(
-            dims=ds_out.raster.dims,
-            coords=ds_out.raster.coords,
-            data=self.hydromaps["mask"].values,
-            attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
+        ds_out = forcing.climate_forcing(
+            ds=ds,
+            ds_model=self.hydromaps,
+            timestepsecs=timestepsecs,
+            temp_correction=temp_correction,
+            dem_forcing=dem_forcing,
         )
-        # Add _FillValue to the data attributes
-        for dvar in ds_out.data_vars.keys():
-            nodata = ds_out[dvar].raster.nodata
-            if nodata is not None:
-                ds_out[dvar].attrs.update(_FillValue=nodata)
-            else:
-                ds_out[dvar].attrs.update(_FillValue=-9999.0)
-            # Fill with zeros inside mask and keep NaN outside
-            ds_out[dvar] = (
-                ds_out[dvar].fillna(0).where(ds_out["mask"], ds_out[dvar].raster.nodata)
-            )
 
         # Rename and add to forcing
         rmdict = {k: v for k, v in self._FORCING.items() if k in ds_out.data_vars}
         ds_out = ds_out.rename(rmdict)
         self.set_forcing(ds_out)
 
+        # Update config
         lines_ini = {
             "l1": "SEG_FUNCTIONS",
             "l2": " ".join(str(x) for x in ds_out.data_vars),

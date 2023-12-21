@@ -137,9 +137,6 @@ def test_model_update(tmpdir, model):
     delwaq_path = str(delwaq_path).replace("\\", "/")
     # Update model
     mod1 = _model["model_type"](root=delwaq_path, mode="r", **kwargs)
-    import pdb
-
-    pdb.set_trace()
     mod1.update(model_out=root, opt=opt)
     # Check if model is api compliant
     non_compliant_list = mod1._test_model_api()
