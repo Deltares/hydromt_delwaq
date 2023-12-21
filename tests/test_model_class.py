@@ -123,11 +123,23 @@ def test_model_update(tmpdir, model):
     root = str(tmpdir.join(model + "_update"))
     config = join(TESTDATADIR, _model["ini_update"])
     opt = parse_config(config)
+    opt = parse_config(config)
+    if "global" in opt:
+        kwargs = opt.pop("global")
+        if "data_libs" in kwargs:
+            cats = kwargs["data_libs"]
+            cats.extend(["artifact_data"])
+            kwargs["data_libs"] = cats
+    else:
+        kwargs = {"data_libs": ["artifact_data"]}
     delwaq_path = join(EXAMPLEDIR, _model["example"])
     # Transform the path to be processed by CLI runner and json.load
     delwaq_path = str(delwaq_path).replace("\\", "/")
     # Update model
-    mod1 = _model["model_type"](root=delwaq_path, mode="r", data_libs="artifact_data")
+    mod1 = _model["model_type"](root=delwaq_path, mode="r", **kwargs)
+    import pdb
+
+    pdb.set_trace()
     mod1.update(model_out=root, opt=opt)
     # Check if model is api compliant
     non_compliant_list = mod1._test_model_api()

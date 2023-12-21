@@ -362,7 +362,7 @@ class DemissionModel(DelwaqModel):
         starttime: str,
         endtime: str,
         timestepsecs: int,
-        include_transport: bool = False,
+        include_transport: bool = True,
     ):
         """Setup Demission hydrological fluxes.
 
@@ -396,7 +396,7 @@ class DemissionModel(DelwaqModel):
         include_transport : bool, optional
             If False (default), only use the vertical fluxes for emission [precip,
             runPav, runUnp, infilt, totflw].
-            If True, includes additional fluxes for land and subsurface trasnport
+            If True, includes additional fluxes for land and subsurface transport
             [precip, runPav, runUnp, infilt, exfilt, q_land, q_ss].
         """
         if hydro_forcing_fn not in self.data_catalog:
@@ -539,9 +539,13 @@ class DemissionModel(DelwaqModel):
             self.set_config("B2_timers_only", option, lines_ini[option])
 
         # Add var info to config
+        if include_transport:
+            l2 = "Rainfall RunoffPav RunoffUnp Infiltr Exfiltr Overland Subsurface"
+        else:
+            l2 = "Rainfall RunoffPav RunoffUnp Infiltr TotalFlow"
         lines_ini = {
             "l1": "SEG_FUNCTIONS",
-            "l2": "Rainfall RunoffPav RunoffUnp Infiltr Exfiltr Overland Subsurface ",
+            "l2": l2,
         }
         for option in lines_ini:
             self.set_config("B7_hydrology", option, lines_ini[option])
@@ -549,7 +553,7 @@ class DemissionModel(DelwaqModel):
     # I/O
     def read(self):
         """Read the complete model schematization and configuration from file."""
-        # self.read_config()
+        self.read_config()
         self.read_geoms()
         self.read_hydromaps()
         # self.read_pointer()
@@ -568,6 +572,20 @@ class DemissionModel(DelwaqModel):
         self.write_hydromaps()
         self.write_geometry()
         self.write_forcing()
+
+    def read_config(
+        self,
+        skip: List[str] = [
+            "B7_geometry",
+            "B2_stations",
+            "B2_stations-balance",
+            "B2_monareas",
+        ],
+    ):
+        """Read config files in ASCII format at <root/config>."""
+        # Skip geometry file (should be read with read_geometry())
+        # Skip monitoring files (should be read with read_monitoring())
+        super().read_config(skip=skip)
 
     def read_geometry(self):
         """Read Delwaq EM geometry file"""
@@ -709,7 +727,7 @@ class DemissionModel(DelwaqModel):
             nseg = self.pointer["nrofseg"]
         else:
             # from config
-            nseg = self.get_config("B3_nrofseg.l1", "0 ; nr of segments")
+            nseg = self.get_config("B3_nrofseg.l1", fallback="0 ; nr of segments")
             nseg = int(nseg.split(";")[0])
             self.set_pointer(nseg, "nrofseg")
         return nseg
@@ -723,3 +741,18 @@ class DemissionModel(DelwaqModel):
             nexch = self.nrofseg * 5
             self.set_pointer(nexch, "nrofexch")
         return nexch
+
+    @property
+    def fluxes(self):
+        """Fast accessor to fluxes property of pointer"""
+        if "fluxes" in self.pointer:
+            fl = self.pointer["fluxes"]
+        else:
+            # from config
+            fl = self.get_config(
+                "B7_hydrology.l2",
+                fallback="Rainfall RunoffPav RunoffUnp Infiltr Exfiltr Overland Subsurface",
+            )
+            fl = fl.split(" ")
+            self.set_pointer(fl, "fluxes")
+        return fl

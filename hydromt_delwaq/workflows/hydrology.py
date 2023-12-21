@@ -113,7 +113,7 @@ def hydrology_forcing(
     ### Fluxes ###
     for flux in fluxes:
         # Check if the flux is split into several variables
-        fl_vars = [v for v in ds.data_vars if v.startswith(flux)]
+        fl_vars = [v for v in ds.data_vars if v.split("_")[0] == flux]
         # Sort the list of flux by name, important for override type of sum
         fl_vars.sort()
         # Unit conversion (from mm to m3/s)
@@ -159,7 +159,7 @@ def hydrology_forcing(
         times_offset = times + times.freq
     vol = surface_water
     # Check if the flux is split into several variables
-    vol_vars = [v for v in ds.data_vars if v.startswith(vol)]
+    vol_vars = [v for v in ds.data_vars if v.split("_")[0] == vol]
     # Unit conversion (from mm to m3)
     for vl in vol_vars:
         unit = ds[vl].attrs.get("unit")

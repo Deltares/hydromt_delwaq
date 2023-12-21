@@ -4,5 +4,5 @@
      1     2
  1    ; file option in this file
  1    ; option without defaults
-     1653*01 ; Sfw
+     315*01 ; sfw
  0    ; no time dependent attributes

@@ -436,7 +436,7 @@ class DelwaqModel(GridModel):
         hydro_forcing_fn: str,
         starttime: str,
         endtime: str,
-        timestepsecs: int,
+        timestepsecs: int = 86400,
         add_volume_offset: bool = True,
         min_volume: float = 0.1,
         override: List = [],
@@ -488,7 +488,7 @@ class DelwaqModel(GridModel):
         endtime : str
             Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS
         timestepsecs : int
-            Model timestep in seconds.
+            Model timestep in seconds. By default 86400.
         add_volume_offset : bool, optional
             Delwaq needs water volumes at the beginning of the timestep.
             In some models, like wflow, volumes are written at the end of the timestep
@@ -502,7 +502,7 @@ class DelwaqModel(GridModel):
         """
         if hydro_forcing_fn not in self.data_catalog:
             self.logger.warning(
-                f"None or Invalid source '{hydro_forcing_fn} ",
+                f"None or Invalid source {hydro_forcing_fn} ",
                 "skipping setup_hydrology_forcing.",
             )
             return
@@ -591,6 +591,7 @@ class DelwaqModel(GridModel):
         sediment_fn: Union[str, xr.Dataset],
         starttime: str,
         endtime: str,
+        timestepsecs: int = 86400,
         particle_class: List[str] = ["IM1", "IM2", "IM3", "IM4", "IM5"],
     ):
         """Setup Delwaq hydrological fluxes.
@@ -612,51 +613,68 @@ class DelwaqModel(GridModel):
             Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
         endtime : str
             Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS
+        timestepsecs: int
+            Delwaq model timestep in seconds. By default 86400 for daily.
         particle_class : str list, optional
             List of particle classes to consider. By default 5 classes: ['IM1', 'IM2',
             'IM3', 'IM4', 'IM5']
         """
-        if sediment_fn not in self.data_catalog:
-            self.logger.warning(
-                f"None or Invalid source '{sediment_fn}', "
-                "skipping setup_sediment_forcing."
-            )
-            return
         self.logger.info(f"Setting dynamic data from sediment source {sediment_fn}.")
 
         # read dynamic data
         ds = self.data_catalog.get_rasterdataset(sediment_fn, geom=self.region)
+
         # Select time and particle classes
+        freq = pd.to_timedelta(timestepsecs, unit="s")
         # Sell times to starttime and endtime
         ds = ds.sel(time=slice(starttime, endtime))
         sed_vars = [f"Erod{x}" for x in particle_class]
         ds = ds[sed_vars]
+
+        # Select time and particle classes
+        freq = pd.to_timedelta(timestepsecs, unit="s")
+        # Sell times to starttime and endtime
+        ds = ds.sel(time=slice(starttime, endtime))
+        # Resample in time if needed
+        ds_out = xr.Dataset()
+        for var in ds.data_vars:
+            ds_out[var] = hydromt.workflows.forcing.resample_time(
+                ds[var],
+                freq,
+                upsampling="bfill",  # we assume right labeled original data
+                downsampling="sum",
+                conserve_mass=True,
+                logger=self.logger,
+            )
+
         # If needed reproject forcing data to model grid
         # As forcing should come from hydromodel the grids should already be identical
-        if not ds.raster.identical_grid(self.hydromaps):
+        if not ds_out.raster.identical_grid(self.hydromaps):
             self.logger.warning(
                 "hydro_forcing_fn and model grid are not identical. Reprojecting."
             )
-            ds = ds.raster.reproject_like(self.hydromaps)
+            ds_out = ds_out.raster.reproject_like(self.hydromaps)
 
         # Add basin mask
-        ds.coords["mask"] = xr.DataArray(
-            dims=ds.raster.dims,
-            coords=ds.raster.coords,
+        ds_out.coords["mask"] = xr.DataArray(
+            dims=ds_out.raster.dims,
+            coords=ds_out.raster.coords,
             data=self.hydromaps["mask"].values,
             attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
         )
         # Add _FillValue to the data attributes
-        for dvar in ds.data_vars.keys():
-            nodata = ds[dvar].raster.nodata
+        for dvar in ds_out.data_vars.keys():
+            nodata = ds_out[dvar].raster.nodata
             if nodata is not None:
-                ds[dvar].attrs.update(_FillValue=nodata)
+                ds_out[dvar].attrs.update(_FillValue=nodata)
             else:
-                ds[dvar].attrs.update(_FillValue=-9999.0)
+                ds_out[dvar].attrs.update(_FillValue=-9999.0)
             # Fill with zeros inside mask and keep NaN outside
-            ds[dvar] = ds[dvar].fillna(0).where(ds["mask"], ds[dvar].raster.nodata)
+            ds_out[dvar] = (
+                ds_out[dvar].fillna(0).where(ds_out["mask"], ds_out[dvar].raster.nodata)
+            )
 
-        self.set_forcing(ds)
+        self.set_forcing(ds_out)
 
         lines_ini = {
             "l1": "SEG_FUNCTIONS",
@@ -695,7 +713,8 @@ class DelwaqModel(GridModel):
         endtime : str
             Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS
         climate_vars : str list, optional
-            List of climate_vars to consider. By default ["temp", "temp_dew", "ssr", "wind_u", "wind_v", "tcc"]
+            List of climate_vars to consider. By default ["temp", "temp_dew", "ssr",
+            "wind_u", "wind_v", "tcc"]
         temp_correction : bool, optional
             If True temperature are corrected using elevation lapse rate,
             by default False.
@@ -964,7 +983,7 @@ class DelwaqModel(GridModel):
     # I/O
     def read(self):
         """Method to read the complete model schematization and configuration from file."""
-        # self.read_config()
+        self.read_config()
         self.read_geoms()
         self.read_hydromaps()
         # self.read_pointer()
@@ -1038,6 +1057,34 @@ class DelwaqModel(GridModel):
         # to write use self.geoms[var].to_file()
         super().write_geoms(fn="geoms/{name}.geojson", driver="GeoJSON")
 
+    def read_config(
+        self,
+        skip: List[str] = [
+            "B4_pointer",
+            "B2_stations",
+            "B2_stations-balance",
+            "B2_monareas",
+        ],
+    ):
+        """Read config files in ASCII format at <root/config>."""
+        # Because of template config can be read also in write mode.
+        # Use fonction from hydromt core to read the main config file
+        super().read_config()
+
+        # Add the other files in the config folder
+        config_fns = glob.glob(join(self.root, "config", f"*.inc"))
+        for fn in config_fns:
+            name = os.path.splitext(os.path.basename(fn))[0]
+            if name in skip:
+                # Skip pointer file (should be read with read_pointer())
+                # Skip monitoring files (should be read with read_monitoring())
+                continue
+            self.config[name] = dict()
+            with open(fn) as f:
+                for i, line in enumerate(f):
+                    # Remove line breaks
+                    self.config[name][f"l{i+1}"] = line.replace("\n", "")
+
     def write_config(self):
         """Write config files in ASCII format at <root/config>."""
         self._assert_write_mode()
@@ -1092,7 +1139,7 @@ class DelwaqModel(GridModel):
     def write_pointer(self):
         """Write pointer at <root/dynamicdata> in ASCII and binary format."""
         self._assert_write_mode()
-        if self._pointer is not None:
+        if self._pointer is not None and "pointer" in self._pointer:
             pointer = self.pointer["pointer"]
             self.logger.info("Writting pointer file in root/config")
             fname = join(self.root, "config", "B4_pointer")
@@ -1162,7 +1209,7 @@ class DelwaqModel(GridModel):
             # )
             # Flow
             flname = join(self.root, "dynamicdata", "flow.dat")
-            flow_vars = self.get_config("B7_fluxes.l2").split(" ")
+            flow_vars = self.fluxes
             flowblock = []
             for dvar in flow_vars:
                 nodata = ds_out[dvar].raster.nodata
@@ -1174,7 +1221,7 @@ class DelwaqModel(GridModel):
             )
             # volume
             voname = join(self.root, "dynamicdata", "volume.dat")
-            vol_vars = self.compartments
+            vol_vars = [self.surface_water]
             volblock = []
             for dvar in vol_vars:
                 nodata = ds_out[dvar].raster.nodata
@@ -1351,7 +1398,7 @@ class DelwaqModel(GridModel):
             nseg = self.pointer["nrofseg"]
         else:
             # from config
-            nseg = self.get_config("B3_nrofseg.l1", "0 ; nr of segments")
+            nseg = self.get_config("B3_nrofseg.l1", fallback="0 ; nr of segments")
             nseg = int(nseg.split(";")[0])
             self.set_pointer(nseg, "nrofseg")
         return nseg
@@ -1368,7 +1415,7 @@ class DelwaqModel(GridModel):
             # from config
             nexch = self.get_config(
                 "B4_nrofexch.l1",
-                "0 0 0 ; x, y, z direction",
+                fallback="0 0 0 ; x, y, z direction",
             )
             nexch = int(nexch.split(" ")[0])
             self.set_pointer(nexch, "nrofexch")
@@ -1384,9 +1431,9 @@ class DelwaqModel(GridModel):
             nl = 7
             sfw = self.get_config(
                 f"B3_attributes.l{nl}",
-                "     1*01 ; sfw",
+                fallback="     1*01 ; sfw",
             )
-            sfw = sfw.split(";")[0][1:-1]
+            sfw = sfw.split(";")[1][1:]
             self.set_pointer(sfw, "surface_water")
         return sfw
 
@@ -1399,7 +1446,7 @@ class DelwaqModel(GridModel):
             # from config
             fl = self.get_config(
                 "B7_fluxes.l2",
-                "sfw>sfw inw>sfw",
+                fallback="sfw>sfw inw>sfw",
             )
             fl = fl.split(" ")
             self.set_pointer(fl, "fluxes")
@@ -1424,7 +1471,8 @@ class DelwaqModel(GridModel):
             - datablock - array with data
             - boundids to write more than 1 block
             - WriteAscii - if True to make a copy in an ascii checkfile
-            - mode - {"a", "w"} Force the writting mode, append or overwrite existing files.
+            - mode - {"a", "w"} Force the writting mode, append or overwrite existing
+              files.
 
         """
         # Supress potential NaN values to avoid error (replaced by -1.0)

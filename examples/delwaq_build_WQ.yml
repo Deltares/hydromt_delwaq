@@ -32,3 +32,5 @@ setup_hydrology_forcing:
   endtime: "2010-02-10 00:00:00"
   timestepsecs: 86400
   add_volume_offset: True
+  override: 
+    - sfw>sfw
