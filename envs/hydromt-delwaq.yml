@@ -4,41 +4,34 @@ channels:
   - conda-forge
 
 dependencies:
-  - affine
-  - click
   - black
-  - bottleneck
   - cartopy # to run examples
-  - dask
   - descartes # to run examples
   - entrypoints
   - flit>=3.4
-  - gdal>=3.1
   - geopandas>=0.10
-  - hydromt>=0.5.0
-  - hydromt_wflow>=0.2.0
+  - hydromt>=0.9.1
+  - hydromt_wflow>=0.4.0
   - jupyter # to run examples
-  - netcdf4
   - matplotlib # to run examples
-  - numba
+  - nbsphinx  # docs
   - numpy
   - openpyxl
   - pandas
   - pip
-  - pygeos>=0.8
   - pytest # tests
   - pytest-cov # tests
   - pytest-benchmark # tests
-  - pyflwdir>=0.5.5
   - python<=3.11
   - rasterio
-  - requests
-  - rioxarray
   - scipy
   - shapely>=2.0.0
+  - sphinx # docs
+  - pydata-sphinx-theme # docs
   - tqdm
   - xarray
   - xclim
   - xugrid
-  - zarr
+  - pip:
+   - sphinx_design # docs
 

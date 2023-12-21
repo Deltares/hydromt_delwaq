@@ -1,4 +1,4 @@
-name: Tests
+name: Test stable
 
 on:
   push:
@@ -16,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["windows-latest"] #, "ubuntu-latest", "macos-latest"]
-        python-version: ["3.9"] # fix tests to support older versions
+        os: ["ubuntu-latest"] #, "ubuntu-latest", "macos-latest", windows-latest]
+        python-version: ["3.10", "3.11"] # fix tests to support older versions
     
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
           mamba-version: "*"
           channels: conda-forge,defaults
           channel-priority: true
-          environment-file: envs/test_env.yml
+          environment-file: envs/hydromt-delwaq.yml
           activate-environment: hydromt-delwaq
 
       - name: Conda info
@@ -38,10 +38,8 @@ jobs:
       - name: Install plugin
         run: flit install --deps all
 
-      - name: Test
+      - name: Run Tests
         run: python -m pytest --verbose --cov=hydromt_delwaq --cov-report xml
 
-      - name: Check style
-        run: black --check .
-
-      - uses: codecov/codecov-action@v3
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v3
