@@ -1,11 +1,12 @@
-"""Unit tests for hydromt_delwaq methods and workflows"""
-
-from os.path import join, dirname, abspath
-import numpy as np
-from hydromt_delwaq.delwaq import DelwaqModel
-import hydromt
+"""Unit tests for hydromt_delwaq methods and workflows."""
 
 import logging
+from os.path import abspath, dirname, join
+
+import hydromt
+import numpy as np
+
+from hydromt_delwaq.delwaq import DelwaqModel
 
 TESTDATADIR = join(dirname(abspath(__file__)), "data")
 EXAMPLEDIR = join(dirname(abspath(__file__)), "..", "examples")

@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
+"""Workflow for roads data."""
 
-import numpy as np
-import xarray as xr
-import geopandas as gpd
 import logging
 
-from hydromt import flw
-
+import geopandas as gpd
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +11,7 @@ __all__ = ["zonal_stats", "zonal_stats_grid"]
 
 
 def zonal_stats(gdf, zones, variables=[], stats=[], method="overlay"):
-    """Calculates zonal statisctics of vector samples aggregated for geometries.
+    """Calculate zonal statisctics of vector samples aggregated for geometries.
 
     Adds new columns variables to the zones GeoDataFrame:
         - New columns: {variable}_{stat} (for variable in variables and stat in stats).
@@ -27,17 +24,21 @@ def zonal_stats(gdf, zones, variables=[], stats=[], method="overlay"):
         Zones to compute the roads statistics.
     variables: list of str, optional.
         List of variables to derive statistics from.
-        Either columns names from gdf (dtype must be either float or integer) or geometric properties such as ['length', 'area'].
-        If geometric properties of the gdf are not available, they are computed on the spot.
+        Either columns names from gdf (dtype must be either float or integer) or
+        geometric properties such as ['length', 'area'].
+        If geometric properties of the gdf are not available, they are computed on
+        the spot.
     stats: list of str, callable
         Statistics to compute from raster values, options include
         {'count', 'min', 'max', 'sum', 'mean', 'std', 'median', 'q##'}.
-         Multiple percentiles can be calculated using comma-seperated values, e.g.: 'q10,50,90'
-         Statistics ignore the nodata value and are applied along the x and y dimension.
-         By default ['mean'].
+        Multiple percentiles can be calculated using comma-seperated values,
+        e.g.: 'q10,50,90'
+        Statistics ignore the nodata value and are applied along the x and y dimension.
+        By default ['mean'].
     method: str, optional
-        Method for the spatial interpolation of gdf and zones. Either 'sjoin' for spatial join for
-        gdf within zones, or 'overlay' for a union overlay of gdf with zones (default).
+        Method for the spatial interpolation of gdf and zones. Either 'sjoin' for
+        spatial join for gdf within zones, or 'overlay' for a union overlay of gdf with
+        zones (default).
 
 
     Returns
@@ -121,10 +122,11 @@ def zonal_stats_grid(
     mask_name="mask",
     method="overlay",
 ):
-    """Calculates zonal statisctics of vector samples aggregated per raster cell.
+    """Calculate zonal statisctics of vector samples aggregated per raster cell.
 
     Returns a xr.Dataset with gridded road information :
-        - Variables: {name_}{variable}_{stat} (name is taken from feature_filter, variable from variables and stat from stats).
+        - Variables: {name_}{variable}_{stat} (name is taken from feature_filter,
+        variable from variables and stat from stats).
 
     Parameters
     ----------
@@ -134,19 +136,23 @@ def zonal_stats_grid(
         Dataset at model resolution.
     variables: list of str, optional.
         List of variables to derive statistics from.
-        Either columns names from gdf (dtype must be either float or integer) or geometric properties such as ['length', 'area'].
-        If geometric properties of the gdf are not available, they are computed on the spot.
+        Either columns names from gdf (dtype must be either float or integer) or
+        geometric properties such as ['length', 'area'].
+        If geometric properties of the gdf are not available, they are computed on
+        the spot.
     stats: list of str, callable
         Statistics to compute from raster values, options include
         {'count', 'min', 'max', 'sum', 'mean', 'std', 'median', 'q##'}.
-         Multiple percentiles can be calculated using comma-seperated values, e.g.: 'q10,50,90'
+         Multiple percentiles can be calculated using comma-seperated values,
+         e.g.: 'q10,50,90'
          Statistics ignore the nodata value and are applied along the x and y dimension.
          By default ['mean'].
     mask_name : str
         Name of a basin mask array in ds_like.
     method: str, optional
-        Method for the spatial interpolation of gdf and zones. Either 'sjoin' for spatial join for
-        gdf within zones, or 'overlay' for a union overlay of gdf with zones (default).
+        Method for the spatial interpolation of gdf and zones. Either 'sjoin' for
+        spatial join for gdf within zones, or 'overlay' for a union overlay of gdf with
+        zones (default).
 
     Returns
     -------

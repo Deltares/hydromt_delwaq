@@ -9,12 +9,12 @@ If needed edit your data library with new data sources required for the update a
 
     activate hydromt-delwaq
     hydromt update delwaq path/to/model_to_update -o path/to/updated_model -i delwaq_update.ini -d data_sources.yml -vv
-	
+
 .. toctree::
    :hidden:
    :maxdepth: 2
    :caption: Available tutorials:
-   
+
    Example: Add (global) emission data <../_examples/adding_global_emission.ipynb>
    Example: Add (local) emission data  <../_examples/adding_local_emission.ipynb>
    Example: Update forcing data <../_examples/update_model_forcing.ipynb>

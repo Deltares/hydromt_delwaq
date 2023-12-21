@@ -34,4 +34,3 @@ dependencies:
   - xugrid
   - pip:
     - sphinx_design # docs
-

@@ -56,7 +56,7 @@ The EM is currently configured for 6 compartments.
 
    * - Abbreviation
      - Description
-   * - ``Sew`` 
+   * - ``Sew``
      - Sewer system that receives wastewater and (optionally) stormwater
    * - ``Pav``
      - Paved or impermeable surfaces
@@ -67,7 +67,7 @@ The EM is currently configured for 6 compartments.
    * - ``Sfw``
      - Final recipient surface water, all matter that ends up here is “emissions to surface waters”
    * - ``Soi``
-     - Final recipient soil system, all matter that ends up here is “emissions to soils” 
+     - Final recipient soil system, all matter that ends up here is “emissions to soils”
 
 
 In the EM software, these compartments are mathematically represented by substances. The mass of the simulated substances is expressed in grams. Transports from one compartment to another (in g s-1) are mathematically represented by “process fluxes” (transformations of one substance into another substance). This comes back in the mass balance output.
@@ -80,25 +80,25 @@ Formulation
 Releases
 ^^^^^^^^
 
-Releases of substances are quantified per time step. 
-Releases from atmospheric deposition are automatically allocated to the proper receiving compartment (paved surfaces, unpaved surfaces and surface waters) depending on the local conditions that follow from the supportive hydrology model. 
-Releases from other sources need to be allocated to the proper receiving compartment by the user. 
-Optionally, a part of the releases can be **preliminary** allocated to wastewater. 
+Releases of substances are quantified per time step.
+Releases from atmospheric deposition are automatically allocated to the proper receiving compartment (paved surfaces, unpaved surfaces and surface waters) depending on the local conditions that follow from the supportive hydrology model.
+Releases from other sources need to be allocated to the proper receiving compartment by the user.
+Optionally, a part of the releases can be **preliminary** allocated to wastewater.
 The subsequent allocation of the wastewater to receiving compartments can then be arranged by a supportive process :ref:`GenWWman <GenWWman>`.
 
 Paved surfaces
 ^^^^^^^^^^^^^^
 
-The figure below shows a schematic overview of the fate of releases to paved areas. 
-Substances reaching paved areas undergo a decay process and can be washed off. 
-The fraction that is not removed by runoff or decay remains in the paved emission pool. 
-The intensity of runoff is regulated by the rainfall intensity. 
-Wash-off starts at a threshold of 2 mm runoff and the removed fraction linearly increases to 100% at a runoff intensity of 5 mm. 
+The figure below shows a schematic overview of the fate of releases to paved areas.
+Substances reaching paved areas undergo a decay process and can be washed off.
+The fraction that is not removed by runoff or decay remains in the paved emission pool.
+The intensity of runoff is regulated by the rainfall intensity.
+Wash-off starts at a threshold of 2 mm runoff and the removed fraction linearly increases to 100% at a runoff intensity of 5 mm.
 This relation is fixed in the model code.
 
 .. image:: ../img/EM_PavedSurfaces.png
 
-*Schematic overview of the pathway that releases follow when distributed to the paved areas. 
+*Schematic overview of the pathway that releases follow when distributed to the paved areas.
 The fate of the release is either runoff to storm water or decay and thereby removal from the model.*
 
 In formulas:
@@ -106,7 +106,7 @@ In formulas:
 .. math::
     :label: Eq_Paved1
 
-    f_{runoff} = 
+    f_{runoff} =
     max \left( min \left( \frac{RO - 2}{5 - 2},1  \right),0 \right)
 
 .. math::
@@ -142,24 +142,24 @@ The washed off substances are distributed over different compartments:
 Unpaved surfaces
 ^^^^^^^^^^^^^^^^
 
-The figure below presents a schematic overview of the simulated pathways for unpaved areas. 
-The unpaved pool is undergoing burial and decay. 
-Both processes remove substances from the simulation. 
-Depending on the hydrological conditions, a fraction of the pool can be washed off, infiltrate or erode. 
+The figure below presents a schematic overview of the simulated pathways for unpaved areas.
+The unpaved pool is undergoing burial and decay.
+Both processes remove substances from the simulation.
+Depending on the hydrological conditions, a fraction of the pool can be washed off, infiltrate or erode.
 The fraction of the emission that is not removed by any of these processes remains in the unpaved pool.
 
-The pool is split into fractions bound and unbound to soil particles (parameter :math:`Kd_{unpaved}`). 
-The bound fraction can erode, the unbound fraction can infiltrate and be washed off. 
-Erosion depends on the rainfall intensity: 10 - 20 mm rainfall is equivalent to 0 - 100% erosion (see figure below). 
-Wash-off and infiltration also depend on rainfall intensity: 0 - 7 mm of combined runoff and infiltration lead to 0 - 100% of mobilization, 
-distributed over wash-off and infiltration in accordance with the hydrological fluxes. 
+The pool is split into fractions bound and unbound to soil particles (parameter :math:`Kd_{unpaved}`).
+The bound fraction can erode, the unbound fraction can infiltrate and be washed off.
+Erosion depends on the rainfall intensity: 10 - 20 mm rainfall is equivalent to 0 - 100% erosion (see figure below).
+Wash-off and infiltration also depend on rainfall intensity: 0 - 7 mm of combined runoff and infiltration lead to 0 - 100% of mobilization,
+distributed over wash-off and infiltration in accordance with the hydrological fluxes.
 
 .. image:: ../img/EM_UnpavedSurfaces.png
 
-*Schematic overview of the pathways in unpaved areas. 
-The releases are first divided over the bound and unbound fractions. 
-The fate of the unbound fraction is either runoff to the storm water collection system (runoff) or infiltration to the soil. 
-The fate of the bound fraction is erosion. 
+*Schematic overview of the pathways in unpaved areas.
+The releases are first divided over the bound and unbound fractions.
+The fate of the unbound fraction is either runoff to the storm water collection system (runoff) or infiltration to the soil.
+The fate of the bound fraction is erosion.
 Both fractions will experience burial and decay and thereby removal from the model.*
 
 In formulas:
@@ -167,43 +167,43 @@ In formulas:
 .. math::
     :label: Eq_Unpaved1
 
-    f_{erosion} = 
+    f_{erosion} =
     max \left( min \left( \frac{RA - 10}{20 - 10},1  \right),0 \right)
 
 .. math::
     :label: Eq_Unpaved2
 
-    f_{mob} = 
+    f_{mob} =
     max \left( min \left( \frac{RO + INF}{7},1  \right),0 \right)
 
 .. math::
     :label: Eq_Unpaved3
 
-    f_{runoff} = 
+    f_{runoff} =
     max \left( min \left( \frac{RO}{RO + INF},1  \right),0 \right)
 
 .. math::
     :label: Eq_Unpaved4
 
-    f_{infilt} = 
+    f_{infilt} =
     max \left( min \left( \frac{INF}{RO + INF},1  \right),0 \right)
 
 .. math::
     :label: Eq_Unpaved5
 
-    F_{loss} = 
+    F_{loss} =
     \left( k_{unpaved} + b \right) M
 
 .. math::
     :label: Eq_Unpaved6
 
-    F_{part} = 
+    F_{part} =
     Kd_{unpaved} * \left( \frac{M}{\Delta t} + L - F_{loss} \right)
 
 .. math::
     :label: Eq_Unpaved7
 
-    F_{dis} = 
+    F_{dis} =
     \left(1 - Kd_{unpaved} \right) * \left( \frac{M}{\Delta t} + L - F_{loss} \right)
 
 .. math::
@@ -246,34 +246,34 @@ where
 :math:`F_{infilt}`        infiltration flux (-)
 ======================    ================================================
 
-The washed off and eroded fractions are routed to the *Sfw* compartment. 
-The infiltrating fraction is routed to the *Soi* compartment. 
+The washed off and eroded fractions are routed to the *Sfw* compartment.
+The infiltrating fraction is routed to the *Soi* compartment.
 
 Combined sewer systems
 ^^^^^^^^^^^^^^^^^^^^^^
 
-A flux from the Sew to surface water is defined that corresponds to leakages and combined sewer overflows (CSO's). 
-This is controlled by the parameter *SewLeakage*. 
-If this parameter is a positive number, it represents a constant leakage fraction. 
-If this parameter is negative, it represents a precipitation threshold. 
+A flux from the Sew to surface water is defined that corresponds to leakages and combined sewer overflows (CSO's).
+This is controlled by the parameter *SewLeakage*.
+If this parameter is a positive number, it represents a constant leakage fraction.
+If this parameter is negative, it represents a precipitation threshold.
 If the threshold is exceeded, the inflow to the Sew compartment is directly routed to *Sfw*.
 
-The parameters *LocWWTP* and *RecWWTP* allow a man-induced horizontal displacement of the collected water in the *Sew* compartment. 
+The parameters *LocWWTP* and *RecWWTP* allow a man-induced horizontal displacement of the collected water in the *Sew* compartment.
 This is only relevant in small scale applications, e.g. in cities.
 
-The substances remaining in *Sew* undergo a treatment. 
-The fate of the substances in the influent is fixed by the parameters specifying the fractions that end up in effluent (*Eff_WWTP*) and in sludge (*Sld_WWTP*) respectively. 
+The substances remaining in *Sew* undergo a treatment.
+The fate of the substances in the influent is fixed by the parameters specifying the fractions that end up in effluent (*Eff_WWTP*) and in sludge (*Sld_WWTP*) respectively.
 These two parameters implicitly determine the removal by wastewater treatment (*1 - Eff_WWTP-Sld_WWTP*).
 
 
 Separated sewer systems
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The parameters *LocSTW* and *RecSTW* allow a man-induced horizontal displacement of the collected water in the *Sew* and *Stw* compartments respectively. 
+The parameters *LocSTW* and *RecSTW* allow a man-induced horizontal displacement of the collected water in the *Sew* and *Stw* compartments respectively.
 This is only relevant in small scale applications, e.g. in cities.
 
-The substances remaining in *Stw* can partly be retained. 
-The fate of the substances in the influent is fixed by the parameters specifying the fractions that end up in effluent (*Eff_RS*) and in sludge (*Sld_RS*) respectively. 
+The substances remaining in *Stw* can partly be retained.
+The fate of the substances in the influent is fixed by the parameters specifying the fractions that end up in effluent (*Eff_RS*) and in sludge (*Sld_RS*) respectively.
 These two parameters implicitly determine the retention (*1 - Eff_RS-Sld_RS*).
 
 
@@ -471,7 +471,7 @@ and by providing the WWTP treatment parameters (*Eff_WWTP*, *Sld_WWTP*) as a spa
 Implementation
 --------------
 
-The process is implemented for the compartments listed in Table :ref:`EM compartments <EM_compartments>`. 
+The process is implemented for the compartments listed in Table :ref:`EM compartments <EM_compartments>`.
 The local treatment capacity can be specified for up to three levels of treatment, each with different properties.
 
 Formulation
@@ -481,9 +481,9 @@ Allocation of wastewater to receiving compartments
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Wastewater is either collected in a sewer system (*FrSewered*), or in septic tanks (*FrSeptic*) or remains unmanaged (*1 - FrSewered - FrSeptic*).
 
-For the fraction collected in septic tanks, a loss to surface waters (*Eff_Septic*) and to soils (*Sld_Septic*) can be defined. The remaining part is assumed transported to treatment plants by other means than sewer systems. 
+For the fraction collected in septic tanks, a loss to surface waters (*Eff_Septic*) and to soils (*Sld_Septic*) can be defined. The remaining part is assumed transported to treatment plants by other means than sewer systems.
 
-From the unmanaged wastewater, a fraction *fOpenWater* is allocated to surface waters, the remainder to soils. 
+From the unmanaged wastewater, a fraction *fOpenWater* is allocated to surface waters, the remainder to soils.
 
 Thus, the allocation of wastewater to the modelled compartments is:
 
@@ -513,7 +513,7 @@ The fraction of wastewater treated at three individual levels can be indicated. 
 
     FrUnTreated = 1 - FrTreat1 - FrTreat2 - FrTreat3
 
-For each of the three treatment levels, the fraction of the influent reaching the effluent and the sludge respectively is specified. 
+For each of the three treatment levels, the fraction of the influent reaching the effluent and the sludge respectively is specified.
 For the untreated fraction all influent reaches the effluent.
 
 For the complete treatment system, the fractions reaching the effluent and the sludge equal:
@@ -521,7 +521,7 @@ For the complete treatment system, the fractions reaching the effluent and the s
 .. math::
     :label: Eq_WWman5
 
-    Eff_WWTP = 
+    Eff_WWTP =
     FrUnTreated +
     FrTreat1*Eff_Treat1 +\\
     FrTreat2*Eff_Treat2 +
@@ -530,12 +530,12 @@ For the complete treatment system, the fractions reaching the effluent and the s
 .. math::
     :label: Eq_WWman6
 
-    Sld_WWTP = 
+    Sld_WWTP =
     FrTreat1*Sld_Treat1 +
     FrTreat2*Sld_Treat2 +\\
     FrTreat3*Sld_Treat3
 
-In a final step, the fraction reaching sludge is corrected for “removal” of sludge by incineration and isolation. 
+In a final step, the fraction reaching sludge is corrected for “removal” of sludge by incineration and isolation.
 The remaining part is routed to soils in the main emission modelling process.
 
 .. math::
@@ -628,18 +628,18 @@ The supportive process produces the below output, that feeds directly into the m
    * - Name in model
      - Definition
      - Unit
-   * - ``Eff_WWTP`` 
+   * - ``Eff_WWTP``
      - fraction of substance in WWTP influent that reaches the effluent (substance dependent)
      - (-)
-   * - ``Sld_WWTP`` 
+   * - ``Sld_WWTP``
      - fraction of substance in WWTP influent that reaches the sludge (substance dependent)
      - (-)
-   * - ``WWtoSew`` 
+   * - ``WWtoSew``
      - fraction of wastewater allocated to mixed sewers
      - (-)
-   * - ``WWtoSfw`` 
+   * - ``WWtoSfw``
      - fraction of wastewater allocated to surface waters
      - (-)
-   * - ``WWtoSoi`` 
+   * - ``WWtoSoi``
      - fraction of wastewater allocated to soils
      - (-)

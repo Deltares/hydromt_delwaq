@@ -1,15 +1,13 @@
-# -*- coding: utf-8 -*-
+"""Worflows dealing with pointer and Delwaq segments."""
 
-import numpy as np
-import xarray as xr
-import pandas as pd
 import logging
 from typing import List
 
+import numpy as np
+import xarray as xr
 from hydromt import flw
-from hydromt.raster import full_like
-from . import emissions
 
+from . import emissions
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +22,7 @@ __all__ = [
 def hydromaps(
     hydromodel,
 ):
-    """Returns base information maps from hydromodel.
+    """Return base information maps from hydromodel.
 
     The following basemaps are extracted:\
     - flwdir
@@ -32,7 +30,7 @@ def hydromaps(
     - basmsk
     - elevtn
     - rivmsk
-    
+
     Parameters
     ----------
     hydromodel : hydromt.model
@@ -78,7 +76,7 @@ def maps_from_hydromodel(
     maps=["rivmsk", "lndslp", "strord", "N", "SoilThickness", "thetaS"],
     logger=logger,
 ):
-    """Returns maps from hydromodel.
+    """Return maps from hydromodel.
 
     Parameters
     ----------
@@ -122,13 +120,13 @@ def maps_from_hydromodel(
 def geometrymaps(
     hydromodel,
 ):
-    """Returns geometry information maps from hydromodel.
+    """Return geometry information maps from hydromodel.
 
     The following basemaps are extracted:\
     - surface
     - length
     - width
-    
+
     Parameters
     ----------
     hydromodel : HydroMT Model
@@ -173,8 +171,9 @@ def pointer(
     fluxes: List[str] = ["sfw>sfw", "bd>sfw"],
     logger=logger,
 ):
-    """Returns map with Delwaq segment ID. As well as the pointer matrix if
-    ``build_pointer`` is True.
+    """Return map with Delwaq segment ID and pointer.
+
+    The pointer matrix is built only if ``build_pointer`` is True.
 
     Parameters
     ----------

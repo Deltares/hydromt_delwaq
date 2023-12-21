@@ -1,8 +1,10 @@
-import xarray as xr
+"""Hydrology workflows for hydromt_delwaq."""
+
 import logging
-from xclim.indices.stats import frequency_analysis
 
 import hydromt
+import xarray as xr
+from xclim.indices.stats import frequency_analysis
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +23,9 @@ def bankfull_volume_from_discharge(
     """
     Derive bankfull discharge/depth/volume from a time series of discharge.
 
-    The bankfull discharge is defined as the discharge corresponding to a given return period.
-    The power law method of hydromt.workflows.river_depth is used to get bankfull depth.
+    The bankfull discharge is defined as the discharge corresponding to a given
+    return period. The power law method of hydromt.workflows.river_depth is used to get
+    bankfull depth.
 
     Parameters
     ----------
@@ -36,12 +39,14 @@ def bankfull_volume_from_discharge(
     bankfull_rp : int, optional
         Return period of the bankfull discharge, by default 2 years
     distribution : str, optional
-        Extreme value distribution, by default "genextreme" for Generalized Extreme Value.
+        Extreme value distribution, by default "genextreme" for Generalized Extreme
+        Value.
 
     Returns
     -------
     ds_out: xr.Dataset
-        Dataset containing bankfull_discharge [m3/s], bankfull_depth [m] and bankfull_volume [m3].
+        Dataset containing bankfull_discharge [m3/s], bankfull_depth [m] and
+        bankfull_volume [m3].
     """
     # Make sure ds_model is 2D and not 3D in case one comp
     ds_model = ds_model.squeeze()
@@ -78,7 +83,8 @@ def bankfull_volume(
     Derive bankfull volume from a time series of volume.
 
     The bankfull volume is defined as the volume corresponding to a given return period.
-    xclim.indices.stats.frequency_analysis is used to get bankfull volume based on annual maxima method.
+    xclim.indices.stats.frequency_analysis is used to get bankfull volume based on
+    annual maxima method.
 
     Parameters
     ----------
@@ -87,12 +93,14 @@ def bankfull_volume(
     bankfull_rp : int, optional
         Return period of the bankfull volume, by default 2 years
     distribution : str, optional
-        Extreme value distribution, by default "genextreme" for Generalized Extreme Value.
-        Available values: `beta`, `expon`, `genextreme`, `gamma`, `gumbel_r`, `lognorm`, `norm`.
+        Extreme value distribution, by default "genextreme" for Generalized Extreme
+        Value.
+        Available values: `beta`, `expon`, `genextreme`, `gamma`, `gumbel_r`, `lognorm`,
+        `norm`.
     method : str, optional
         Fitting method, either maximum likelihood (ML or MLE), method of moments (MOM),
-        probability weighted moments (PWM), also called L-Moments, or approximate method (APP).
-        The PWM method is usually more robust to outliers. ML by default.
+        probability weighted moments (PWM), also called L-Moments, or approximate method
+        (APP). The PWM method is usually more robust to outliers. ML by default.
 
     Returns
     -------

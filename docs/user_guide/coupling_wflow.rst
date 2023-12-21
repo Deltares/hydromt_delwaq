@@ -3,7 +3,7 @@
 Explaining the Wflow - DELWAQ coupling
 --------------------------------------
 
-Water quality and emission, fate and transport of pollutants through the landscape is very much linked to the water movements. In most cases, pollutants are emitted on land and 
+Water quality and emission, fate and transport of pollutants through the landscape is very much linked to the water movements. In most cases, pollutants are emitted on land and
 either leach into the soil or are picked up by water during rain events and transported towards and into the rivers. In order to model water quality is it therefore essential to first understand and assess the hydrology of the catchment / region of interests.
 
 A full hydrology - water quality modelling suite is in general separated in three parts:
@@ -14,7 +14,7 @@ A full hydrology - water quality modelling suite is in general separated in thre
 
 .. image:: ../img/wflow-Delwaq.jpg
 
-For the purpose of modelling catchment water quality, the wflow_sbm model has been linked to EM and WQ (both based on DELWAQ, Deltares water quality software) using a "coupling" function integrated in the 
+For the purpose of modelling catchment water quality, the wflow_sbm model has been linked to EM and WQ (both based on DELWAQ, Deltares water quality software) using a "coupling" function integrated in the
 HydroMT-delwaq plugin.
 
 The wflow-DELWAQ coupling function in HydroMT:
@@ -44,7 +44,7 @@ C)  Fate and transport modelling with D-Water Quality
 Hydrological forcing from Wflow
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order to determine how and where substances are emitted and how they move through the landscape via the surface water, water quality modelling requires certain 
+In order to determine how and where substances are emitted and how they move through the landscape via the surface water, water quality modelling requires certain
 hydrological information.
 
 For an EM type of model (emission of substances in the surface waters), the required information is:
@@ -60,8 +60,8 @@ For a WQ type of model (fate and transport of substances in the surface waters),
 -  **Surface water volumes**
 -  **Total water entering the surface waters** (e.g. precipitation, exfiltration from the soil, evaporation...) in order to close the surface water mass balance.
 
-Wflow separates and routes water for three different components, the surface waters on the land, the river surface water and the water in the soil. DELWAQ uses only the one surface water components 
-and therefore the river and land surface waters from wflow are saved together for DELWAQ. The corresponding water balances for the river and land surface waters in wflow are shown in the Figure below. 
+Wflow separates and routes water for three different components, the surface waters on the land, the river surface water and the water in the soil. DELWAQ uses only the one surface water components
+and therefore the river and land surface waters from wflow are saved together for DELWAQ. The corresponding water balances for the river and land surface waters in wflow are shown in the Figure below.
 In order to prepare hydrological fluxes for DELWAQ from wflow, Wflow should be run and the required fluxes saved (same order as above):
 
 -  vertical.precipitation (precipitation input)
@@ -70,8 +70,8 @@ In order to prepare hydrological fluxes for DELWAQ from wflow, Wflow should be r
 -  vertical.excesswatersoil (infiltration excess runoff on unpaved areas)
 -  lateral.river.q_av and lateral.land.q_av (runoff in the river and land kinematic wave)
 -  lateral.river.volume and lateral.land.volume (kinematic wave volume in the river and on the land)
--  lateral.river.inwater, lateral.land.inwater and lateral.land.to_river (inwater river/land is the sum of all fluxes reaching the kinematic wave of the river/land surface water. As 
-   inwater also contains an internal flux between the land and river water, the part of land runoff that reaches the river lateral.land.to_river, we will need to substract 
+-  lateral.river.inwater, lateral.land.inwater and lateral.land.to_river (inwater river/land is the sum of all fluxes reaching the kinematic wave of the river/land surface water. As
+   inwater also contains an internal flux between the land and river water, the part of land runoff that reaches the river lateral.land.to_river, we will need to substract
    it to not count it twice, see Figure below).
 
 .. image:: ../img/wflow_balances.png

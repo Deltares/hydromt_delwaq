@@ -5,16 +5,16 @@ global:
 setup_basemaps:
   mask: rivers
   surface_water: sfw
-  boundaries: 
+  boundaries:
     - land
     - soil
     - sett
-  fluxes: 
+  fluxes:
     - sfw>sfw
     - land>sfw
     - soil>sfw
     - sfw>sett
-  maps: 
+  maps:
     - rivmsk
     - lndslp
     - strord
@@ -32,5 +32,5 @@ setup_hydrology_forcing:
   endtime: "2010-02-10 00:00:00"
   timestepsecs: 86400
   add_volume_offset: True
-  override: 
+  override:
     - sfw>sfw

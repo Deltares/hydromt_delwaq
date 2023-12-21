@@ -1,11 +1,11 @@
-"""Forcing data workflows"""
+"""Forcing data workflows."""
 
-import pandas as pd
-import xarray as xr
 import logging
 from typing import List
 
 import hydromt
+import pandas as pd
+import xarray as xr
 
 from . import emissions
 
@@ -132,7 +132,8 @@ def hydrology_forcing(
                 else:
                     surface_fns = [f for f in ds_model.keys() if f.endswith("area")]
                     logger.error(
-                        f"Map {surfacemap} not found in hydromaps to convert unit {unit}. Allowed names are {surface_fns}."
+                        f"Map {surfacemap} not found in hydromaps to convert unit "
+                        f"{unit}. Allowed names are {surface_fns}."
                     )
         if len(fl_vars) > 0:  # flux not in ds
             attrs = ds[fl_vars[0]].attrs.copy()
@@ -294,7 +295,7 @@ def climate_forcing(
     temp_correction: bool = False,
     dem_forcing: xr.DataArray = None,
 ) -> xr.Dataset:
-    """Setup Delwaq climate fluxes.
+    """Prepare Delwaq climate fluxes.
 
     Parameters
     ----------

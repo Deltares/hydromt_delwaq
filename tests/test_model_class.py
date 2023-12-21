@@ -1,15 +1,14 @@
-"""Test plugin model class against hydromt.models.model_api"""
+"""Test plugin model class against hydromt.models.model_api."""
 
-import pytest
-from os.path import join, dirname, abspath
-import numpy as np
 import warnings
-from click.testing import CliRunner
+from os.path import abspath, dirname, join
+
+import numpy as np
+import pytest
+from hydromt.cli.cli_utils import parse_config
 
 from hydromt_delwaq.delwaq import DelwaqModel
 from hydromt_delwaq.demission import DemissionModel
-from hydromt.cli.cli_utils import parse_config
-from hydromt.cli.main import main as hydromt_cli
 
 TESTDATADIR = join(dirname(abspath(__file__)), "data")
 EXAMPLEDIR = join(dirname(abspath(__file__)), "..", "examples")
@@ -86,7 +85,7 @@ def test_model_build(tmpdir, model):
     invalid_maps = []
     if len(mod0.grid) > 0:
         maps = mod0.grid.raster.vars
-        assert mod0.crs == mod1.crs, f"map crs mismatch"
+        assert mod0.crs == mod1.crs, "map crs mismatch"
         for name in maps:
             map0 = mod0.grid[name].fillna(0)
             if name not in mod1.grid:
@@ -103,12 +102,10 @@ def test_model_build(tmpdir, model):
             geom0 = mod0.geoms[name]
             assert name in mod1.geoms, f"geom {name} missing"
             geom1 = mod1.geoms[name]
-            assert geom0.index.size == geom1.index.size and np.all(
-                geom0.index == geom1.index
-            ), f"geom index {name}"
-            assert geom0.columns.size == geom1.columns.size and np.all(
-                geom0.columns == geom1.columns
-            ), f"geom columns {name}"
+            assert geom0.index.size == geom1.index.size, f"geom index {name}"
+            assert np.all(geom0.index == geom1.index), f"geom index {name}"
+            assert geom0.columns.size == geom1.columns.size, f"geom columns {name}"
+            assert np.all(geom0.columns == geom1.columns), f"geom columns {name}"
             assert geom0.crs == geom1.crs, f"geom crs {name}"
             if not np.all(geom0.geometry == geom1.geometry):
                 warnings.warn(f"New geom {name} different than the example one.")

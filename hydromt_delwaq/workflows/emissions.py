@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
+"""Workflow functions for emissions data preparation."""
+
+import logging
 
 import numpy as np
 import pandas as pd
-from rasterio.enums import MergeAlg
 import xarray as xr
-import logging
-
 from hydromt import gis_utils
-
+from rasterio.enums import MergeAlg
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +18,7 @@ DTYPES = {"EM_level1": np.int16, "EM_fact_X": np.float32}
 
 
 def gridarea(ds):
-    """Returns a DataArray cointaining the area in m2 of the reference grid ds
+    """Return a DataArray cointaining the area in m2 of the reference grid ds.
 
     Parameters
     ----------
@@ -32,7 +31,6 @@ def gridarea(ds):
         DataArray containing area in m2 of the reference grid.
 
     """
-
     realarea = gis_utils.reggrid_area(
         ds.raster.ycoords.values, ds.raster.xcoords.values
     )
@@ -46,7 +44,7 @@ def gridarea(ds):
 
 
 def gridlength_gridwidth(ds):
-    """Returns two DataArray for length and width of the grid"""
+    """Return two DataArray for length and width of the grid."""
     lons = ds.raster.xcoords.values
     lats = ds.raster.ycoords.values
     xres = np.abs(np.mean(np.diff(lons)))
@@ -86,11 +84,11 @@ def emission_raster(
     area_division=False,
     logger=logger,
 ):
-    """Returns emission map.
+    """Return emission map.
 
     The following emission maps are calculated:\
     - da
-    
+
     Parameters
     ----------
     da : xarray.DataArray
@@ -102,7 +100,8 @@ def emission_raster(
     fillna_method : str {'nearest', 'zero', 'value'}
         Method to fill NaN values.
     fillna_value : float
-        If fillna_method is set to 'value', NaNs in the emission maps will be replaced by this value.
+        If fillna_method is set to 'value', NaNs in the emission maps will be replaced
+        by this value.
     area_division : boolean
         If needed do the resampling in count/m2 (True) instead of count (False)
 
@@ -152,7 +151,7 @@ def emission_vector(
     mask_name="basmsk",
     logger=logger,
 ):
-    """Returns gridded emission data from vector.
+    """Return gridded emission data from vector.
 
     Parameters
     ----------
@@ -219,7 +218,8 @@ def emission_vector(
         if method == "area":
             da_out = da_area
         else:  # fraction
-            # Convert to frac using gdf grid in same crs (area error when using ds_like.raster.area_grid)
+            # Convert to frac using gdf grid in same crs
+            # (area error when using ds_like.raster.area_grid)
             gdf_grid = gdf_grid.to_crs(crs_utm)
             gdf_grid["area"] = gdf_grid.area
             da_gridarea = ds_like.raster.rasterize(
@@ -236,13 +236,14 @@ def emission_vector(
 
 
 def admin(da, ds_like, source_name, fn_map, logger=logger):
-    """Returns administrative boundaries map and related parameter maps.
+    """Return administrative boundaries map and related parameter maps.
+
     The parameter maps are prepared based on administrative boundaries and
     mapping table as provided in the generic data folder of hydromt.
 
     The following maps are calculated:\
     - TODO
-    
+
     Parameters
     ----------
     da : xarray.DataArray
@@ -255,7 +256,6 @@ def admin(da, ds_like, source_name, fn_map, logger=logger):
     ds_out : xarray.Dataset
         Dataset containing gridded emission factor based maps
     """
-
     # read csv with remapping values
     df = pd.read_csv(fn_map, index_col=0, sep="[,;]", engine="python", dtype=DTYPES)
     # limit dtypes to avoid gdal errors downstream
@@ -288,9 +288,8 @@ def admin(da, ds_like, source_name, fn_map, logger=logger):
             reclass, da, dask="parallelized", output_dtypes=[values.dtype]
         )
         da_param.attrs.update(_FillValue=nodata)  # first set new nodata values
-        if (
-            param == "EM_ID"
-        ):  # rename ID map to source_name (to avoid overwriting when several sources use this admin mapping function)
+        if param == "EM_ID":  # rename ID map to source_name (to avoid overwriting
+            # when several sources use this admin mapping function)
             ds_out[source_name] = da_param.raster.reproject_like(
                 ds_like, method=method
             )  # then resample

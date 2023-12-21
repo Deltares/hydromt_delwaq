@@ -1,20 +1,20 @@
-"""Implement demission model class"""
+"""Implement demission model class."""
 
+import logging
 import os
+from datetime import datetime
 from os.path import join
+from typing import Dict, List, Union
+
+import geopandas as gpd
 import numpy as np
 import pandas as pd
 import xarray as xr
-import geopandas as gpd
-import logging
-from datetime import datetime
-from typing import List, Union, Dict
-
 from hydromt import workflows
 
-from .delwaq import DelwaqModel
-from .workflows import emissions, segments, roads
 from . import DATADIR
+from .delwaq import DelwaqModel
+from .workflows import emissions, roads, segments
 
 __all__ = ["DemissionModel"]
 
@@ -30,7 +30,7 @@ PCR_VS_MAP = {
 
 
 class DemissionModel(DelwaqModel):
-    """This is the demission model class"""
+    """Demission model class."""
 
     _NAME = "demission"
     _CONF = "demission.inp"
@@ -81,7 +81,7 @@ class DemissionModel(DelwaqModel):
         maps: List[str] = ["rivmsk", "lndslp", "strord"],
     ):
         """
-        Setup demission model schematization using the hydromodel region and resolution.
+        Prepare demission schematization using the hydromodel region and resolution.
 
         Maps used and derived from the hydromodel are stored in a specific
         hydromodel attribute. Depending on the global option ``type``, build a
@@ -119,7 +119,7 @@ class DemissionModel(DelwaqModel):
             self.hydromodel_name = hydromodel._NAME
             self.hydromodel_root = hydromodel.root
 
-        self.logger.info(f"Preparing EM basemaps from hydromodel.")
+        self.logger.info("Preparing EM basemaps from hydromodel.")
 
         ### Select and build hydromaps from model ###
         # Initialise hydromaps
@@ -204,7 +204,7 @@ class DemissionModel(DelwaqModel):
             self.set_config("B4_nrofexch", option, lines_ini[option])
         # B5_boundlist
         lines_ini = {
-            "l1": f";'NodeID' 'Number' 'Type'",
+            "l1": ";'NodeID' 'Number' 'Type'",
         }
         for option in lines_ini:
             self.set_config("B5_boundlist", option, lines_ini[option])
@@ -223,14 +223,15 @@ class DemissionModel(DelwaqModel):
         non_highway_list: Union[str, List[str]] = None,
         country_fn: Union[str, gpd.GeoDataFrame] = None,
     ):
-        """Setup roads statistics needed for emission modelling.
+        """Prepare roads statistics needed for emission modelling.
 
         Adds model layers:
 
         * **km_highway_country** map: emission data with for each grid cell the total km
           of highway for the country the grid cell is in [km highway/country]
         * **km_other_country** map: emission data with for each grid cell the total km
-          of non highway roads for the country the grid cell is in [km other road/country]
+          of non highway roads for the country the grid cell is in [km other
+          road/country]
         * **km_highway_cell** map: emission data containing highway length per cell
           [km highway/cell]
         * **km_other_cell** map: emission data containing non-highway length per cell
@@ -364,7 +365,7 @@ class DemissionModel(DelwaqModel):
         timestepsecs: int,
         include_transport: bool = True,
     ):
-        """Setup Demission hydrological fluxes.
+        """Prepare Demission hydrological fluxes.
 
         Adds model layers:
 
@@ -511,9 +512,9 @@ class DemissionModel(DelwaqModel):
             self.set_config("B2_outputtimes", option, lines_ini[option])
 
         # B2_sysclock
-        timestepsec = timestep.days * 86400 + timestep.seconds
+        timestep.days * 86400 + timestep.seconds
         lines_ini = {
-            "l1": f"  1 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
+            "l1": "  1 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
         }
         for option in lines_ini:
             self.set_config("B2_sysclock", option, lines_ini[option])
@@ -588,7 +589,7 @@ class DemissionModel(DelwaqModel):
         super().read_config(skip=skip)
 
     def read_geometry(self):
-        """Read Delwaq EM geometry file"""
+        """Read Delwaq EM geometry file."""
         raise NotImplementedError()
 
     def write_geometry(self):
@@ -722,7 +723,7 @@ class DemissionModel(DelwaqModel):
 
     @property
     def nrofseg(self):
-        """Fast accessor to nrofseg property of pointer"""
+        """Fast accessor to nrofseg property of pointer."""
         if "nrofseg" in self.pointer:
             nseg = self.pointer["nrofseg"]
         else:
@@ -734,7 +735,7 @@ class DemissionModel(DelwaqModel):
 
     @property
     def nrofexch(self):
-        """Fast accessor to nrofexch property of pointer"""
+        """Fast accessor to nrofexch property of pointer."""
         if "nrofexch" in self.pointer:
             nexch = self.pointer["nrofexch"]
         else:
@@ -744,14 +745,17 @@ class DemissionModel(DelwaqModel):
 
     @property
     def fluxes(self):
-        """Fast accessor to fluxes property of pointer"""
+        """Fast accessor to fluxes property of pointer."""
         if "fluxes" in self.pointer:
             fl = self.pointer["fluxes"]
         else:
             # from config
             fl = self.get_config(
                 "B7_hydrology.l2",
-                fallback="Rainfall RunoffPav RunoffUnp Infiltr Exfiltr Overland Subsurface",
+                fallback=(
+                    "Rainfall RunoffPav RunoffUnp Infiltr "
+                    + "Exfiltr Overland Subsurface"
+                ),
             )
             fl = fl.split(" ")
             self.set_pointer(fl, "fluxes")

@@ -1,26 +1,26 @@
-"""Implement delwaq model class"""
+"""Implement delwaq model class."""
 
-import os
-from os.path import join, isfile
-from pathlib import Path
 import glob
-import numpy as np
-import pandas as pd
-import geopandas as gpd
-import xarray as xr
-import pyproj
 import logging
+import os
 import struct
 from datetime import datetime
+from os.path import isfile, join
+from pathlib import Path
+from typing import Dict, List, Optional, Union
+
+import geopandas as gpd
+import numpy as np
+import pandas as pd
+import pyproj
+import xarray as xr
 import xugrid as xu
-from typing import List, Union, Optional, Dict
+from hydromt import io, workflows
+from hydromt.models.model_grid import GridModel
 from tqdm import tqdm
 
-from hydromt.models.model_grid import GridModel
-from hydromt import workflows, io
-
-from .workflows import emissions, segments, hydrology, forcing
 from . import DATADIR
+from .workflows import emissions, forcing, hydrology, segments
 
 __all__ = ["DelwaqModel"]
 
@@ -36,7 +36,7 @@ PCR_VS_MAP = {
 
 
 class DelwaqModel(GridModel):
-    """This is the delwaq model class"""
+    """Delwaq model class."""
 
     _NAME = "delwaq"
     _CLI_ARGS = {"region": "setup_basemaps"}
@@ -111,16 +111,16 @@ class DelwaqModel(GridModel):
         fluxes: List[str] = ["sfw>sfw", "bd>sfw"],
         maps: List[str] = ["rivmsk", "lndslp", "strord", "N"],
     ):
-        """Setup the delwaq model schematization using the hydromodel region and
-        resolution. 
-        
-        Maps used and derived from the hydromodel are stored in a specific\ 
+        """
+        Prepare delwaq schematization using the hydromodel region and resolution.
+
+        Maps used and derived from the hydromodel are stored in a specific\
         hydromodel attribute. Build a D-Water Quality ("WQ") case.\
         The pointer will be created based on the ``fluxes`` list
         between surface water and boundaries.
-        
+
         Adds model layers:
-        
+
         * **ldd** hydromap: flow direction [-]
         * **modelmap** hydromap: mask map [bool]
         * **ptid** hydromap: unique ID of Delwaq segments [-]
@@ -138,22 +138,22 @@ class DelwaqModel(GridModel):
             Dictionary describing region of interest.
             Currently supported format is {'wflow': 'path/to/wflow_model'}
         mask : str, optional
-            Mask used to define Delwaq segments. Either "basins" (default) or "rivers".        
+            Mask used to define Delwaq segments. Either "basins" (default) or "rivers".
         surface_water : str, optional
-            Name of the surface water layer. Used to identify fluxes to and from surface 
+            Name of the surface water layer. Used to identify fluxes to and from surface
             waters in the fluxes list. By default 'sfw'.
         boundaries: list of str, optional
             List of names of boundaries to include. By default a unique boundary called
             'bd'.
         fluxes: list of str
-            List of fluxes to include between surface water/boundaries. Name convention 
-            is '{surface_water}>{boundary_name}' for a flux from athe surface water to a 
-            boundary, ex 'sfw>bd'. By default ['sfw>sfw', 'bd>sfw'] for runoff and 
+            List of fluxes to include between surface water/boundaries. Name convention
+            is '{surface_water}>{boundary_name}' for a flux from athe surface water to a
+            boundary, ex 'sfw>bd'. By default ['sfw>sfw', 'bd>sfw'] for runoff and
             inwater.
-            Names in the fluxes list should match name in the hydrology_fn source in 
+            Names in the fluxes list should match name in the hydrology_fn source in
             setup_hydrology_forcing.
         maps: list of str
-            List of variables from hydromodel to add to grid. 
+            List of variables from hydromodel to add to grid.
             By default ['rivmsk', 'lndslp', 'strord', 'N'].
         """
         # Initialise hydromodel from region
@@ -169,7 +169,7 @@ class DelwaqModel(GridModel):
             self.hydromodel_name = hydromodel._NAME
             self.hydromodel_root = hydromodel.root
 
-        self.logger.info(f"Preparing WQ basemaps from hydromodel.")
+        self.logger.info("Preparing WQ basemaps from hydromodel.")
 
         ### Select and build hydromaps from model ###
         # Initialise hydromaps
@@ -248,7 +248,7 @@ class DelwaqModel(GridModel):
             self.set_config("B4_nrofexch", option, lines_ini[option])
         # B5_boundlist
         lines_ini = {
-            "l1": f";'NodeID' 'Number' 'Type'",
+            "l1": ";'NodeID' 'Number' 'Type'",
         }
         for i in range(len(bd_id)):
             lstr = "l" + str(i + 2)
@@ -266,7 +266,7 @@ class DelwaqModel(GridModel):
             self.set_config("B7_fluxes", option, lines_ini[option])
 
     def setup_monitoring(self, mon_points: str = None, mon_areas: str = None, **kwargs):
-        """Setup Delwaq monitoring points and areas options.
+        """Prepare Delwaq monitoring points and areas options.
 
         Adds model layers:
 
@@ -323,7 +323,7 @@ class DelwaqModel(GridModel):
 
         # Monitoring areas domain
         monareas = None
-        if mon_areas != None:
+        if mon_areas is not None:
             if mon_areas == "subcatch":  # subcatch
                 basins = self.hydromaps["basins"].copy()
                 # Number or monitoring areas
@@ -440,7 +440,7 @@ class DelwaqModel(GridModel):
         min_volume: float = 0.1,
         override: List = [],
     ):
-        """Setup Delwaq hydrological fluxes.
+        """Prepare Delwaq hydrological fluxes.
 
         As the fluxes order should precisely macth the pointer defined in
         setup_basemaps, the variables names in ``hydro_forcing_fn`` should match names
@@ -480,7 +480,8 @@ class DelwaqModel(GridModel):
             Names of fluxes should match those as set in the ``fluxes`` list of
             setup_basemaps methods (pointer creation).
 
-            * Required variables (to be deprecated): ['time', 'run', 'vol' or 'lev', 'inwater']
+            * Required variables (to be deprecated): ['time', 'run', 'vol' or 'lev',
+            'inwater']
 
         startime : str
             Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
@@ -593,7 +594,7 @@ class DelwaqModel(GridModel):
         timestepsecs: int = 86400,
         particle_class: List[str] = ["IM1", "IM2", "IM3", "IM4", "IM5"],
     ):
-        """Setup Delwaq sediment fluxes.
+        """Prepare Delwaq sediment fluxes.
 
         Adds model layers:
 
@@ -656,7 +657,7 @@ class DelwaqModel(GridModel):
         temp_correction: bool = False,
         dem_forcing_fn: str = None,
     ):
-        """Setup Delwaq climate fluxes.
+        """Prepare Delwaq climate fluxes.
 
         Adds model layers:
 
@@ -698,7 +699,7 @@ class DelwaqModel(GridModel):
             single_var_as_array=False,
         )
         dem_forcing = None
-        if dem_forcing_fn != None:
+        if dem_forcing_fn is not None:
             dem_forcing = self.data_catalog.get_rasterdataset(
                 dem_forcing_fn,
                 geom=ds.raster.box,  # clip dem with forcing bbox for full coverage
@@ -735,7 +736,7 @@ class DelwaqModel(GridModel):
         fillna_value: int = 0.0,
         area_division: bool = False,
     ):
-        """Setup one or several emission map from raster data.
+        """Prepare one or several emission map from raster data.
 
         Adds model layer:
 
@@ -779,7 +780,7 @@ class DelwaqModel(GridModel):
         col2raster: str = "",
         rasterize_method: str = "value",
     ):
-        """Setup emission map from vector data.
+        """Prepare emission map from vector data.
 
         Adds model layer:
 
@@ -851,7 +852,7 @@ class DelwaqModel(GridModel):
         """
         self.logger.info(f"Preparing region_fn related parameter maps for {region_fn}.")
         if mapping_fn is None:
-            self.logger.warning(f"Using default mapping file.")
+            self.logger.warning("Using default mapping file.")
             mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
         # process emission factor maps
         gdf_org = self.data_catalog.get_geodataframe(
@@ -884,7 +885,7 @@ class DelwaqModel(GridModel):
 
     # I/O
     def read(self):
-        """Method to read the complete model schematization and configuration from file."""
+        """Read the complete model schematization and configuration from file."""
         self.read_config()
         self.read_geoms()
         self.read_hydromaps()
@@ -895,7 +896,7 @@ class DelwaqModel(GridModel):
         self.logger.info("Model read")
 
     def write(self):
-        """Method to write the complete model schematization and configuration to file."""
+        """Write the complete model schematization and configuration to file."""
         self.logger.info(f"Write model data to {self.root}")
         # if in r, r+ mode, only write updated components
         self.write_grid()
@@ -906,7 +907,7 @@ class DelwaqModel(GridModel):
         self.write_forcing()
 
     def read_grid(self, **kwargs):
-        """Read grid at <root/staticdata> and parse to xarray"""
+        """Read grid at <root/staticdata> and parse to xarray."""
         fn = join(self.root, "staticdata", "staticdata.nc")
         super().read_grid(fn, **kwargs)
 
@@ -951,11 +952,11 @@ class DelwaqModel(GridModel):
         self.write_monitoring(monpoints, monareas)
 
     def read_geoms(self):
-        """Read and geoms at <root/geoms> and parse to geopandas"""
+        """Read and geoms at <root/geoms> and parse to geopandas."""
         super().read_geoms(fn="geoms/*.geojson")
 
     def write_geoms(self):
-        """Write grid at <root/geoms> in model ready format"""
+        """Write grid at <root/geoms> in model ready format."""
         # to write use self.geoms[var].to_file()
         super().write_geoms(fn="geoms/{name}.geojson", driver="GeoJSON")
 
@@ -974,7 +975,7 @@ class DelwaqModel(GridModel):
         super().read_config()
 
         # Add the other files in the config folder
-        config_fns = glob.glob(join(self.root, "config", f"*.inc"))
+        config_fns = glob.glob(join(self.root, "config", "*.inc"))
         for fn in config_fns:
             name = os.path.splitext(os.path.basename(fn))[0]
             if name in skip:
@@ -1000,7 +1001,7 @@ class DelwaqModel(GridModel):
                 exfile.close()
 
     def read_hydromaps(self, crs=None, **kwargs):
-        """Read hydromaps at <root/hydromodel> and parse to xarray"""
+        """Read hydromaps at <root/hydromodel> and parse to xarray."""
         self._assert_read_mode()
         self._initialize_hydromaps(skip_read=True)
         if "chunks" not in kwargs:
@@ -1008,7 +1009,7 @@ class DelwaqModel(GridModel):
         # Load grid data in r+ mode to allow overwritting netcdf files
         if self._read and self._write:
             kwargs["load"] = True
-        fns = glob.glob(join(self.root, "hydromodel", f"*.tif"))
+        fns = glob.glob(join(self.root, "hydromodel", "*.tif"))
         if len(fns) > 0:
             ds_hydromaps = io.open_mfraster(fns, **kwargs)
         if ds_hydromaps.raster.crs is None and crs is not None:
@@ -1035,7 +1036,7 @@ class DelwaqModel(GridModel):
         )
 
     def read_pointer(self):
-        """Read Delwaq pointer file"""
+        """Read Delwaq pointer file."""
         raise NotImplementedError()
 
     def write_pointer(self):
@@ -1059,13 +1060,17 @@ class DelwaqModel(GridModel):
             f.close()
 
     def read_forcing(self):
-        """Read and forcing at <root/?/> and parse to dict of xr.DataArray"""
+        """Read and forcing at <root/?/> and parse to dict of xr.DataArray."""
         self._assert_read_mode()
         self._forcing = dict()
         # raise NotImplementedError()
 
     def write_forcing(self, write_nc=False):
-        """Write grid at <root/staticdata> in binary format and NetCDF (if write_nc is True)."""
+        """
+        Write grid at <root/staticdata> in binary format.
+
+        Can also write a NetCDF copy if write_nc is True.
+        """
         self._assert_write_mode()
         if len(self.forcing) == 0:
             self.logger.debug("No forcing data found, skip writing.")
@@ -1161,24 +1166,24 @@ class DelwaqModel(GridModel):
                 )
 
     def read_states(self):
-        """Read states at <root/?/> and parse to dict of xr.DataArray"""
+        """Read states at <root/?/> and parse to dict of xr.DataArray."""
         self._assert_read_mode()
         self._states = dict()
         # raise NotImplementedError()
 
     def write_states(self):
-        """write states at <root/?/> in model ready format"""
+        """Write states at <root/?/> in model ready format."""
         self._assert_write_mode()
         raise NotImplementedError()
 
     def read_results(self):
-        """Read results at <root/?/> and parse to dict of xr.DataArray"""
+        """Read results at <root/?/> and parse to dict of xr.DataArray."""
         self._assert_read_mode()
         self._results = dict()
         # raise NotImplementedError()
 
     def write_results(self):
-        """write results at <root/?/> in model ready format"""
+        """Write results at <root/?/> in model ready format."""
         self._assert_write_mode()
         raise NotImplementedError()
 
@@ -1186,6 +1191,7 @@ class DelwaqModel(GridModel):
 
     @property
     def basins(self):
+        """Derive basins from geoms or hydromaps."""
         if "basins" in self.geoms:
             gdf = self.geoms["basins"]
         elif "basins" in self.hydromaps:
@@ -1196,7 +1202,7 @@ class DelwaqModel(GridModel):
 
     @property
     def hydromaps(self):
-        """xarray.dataset representation of all hydrology maps"""
+        """xarray.dataset representation of all hydrology maps."""
         if self._hydromaps is None:
             self._initialize_hydromaps()
         return self._hydromaps
@@ -1213,7 +1219,7 @@ class DelwaqModel(GridModel):
         data: Union[xr.DataArray, xr.Dataset, np.ndarray],
         name: Optional[str] = None,
     ):
-        """Add data to hydromaps re-using the set_grid method"""
+        """Add data to hydromaps re-using the set_grid method."""
         self._initialize_hydromaps()
         name_required = isinstance(data, np.ndarray) or (
             isinstance(data, xr.DataArray) and data.name is None
@@ -1268,12 +1274,13 @@ class DelwaqModel(GridModel):
         return self._pointer
 
     def set_pointer(self, attr, name):
-        """Add model attribute property to pointer"""
+        """Add model attribute property to pointer."""
         # Check that pointer attr is a four column np.array
         if name == "pointer":
             if not isinstance(attr, np.ndarray) and attr.shape[1] == 4:
                 self.logger.warning(
-                    "pointer values in self.pointer should be a np.ndarray with four columns."
+                    "pointer values in self.pointer should be a"
+                    "np.ndarray with four columns."
                 )
                 return
         elif np.isin(name, ["csurface_water", "boundaries", "fluxes"]):
@@ -1295,7 +1302,7 @@ class DelwaqModel(GridModel):
 
     @property
     def nrofseg(self):
-        """Fast accessor to nrofseg property of pointer"""
+        """Fast accessor to nrofseg property of pointer."""
         if "nrofseg" in self.pointer:
             nseg = self.pointer["nrofseg"]
         else:
@@ -1307,7 +1314,7 @@ class DelwaqModel(GridModel):
 
     @property
     def nrofexch(self):
-        """Fast accessor to nrofexch property of pointer"""
+        """Fast accessor to nrofexch property of pointer."""
         if "nrofexch" in self.pointer:
             nexch = self.pointer["nrofexch"]
         elif "pointer" in self.pointer:
@@ -1325,7 +1332,7 @@ class DelwaqModel(GridModel):
 
     @property
     def surface_water(self):
-        """Fast accessor to surface_water name property of pointer"""
+        """Fast accessor to surface_water name property of pointer."""
         if "surface_water" in self.pointer:
             sfw = self.pointer["surface_water"]
         else:
@@ -1341,7 +1348,7 @@ class DelwaqModel(GridModel):
 
     @property
     def fluxes(self):
-        """Fast accessor to fluxes property of pointer"""
+        """Fast accessor to fluxes property of pointer."""
         if "fluxes" in self.pointer:
             fl = self.pointer["fluxes"]
         else:
@@ -1364,8 +1371,9 @@ class DelwaqModel(GridModel):
         mode="a",
     ):
         """
-        Writes a timestep to a segment/exchange data file (appends to an existing
-        file or creates a new one).
+        Write a timestep to a segment/exchange data file.
+
+        Either appends to an existing file or creates a new one.
 
         Input:
             - time - timestep number for this timestep
@@ -1412,7 +1420,7 @@ class DelwaqModel(GridModel):
 
     def write_monitoring(self, monpoints, monareas):
         """
-        Writes monitoring files and config in ASCII format.
+        Write monitoring files and config in ASCII format.
 
         Input:
             - monpoints - xr.DataArray of monitoring points location
@@ -1490,7 +1498,7 @@ class DelwaqModel(GridModel):
             exfile.close()
 
     def write_waqgeom(self):
-        """Writes Delwaq netCDF geometry file (config/B3_waqgeom.nc)."""
+        """Write Delwaq netCDF geometry file (config/B3_waqgeom.nc)."""
         # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
         # TODO: Update for several layers
         self.logger.info("Writting waqgeom.nc file")
@@ -1506,7 +1514,7 @@ class DelwaqModel(GridModel):
         # Wflow map dimensions
         m, n = np_ptid.shape
         # Number of segments in horizontal dimension
-        nosegh = int(np.max(np_ptid)) + 1  # because of the zero based
+        int(np.max(np_ptid)) + 1  # because of the zero based
         # Get LDD map
         np_ldd = self.hydromaps["ldd"].squeeze(drop=True).values
         np_ldd[np_ldd == self.hydromaps["ldd"].raster.nodata] = 0

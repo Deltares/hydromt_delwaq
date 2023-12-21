@@ -11,15 +11,15 @@ INCLUDE 'config\B1_timestamp.inc'
 
  1    0
 
-;Nr      Name        
-1       cTR1      ;   
+;Nr      Name
+1       cTR1      ;
 #1;
 
 ;###############################################################################
 ; Second input block
   86400  'DDHHMMSS' 'DDHHMMSS'  ; system clock
 
-    15.73                      ; integration option 
+    15.73                      ; integration option
    BAL_NOLUMPPROCESSES
    BAL_NOLUMPLOADS
    BAL_NOLUMPTRANSPORT
@@ -54,20 +54,20 @@ INCLUDE 'config\B3_nrofseg.inc'
 
 
       2                     ; grid layout not used
-      
+
 ;      0                     ; constant property arrays
 ;      0                     ; time varying property arrays
 INCLUDE 'config\B3_attributes.inc'
 
 
- 
+
       -2                     ; volumes in external file
 'dynamicdata\volume.dat'
 
 #3;
 ;###############################################################################
 ; Fourth input block
-; 
+;
 INCLUDE 'config\B4_nrofexch.inc'
 
       0                     ; # of dispersion arrays
@@ -76,19 +76,19 @@ INCLUDE 'config\B4_nrofexch.inc'
       1                     ; exchange pointers in this file
 INCLUDE 'config\B4_pointer.inc'
 
- 
+
       1                     ; dispersions in this file
      1.0      1.0     1.0   ; scale factors in 3 directions
      0.0      0.0     0.0   ; values in 3 directions
-     
+
       1                     ; areas in this file
       2                     ; constant, defaults
      1.0      1.0           ; scale and value
       0
-      
+
      -2                     ; flows in binary file
-'dynamicdata\flow.dat'      
-     
+'dynamicdata\flow.dat'
+
       0                     ; constant length
      1.0                    ; scale factor
      1.0      1.0     1.0   ; values in 3 directions
@@ -135,7 +135,7 @@ PARAMETERS Surf ALL BINARY_FILE 'staticdata\surface.dat'
 
 INITIALS  cTR1 DEFAULTS  0.0
 
- 
+
 #8
 ;###############################################################################
 ; Ninth input block
@@ -144,8 +144,8 @@ INITIALS  cTR1 DEFAULTS  0.0
  0                                           		; Grid-file
  1                                                      ; His
  1                                                      ; Map
-         
- 
+
+
  ; Binary/Nefis and History/Map
  1                                           		; switch on  binary History file
  1                                           		; switch on  binary Map     file

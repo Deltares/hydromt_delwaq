@@ -3,7 +3,7 @@
 Explaining the D-Emission - D-Water Quality coupling
 ----------------------------------------------------
 
-HydroMT can help you prepare models for DELWAQ and uses a generic single substance version of D-Emission that can be coupled with D-Water Quality. 
+HydroMT can help you prepare models for DELWAQ and uses a generic single substance version of D-Emission that can be coupled with D-Water Quality.
 The single substance D-Emissions model writes its emission data into two files, always called:
 
 - outdata_em.bin
@@ -25,7 +25,7 @@ Link with the outputs from D-Emissions
 
 In the D-Water Quality connection with (the single-substance version of) D-Emissions, there are two ways to provide the outputs of the D-Emissions run to the WQ model for a tracer **TRA**:
 
-- Copy the outputs of the D-Emissions model run *outdata_em.bin* and *outdata_em.txt* and paste them in the WQ model directory. Rename them following the tracer 
+- Copy the outputs of the D-Emissions model run *outdata_em.bin* and *outdata_em.txt* and paste them in the WQ model directory. Rename them following the tracer
   convention: *TRA_em.bin* and *TRA_em.txt*.
 
 OR
@@ -43,7 +43,7 @@ OR
 
 .. _coupling_delwaq_multiple:
 
-Linking multiple D-Emissions models with D-Water Quality 
+Linking multiple D-Emissions models with D-Water Quality
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the case that multiple D-Emissions model runs are carried out, e.g. for total nitrogen (TN) and total phosphorus (TP), it is up to the user to manage these files and avoid that the results for TP overwrite those for TN. This can easily be done in a batch script using the following commandlines:
@@ -52,15 +52,15 @@ In the case that multiple D-Emissions model runs are carried out, e.g. for total
 
 	copy outdata_em.txt %1_em.txt
 	copy outdata_em.bin %1_em.bin
-	erase outdata_em.txt 
+	erase outdata_em.txt
 	erase outdata_em.bin
-	
+
 	#where %1 matches the run-id equal to the input filename, %1.inp
 
-D-Water Quality is equipped with a series of processes able to read these files and translate them into the appropriate state variables (e.g. NH4, NO3, PON1 etc. for TN; AAP, 
+D-Water Quality is equipped with a series of processes able to read these files and translate them into the appropriate state variables (e.g. NH4, NO3, PON1 etc. for TN; AAP,
 PO4, POP1 for TP). This allows D-Water Quality to simulate their fate in the surface water using standard processes from the library.
 
-This series of processes is called EM_xxx and is currently still embedded in an open processes library dll. This implies that they need to be manually merged into the D-Water Quality 
+This series of processes is called EM_xxx and is currently still embedded in an open processes library dll. This implies that they need to be manually merged into the D-Water Quality
 proc_def file. After correct functioning has been demonstrated, integration with the standard open source version of D-Water Quality is foreseen.
 
 Every individual EM_xxx process extracts by default its EM data from the following files, assumed to be present in the working directory:
@@ -72,7 +72,7 @@ Alternatively, these filenames can be read from a file assumed to be present in 
 
 - xxx_em.def
 
-The functionality to distribute the emission data over several state variables (also known as “USEFOR” functionality) is included in the EM_xxx process. Input can be provided by the 
+The functionality to distribute the emission data over several state variables (also known as “USEFOR” functionality) is included in the EM_xxx process. Input can be provided by the
 user in the regular way.
 
 In order to connect a D-Water Quality simulation to one or more D-Emissions runs, the following steps need to be taken.
@@ -92,20 +92,20 @@ Let XXX be the variable for which D-Emissions has calculated emissions. The user
 The table below lists the currently available options for xxx, and the equivalent definitions.
 
 ==== ============================= =========== ===============================
-xxx  EM files                      WQ process  Input to WQ process            
+xxx  EM files                      WQ process  Input to WQ process
 ==== ============================= =========== ===============================
-BOD  BOD_em.bin and BOD_em.txt OR  EM_BOD      n.a. (all emissions to CBODu)  
-     BOD_em.def                                                               
-TNI  TNI_em.bin and TNI_em.txt OR  EM_TNI      TNItoNH4, TNItoNO3, TNItoPON1, 
-     TNI_em.def                                TNItoPON2, TNItoDON            
-TPH  TPH_em.bin and TPH_em.txt OR  EM_TPH      TPHtoPO4, TPHtoAAP, TPHtoPOP1, 
-     TPH_em.def                                TPHtoPOP2, TPHtoDOP            
-TSS  TSS_em.bin and TSS_em.txt OR  EM_TSS      TSStoIM1, TSStoIM2,            
-     TSS_em.def                                TSStoIM3                       
-COL  COL_em.bin and COL_em.txt OR  EM_COL      COLtoEColi, COLtoFColi,        
-     COL_em.def                                COLtoTColi                     
-TRA  TRA_em.bin and TRA_em.txt OR  EM_TRA      n.a. (all emissions to cTR1)   
-     TRA_em.def                                                               
+BOD  BOD_em.bin and BOD_em.txt OR  EM_BOD      n.a. (all emissions to CBODu)
+     BOD_em.def
+TNI  TNI_em.bin and TNI_em.txt OR  EM_TNI      TNItoNH4, TNItoNO3, TNItoPON1,
+     TNI_em.def                                TNItoPON2, TNItoDON
+TPH  TPH_em.bin and TPH_em.txt OR  EM_TPH      TPHtoPO4, TPHtoAAP, TPHtoPOP1,
+     TPH_em.def                                TPHtoPOP2, TPHtoDOP
+TSS  TSS_em.bin and TSS_em.txt OR  EM_TSS      TSStoIM1, TSStoIM2,
+     TSS_em.def                                TSStoIM3
+COL  COL_em.bin and COL_em.txt OR  EM_COL      COLtoEColi, COLtoFColi,
+     COL_em.def                                COLtoTColi
+TRA  TRA_em.bin and TRA_em.txt OR  EM_TRA      n.a. (all emissions to cTR1)
+     TRA_em.def
 ==== ============================= =========== ===============================
 
 So, for illustration, to set up a model for nitrogen and phosphorus, the user has to provide:

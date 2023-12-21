@@ -38,11 +38,16 @@ dynamic = ['version', 'description']
 extra = [
     "xclim",
 ]
-
+dev = [
+    "black",
+    "ruff",
+    "pre-commit",
+    "pip>=23.1.2",
+]
 test = [
 	"pytest>=2.7.3",
 	"pytest-cov",
-	"black",
+	"hydromt_delwaq[dev, extra]",
 ]
 doc = [
     "nbsphinx",
@@ -50,7 +55,16 @@ doc = [
     "sphinx_design",
     "pydata-sphinx-theme",
     "sphinx_autosummary_accessors",
+    "hydromt_delwaq[examples,extra]",
 ]
+examples = [
+    "jupyterlab",
+    "cartopy",
+    "matplotlib",
+    "notebook",
+]
+full = ["hydromt_delwaq[extra,dev,test,doc,examples]"]
+slim = ["hydromt_delwaq[extra,examples]"]
 
 [project.urls]
 Documentation = "https://deltares.github.io/hydromt_delwaq/latest/"
@@ -62,7 +76,24 @@ demission = "hydromt_delwaq.demission:DemissionModel"
 
 [tool.black]
 line-length = 88
-target-version = ['py38']
+target-version = ['py39']
+
+[tool.ruff]
+line-length = 88
+
+# enable pydocstyle (E), pyflake (F) and isort (I), pytest-style (PT)
+select = ["E", "F", "I", "PT", "D"]
+ignore-init-module-imports = true
+ignore = ["D211", "D213", "E741", "D105", "E712"]
+exclude = ["docs"]
+
+[tool.ruff.per-file-ignores]
+"tests/**" = ["D103", "D100", "D104"]
+"hydromt_delwaq/__init__.py" = ["F403", "E402"]
+"hydromt_delwaq/workflows/__init__.py" = ["F403"]
+
+[tool.ruff.pydocstyle]
+convention = "numpy"
 
 [tool.flit.sdist]
 include = ["hydromt_delwaq"]
