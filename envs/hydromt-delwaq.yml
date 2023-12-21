@@ -33,5 +33,5 @@ dependencies:
   - xclim
   - xugrid
   - pip:
-   - sphinx_design # docs
+    - sphinx_design # docs
 
