@@ -8,30 +8,54 @@ wflow_output:
       lat: -1
       lon: -1
       time: 1
+    preprocess: harmonise_dims
   meta:
     category: hydro
   rename:
-    time: time
-    prec: precip
-    inf: infilt
-    runPav: runPav
-    runUnp: runUnp
-    inw_river: inwaterRiv
-    inw_land: inwaterLand
-    inwint: inwaterInternal
-    q_river: runRiv
-    q_land: runLand
-    vol_river: volRiv
-    vol_land: volLand
-  units:
-    precip: mm
-    infilt: mm
-    runPav: mm
-    runUnp: mm
-    inwaterRiv: m3/s
-    inwaterLand: m3/s
-    inwaterInternal: m3/s
-    runRiv: m3/s
-    runLand: m3/s
-    volRiv: m3
-    volLand: m3
+    q_ssf: q_ss
+    q_river: sfw>sfw_1
+    q_reservoir: sfw>sfw_2
+    q_lake: sfw>sfw_3
+    vol_river: sfw_1
+    vol_reservoir: sfw_2
+    vol_lake: sfw_3
+    land_to_river: land>sfw
+    ssf_to_river: soil>sfw
+  unit_mult:
+    q_ss: 0.0000115741
+    soil>sfw: 0.0000115741
+    sfw>sfw_2: 0.0000115741
+    sfw>sfw_3: 0.0000115741
+  attrs:
+    precip:
+      unit: mm
+    infilt:
+      unit: mm
+    runPav:
+      unit: mm
+    runUnp:
+      unit: mm
+    exfiltustore:
+      unit: mm
+    exfiltsatstore:
+      unit: mm
+    q_land:
+      unit: m3/s
+    q_ss:
+      unit: m3/s
+    sfw_1:
+      unit: m3
+    sfw_2:
+      unit: m3
+    sfw_3:
+      unit: m3
+    sfw>sfw_1:
+      unit: m3/s
+    sfw>sfw_2:
+      unit: m3/s
+    sfw>sfw_3:
+      unit: m3/s
+    land>sfw:
+      unit: m3/s
+    soil>sfw:
+      unit: m3/s

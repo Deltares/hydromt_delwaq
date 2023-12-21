@@ -1,2 +1,2 @@
 SEG_FUNCTIONS
-Rainfall RunoffPav RunoffUnp Infiltr TotalFlow 
+Rainfall RunoffPav RunoffUnp Infiltr Exfiltr Overland Subsurface
