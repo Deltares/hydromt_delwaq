@@ -35,7 +35,6 @@ Setup methods
    DelwaqModel.setup_emission_raster
    DelwaqModel.setup_emission_vector
    DelwaqModel.setup_emission_mapping
-   DelwaqModel.setup_roads
 
 Attributes
 ----------
