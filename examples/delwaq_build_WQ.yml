@@ -34,3 +34,7 @@ setup_hydrology_forcing:
   add_volume_offset: True
   override:
     - sfw>sfw
+
+write:
+
+write_waqgeom:

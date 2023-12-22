@@ -325,7 +325,11 @@ class DelwaqModel(GridModel):
         monareas = None
         if mon_areas is not None:
             if mon_areas == "subcatch":  # subcatch
-                basins = self.hydromaps["basins"].copy()
+                basins = xr.where(
+                    self.hydromaps["basins"] > 0,
+                    self.hydromaps["basins"],
+                    mv,
+                ).astype(np.int32)
                 # Number or monitoring areas
                 areas = basins.values.flatten()
                 areas = areas[areas != mv]
@@ -345,12 +349,12 @@ class DelwaqModel(GridModel):
                 monareas = lr_areas
 
             # Add to grid
-            self.set_grid(monareas.rename("monareas"))
-            self.grid["monareas"].attrs.update(_FillValue=mv)
-            self.grid["monareas"].attrs["mon_areas"] = mon_areas
+            monareas.attrs.update(_FillValue=mv)
+            monareas.attrs["mon_areas"] = mon_areas
+            self.set_grid(monareas, name="monareas")
 
             # Add to geoms
-            gdf_areas = self.grid["monareas"].raster.vectorize()
+            gdf_areas = self.grid["monareas"].astype(np.int32).raster.vectorize()
             self.set_geoms(gdf_areas, name="monareas")
         else:
             self.logger.info("No monitoring areas set in the config file, skipping")
@@ -1015,6 +1019,16 @@ class DelwaqModel(GridModel):
         if ds_hydromaps.raster.crs is None and crs is not None:
             ds_hydromaps.raster.set_crs(crs)
         ds_hydromaps.coords["mask"] = ds_hydromaps["modelmap"].astype(bool)
+        # When reading tif files, default lat/lon names are y/x
+        # Rename to name used in grid for consistency
+        if ds_hydromaps.raster.x_dim != self.grid.raster.x_dim:
+            ds_hydromaps = ds_hydromaps.rename(
+                {ds_hydromaps.raster.x_dim: self.grid.raster.x_dim}
+            )
+        if ds_hydromaps.raster.y_dim != self.grid.raster.y_dim:
+            ds_hydromaps = ds_hydromaps.rename(
+                {ds_hydromaps.raster.y_dim: self.grid.raster.y_dim}
+            )
         self.set_hydromaps(ds_hydromaps)
 
     def write_hydromaps(self):

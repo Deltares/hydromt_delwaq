@@ -1,9 +1,11 @@
 casename = "wflow_sbm"
 calendar = "proleptic_gregorian"
-starttime = "2010-02-01T00:00:00"
-endtime = "2010-02-10T00:00:00"
+starttime = 2010-02-02T00:00:00
+endtime = 2010-02-10T00:00:00
 time_units = "days since 1900-01-01 00:00:00"
 timestepsecs = 86400
+exfiltustore = "exfiltustore"
+exfiltsatwater = "exfiltsatstore"
 
 [state]
 path_input = "instate/instates.nc"
@@ -36,35 +38,6 @@ thicknesslayers = [ 100, 300, 800,]
 [output]
 path = "run_default/output.nc"
 compressionlevel = 1
-
-[output.vertical]
-precipitation = "precip"
-actinfilt = "infilt"
-excesswatersoil = "runUnp"
-excesswaterpath = "runPav"
-exfiltustore = "exfiltustore"
-exfiltsatwater = "exfiltsatstore"
-
-[output.lateral.land]
-q_av = "q_land"
-volume = "vol_land"
-to_river = "land_to_river"
-
-[output.lateral.subsurface]
-to_river = "ssf_to_river"
-ssf = "q_ssf"
-
-[output.lateral.river]
-q_av = "q_river"
-volume = "vol_river"
-
-[output.lateral.river.reservoir]
-volume = "vol_reservoir"
-totaloutflow = "q_reservoir"
-
-[output.lateral.river.lake]
-storage = "vol_lake"
-totaloutflow = "q_lake"
 
 [csv]
 path = "run_default/output.csv"
@@ -114,6 +87,14 @@ waterfrac = "WaterFrac"
 theta_r = "thetaR"
 theta_s = "thetaS"
 
+[output.vertical]
+precipitation = "precip"
+actinfilt = "infilt"
+excesswatersoil = "runUnp"
+excesswaterpath = "runPav"
+exfiltustore = "exfiltustore"
+exfiltsatwater = "exfiltsatstore"
+
 [state.lateral.river]
 q = "q_river"
 h = "h_river"
@@ -139,6 +120,19 @@ ksathorfrac = "KsatHorFrac"
 [input.lateral.land]
 n = "N"
 slope = "Slope"
+
+[output.lateral.land]
+q_av = "q_land"
+volume = "vol_land"
+to_river = "land_to_river"
+
+[output.lateral.subsurface]
+to_river = "ssf_to_river"
+ssf = "q_ssf"
+
+[output.lateral.river]
+q_av = "q_river"
+volume = "vol_river"
 
 [state.lateral.river.reservoir]
 volume = "volume_reservoir"
@@ -167,3 +161,11 @@ storfunc = "LakeStorFunc"
 threshold = "LakeThreshold"
 linkedlakelocs = "LinkedLakeLocs"
 waterlevel = "LakeAvgLevel"
+
+[output.lateral.river.reservoir]
+volume = "vol_reservoir"
+totaloutflow = "q_reservoir"
+
+[output.lateral.river.lake]
+storage = "vol_lake"
+totaloutflow = "q_lake"

@@ -4,3 +4,9 @@ setup_hydrology_forcing:
   endtime: "2010-02-10 00:00:00"
   timestepsecs: 86400
   include_transport: True
+
+write_config:
+
+write_forcing:
+
+write_waqgeom:
