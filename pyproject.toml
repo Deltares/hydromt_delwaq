@@ -47,6 +47,7 @@ dev = [
 test = [
 	"pytest>=2.7.3",
 	"pytest-cov",
+    "pytest-timeout",
 	"hydromt_delwaq[dev, extra]",
 ]
 doc = [

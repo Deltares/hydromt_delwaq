@@ -21,6 +21,7 @@ dependencies:
   - pytest # tests
   - pytest-cov # tests
   - pytest-benchmark # tests
+  - pytest-timeout # tests
   - python<=3.11
   - rasterio
   - scipy
