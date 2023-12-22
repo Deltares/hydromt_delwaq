@@ -2,8 +2,8 @@
 
 import logging
 import os
-from datetime import datetime
 from os.path import join
+from pathlib import Path
 from typing import Dict, List, Union
 
 import geopandas as gpd
@@ -11,10 +11,11 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 from hydromt import workflows
+from tqdm import tqdm
 
 from . import DATADIR
 from .delwaq import DelwaqModel
-from .workflows import emissions, roads, segments
+from .workflows import config, forcing, geometry, roads, segments
 
 __all__ = ["DemissionModel"]
 
@@ -57,14 +58,38 @@ class DemissionModel(DelwaqModel):
 
     def __init__(
         self,
-        root=None,
-        mode="w",
-        config_fn=None,
-        hydromodel_name="wflow",
-        hydromodel_root=None,
-        data_libs=None,
+        root: Union[str, Path] = None,
+        mode: str = "w",
+        config_fn: Union[str, Path] = None,
+        hydromodel_name: str = "wflow",
+        hydromodel_root: Union[str, Path] = None,
+        data_libs: List[Union[str, Path]] = None,
         logger=logger,
     ):
+        """Initialize a model.
+
+        Parameters
+        ----------
+        root : str, optional
+            Model root, by default None
+        mode : {'r','r+','w', 'w+'}, optional
+            read/append/write mode, by default "w"
+        config_fn : str or Path, optional
+            Model simulation configuration file, by default None.
+            Note that this is not the HydroMT model setup configuration file!
+        hydromodel_name : str, optional
+            Name of the hydromodel used to build the emission model. Only useful in
+            update mode as this is taken from the ``region`` argument in
+            **setup_basemaps** method. By default "wflow".
+        hydromodel_root : str or Path, optional
+            Root of the hydromodel used to build the emission model. Only useful in
+            update mode as this is taken from the ``region`` argument in
+            **setup_basemaps** method. By default None.
+        data_libs : List[str, Path], optional
+            List of data catalog configuration files, by default None
+        logger:
+            The logger to be used.
+        """
         super().__init__(
             root=root,
             mode=mode,
@@ -124,12 +149,6 @@ class DemissionModel(DelwaqModel):
         ### Select and build hydromaps from model ###
         # Initialise hydromaps
         ds_hydro = segments.hydromaps(hydromodel)
-        # Add mask
-        da_mask = ds_hydro["basmsk"]
-        ds_hydro = ds_hydro.drop_vars(["rivmsk", "basmsk"])
-        ds_hydro.coords["mask"] = da_mask
-        ds_hydro["modelmap"] = da_mask.astype(np.int32)
-        ds_hydro["modelmap"].raster.set_nodata(0)
         # Add to hydromaps
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_hydro.data_vars}
         self.set_hydromaps(ds_hydro.rename(rmdict))
@@ -152,68 +171,23 @@ class DemissionModel(DelwaqModel):
         self.grid.coords["mask"] = self.hydromaps["mask"]
 
         ### Geometry data ###
-        surface = emissions.gridarea(hydromodel.grid)
-        surface.raster.set_nodata(np.nan)
-        geom = surface.rename("surface").to_dataset()
-        # For EM type build a pointer like object and add to self.geometry
-        geom["fPaved"] = hydromodel.grid["PathFrac"]
-        geom["fOpenWater"] = hydromodel.grid["WaterFrac"]
-        geom["fUnpaved"] = (
-            (geom["fPaved"] * 0.0 + 1.0) - geom["fPaved"] - geom["fOpenWater"]
+        geometry_data = geometry.compute_geometry(
+            ds=hydromodel.grid, mask=self.grid["mask"]
         )
-        geom["fUnpaved"] = xr.where(geom["fUnpaved"] < 0.0, 0.0, geom["fUnpaved"])
-
-        mask = self.grid["mask"].values.flatten()
-        for dvar in ["surface", "fPaved", "fUnpaved", "fOpenWater"]:
-            data = geom[dvar].values.flatten()
-            data = data[mask].reshape(nrofseg, 1)
-            if dvar == "surface":
-                geometry = data
-            else:
-                geometry = np.hstack((geometry, data))
         self._geometry = pd.DataFrame(
-            geometry, columns=(["TotArea", "fPaved", "fUnpaved", "fOpenWater"])
+            geometry_data, columns=(["TotArea", "fPaved", "fUnpaved", "fOpenWater"])
         )
 
         ### Config ###
-        # B3_nrofseg
-        lines_ini = {
-            "l1": f"{nrofseg} ; nr of segments",
-        }
-        for option in lines_ini:
-            self.set_config("B3_nrofseg", option, lines_ini[option])
-        # B3_attributes
-        lines_ini = {
-            "l1": "      ; DELWAQ_COMPLETE_ATTRIBUTES",
-            "l2": " 1    ; one block with input",
-            "l3": " 2    ; number of attributes, they are :",
-            "l4": "     1     2",
-            "l5": " 1    ; file option in this file",
-            "l6": " 1    ; option without defaults",
-            "l7": f"     {int(nrofseg)}*01 ; EM",
-            "l8": " 0    ; no time dependent attributes",
-        }
-        for option in lines_ini:
-            self.set_config("B3_attributes", option, lines_ini[option])
-        # B4_nrofexch
-        nrexch = 0
-        lines_ini = {
-            "l1": f"{nrexch} 0 0 ; x, y, z direction",
-        }
-        for option in lines_ini:
-            self.set_config("B4_nrofexch", option, lines_ini[option])
-        # B5_boundlist
-        lines_ini = {
-            "l1": ";'NodeID' 'Number' 'Type'",
-        }
-        for option in lines_ini:
-            self.set_config("B5_boundlist", option, lines_ini[option])
-        # B7_Surf
-        lines_ini = {
-            "l1": f"PARAMETERS Surf ALL DATA {nrofseg}*1.0",
-        }
-        for option in lines_ini:
-            self.set_config("B7_surf", option, lines_ini[option])
+        configs = config.base_config(
+            nrofseg=nrofseg,
+            nrofexch=0,
+            layer_name="EM",
+            add_surface=True,
+        )
+        for file in configs:
+            for option in configs[file]:
+                self.set_config(file, option, configs[file][option])
 
     def setup_roads(
         self,
@@ -260,102 +234,46 @@ class DemissionModel(DelwaqModel):
             * Required variables: ['country_code']
 
         """
-        # Convert string to lists
-        if not isinstance(highway_list, list):
-            highway_list = [highway_list]
-        if not isinstance(country_list, list):
-            country_list = [country_list]
-
-        # Mask the road data with countries of interest
-        gdf_country = self.data_catalog.get_geodataframe(country_fn, dst_crs=self.crs)
-        gdf_country = gdf_country.astype({"country_code": "str"})
-        gdf_country = gdf_country.iloc[
-            np.isin(gdf_country["country_code"], country_list)
-        ]
-
-        # Read the roads data and mask with country geom
-        gdf_roads = self.data_catalog.get_geodataframe(
-            roads_fn, dst_crs=self.crs, geom=gdf_country, variables=["road_type"]
-        )
-        # Make sure road type is str format
-        gdf_roads["road_type"] = gdf_roads["road_type"].astype(str)
-        # Get non_highway_list
-        if non_highway_list is None:
-            road_types = np.unique(gdf_roads["road_type"].values)
-            non_highway_list = road_types[~np.isin(road_types, highway_list)].tolist()
-        elif not isinstance(non_highway_list, list):
-            non_highway_list = [non_highway_list]
-
-        # Feature filter for highway and non-highway
-        feature_filter = {
-            "hwy": {"road_type": highway_list},
-            "nnhwy": {"road_type": non_highway_list},
-        }
-
         ### Country statistics ###
-        # Loop over feature_filter
-        for name, colfilter in feature_filter.items():
-            self.logger.info(
-                f"Computing {name} roads statistics per country of interest"
+        # Mask the road data with countries of interest
+        if country_fn is not None:
+            if not isinstance(country_list, list):
+                country_list = [country_list]
+            gdf_country = self.data_catalog.get_geodataframe(
+                country_fn, dst_crs=self.crs
             )
-            # Filter gdf
-            colname = [k for k in colfilter.keys()][0]
-            subset_roads = gdf_roads.iloc[
-                np.isin(gdf_roads[colname], colfilter.get(colname))
+            gdf_country = gdf_country.astype({"country_code": "str"})
+            gdf_country = gdf_country.iloc[
+                np.isin(gdf_country["country_code"], country_list)
             ]
-            gdf_country = roads.zonal_stats(
-                gdf=subset_roads,
-                zones=gdf_country,
-                variables=["length"],
-                stats=["sum"],
-                method="sjoin",
+            # Read the roads data and mask with country geom
+            gdf_roads = self.data_catalog.get_geodataframe(
+                roads_fn, dst_crs=self.crs, geom=gdf_country, variables=["road_type"]
             )
-            gdf_country = gdf_country.rename(
-                columns={"length_sum": f"{name}_length_sum"}
-            )
-            # Convert from m to km
-            gdf_country[f"{name}_length_sum"] = gdf_country[f"{name}_length_sum"] / 1000
-
-            # Rasterize statistics
-            da_emi = emissions.emission_vector(
-                gdf=gdf_country,
-                ds_like=self.grid,
-                col_name=f"{name}_length_sum",
-                method="value",
-                mask_name="mask",
+            # Compute country statistics
+            ds_country = roads.roads_emissions_country(
+                gdf_roads=gdf_roads,
+                highway_list=highway_list,
+                non_highway_list=non_highway_list,
                 logger=self.logger,
             )
-            self.set_grid(da_emi.rename(f"{name}_length_sum_country"))
+            # Add to grid
+            self.set_grid(ds_country)
 
         ### Road statistics per segment ###
-        # Filter road gdf with model mask
+        # Filter road gdf with model mask instead of whole country
         mask = self.grid["mask"].astype("int32").raster.vectorize()
         gdf_roads = self.data_catalog.get_geodataframe(
             roads_fn, dst_crs=self.crs, geom=mask, variables=["road_type"]
         )
-        # Make sure road type is str format
-        gdf_roads["road_type"] = gdf_roads["road_type"].astype(str)
-
-        # Loop over feature_filter
-        for name, colfilter in feature_filter.items():
-            self.logger.info(f"Computing {name} roads statistics per segment")
-            # Filter gdf
-            colname = [k for k in colfilter.keys()][0]
-            subset_roads = gdf_roads.iloc[
-                np.isin(gdf_roads[colname], colfilter.get(colname))
-            ]
-            ds_roads = roads.zonal_stats_grid(
-                gdf=subset_roads,
-                ds_like=self.grid,
-                variables=["length"],
-                stats=["sum"],
-                mask_name="mask",
-                method="overlay",
-            )
-            # Convert from m to km and rename
-            ds_roads[f"{name}_length"] = ds_roads["length_sum"] / 1000
-            ds_roads[f"{name}_length"].attrs.update(_FillValue=0)
-            self.set_grid(ds_roads)
+        # Compute segment statistics
+        ds_segments = roads.roads_emissions_segment(
+            gdf_roads=gdf_roads,
+            highway_list=highway_list,
+            non_highway_list=non_highway_list,
+            logger=self.logger,
+        )
+        self.set_grid(ds_segments)
 
     def setup_hydrology_forcing(
         self,
@@ -382,7 +300,7 @@ class DemissionModel(DelwaqModel):
 
         Parameters
         ----------
-        hydro_forcing_fn : {'None', 'name in local_sources.yml'}
+        hydro_forcing_fn : {'name in local_sources.yml'}
             Either None, or name in a local or global data_sources.yml file.
 
             * Required variables for EM: ['time', 'precip', 'runPav', 'runUnp',
@@ -400,12 +318,6 @@ class DemissionModel(DelwaqModel):
             If True, includes additional fluxes for land and subsurface transport
             [precip, runPav, runUnp, infilt, exfilt, q_land, q_ss].
         """
-        if hydro_forcing_fn not in self.data_catalog:
-            self.logger.warning(
-                f"None or Invalid source '{hydro_forcing_fn}', "
-                "skipping setup_hydrology_forcing."
-            )
-            return
         self.logger.info(
             f"Setting dynamic data from hydrology source {hydro_forcing_fn}."
         )
@@ -417,129 +329,32 @@ class DemissionModel(DelwaqModel):
             time_tuple=(starttime, endtime),
         )
 
-        # Select variables based on model type
-        vars = ["precip", "runPav", "runUnp", "infilt"]
-        if include_transport:
-            vars.extend(["q_land", "q_ss"])
-            ex_vars = [v for v in ds_in.data_vars if v.startswith("exfilt")]
-            vars.extend(ex_vars)
-        ds = ds_in[vars]
-
         # Update model timestepsecs attribute
         self.timestepsecs = timestepsecs
 
-        # Unit conversion (from mm to m3/s)
-        for dvar in ds.data_vars.keys():
-            if ds[dvar].attrs.get("unit") == "mm":
-                attrs = ds[dvar].attrs.copy()
-                surface = emissions.gridarea(ds)
-                ds[dvar] = ds[dvar] * surface / (1000 * self.timestepsecs)
-                ds[dvar].attrs.update(attrs)  # set original attributes
-                ds[dvar].attrs.update(unit="m3/s")
-
-        # Sum up exfiltrattion or add totflw depending on include_transport
-        if include_transport:
-            # Add exfiltration (can be split into several variables)
-            # Check if the flux is split into several variables
-            ex_vars = [v for v in ds.data_vars if v.startswith("exfilt")]
-            if len(ex_vars) > 1:  # need to sum
-                attrs = ds[ex_vars[0]].attrs.copy()
-                nodata = ds[ex_vars[0]].raster.nodata
-                # Cover exfilt with zeros (some negative zeros in wflow outputs?)
-                ds["exfilt"] = ds[ex_vars].fillna(0).to_array().sum("variable")
-                ds["exfilt"] = ds["exfilt"].where(ds["exfilt"] > 0.0, 0.0)
-                ds["exfilt"].attrs.update(attrs)
-                ds["exfilt"].raster.set_nodata(nodata)
-                ds = ds.drop_vars(ex_vars)
-            elif ex_vars[0] != "exfilt":
-                ds = ds.rename({ex_vars[0]: "exfilt"})
-        else:
-            # Add total flow
-            ds["totflw"] = ds["precip"].copy()
-
-        # align forcing file with hydromaps
-        # as hydro forcing comes from hydro model, it should be aligned with hydromaps
-        if not ds.raster.identical_grid(self.hydromaps):
-            self.logger.warning(
-                "hydro_forcing_fn and model grid are not identical. Reprojecting."
-            )
-            ds = ds.raster.reproject_like(self.hydromaps)
-
-        # Add _FillValue to the data attributes
-        for dvar in ds.data_vars.keys():
-            nodata = ds[dvar].raster.nodata
-            if nodata is not None:
-                ds[dvar].attrs.update(_FillValue=nodata)
-            else:
-                ds[dvar].attrs.update(_FillValue=-9999.0)
-
-        # Add mask
-        ds.coords["mask"] = xr.DataArray(
-            dims=ds.raster.dims,
-            coords=ds.raster.coords,
-            data=self.hydromaps["modelmap"].values,
-            attrs=dict(_FillValue=self.hydromaps["mask"].raster.nodata),
+        # Compute hydrology forcing
+        ds = forcing.hydrology_forcing_em(
+            ds=ds_in,
+            ds_model=self.hydromaps,
+            timestepsecs=timestepsecs,
+            include_transport=include_transport,
+            logger=self.logger,
         )
 
         # Add to forcing
         self.set_forcing(ds)
 
-        # Add time info to config
-        ST = datetime.strptime(starttime, "%Y-%m-%d %H:%M:%S")
-        ET = datetime.strptime(endtime, "%Y-%m-%d %H:%M:%S")
-        # B1_timestamp
-        lines_ini = {
-            "l1": f"'T0: {ST.strftime('%Y.%m.%d %H:%M:%S')}  (scu=       1s)'",
-        }
-        for option in lines_ini:
-            self.set_config("B1_timestamp", option, lines_ini[option])
+        # Add timers info to config
+        time_config = config.time_config(
+            starttime=starttime,
+            endtime=endtime,
+            timestepsecs=timestepsecs,
+        )
+        for file in time_config:
+            for option in time_config[file]:
+                self.set_config(file, option, time_config[file][option])
 
-        # B2_outputtimes
-        STstr = ST.strftime("%Y/%m/%d-%H:%M:%S")
-        ETstr = ET.strftime("%Y/%m/%d-%H:%M:%S")
-        timestep = pd.Timedelta(ds.time.values[1] - ds.time.values[0])
-        hours = int(timestep.seconds / 3600)
-        minutes = int(timestep.seconds / 60)
-        seconds = int(timestep.seconds - minutes * 60)
-        minutes -= hours * 60
-        timestepstring = "%03d%02d%02d%02d" % (timestep.days, hours, minutes, seconds)
-        lines_ini = {
-            "l1": f"  {STstr}  {ETstr}  {timestepstring} ; mon/bal",
-            "l2": f"  {STstr}  {ETstr}  {timestepstring} ; map",
-            "l3": f"  {STstr}  {ETstr}  {timestepstring} ; his",
-        }
-        for option in lines_ini:
-            self.set_config("B2_outputtimes", option, lines_ini[option])
-
-        # B2_sysclock
-        timestep.days * 86400 + timestep.seconds
-        lines_ini = {
-            "l1": "  1 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
-        }
-        for option in lines_ini:
-            self.set_config("B2_sysclock", option, lines_ini[option])
-
-        # B2_timers
-        lines_ini = {
-            "l1": f"  {STstr} ; start time",
-            "l2": f"  {ETstr} ; stop time",
-            "l3": "  0 ; timestep constant",
-            "l4": "; dddhhmmss format for timestep",
-            "l5": f"{timestepstring} ; timestep",
-        }
-        for option in lines_ini:
-            self.set_config("B2_timers", option, lines_ini[option])
-
-        # B2_timers_only
-        lines_ini = {
-            "l1": f"  {STstr} ; start time",
-            "l2": f"  {ETstr} ; stop time",
-            "l3": "  0 ; timestep constant",
-        }
-        for option in lines_ini:
-            self.set_config("B2_timers_only", option, lines_ini[option])
-
-        # Add var info to config
+        # Add hydrology variables info to config
         if include_transport:
             l2 = "Rainfall RunoffPav RunoffUnp Infiltr Exfiltr Overland Subsurface"
         else:
@@ -624,7 +439,7 @@ class DemissionModel(DelwaqModel):
             print("PARAMETERS TotArea fPaved fUnpaved fOpenWater", file=fpa)
             fpa.close()
 
-    def write_forcing(self, write_nc=False):
+    def write_forcing(self, write_nc: bool = False):
         """Write forcing at <root/dynamicdata> in binary format.
 
         Can also write a netcdf copy if ``write_nc`` is True.
@@ -665,10 +480,10 @@ class DemissionModel(DelwaqModel):
         timestepstamp = np.arange(
             0, (len(ds_out.time.values) + 1) * int(self.timestepsecs), self.timestepsecs
         )
-        for i in timesteps:
-            self.logger.info(
-                f"Writting dynamic data for timestep {i+1}/{timesteps[-1]+1}"
-            )
+        for i in tqdm(timesteps, desc="Writing dynamic data"):
+            # self.logger.info(
+            #    f"Writting dynamic data for timestep {i+1}/{timesteps[-1]+1}"
+            # )
             fname = join(self.root, "dynamicdata", "hydrology.bin")
             datablock = []
             dvars = ["precip", "runPav", "runUnp", "infilt"]

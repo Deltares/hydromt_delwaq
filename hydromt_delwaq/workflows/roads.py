@@ -1,16 +1,31 @@
 """Workflow for roads data."""
 
 import logging
+from typing import Dict, List
 
 import geopandas as gpd
 import numpy as np
+import xarray as xr
+
+from .emissions import emission_vector
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["zonal_stats", "zonal_stats_grid"]
+__all__ = [
+    "zonal_stats",
+    "zonal_stats_grid",
+    "roads_emissions_country",
+    "roads_emissions_segments",
+]
 
 
-def zonal_stats(gdf, zones, variables=[], stats=[], method="overlay"):
+def zonal_stats(
+    gdf: gpd.GeoDataFrame,
+    zones: gpd.GeoDataFrame,
+    variables: List[str] = [],
+    stats: List[str] = [],
+    method: str = "overlay",
+) -> gpd.GeoDataFrame:
     """Calculate zonal statisctics of vector samples aggregated for geometries.
 
     Adds new columns variables to the zones GeoDataFrame:
@@ -121,7 +136,7 @@ def zonal_stats_grid(
     stats=["mean"],
     mask_name="mask",
     method="overlay",
-):
+) -> xr.Dataset:
     """Calculate zonal statisctics of vector samples aggregated per raster cell.
 
     Returns a xr.Dataset with gridded road information :
@@ -191,3 +206,200 @@ def zonal_stats_grid(
                 ds_out[dvar] = da_out
 
     return ds_out
+
+
+def _preprocess_roads_emissions(
+    gdf_roads: gpd.GeoDataFrame,
+    highway_list: List[str],
+    non_highway_list: List[str] = None,
+) -> Dict:
+    """
+    Preprocess arguments for roads_emissions_country and roads_emissions_segments.
+
+    Parameters
+    ----------
+    gdf_roads : geopandas.GeoDataFrame
+        GeoDataFrame containing roads shape.
+
+        * Required columns: ``road_type``.
+    highway_list : list of str
+        List of highway road types.
+    non_highway_list : list of str, optional
+        List of non-highway road types. If None, all road types not in highway_list
+        are considered as non-highway.
+
+    Returns
+    -------
+    feature_filter : dict
+        Dictionary with keys 'hwy' and 'nnhwy' for highway and non-highway roads
+        respectively. Each key contains a dictionary with the column name and the
+        list of road types.
+    """
+    # Convert string to lists
+    if not isinstance(highway_list, list):
+        highway_list = [highway_list]
+
+    # Make sure road type is str format
+    gdf_roads["road_type"] = gdf_roads["road_type"].astype(str)
+    # Get non_highway_list
+    if non_highway_list is None:
+        road_types = np.unique(gdf_roads["road_type"].values)
+        non_highway_list = road_types[~np.isin(road_types, highway_list)].tolist()
+    elif not isinstance(non_highway_list, list):
+        non_highway_list = [non_highway_list]
+
+    # Feature filter for highway and non-highway
+    feature_filter = {
+        "hwy": {"road_type": highway_list},
+        "nnhwy": {"road_type": non_highway_list},
+    }
+
+    return feature_filter
+
+
+def roads_emissions_country(
+    gdf_roads: gpd.GeoDataFrame,
+    gdf_country: gpd.GeoDataFrame,
+    ds_like: xr.Dataset,
+    highway_list: List[str],
+    non_highway_list: List[str] = None,
+    logger=logger,
+) -> xr.Dataset:
+    """
+    Compute roads statistics per country of interest.
+
+    Parameters
+    ----------
+    gdf_roads : geopandas.GeoDataFrame
+        GeoDataFrame containing roads shape.
+
+        * Required columns: ``road_type``.
+    gdf_country : geopandas.GeoDataFrame
+        GeoDataFrame containing country shape.
+    ds_like : xarray.Dataset
+        Dataset at model resolution.
+
+        * Required variables: ``mask``.
+    highway_list : list of str
+        List of highway road types.
+    non_highway_list : list of str, optional
+        List of non-highway road types. If None, all road types not in highway_list
+        are considered as non-highway.
+
+    Returns
+    -------
+    ds_country : xarray.Dataset
+        Dataset contains roads statistics per country of interest.
+        Contains the following variables:
+
+        * ``hwy_length_sum_country``: highway road length per country of interest.
+        * ``nnhwy_length_sum_country``: non-highway road length per country of interest.
+    """
+    # Common preprocessing of arguments with segments
+    feature_filter = _preprocess_roads_emissions(
+        gdf_roads=gdf_roads,
+        highway_list=highway_list,
+        non_highway_list=non_highway_list,
+    )
+    # Loop over feature_filter
+    ds_country = xr.Dataset()
+    for name, colfilter in feature_filter.items():
+        logger.info(f"Computing {name} roads statistics per country of interest")
+        # Filter gdf
+        colname = [k for k in colfilter.keys()][0]
+        subset_roads = gdf_roads.iloc[
+            np.isin(gdf_roads[colname], colfilter.get(colname))
+        ]
+        gdf_country = zonal_stats(
+            gdf=subset_roads,
+            zones=gdf_country,
+            variables=["length"],
+            stats=["sum"],
+            method="sjoin",
+        )
+        gdf_country = gdf_country.rename(columns={"length_sum": f"{name}_length_sum"})
+        # Convert from m to km
+        gdf_country[f"{name}_length_sum"] = gdf_country[f"{name}_length_sum"] / 1000
+
+        # Rasterize statistics
+        da_emi = emission_vector(
+            gdf=gdf_country,
+            ds_like=ds_like,
+            col_name=f"{name}_length_sum",
+            method="value",
+            mask_name="mask",
+            logger=logger,
+        )
+        ds_country[f"{name}_length_sum_country"] = da_emi
+
+    return ds_country
+
+
+def roads_emissions_segments(
+    gdf_roads: gpd.GeoDataFrame,
+    ds_like: xr.Dataset,
+    highway_list: List[str],
+    non_highway_list: List[str] = None,
+    logger=logger,
+) -> xr.Dataset:
+    """
+    Compute roads statistics per segment/grid cell.
+
+    Parameters
+    ----------
+    gdf_roads : geopandas.GeoDataFrame
+        GeoDataFrame containing roads shape.
+
+        * Required columns: ``road_type``.
+    ds_like : xarray.Dataset
+        Dataset at model resolution.
+
+        * Required variables: ``mask``.
+    highway_list : list of str
+        List of highway road types.
+    non_highway_list : list of str, optional
+        List of non-highway road types. If None, all road types not in highway_list
+        are considered as non-highway.
+
+    Returns
+    -------
+    ds_segments : xarray.Dataset
+        Dataset contains roads statistics per segment/grid cell.
+        Contains the following variables:
+
+        * ``hwy_length``: highway road length per segment/grid cell.
+        * ``nnhwy_length``: non-highway road length per segment/grid cell.
+
+    """
+    # Common preprocessing of arguments with country
+    feature_filter = _preprocess_roads_emissions(
+        gdf_roads=gdf_roads,
+        highway_list=highway_list,
+        non_highway_list=non_highway_list,
+    )
+
+    # Loop over feature_filter
+    ds_segments = xr.Dataset()
+    for name, colfilter in feature_filter.items():
+        logger.info(f"Computing {name} roads statistics per segment")
+        # Filter gdf
+        colname = [k for k in colfilter.keys()][0]
+        subset_roads = gdf_roads.iloc[
+            np.isin(gdf_roads[colname], colfilter.get(colname))
+        ]
+        ds_roads = zonal_stats_grid(
+            gdf=subset_roads,
+            ds_like=ds_like,
+            variables=["length"],
+            stats=["sum"],
+            mask_name="mask",
+            method="overlay",
+        )
+        # Convert from m to km and rename
+        ds_roads[f"{name}_length"] = ds_roads["length_sum"] / 1000
+        ds_roads[f"{name}_length"].attrs.update(_FillValue=0)
+
+        # Add to ds_segments
+        ds_segments[f"{name}_length"] = ds_roads[f"{name}_length"]
+
+    return ds_segments

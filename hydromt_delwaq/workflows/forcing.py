@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = [
     "hydrology_forcing",
+    "hydrology_forcing_em",
     "sediment_forcing",
     "climate_forcing",
 ]
@@ -214,6 +215,104 @@ def hydrology_forcing(
     )
 
     return ds_out
+
+
+def hydrology_forcing_em(
+    ds: xr.Dataset,
+    ds_model: xr.Dataset,
+    timestepsecs: int,
+    include_transport: bool = True,
+    logger: logging.Logger = logger,
+) -> xr.Dataset:
+    """
+    Calculate hydrology forcing data for emission model.
+
+    Parameters
+    ----------
+    ds : xr.Dataset
+        Either None, or name in a local or global data_sources.yml file.
+
+        * Required variables for EM: ['time', 'precip', 'runPav', 'runUnp',
+            'infilt', 'exfilt*', 'q_land', 'q_ss']
+    ds_model : xr.Dataset
+        Dataset containing the model grid.
+
+        * Required variables: ['mask', 'modelmap']
+    timestepsecs : int
+        Model timestep in seconds.
+    include_transport : bool, optional
+        If False (default), only use the vertical fluxes for emission [precip,
+        runPav, runUnp, infilt, totflw].
+        If True, includes additional fluxes for land and subsurface transport
+        [precip, runPav, runUnp, infilt, exfilt, q_land, q_ss].
+
+    Returns
+    -------
+    ds_out : xr.Dataset
+        Dataset containing the processed hydrology data.
+    """
+    # Select variables based on model type
+    vars = ["precip", "runPav", "runUnp", "infilt"]
+    if include_transport:
+        vars.extend(["q_land", "q_ss"])
+        ex_vars = [v for v in ds.data_vars if v.startswith("exfilt")]
+        vars.extend(ex_vars)
+    ds = ds[vars]
+
+    # Unit conversion (from mm to m3/s)
+    for dvar in ds.data_vars.keys():
+        if ds[dvar].attrs.get("unit") == "mm":
+            attrs = ds[dvar].attrs.copy()
+            surface = emissions.gridarea(ds)
+            ds[dvar] = ds[dvar] * surface / (1000 * timestepsecs)
+            ds[dvar].attrs.update(attrs)  # set original attributes
+            ds[dvar].attrs.update(unit="m3/s")
+
+    # Sum up exfiltrattion or add totflw depending on include_transport
+    if include_transport:
+        # Add exfiltration (can be split into several variables)
+        # Check if the flux is split into several variables
+        ex_vars = [v for v in ds.data_vars if v.startswith("exfilt")]
+        if len(ex_vars) > 1:  # need to sum
+            attrs = ds[ex_vars[0]].attrs.copy()
+            nodata = ds[ex_vars[0]].raster.nodata
+            # Cover exfilt with zeros (some negative zeros in wflow outputs?)
+            ds["exfilt"] = ds[ex_vars].fillna(0).to_array().sum("variable")
+            ds["exfilt"] = ds["exfilt"].where(ds["exfilt"] > 0.0, 0.0)
+            ds["exfilt"].attrs.update(attrs)
+            ds["exfilt"].raster.set_nodata(nodata)
+            ds = ds.drop_vars(ex_vars)
+        elif ex_vars[0] != "exfilt":
+            ds = ds.rename({ex_vars[0]: "exfilt"})
+    else:
+        # Add total flow
+        ds["totflw"] = ds["precip"].copy()
+
+    # align forcing file with hydromaps
+    # as hydro forcing comes from hydro model, it should be aligned with hydromaps
+    if not ds.raster.identical_grid(ds_model):
+        logger.warning(
+            "hydro_forcing_fn and model grid are not identical. Reprojecting."
+        )
+        ds = ds.raster.reproject_like(ds_model)
+
+    # Add _FillValue to the data attributes
+    for dvar in ds.data_vars.keys():
+        nodata = ds[dvar].raster.nodata
+        if nodata is not None:
+            ds[dvar].attrs.update(_FillValue=nodata)
+        else:
+            ds[dvar].attrs.update(_FillValue=-9999.0)
+
+    # Add mask
+    ds.coords["mask"] = xr.DataArray(
+        dims=ds.raster.dims,
+        coords=ds.raster.coords,
+        data=ds_model["modelmap"].values,
+        attrs=dict(_FillValue=ds_model["mask"].raster.nodata),
+    )
+
+    return ds
 
 
 def sediment_forcing(

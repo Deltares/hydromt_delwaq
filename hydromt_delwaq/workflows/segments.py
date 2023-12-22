@@ -21,6 +21,7 @@ __all__ = [
 
 def hydromaps(
     hydromodel,
+    mask: str = "basins",
 ):
     """Return base information maps from hydromodel.
 
@@ -35,6 +36,8 @@ def hydromaps(
     ----------
     hydromodel : hydromt.model
         HydroMT Model class containing the hydromodel to build DelwaqModel from.
+    mask: str, optional
+        Name of the mask to use to mask the maps. Either 'rivers' or 'basins' (default).
 
     Returns
     -------
@@ -67,6 +70,16 @@ def hydromaps(
         data=(ds_out["river"] != river_mv),
         attrs=dict(_FillValue=False),
     )
+
+    # Add mask
+    if mask == "rivers":
+        da_mask = ds_out["rivmsk"]
+    else:
+        da_mask = ds_out["basmsk"]
+    ds_out = ds_out.drop_vars(["rivmsk", "basmsk"])
+    ds_out.coords["mask"] = da_mask
+    ds_out["modelmap"] = da_mask.astype(np.int32)
+    ds_out["modelmap"].raster.set_nodata(0)
 
     return ds_out
 

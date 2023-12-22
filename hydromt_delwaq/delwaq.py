@@ -4,14 +4,12 @@ import glob
 import logging
 import os
 import struct
-from datetime import datetime
 from os.path import isfile, join
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 import geopandas as gpd
 import numpy as np
-import pandas as pd
 import pyproj
 import xarray as xr
 import xugrid as xu
@@ -20,7 +18,7 @@ from hydromt.models.model_grid import GridModel
 from tqdm import tqdm
 
 from . import DATADIR
-from .workflows import emissions, forcing, hydrology, segments
+from .workflows import config, emissions, forcing, hydrology, segments
 
 __all__ = ["DelwaqModel"]
 
@@ -73,14 +71,38 @@ class DelwaqModel(GridModel):
 
     def __init__(
         self,
-        root=None,
-        mode="w",
-        config_fn=None,
-        hydromodel_name="wflow",
-        hydromodel_root=None,
-        data_libs=None,
+        root: Union[str, Path] = None,
+        mode: str = "w",
+        config_fn: Union[str, Path] = None,
+        hydromodel_name: str = "wflow",
+        hydromodel_root: Union[str, Path] = None,
+        data_libs: List[Union[str, Path]] = None,
         logger=logger,
     ):
+        """Initialize a model.
+
+        Parameters
+        ----------
+        root : str, optional
+            Model root, by default None
+        mode : {'r','r+','w', 'w+'}, optional
+            read/append/write mode, by default "w"
+        config_fn : str or Path, optional
+            Model simulation configuration file, by default None.
+            Note that this is not the HydroMT model setup configuration file!
+        hydromodel_name : str, optional
+            Name of the hydromodel used to build the emission model. Only useful in
+            update mode as this is taken from the ``region`` argument in
+            **setup_basemaps** method. By default "wflow".
+        hydromodel_root : str or Path, optional
+            Root of the hydromodel used to build the emission model. Only useful in
+            update mode as this is taken from the ``region`` argument in
+            **setup_basemaps** method. By default None.
+        data_libs : List[str, Path], optional
+            List of data catalog configuration files, by default None
+        logger:
+            The logger to be used.
+        """
         super().__init__(
             root=root,
             mode=mode,
@@ -173,16 +195,7 @@ class DelwaqModel(GridModel):
 
         ### Select and build hydromaps from model ###
         # Initialise hydromaps
-        ds_hydro = segments.hydromaps(hydromodel)
-        # Add mask
-        if mask == "rivers":
-            da_mask = ds_hydro["rivmsk"]
-        else:
-            da_mask = ds_hydro["basmsk"]
-        ds_hydro = ds_hydro.drop_vars(["rivmsk", "basmsk"])
-        ds_hydro.coords["mask"] = da_mask
-        ds_hydro["modelmap"] = da_mask.astype(np.int32)
-        ds_hydro["modelmap"].raster.set_nodata(0)
+        ds_hydro = segments.hydromaps(hydromodel, mask=mask)
         # Add to hydromaps
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_hydro.data_vars}
         self.set_hydromaps(ds_hydro.rename(rmdict))
@@ -209,7 +222,7 @@ class DelwaqModel(GridModel):
         ds_stat = segments.maps_from_hydromodel(
             hydromodel, maps=maps, logger=self.logger
         )
-        ds_stat["mask"] = da_mask
+        ds_stat["mask"] = self.hydromaps["mask"]
         ds_stat = ds_stat.set_coords("mask")
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
         self.set_grid(ds_stat.rename(rmdict))
@@ -221,51 +234,24 @@ class DelwaqModel(GridModel):
         self.set_grid(ds_geom)
 
         ### Config ###
-        # B3_nrofseg
-        lines_ini = {
-            "l1": f"{nrofseg} ; nr of segments",
-        }
-        for option in lines_ini:
-            self.set_config("B3_nrofseg", option, lines_ini[option])
-        # B3_attributes
-        lines_ini = {
-            "l1": "      ; DELWAQ_COMPLETE_ATTRIBUTES",
-            "l2": " 1    ; one block with input",
-            "l3": " 2    ; number of attributes, they are :",
-            "l4": "     1     2",
-            "l5": " 1    ; file option in this file",
-            "l6": " 1    ; option without defaults",
-            "l7": f"     {nrofseg}*01 ; {surface_water}",
-            "l8": " 0    ; no time dependent attributes",
-        }
-        for option in lines_ini:
-            self.set_config("B3_attributes", option, lines_ini[option])
-        # B4_nrofexch
-        lines_ini = {
-            "l1": f"{self.nrofexch} 0 0 ; x, y, z direction",
-        }
-        for option in lines_ini:
-            self.set_config("B4_nrofexch", option, lines_ini[option])
-        # B5_boundlist
-        lines_ini = {
-            "l1": ";'NodeID' 'Number' 'Type'",
-        }
-        for i in range(len(bd_id)):
-            lstr = "l" + str(i + 2)
-            lines_ini.update(
-                {lstr: f"'BD_{int(bd_id[i])}' '{int(bd_id[i])}' '{bd_type[i]}'"}
-            )
-        for option in lines_ini:
-            self.set_config("B5_boundlist", option, lines_ini[option])
-        # B7_fluxes
-        lines_ini = {
-            "l1": "SEG_FUNCTIONS",
-            "l2": " ".join(fluxes),
-        }
-        for option in lines_ini:
-            self.set_config("B7_fluxes", option, lines_ini[option])
+        configs = config.base_config(
+            nrofseg=nrofseg,
+            nrofexch=self.nrofexch,
+            layer_name=surface_water,
+            add_surface=False,
+            boundaries=bd_id,
+            boundaries_type=bd_type,
+            fluxes=fluxes,
+        )
+        for file in configs:
+            for option in configs[file]:
+                self.set_config(file, option, configs[file][option])
 
-    def setup_monitoring(self, mon_points: str = None, mon_areas: str = None, **kwargs):
+    def setup_monitoring(
+        self,
+        mon_points: str = None,
+        mon_areas: str = None,
+    ):
         """Prepare Delwaq monitoring points and areas options.
 
         Adds model layers:
@@ -535,60 +521,15 @@ class DelwaqModel(GridModel):
         # Update model timestepsecs attribute
         self.timestepsecs = timestepsecs
 
-        # Add time info to config
-        ST = datetime.strptime(starttime, "%Y-%m-%d %H:%M:%S")
-        ET = datetime.strptime(endtime, "%Y-%m-%d %H:%M:%S")
-        # B1_timestamp
-        lines_ini = {
-            "l1": f"'T0: {ST.strftime('%Y.%m.%d %H:%M:%S')}  (scu=       1s)'",
-        }
-        for option in lines_ini:
-            self.set_config("B1_timestamp", option, lines_ini[option])
-
-        # B2_outputtimes
-        STstr = ST.strftime("%Y/%m/%d-%H:%M:%S")
-        ETstr = ET.strftime("%Y/%m/%d-%H:%M:%S")
-        timestep = pd.Timedelta(ds_out.time.values[1] - ds_out.time.values[0])
-        hours = int(timestep.seconds / 3600)
-        minutes = int(timestep.seconds / 60)
-        seconds = int(timestep.seconds - minutes * 60)
-        minutes -= hours * 60
-        timestepstring = "%03d%02d%02d%02d" % (timestep.days, hours, minutes, seconds)
-        lines_ini = {
-            "l1": f"  {STstr}  {ETstr}  {timestepstring} ; mon/bal",
-            "l2": f"  {STstr}  {ETstr}  {timestepstring} ; map",
-            "l3": f"  {STstr}  {ETstr}  {timestepstring} ; his",
-        }
-        for option in lines_ini:
-            self.set_config("B2_outputtimes", option, lines_ini[option])
-
-        # B2_sysclock
-        timestepsec = timestep.days * 86400 + timestep.seconds
-        lines_ini = {
-            "l1": f"{timestepsec:7d} 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
-        }
-        for option in lines_ini:
-            self.set_config("B2_sysclock", option, lines_ini[option])
-
-        # B2_timers
-        lines_ini = {
-            "l1": f"  {STstr} ; start time",
-            "l2": f"  {ETstr} ; stop time",
-            "l3": "  0 ; timestep constant",
-            "l4": "; dddhhmmss format for timestep",
-            "l5": f"{timestepstring} ; timestep",
-        }
-        for option in lines_ini:
-            self.set_config("B2_timers", option, lines_ini[option])
-
-        # B2_timers_only
-        lines_ini = {
-            "l1": f"  {STstr} ; start time",
-            "l2": f"  {ETstr} ; stop time",
-            "l3": "  0 ; timestep constant",
-        }
-        for option in lines_ini:
-            self.set_config("B2_timers_only", option, lines_ini[option])
+        # Update config times
+        time_config = config.time_config(
+            starttime=starttime,
+            endtime=endtime,
+            timestepsecs=timestepsecs,
+        )
+        for file in time_config:
+            for option in time_config[file]:
+                self.set_config(file, option, time_config[file][option])
 
     def setup_sediment_forcing(
         self,
