@@ -110,6 +110,7 @@ def time_config(
     starttime: str,
     endtime: str,
     timestepsecs: int,
+    sysclock_format: str = "seconds",
 ) -> Dict:
     """
     Prepare time config dictionnary.
@@ -129,6 +130,8 @@ def time_config(
         End time in format "yyyy-mm-dd hh:mm:ss".
     timestepsecs : int
         Timestep in seconds.
+    sysclock_format : str, optional
+        Format of the system clock, either "seconds" or "days", by default "seconds".
 
     Returns
     -------
@@ -163,9 +166,14 @@ def time_config(
     }
 
     # B2_sysclock
-    timestepsec = timestep.days * 86400 + timestep.seconds
+    if sysclock_format == "seconds":
+        timestepstring = f"{timestepsecs:7d}"
+        # timestepsec = timestep.days * 86400 + timestep.seconds
+    else:
+        # days
+        timestepstring = timestep.days
     config["B2_sysclock"] = {
-        "l1": f"{timestepsec:7d} 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
+        "l1": f" {timestepstring} 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
     }
 
     # B2_timers

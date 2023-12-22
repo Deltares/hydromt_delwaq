@@ -15,6 +15,7 @@ from tqdm import tqdm
 
 from . import DATADIR
 from .delwaq import DelwaqModel
+from .utils import dw_WriteSegmentOrExchangeData
 from .workflows import config, forcing, geometry, roads, segments
 
 __all__ = ["DemissionModel"]
@@ -349,6 +350,7 @@ class DemissionModel(DelwaqModel):
             starttime=starttime,
             endtime=endtime,
             timestepsecs=timestepsecs,
+            sysclock_format="days",
         )
         for file in time_config:
             for option in time_config[file]:
@@ -496,7 +498,7 @@ class DemissionModel(DelwaqModel):
                 data = ds_out[dvar].isel(time=i).values.flatten()
                 data = data[data != nodata]
                 datablock = np.append(datablock, data)
-            self.dw_WriteSegmentOrExchangeData(
+            dw_WriteSegmentOrExchangeData(
                 timestepstamp[i], fname, datablock, 1, WriteAscii=False
             )
             # sediment
@@ -514,7 +516,7 @@ class DemissionModel(DelwaqModel):
                     )
                     data = data[data != nodata]
                     sedblock = np.append(sedblock, data)
-                self.dw_WriteSegmentOrExchangeData(
+                dw_WriteSegmentOrExchangeData(
                     timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
                 )
             # climate
@@ -532,7 +534,7 @@ class DemissionModel(DelwaqModel):
                     )
                     data = data[data != nodata]
                     climblock = np.append(climblock, data)
-                self.dw_WriteSegmentOrExchangeData(
+                dw_WriteSegmentOrExchangeData(
                     timestepstamp[i], climname, climblock, 1, WriteAscii=False
                 )
 
