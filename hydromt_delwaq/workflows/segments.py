@@ -53,6 +53,7 @@ def hydromaps(
 
     # Surface area maps
     ds_out["rivarea"] = ds_out["rivlen"] * ds_out["rivwth"]
+    ds_out["rivarea"].raster.set_nodata(ds_out["rivlen"].raster.nodata)
     if "LakeArea" in hydromodel.grid:
         ds_out["lakearea"] = hydromodel.grid["LakeArea"]
     if "ResSimpleArea" in hydromodel.grid:

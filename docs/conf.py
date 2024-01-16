@@ -23,6 +23,8 @@ import hydromt
 import hydromt_delwaq
 from distutils.dir_util import copy_tree
 
+os.environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
+
 here = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(here, "..")))
 

@@ -472,7 +472,7 @@ class DelwaqModel(GridModel):
             setup_basemaps methods (pointer creation).
 
             * Required variables (to be deprecated): ['time', 'run', 'vol' or 'lev',
-            'inwater']
+              'inwater']
 
         startime : str
             Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
