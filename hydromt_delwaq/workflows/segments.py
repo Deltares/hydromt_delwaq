@@ -7,7 +7,7 @@ import numpy as np
 import xarray as xr
 from hydromt import flw
 
-from . import emissions
+from .emissions import gridarea, gridlength_gridwidth
 
 logger = logging.getLogger(__name__)
 
@@ -151,10 +151,10 @@ def geometrymaps(
         Dataset containing gridded geometry map at model resolution.
     """
     ### Geometry data ###
-    surface = emissions.gridarea(hydromodel.grid)
+    surface = gridarea(hydromodel.grid)
     surface.raster.set_nodata(-9999.0)
     surface = surface.rename("surface")
-    length, width = emissions.gridlength_gridwidth(hydromodel.grid)
+    length, width = gridlength_gridwidth(hydromodel.grid)
 
     rivlen = hydromodel.grid[hydromodel._MAPS["rivlen"]]
     rivwth = hydromodel.grid[hydromodel._MAPS["rivwth"]]

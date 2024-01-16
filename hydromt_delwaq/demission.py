@@ -508,12 +508,7 @@ class DemissionModel(DelwaqModel):
                 sedblock = []
                 for dvar in sed_vars:
                     nodata = ds_out[dvar].raster.nodata
-                    data = (
-                        ds_out[dvar]
-                        .isel(time=i)
-                        .transpose("comp", ...)
-                        .values.flatten()
-                    )
+                    data = ds_out[dvar].isel(time=i).values.flatten()
                     data = data[data != nodata]
                     sedblock = np.append(sedblock, data)
                 dw_WriteSegmentOrExchangeData(
@@ -526,12 +521,7 @@ class DemissionModel(DelwaqModel):
                 climblock = []
                 for dvar in clim_vars:
                     nodata = ds_out[dvar].raster.nodata
-                    data = (
-                        ds_out[dvar]
-                        .isel(time=i)
-                        .transpose("comp", ...)
-                        .values.flatten()
-                    )
+                    data = ds_out[dvar].isel(time=i).values.flatten()
                     data = data[data != nodata]
                     climblock = np.append(climblock, data)
                 dw_WriteSegmentOrExchangeData(

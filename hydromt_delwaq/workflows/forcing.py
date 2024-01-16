@@ -7,7 +7,7 @@ import hydromt
 import pandas as pd
 import xarray as xr
 
-from . import emissions
+from .emissions import gridarea
 
 logger = logging.getLogger(__name__)
 
@@ -123,7 +123,7 @@ def hydrology_forcing(
             # Assume by default mm/cellarea
             unit = ds[fl].attrs.get("unit")
             if unit == "mm":
-                surface = emissions.gridarea(ds)
+                surface = gridarea(ds)
                 ds[fl] = ds[fl] * surface / (1000 * timestepsecs)
             # For other area eg river, lake, reservoir
             elif unit.startswith("mm/"):
@@ -167,7 +167,7 @@ def hydrology_forcing(
     for vl in vol_vars:
         unit = ds[vl].attrs.get("unit")
         if unit == "mm":
-            surface = emissions.gridarea(ds)
+            surface = gridarea(ds)
             ds[vl] = ds[vl] * surface / (1000 * timestepsecs)
         # For other area eg river, lake, reservoir
         elif unit.startswith("mm/"):
@@ -263,7 +263,7 @@ def hydrology_forcing_em(
     for dvar in ds.data_vars.keys():
         if ds[dvar].attrs.get("unit") == "mm":
             attrs = ds[dvar].attrs.copy()
-            surface = emissions.gridarea(ds)
+            surface = gridarea(ds)
             ds[dvar] = ds[dvar] * surface / (1000 * timestepsecs)
             ds[dvar].attrs.update(attrs)  # set original attributes
             ds[dvar].attrs.update(unit="m3/s")

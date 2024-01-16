@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import xarray as xr
 
-from . import emissions
+from .emissions import gridarea
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ def compute_geometry(
     geometry : np.ndarray
         Array containing the geometry data.
     """
-    surface = emissions.gridarea(ds)
+    surface = gridarea(ds)
     surface.raster.set_nodata(np.nan)
     geom = surface.rename("surface").to_dataset()
     # For EM type build a pointer like object and add to self.geometry
