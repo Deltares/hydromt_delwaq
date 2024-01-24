@@ -483,9 +483,7 @@ class DemissionModel(DelwaqModel):
             0, (len(ds_out.time.values) + 1) * int(self.timestepsecs), self.timestepsecs
         )
         for i in tqdm(timesteps, desc="Writing dynamic data"):
-            # self.logger.info(
-            #    f"Writting dynamic data for timestep {i+1}/{timesteps[-1]+1}"
-            # )
+            # hydrology
             fname = join(self.root, "dynamicdata", "hydrology.bin")
             datablock = []
             dvars = ["precip", "runPav", "runUnp", "infilt"]
@@ -494,39 +492,52 @@ class DemissionModel(DelwaqModel):
             else:
                 dvars.extend(["exfilt", "q_land", "q_ss"])
             for dvar in dvars:
-                nodata = ds_out[dvar].raster.nodata
-                data = ds_out[dvar].isel(time=i).values.flatten()
-                data = data[data != nodata]
-                datablock = np.append(datablock, data)
-            dw_WriteSegmentOrExchangeData(
-                timestepstamp[i], fname, datablock, 1, WriteAscii=False
-            )
+                # Maybe only clim or sed were updated
+                if dvar in ds_out.data_vars:
+                    nodata = ds_out[dvar].raster.nodata
+                    data = ds_out[dvar].isel(time=i).values.flatten()
+                    data = data[data != nodata]
+                    datablock = np.append(datablock, data)
+                else:
+                    self.logger.info(f"Variable {dvar} not found in forcing data.")
+            if len(datablock) > 0:
+                dw_WriteSegmentOrExchangeData(
+                    timestepstamp[i], fname, datablock, 1, WriteAscii=False
+                )
+            else:
+                self.logger.info("No hydrology data found.")
             # sediment
             if "B7_sediment" in self.config:
                 sedname = join(self.root, "dynamicdata", "sediment.dat")
                 sed_vars = self.get_config("B7_sediment.l2").split(" ")
                 sedblock = []
                 for dvar in sed_vars:
-                    nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
-                    data = data[data != nodata]
-                    sedblock = np.append(sedblock, data)
-                dw_WriteSegmentOrExchangeData(
-                    timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
-                )
+                    # sed maybe not updated or might be present for WQ
+                    if dvar in ds_out.data_vars:
+                        nodata = ds_out[dvar].raster.nodata
+                        data = ds_out[dvar].isel(time=i).values.flatten()
+                        data = data[data != nodata]
+                        sedblock = np.append(sedblock, data)
+                if len(sedblock) > 0:
+                    dw_WriteSegmentOrExchangeData(
+                        timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
+                    )
             # climate
             if "B7_climate" in self.config:
                 climname = join(self.root, "dynamicdata", "climate.dat")
                 clim_vars = self.get_config("B7_climate.l2").split(" ")
                 climblock = []
                 for dvar in clim_vars:
-                    nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
-                    data = data[data != nodata]
-                    climblock = np.append(climblock, data)
-                dw_WriteSegmentOrExchangeData(
-                    timestepstamp[i], climname, climblock, 1, WriteAscii=False
-                )
+                    # clim maybe not updated or might be present for WQ
+                    if dvar in ds_out.data_vars:
+                        nodata = ds_out[dvar].raster.nodata
+                        data = ds_out[dvar].isel(time=i).values.flatten()
+                        data = data[data != nodata]
+                        climblock = np.append(climblock, data)
+                if len(climblock) > 0:
+                    dw_WriteSegmentOrExchangeData(
+                        timestepstamp[i], climname, climblock, 1, WriteAscii=False
+                    )
 
     @property
     def nrofseg(self):

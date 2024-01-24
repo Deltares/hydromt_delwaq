@@ -952,12 +952,12 @@ class DelwaqModel(GridModel):
         self._initialize_hydromaps(skip_read=True)
         if "chunks" not in kwargs:
             kwargs.update(chunks={"y": -1, "x": -1})
-        # Load grid data in r+ mode to allow overwritting netcdf files
-        if self._read and self._write:
-            kwargs["load"] = True
         fns = glob.glob(join(self.root, "hydromodel", "*.tif"))
         if len(fns) > 0:
             ds_hydromaps = io.open_mfraster(fns, **kwargs)
+        # Load grid data in r+ mode to allow overwritting netcdf files
+        if self._read and self._write:
+            ds_hydromaps.load()
         if ds_hydromaps.raster.crs is None and crs is not None:
             ds_hydromaps.raster.set_crs(crs)
         ds_hydromaps.coords["mask"] = ds_hydromaps["modelmap"].astype(bool)
@@ -1075,51 +1075,67 @@ class DelwaqModel(GridModel):
             flow_vars = self.fluxes
             flowblock = []
             for dvar in flow_vars:
-                nodata = ds_out[dvar].raster.nodata
-                data = ds_out[dvar].isel(time=i).values.flatten()
-                data = data[data != nodata]
-                flowblock = np.append(flowblock, data)
-            dw_WriteSegmentOrExchangeData(
-                timestepstamp[i], flname, flowblock, 1, WriteAscii=False
-            )
+                # Maybe only clim or sed were updated
+                if dvar in ds_out.data_vars:
+                    nodata = ds_out[dvar].raster.nodata
+                    data = ds_out[dvar].isel(time=i).values.flatten()
+                    data = data[data != nodata]
+                    flowblock = np.append(flowblock, data)
+                else:
+                    self.logger.info(f"Variable {dvar} not found in forcing data.")
+            # Maybe do a check on len of flowback
+            # based on number of variables,segments,timesteps
+            if len(flowblock) > 0:
+                dw_WriteSegmentOrExchangeData(
+                    timestepstamp[i], flname, flowblock, 1, WriteAscii=False
+                )
             # volume
             voname = join(self.root, "dynamicdata", "volume.dat")
             vol_vars = [self.surface_water]
             volblock = []
             for dvar in vol_vars:
-                nodata = ds_out[dvar].raster.nodata
-                data = ds_out[dvar].isel(time=i).values.flatten()
-                data = data[data != nodata]
-                volblock = np.append(volblock, data)
-            dw_WriteSegmentOrExchangeData(
-                timestepstamp[i], voname, volblock, 1, WriteAscii=False
-            )
+                # Maybe only clim or sed were updated
+                if dvar in ds_out.data_vars:
+                    nodata = ds_out[dvar].raster.nodata
+                    data = ds_out[dvar].isel(time=i).values.flatten()
+                    data = data[data != nodata]
+                    volblock = np.append(volblock, data)
+            if len(volblock) > 0:
+                dw_WriteSegmentOrExchangeData(
+                    timestepstamp[i], voname, volblock, 1, WriteAscii=False
+                )
             # sediment
             if "B7_sediment" in self.config:
                 sedname = join(self.root, "dynamicdata", "sediment.dat")
                 sed_vars = self.get_config("B7_sediment.l2").split(" ")
                 sedblock = []
                 for dvar in sed_vars:
-                    nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
-                    data = data[data != nodata]
-                    sedblock = np.append(sedblock, data)
-                dw_WriteSegmentOrExchangeData(
-                    timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
-                )
+                    # sed maybe not updated or might be present for EM
+                    if dvar in ds_out.data_vars:
+                        nodata = ds_out[dvar].raster.nodata
+                        data = ds_out[dvar].isel(time=i).values.flatten()
+                        data = data[data != nodata]
+                        sedblock = np.append(sedblock, data)
+                if len(sedblock) > 0:
+                    dw_WriteSegmentOrExchangeData(
+                        timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
+                    )
             # climate
             if "B7_climate" in self.config:
                 climname = join(self.root, "dynamicdata", "climate.dat")
                 clim_vars = self.get_config("B7_climate.l2").split(" ")
                 climblock = []
                 for dvar in clim_vars:
-                    nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
-                    data = data[data != nodata]
-                    climblock = np.append(climblock, data)
-                dw_WriteSegmentOrExchangeData(
-                    timestepstamp[i], climname, climblock, 1, WriteAscii=False
-                )
+                    # clim maybe not updated or might be present for EM
+                    if dvar in ds_out.data_vars:
+                        nodata = ds_out[dvar].raster.nodata
+                        data = ds_out[dvar].isel(time=i).values.flatten()
+                        data = data[data != nodata]
+                        climblock = np.append(climblock, data)
+                if len(climblock) > 0:
+                    dw_WriteSegmentOrExchangeData(
+                        timestepstamp[i], climname, climblock, 1, WriteAscii=False
+                    )
 
     def read_states(self):
         """Read states at <root/?/> and parse to dict of xr.DataArray."""
