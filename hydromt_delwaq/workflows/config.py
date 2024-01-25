@@ -167,13 +167,13 @@ def time_config(
 
     # B2_sysclock
     if sysclock_format == "seconds":
-        timestepstring = f"{timestepsecs:7d}"
+        timestepstringsys = f"{timestepsecs:7d}"
         # timestepsec = timestep.days * 86400 + timestep.seconds
     else:
         # days
-        timestepstring = timestep.days
+        timestepstringsys = timestep.days
     config["B2_sysclock"] = {
-        "l1": f" {timestepstring} 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
+        "l1": f" {timestepstringsys} 'DDHHMMSS' 'DDHHMMSS'  ; system clock",
     }
 
     # B2_timers
