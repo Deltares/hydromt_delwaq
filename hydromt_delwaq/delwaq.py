@@ -1462,6 +1462,25 @@ class DelwaqModel(GridModel):
             )
         )
 
+        grid = da_ptid.ugrid.grid
+
+        bounds = grid.face_node_coordinates
+        x_bounds = bounds[..., 0]
+        y_bounds = bounds[..., 1]
+
+        name_x = "mesh2d_face_x_bnd"
+        name_y = "mesh2d_face_y_bnd"
+        uda_waqgeom["mesh2d_face_x"].attrs["bounds"] = name_x
+        uda_waqgeom["mesh2d_face_y"].attrs["bounds"] = name_y
+        uda_waqgeom["mesh2d_face_x"].attrs["units"] = "degrees_east"
+        uda_waqgeom["mesh2d_face_y"].attrs["units"] = "degrees_north"
+        uda_waqgeom[name_x] = xr.DataArray(
+            x_bounds, dims=(grid.face_dimension, "mesh2d_nMax_face_nodes")
+        )
+        uda_waqgeom[name_y] = xr.DataArray(
+            y_bounds, dims=(grid.face_dimension, "mesh2d_nMax_face_nodes")
+        )
+
         # Write the waqgeom.nc file
         fname = join(self.root, "config", "B3_waqgeom.nc")
         uda_waqgeom.to_netcdf(path=fname, mode="w")
