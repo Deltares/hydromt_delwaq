@@ -58,6 +58,12 @@ def hydromaps(
         ds_out["lakearea"] = hydromodel.grid["LakeArea"]
     if "ResSimpleArea" in hydromodel.grid:
         ds_out["resarea"] = hydromodel.grid["ResSimpleArea"]
+    # Bankfull volume
+    if hydromodel._MAPS["rivdph"] in hydromodel.grid:
+        ds_out["bankfull_volume"] = (
+            ds_out["rivarea"] * hydromodel.grid[hydromodel._MAPS["rivdph"]]
+        )
+        ds_out["bankfull_volume"].raster.set_nodata(ds_out["rivlen"].raster.nodata)
 
     basins_mv = ds_out["basins"].raster.nodata
     ds_out["basmsk"] = xr.Variable(
