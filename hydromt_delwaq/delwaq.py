@@ -517,6 +517,11 @@ class DelwaqModel(GridModel):
             override=override,
             logger=self.logger,
         )
+        # Rename xdim and ydim
+        if ds_out.raster.x_dim != self.grid.raster.x_dim:
+            ds_out = ds_out.rename({ds_out.raster.x_dim: self.grid.raster.x_dim})
+        if ds_out.raster.y_dim != self.grid.raster.y_dim:
+            ds_out = ds_out.rename({ds_out.raster.y_dim: self.grid.raster.y_dim})
         self.set_forcing(ds_out)
 
         # Update model timestepsecs attribute
@@ -582,6 +587,11 @@ class DelwaqModel(GridModel):
             timestepsecs=timestepsecs,
             logger=self.logger,
         )
+        # Rename xdim and ydim
+        if ds_out.raster.x_dim != self.grid.raster.x_dim:
+            ds_out = ds_out.rename({ds_out.raster.x_dim: self.grid.raster.x_dim})
+        if ds_out.raster.y_dim != self.grid.raster.y_dim:
+            ds_out = ds_out.rename({ds_out.raster.y_dim: self.grid.raster.y_dim})
         # Add to forcing
         self.set_forcing(ds_out)
 
@@ -664,6 +674,11 @@ class DelwaqModel(GridModel):
         # Rename and add to forcing
         rmdict = {k: v for k, v in self._FORCING.items() if k in ds_out.data_vars}
         ds_out = ds_out.rename(rmdict)
+        # Rename xdim and ydim
+        if ds_out.raster.x_dim != self.grid.raster.x_dim:
+            ds_out = ds_out.rename({ds_out.raster.x_dim: self.grid.raster.x_dim})
+        if ds_out.raster.y_dim != self.grid.raster.y_dim:
+            ds_out = ds_out.rename({ds_out.raster.y_dim: self.grid.raster.y_dim})
         self.set_forcing(ds_out)
 
         # Update config

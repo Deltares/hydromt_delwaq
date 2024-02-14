@@ -341,6 +341,11 @@ class DemissionModel(DelwaqModel):
             include_transport=include_transport,
             logger=self.logger,
         )
+        # Rename xdim and ydim
+        if ds.raster.x_dim != self.grid.raster.x_dim:
+            ds = ds.rename({ds.raster.x_dim: self.grid.raster.x_dim})
+        if ds.raster.y_dim != self.grid.raster.y_dim:
+            ds = ds.rename({ds.raster.y_dim: self.grid.raster.y_dim})
 
         # Add to forcing
         self.set_forcing(ds)
