@@ -6,6 +6,7 @@ from typing import List
 import hydromt
 import pandas as pd
 import xarray as xr
+from hydromt.raster import full
 
 from .emissions import gridarea
 
@@ -108,9 +109,18 @@ def hydrology_forcing(
     ds_out = hydromt.raster.full_like(ds[dsvar], lazy=True).to_dataset()
     ds_out = ds_out.sel(time=slice(*time_tuple))
     # Array of zeros
-    da_zeros = ds[dsvar] * 0.0
-    da_zeros.attrs.update(unit="m3/s")
+    da_zeros = full(
+        coords={d: c for d, c in ds_out.coords.items() if d in ds_out.dims},
+        nodata=0.0,
+        dtype="float32",
+        name="zeros",
+        attrs=dict(unit="m3/s"),
+        crs=ds_out.raster.crs,
+        lazy=True,
+    )
     da_zeros.raster.set_nodata(-999.0)
+    # move time dim to first
+    da_zeros = da_zeros.transpose("time", da_zeros.raster.y_dim, da_zeros.raster.x_dim)
 
     ### Fluxes ###
     for flux in fluxes:
