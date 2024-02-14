@@ -179,7 +179,7 @@ def geometrymaps(
         ds_out["bankfull_volume"] = (
             rivlen * rivwth * hydromodel.grid[hydromodel._MAPS["rivdph"]]
         )
-        ds_out["bankfull_volume"].raster.set_nodata(ds_out["rivlen"].raster.nodata)
+        ds_out["bankfull_volume"].raster.set_nodata(ds_out["length"].raster.nodata)
 
     return ds_out
 
