@@ -286,11 +286,15 @@ class DemissionModel(DelwaqModel):
     ):
         """Prepare Demission hydrological fluxes.
 
-        Without transport, the fluxes required are rainfall (precip in mm), runoff
-        from paved (runPav in mm) and unpaved (runUnp in mm) areas, and infiltration
-        (infilt in mm). With transport, additional fluxes are required for exfiltration
-        (exfilt in mm), root zone soil moisture (vwcproot in %), and land (q_land in
-        m3/s) and subsurface (q_ss in m3/s) runoff.
+        Without transport, the fluxes required are rainfall (precip), runoff
+        from paved (runPav) and unpaved (runUnp) areas, and infiltration
+        (infilt). With transport, additional fluxes are required for exfiltration
+        (exfilt), root zone soil moisture (vwcproot), and land (q_land) and subsurface
+        (q_ss) runoff.
+
+        All fluxes are in m3/s except for soil moisture which is in % (volumetric water
+        content of the soil pores for the root zone ie volumetric water content of the
+        root zone divided by the porosity).
 
         Adds model layers:
 

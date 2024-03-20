@@ -1,4 +1,4 @@
-wflow_output:
+wflow_output_em:
   path: ./wflow_piave/run_default/output.nc
   crs: 4326
   data_type: RasterDataset
@@ -13,19 +13,10 @@ wflow_output:
     category: hydro
   rename:
     q_ssf: q_ss
-    q_river: sfw>sfw_1
-    q_reservoir: sfw>sfw_2
-    q_lake: sfw>sfw_3
-    vol_river: sfw_1
-    vol_reservoir: sfw_2
-    vol_lake: sfw_3
-    land_to_river: land>sfw
-    ssf_to_river: soil>sfw
+    ssf_to_river: exfiltssf
   unit_mult:
     q_ss: 0.0000115741
-    soil>sfw: 0.0000115741
-    sfw>sfw_2: 0.0000115741
-    sfw>sfw_3: 0.0000115741
+    exfiltssf: 0.0000115741
   attrs:
     precip:
       unit: mm
@@ -39,10 +30,42 @@ wflow_output:
       unit: mm
     exfiltsatstore:
       unit: mm
+    exfiltssf:
+      unit: m3/s
+    vwcproot:
+      unit: "%"
     q_land:
       unit: m3/s
     q_ss:
       unit: m3/s
+
+wflow_output_wq:
+  path: ./wflow_piave/run_default/output.nc
+  crs: 4326
+  data_type: RasterDataset
+  driver: netcdf
+  kwargs:
+    chunks:
+      lat: -1
+      lon: -1
+      time: 1
+    preprocess: harmonise_dims
+  meta:
+    category: hydro
+  rename:
+    q_river: sfw>sfw_1
+    q_reservoir: sfw>sfw_2
+    q_lake: sfw>sfw_3
+    vol_river: sfw_1
+    vol_reservoir: sfw_2
+    vol_lake: sfw_3
+    land_to_river: land>sfw
+    ssf_to_river: soil>sfw
+  unit_mult:
+    soil>sfw: 0.0000115741
+    sfw>sfw_2: 0.0000115741
+    sfw>sfw_3: 0.0000115741
+  attrs:
     sfw_1:
       unit: m3
     sfw_2:

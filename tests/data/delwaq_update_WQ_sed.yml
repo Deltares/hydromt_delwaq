@@ -4,7 +4,7 @@ global:
     - "../../examples/local_sources.yml"
 
 setup_hydrology_forcing:
-  hydro_forcing_fn: wflow_output
+  hydro_forcing_fn: wflow_output_wq
   starttime: "2010-02-03 00:00:00"
   endtime: "2010-02-10 00:00:00"
   timestepsecs: 86400

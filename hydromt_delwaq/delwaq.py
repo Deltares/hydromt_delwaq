@@ -180,7 +180,7 @@ class DelwaqModel(GridModel):
             By default ['rivmsk', 'lndslp', 'strord', 'N'].
         """
         # Initialise hydromodel from region
-        kind, region = workflows.parse_region(region)  # , logger=self.logger)
+        kind, region = workflows.parse_region(region, logger=self.logger)
         if kind != "model":
             raise ValueError("Delwaq model can only be built from 'model' region.")
         hydromodel = region["mod"]

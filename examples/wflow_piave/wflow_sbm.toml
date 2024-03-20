@@ -94,6 +94,7 @@ excesswatersoil = "runUnp"
 excesswaterpath = "runPav"
 exfiltustore = "exfiltustore"
 exfiltsatwater = "exfiltsatstore"
+vwc_percroot = "vwcproot"
 
 [state.lateral.river]
 q = "q_river"
