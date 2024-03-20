@@ -286,17 +286,22 @@ class DemissionModel(DelwaqModel):
     ):
         """Prepare Demission hydrological fluxes.
 
+        Without transport, the fluxes required are rainfall (precip in mm), runoff
+        from paved (runPav in mm) and unpaved (runUnp in mm) areas, and infiltration
+        (infilt in mm). With transport, additional fluxes are required for exfiltration
+        (exfilt in mm), root zone soil moisture (vwcproot in %), and land (q_land in
+        m3/s) and subsurface (q_ss in m3/s) runoff.
+
         Adds model layers:
 
         * **B1_timestamp.inc** config: timestamp at the beginning of the simulation.
         * **B2_outputtimes.inc** config: start and end timestamp for the delwaq outputs.
         * **B2_sysclock.inc** config: model timestep.
-        * **B2_timers.inc** config: timers info (start, end, timstep...).
+        * **B2_timers.inc** config: timers info (start, end, timestep...).
 
         In EM mode, adds:
 
-        * **hydrology.bin** dynmap: fluxes for EM (Rainfall RunoffPav  RunoffUnp Infiltr
-          TotalFlow) [mm]
+        * **hydrology.bin** dynmap: fluxes for EM.
         * **B7_hydrology.inc** config: names of fluxes included in hydrology.bin
 
         Parameters
@@ -304,8 +309,10 @@ class DemissionModel(DelwaqModel):
         hydro_forcing_fn : {'name in local_sources.yml'}
             Either None, or name in a local or global data_sources.yml file.
 
-            * Required variables for EM: ['time', 'precip', 'runPav', 'runUnp',
-              'infilt', 'exfilt*', 'q_land', 'q_ss']
+            * Required variables without transport: ['time', 'precip', 'runPav',
+              'runUnp', 'infilt']
+            * Required variables with transport: ['time', 'precip', 'runPav',
+              'runUnp', 'infilt', 'exfilt*', 'vwcproot', 'q_land', 'q_ss']
 
         startime : str
             Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
@@ -317,7 +324,7 @@ class DemissionModel(DelwaqModel):
             If False (default), only use the vertical fluxes for emission [precip,
             runPav, runUnp, infilt, totflw].
             If True, includes additional fluxes for land and subsurface transport
-            [precip, runPav, runUnp, infilt, exfilt, q_land, q_ss].
+            [precip, runPav, runUnp, infilt, exfilt, vwcproot, q_land, q_ss].
         """
         self.logger.info(
             f"Setting dynamic data from hydrology source {hydro_forcing_fn}."
@@ -363,7 +370,10 @@ class DemissionModel(DelwaqModel):
 
         # Add hydrology variables info to config
         if include_transport:
-            l2 = "Rainfall RunoffPav RunoffUnp Infiltr Exfiltr Overland Subsurface"
+            l2 = (
+                "Rainfall RunoffPav RunoffUnp Infiltr "
+                "Exfiltr vwcproot Overland Subsurface"
+            )
         else:
             l2 = "Rainfall RunoffPav RunoffUnp Infiltr TotalFlow"
         lines_ini = {
@@ -495,7 +505,7 @@ class DemissionModel(DelwaqModel):
             if "totflw" in ds_out.data_vars:
                 dvars.extend(["totflw"])
             else:
-                dvars.extend(["exfilt", "q_land", "q_ss"])
+                dvars.extend(["exfilt", "vwcproot", "q_land", "q_ss"])
             for dvar in dvars:
                 # Maybe only clim or sed were updated
                 if dvar in ds_out.data_vars:

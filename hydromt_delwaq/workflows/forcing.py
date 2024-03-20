@@ -230,10 +230,12 @@ def hydrology_forcing_em(
     Parameters
     ----------
     ds : xr.Dataset
-        Either None, or name in a local or global data_sources.yml file.
+        Dataset containing the EM forcing to resample.
 
-        * Required variables for EM: ['time', 'precip', 'runPav', 'runUnp',
-            'infilt', 'exfilt*', 'q_land', 'q_ss']
+        * Required variables without transport: ['time', 'precip', 'runPav',
+            'runUnp', 'infilt']
+        * Required variables with transport: ['time', 'precip', 'runPav',
+            'runUnp', 'infilt', 'exfilt*', 'vwcproot', 'q_land', 'q_ss']
     ds_model : xr.Dataset
         Dataset containing the model grid.
 
@@ -244,7 +246,7 @@ def hydrology_forcing_em(
         If False (default), only use the vertical fluxes for emission [precip,
         runPav, runUnp, infilt, totflw].
         If True, includes additional fluxes for land and subsurface transport
-        [precip, runPav, runUnp, infilt, exfilt, q_land, q_ss].
+        [precip, runPav, runUnp, infilt, exfilt, vwcproot, q_land, q_ss].
 
     Returns
     -------
@@ -254,7 +256,7 @@ def hydrology_forcing_em(
     # Select variables based on model type
     vars = ["precip", "runPav", "runUnp", "infilt"]
     if include_transport:
-        vars.extend(["q_land", "q_ss"])
+        vars.extend(["vwcproot", "q_land", "q_ss"])
         ex_vars = [v for v in ds.data_vars if v.startswith("exfilt")]
         vars.extend(ex_vars)
     ds = ds[vars]
