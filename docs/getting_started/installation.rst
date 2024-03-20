@@ -13,10 +13,10 @@ Additional dependencies
 -----------------------
 
 The HydroMT-delwaq Python package makes use of the HydroMT core.
-For a complete list of dependencies, see the pyproject.toml file. 
+For a complete list of dependencies, see the pyproject.toml file.
 
-DELWAQ models are built on top of existing hydrology/hydrodynamic models. 
-To build a DELWAQ model, the plugin of the corresponding hydrology/hydrodynamic model 
+DELWAQ models are built on top of existing hydrology/hydrodynamic models.
+To build a DELWAQ model, the plugin of the corresponding hydrology/hydrodynamic model
 also needs to be installed (example HydroMT-Wflow).
 
 Installation
@@ -27,12 +27,12 @@ HydroMT-delwaq is available from pypi and conda-forge. We recommend installing u
 .. Note::
 
     In the commands below you can exchange `mamba` for `conda`, see
-    `here <https://deltares.github.io/hydromt/latest/getting_started/installation.html#installation-guide>`_ 
+    `here <https://deltares.github.io/hydromt/latest/getting_started/installation.html#installation-guide>`_
     for the difference between both.
 
 Install HydroMT-delwaq in a new environment
 -------------------------------------------
-You can install HydroMT-delwaq in a new environment called `hydromt-delwaq` together with 
+You can install HydroMT-delwaq in a new environment called `hydromt-delwaq` together with
 all optional (see above) and a few additional dependencies with:
 
 .. code-block:: console
@@ -47,15 +47,15 @@ Then, activate the environment (as stated by mamba/conda) to start making use of
 
 .. Tip::
 
-    If you already have this environment with this name either remove it with 
-    `conda env remove -n hydromt-delwaq` **or** set a new name for the environment 
-    by adding `-n <name>` to the line below. 
+    If you already have this environment with this name either remove it with
+    `conda env remove -n hydromt-delwaq` **or** set a new name for the environment
+    by adding `-n <name>` to the line below.
 
 Install HydroMT-delwaq in an existing environment
 -------------------------------------------------
-To install HydroMT-delwaq in an existing environment execute the command below 
-where you replace `<environment_name>` with the name of the existing environment. 
-Note that if some dependencies are not installed from conda-forge but from other 
+To install HydroMT-delwaq in an existing environment execute the command below
+where you replace `<environment_name>` with the name of the existing environment.
+Note that if some dependencies are not installed from conda-forge but from other
 channels the installation may fail.
 
 .. code-block:: console

@@ -1,3 +1,1 @@
-"""add global fixtures"""
-
-import pytest
+"""add global fixtures."""

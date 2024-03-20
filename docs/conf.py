@@ -23,6 +23,8 @@ import hydromt
 import hydromt_delwaq
 from distutils.dir_util import copy_tree
 
+os.environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
+
 here = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(here, "..")))
 
@@ -285,7 +287,7 @@ nbsphinx_prolog = r"""
     .. raw:: html
 
         <div>
-            For an interactive online version click here: 
+            For an interactive online version click here:
             <a href="https://mybinder.org/v2/gh/Deltares/hydromt_delwaq/main?urlpath=lab/tree/examples/{{ docname|e }}" target="_blank" rel="noopener noreferrer"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg"></a>
         </div>
 """

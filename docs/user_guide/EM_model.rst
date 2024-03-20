@@ -69,15 +69,12 @@ and :py:func:`~DelwaqModel.write_config` for the
    * - :py:class:`~hydromt_delwaq.DelwaqModel` attribute
      - D-Emissions files
    * - :py:attr:`~hydromt_delwaq.DelwaqModel.config`
-     - several `config/*.inc` files linked to emission.inp 
-   * - :py:attr:`~hydromt_delwaq.DelwaqModel.staticmaps`
+     - several `config/*.inc` files linked to emission.inp
+   * - :py:attr:`~hydromt_delwaq.DelwaqModel.grid`
      - several static binary data for emission calculation in `staticdata/*.dat`
-   * - :py:attr:`~hydromt_delwaq.DelwaqModel.staticgeoms`
-     - geometries from the staticgeoms folder (basins.geojson, monareas.geojson etc.)
+   * - :py:attr:`~hydromt_delwaq.DelwaqModel.geoms`
+     - geometries from the geoms folder (basins.geojson, monareas.geojson etc.)
    * - :py:attr:`~hydromt_delwaq.DelwaqModel.forcing`
      - hydrology.bin
    * - :py:attr:`~hydromt_delwaq.DelwaqModel.hydromaps`
      - additional `hydromodel/*.tif` files with information on the coupled hydrology/hydrodynamic model.
-
-
-

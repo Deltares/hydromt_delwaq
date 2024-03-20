@@ -31,7 +31,7 @@ Following an update in xarray, hydromt version should be >= 0.5.0.
 Added
 -----
 
-- New setup_sediment_forcing method to add eroded soil particles emissions as input to the river in the WQ component. 
+- New setup_sediment_forcing method to add eroded soil particles emissions as input to the river in the WQ component.
   Different particles size can be taken into account.
 
 Changed

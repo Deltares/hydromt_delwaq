@@ -1,7 +1,6 @@
 """hydroMT plugin for DELWAQ models."""
 
-from os.path import dirname, join, abspath
-
+from os.path import abspath, dirname, join
 
 __version__ = "0.2.2.dev"
 
@@ -13,4 +12,5 @@ import os
 
 os.environ["USE_PYGEOS"] = "0"
 
-from .delwaq import *
+from .delwaq import DelwaqModel
+from .demission import DemissionModel

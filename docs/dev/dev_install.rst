@@ -3,10 +3,10 @@
 Developer's environment
 -----------------------
 
-If you want to download the HydroMT-delwaq plugin directly from git to easily have access to the latest developments or make 
+If you want to download the HydroMT-delwaq plugin directly from git to easily have access to the latest developments or make
 changes to the code you can use the following steps.
 
-First, clone the HydroMT-delwaq plugin ``git`` repo from `github <https://github.com/Deltares/hydromt_delwaq.git>`_. 
+First, clone the HydroMT-delwaq plugin ``git`` repo from `github <https://github.com/Deltares/hydromt_delwaq.git>`_.
 If you need a github authentification key, you can use `ssh <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account>`_
 
 .. code-block:: console
