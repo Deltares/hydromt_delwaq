@@ -140,6 +140,8 @@ def geometrymaps(
     - surface
     - length
     - width
+    - latitude_grid
+    - optional: bankfull_volume if bankfull depth `rivdph` is available
 
     Parameters
     ----------
@@ -173,6 +175,17 @@ def geometrymaps(
     ds_out = surface.to_dataset()
     ds_out["length"] = length
     ds_out["width"] = width
+
+    # Derive latitude of each cell
+    y_dim = ds_out.raster.y_dim
+    x_dim = ds_out.raster.x_dim
+    # Expend latitude dimension values to all cells of ds_out
+    ds_out["latitude_grid"] = xr.DataArray(
+        data=ds_out[y_dim].values.reshape(-1, 1).repeat(ds_out.dims[x_dim], axis=1),
+        coords=ds_out.raster.coords,
+        dims=ds_out.raster.dims,
+    )
+    ds_out["latitude_grid"].raster.set_nodata(-9999.0)
 
     # Bankfull volume
     if hydromodel._MAPS["rivdph"] in hydromodel.grid:
