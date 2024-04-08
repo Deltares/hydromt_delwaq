@@ -322,18 +322,26 @@ class DelwaqModel(GridModel):
                 areas = areas[areas != mv]
                 nb_areas = len(np.unique(areas))
                 monareas = basins
-            else:  # riverland
+            elif mon_areas == "riverland":  # riverland
                 # seperate areas for land cells (1) and river cells (2)
                 lr_areas = xr.where(
                     self.hydromaps["river"],
                     2,
                     xr.where(self.hydromaps["basins"], 1, mv),
                 ).astype(np.int32)
+                # Apply the current model mask
+                lr_areas = lr_areas(self.hydromaps["mask"], mv)
+                lr_areas.raster.set_nodata(mv)
                 # Number or monitoring areas
                 areas = lr_areas.values.flatten()
                 areas = areas[areas != mv]
                 nb_areas = len(np.unique(areas))
                 monareas = lr_areas
+            else:
+                raise ValueError(
+                    f"Unknown monitoring area type {mon_areas}. "
+                    "Valid options are 'subcatch' or 'riverland'."
+                )
 
             # Add to grid
             monareas.attrs.update(_FillValue=mv)
