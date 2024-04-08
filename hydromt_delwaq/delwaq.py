@@ -330,7 +330,7 @@ class DelwaqModel(GridModel):
                     xr.where(self.hydromaps["basins"], 1, mv),
                 ).astype(np.int32)
                 # Apply the current model mask
-                lr_areas = lr_areas(self.hydromaps["mask"], mv)
+                lr_areas = lr_areas.where(self.hydromaps["mask"], mv)
                 lr_areas.raster.set_nodata(mv)
                 # Number or monitoring areas
                 areas = lr_areas.values.flatten()
