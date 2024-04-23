@@ -165,6 +165,11 @@ def geometrymaps(
     # surface
     surface = surface.where(rivmsk == False, rivlen * rivwth)
     surface = surface.rename("surface")
+    # Add waterbodies to surface
+    for wb in ["LakeArea", "ResSimpleArea"]:
+        if wb in hydromodel.grid:
+            wb_surface = hydromodel.grid[wb]
+            surface = surface.where(wb_surface == wb_surface.raster.nodata, wb_surface)
     # length
     length = rivlen.where(rivmsk, length)
     length = length.rename("length")
