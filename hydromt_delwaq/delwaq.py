@@ -19,7 +19,7 @@ from tqdm import tqdm
 
 from . import DATADIR
 from .utils import dw_WriteSegmentOrExchangeData
-from .workflows import config, emissions, forcing, hydrology, segments
+from .workflows import config, emissions, forcing, segments
 
 __all__ = ["DelwaqModel"]
 
@@ -368,71 +368,6 @@ class DelwaqModel(GridModel):
         }
         for option in lines_ini:
             self.set_config("B2_nrofmon", option, lines_ini[option])
-
-    def setup_flooding(
-        self,
-        hydro_fn: str,
-        from_volume: bool = True,
-        bankfull_rp: int = 2,
-        **kwargs,
-    ):
-        """
-        Derive bankfull volume from either discharge or volume timeseries.
-
-        Addionnally, if floodplain processes need to be modelled, the bankfull volume
-        to characterise flooding thresholds can be derived from hydrology timeseries
-        data.
-        The bankfull volume is defined as the volume corresponding to a return period of
-        2 years (default).
-        xclim.indices.stats.frequency_analysis is used to get bankfull volume based on
-        annual maxima method.
-
-        If volume timeseries are not available, the bankfull volume can be derived from
-        discharge timeseries data using the flag from_volume=False.
-
-        Parameters
-        ----------
-        hydro_fn : str
-            Path to the discharge forcing file.
-
-            * Required variable: ["volume"] or ["discharge"]
-
-        from_volume : bool, optional
-            If True, bankfull volume is derived from volume timeseries data.
-        **kwargs
-            Keywords arguments for either bankfull_volume or
-            bankfull_volume_from_discharge.
-        """
-        # Read data
-        # Normally region extent is by default exactly the same as hydromodel
-        if from_volume:
-            da_v = self.data_catalog.get_rasterdataset(
-                hydro_fn, geom=self.region, variables=["volume"]
-            )
-
-            # Derive bankfull discharge / depth / volume
-            self.logger.info("Deriving flooding characteristics from volume.")
-            ds_bankfull = hydrology.bankfull_volume(
-                da_v=da_v,
-                bankfull_rp=bankfull_rp,
-                **kwargs,
-            )
-        else:
-            da_q = self.data_catalog.get_rasterdataset(
-                hydro_fn, geom=self.region, variables=["discharge"]
-            )
-
-            # Derive bankfull discharge / depth / volume
-            self.logger.info("Deriving flooding characteristics from discharge.")
-            ds_bankfull = hydrology.bankfull_volume_from_discharge(
-                da_q=da_q,
-                ds_model=self.grid,
-                bankfull_rp=bankfull_rp,
-                **kwargs,
-            )
-
-        # Add to grid
-        self.set_grid(ds_bankfull)
 
     def setup_hydrology_forcing(
         self,
