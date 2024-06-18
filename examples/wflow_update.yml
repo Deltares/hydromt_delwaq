@@ -13,7 +13,6 @@ setup_config:
   output.lateral.river.q_av: "q_river"
   output.lateral.river.volume: "vol_river"
   output.lateral.land.q_av: "q_land"
-  output.lateral.land.volume: "vol_land"
   output.lateral.land.to_river: "land_to_river"
   output.lateral.subsurface.ssf: "q_ssf"
   output.lateral.subsurface.to_river: "ssf_to_river"
@@ -23,5 +22,7 @@ setup_config:
   # Only add if lakes in the model
   output.lateral.river.lake.storage: "vol_lake"
   output.lateral.river.lake.totaloutflow: "q_lake"
+  # Only add if 1d floodplain in the model
+  # output.lateral.river.floodplain: "vol_floodplain"
 
 write_config:

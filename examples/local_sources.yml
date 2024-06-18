@@ -3,7 +3,7 @@ wflow_output_em:
   crs: 4326
   data_type: RasterDataset
   driver: netcdf
-  kwargs:
+  driver_kwargs:
     chunks:
       lat: -1
       lon: -1
@@ -44,7 +44,7 @@ wflow_output_wq:
   crs: 4326
   data_type: RasterDataset
   driver: netcdf
-  kwargs:
+  driver_kwargs:
     chunks:
       lat: -1
       lon: -1
@@ -59,6 +59,7 @@ wflow_output_wq:
     vol_river: sfw_1
     vol_reservoir: sfw_2
     vol_lake: sfw_3
+    # vol_floodplain: sfw_4
     land_to_river: land>sfw
     ssf_to_river: soil>sfw
   unit_mult:
@@ -72,6 +73,8 @@ wflow_output_wq:
       unit: m3
     sfw_3:
       unit: m3
+    # sfw_4:
+    #   unit: m3
     sfw>sfw_1:
       unit: m3/s
     sfw>sfw_2:
