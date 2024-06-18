@@ -105,8 +105,23 @@ def hydrology_forcing(
 
     # Copy of ds to be filled
     dsvar = [v for v in ds.data_vars if v.startswith(fluxes[0])][0]
-    ds_out = hydromt.raster.full_like(ds[dsvar], lazy=True).to_dataset()
-    ds_out = ds_out.sel(time=slice(*time_tuple))
+    # Delwaq needs one more timestep for the volume
+    starttime, endtime = pd.to_datetime(time_tuple)
+    endtime = endtime + pd.to_timedelta(timestepsecs, unit="s")
+    ds_out_times = pd.date_range(starttime, endtime, freq=f"{timestepsecs}s")
+    coords = {
+        "time": ds_out_times,
+        ds.raster.y_dim: ds[ds.raster.y_dim],
+        ds.raster.x_dim: ds[ds.raster.x_dim],
+    }
+    ds_out = hydromt.raster.full(
+        coords=coords,
+        nodata=-999.0,
+        dtype="float32",
+        name=dsvar,
+        crs=ds.raster.crs,
+        lazy=True,
+    ).to_dataset()
     # Array of zeros
     da_zeros = xr.zeros_like(ds_out[dsvar])
     da_zeros.raster.set_nodata(-999.0)
@@ -198,11 +213,11 @@ def hydrology_forcing(
             da_vol["time"] = times_offset
         else:
             da_vol = ds[vol]
-        ds_out[vol] = da_vol.sel(time=slice(*time_tuple))
+        ds_out[vol] = da_vol.sel(time=slice(starttime, endtime))
         ds_out[vol].attrs.update(attrs)
         ds_out[vol].attrs.update(unit="m3")
 
-    # Select variables, needed??
+    # Select variables (drop dsvar if needed)
     variables = fluxes.copy()
     variables.extend([surface_water])
     ds_out = ds_out[variables]

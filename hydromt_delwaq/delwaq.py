@@ -1090,28 +1090,27 @@ class DelwaqModel(GridModel):
         for i in tqdm(
             np.arange(0, len(ds_out.time.values)), desc="Writing dynamic data"
         ):
-            # self.logger.info(
-            #    f"Writting dynamic data for timestep {i+1}/{len(timesteps)}"
-            # )
-            # Flow
-            flname = join(self.root, "dynamicdata", "flow.dat")
-            flow_vars = self.fluxes
-            flowblock = []
-            for dvar in flow_vars:
-                # Maybe only clim or sed were updated
-                if dvar in ds_out.data_vars:
-                    nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
-                    data = data[data != nodata]
-                    flowblock = np.append(flowblock, data)
-                else:
-                    self.logger.info(f"Variable {dvar} not found in forcing data.")
-            # Maybe do a check on len of flowback
-            # based on number of variables,segments,timesteps
-            if len(flowblock) > 0:
-                dw_WriteSegmentOrExchangeData(
-                    timestepstamp[i], flname, flowblock, 1, WriteAscii=False
-                )
+            # if last timestep only write volumes
+            if i != len(ds_out.time.values) - 1:
+                # Flow
+                flname = join(self.root, "dynamicdata", "flow.dat")
+                flow_vars = self.fluxes
+                flowblock = []
+                for dvar in flow_vars:
+                    # Maybe only clim or sed were updated
+                    if dvar in ds_out.data_vars:
+                        nodata = ds_out[dvar].raster.nodata
+                        data = ds_out[dvar].isel(time=i).values.flatten()
+                        data = data[data != nodata]
+                        flowblock = np.append(flowblock, data)
+                    else:
+                        self.logger.info(f"Variable {dvar} not found in forcing data.")
+                # Maybe do a check on len of flowback
+                # based on number of variables,segments,timesteps
+                if len(flowblock) > 0:
+                    dw_WriteSegmentOrExchangeData(
+                        timestepstamp[i], flname, flowblock, 1, WriteAscii=False
+                    )
             # volume
             voname = join(self.root, "dynamicdata", "volume.dat")
             vol_vars = [self.surface_water]
@@ -1128,7 +1127,7 @@ class DelwaqModel(GridModel):
                     timestepstamp[i], voname, volblock, 1, WriteAscii=False
                 )
             # sediment
-            if "B7_sediment" in self.config:
+            if "B7_sediment" in self.config and i != len(ds_out.time.values) - 1:
                 sedname = join(self.root, "dynamicdata", "sediment.dat")
                 sed_vars = self.get_config("B7_sediment.l2").split(" ")
                 sedblock = []
@@ -1144,7 +1143,7 @@ class DelwaqModel(GridModel):
                         timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
                     )
             # climate
-            if "B7_climate" in self.config:
+            if "B7_climate" in self.config and i != len(ds_out.time.values) - 1:
                 climname = join(self.root, "dynamicdata", "climate.dat")
                 clim_vars = self.get_config("B7_climate.l2").split(" ")
                 climblock = []
