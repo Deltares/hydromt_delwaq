@@ -147,13 +147,17 @@ class DelwaqModel(GridModel):
         * **ldd** hydromap: flow direction [-]
         * **modelmap** hydromap: mask map [bool]
         * **ptid** hydromap: unique ID of Delwaq segments [-]
-        * **streamorder** map: Strahler stream order map. [-]
-        * **slope** map: slope map [-]
         * **river** map: river mask map [-]
         * **surface** map: surface map [m2]
         * **length** map: length map [m]
         * **width** map: width map [m]
         * **pointer** poi: delwaq pointer between segments
+        * **B3_nrofseg** config: number of segments
+        * **B3_attributes** config: delwaq complete attributes
+        * **B4_nrofexch** config: number of exchanges
+        * **B5_boundlist** config: list of boundaries and types
+        * **B7_flow** config: list of flow names
+        * **B7_volume** config: list of volume names
 
         Parameters
         ----------
@@ -243,6 +247,7 @@ class DelwaqModel(GridModel):
             boundaries=bd_id,
             boundaries_type=bd_type,
             fluxes=fluxes,
+            volumes=[surface_water],
         )
         for file in configs:
             for option in configs[file]:
@@ -259,7 +264,7 @@ class DelwaqModel(GridModel):
 
         * **monitoring_points** map: monitoring points segments
         * **monitoring_areas** map: monitoring areas ID
-        * **B2_nrofmon.inc** config: number of monitoring points and areas
+        * **B2_nrofmon** config: number of monitoring points and areas
 
         Parameters
         ----------
@@ -441,10 +446,10 @@ class DelwaqModel(GridModel):
     ):
         """Prepare Delwaq hydrological fluxes.
 
-        As the fluxes order should precisely macth the pointer defined in
+        As the fluxes order should precisely match the pointer defined in
         setup_basemaps, the variables names in ``hydro_forcing_fn`` should match names
         defined in the ``fluxes`` argument of setup_basemaps. These names should also
-        have been saved in the file config/B7_fluxes.inc.
+        have been saved in the file config/B7_flow.inc.
 
         If several sub-variables in ``hydro_forcing_fn`` need to be summed up to get
         the expected flux in pointer, they can be named {flux_name_in_pointer}_{number}
@@ -463,14 +468,12 @@ class DelwaqModel(GridModel):
 
         Adds model layers:
 
-        * **B1_timestamp.inc** config: timestamp at the beginning of the simulation.
-        * **B2_outputtimes.inc** config: start and end timestamp for the delwaq outputs.
-        * **B2_sysclock.inc** config: model timestep.
-        * **B2_timers.inc** config: timers info (start, end, timstep...).
-        * **flow.dat** dynmap: water fluxes [m3/s]
-        * **volume.dat** dynmap: water volumes [m3]
-        * **area.dat** dynmap: water cross sections [m2]
-        * **velocity.dat** dynmap: flow velocity [m/s]
+        * **B1_timestamp** config: timestamp at the beginning of the simulation.
+        * **B2_outputtimes** config: start and end timestamp for the delwaq outputs.
+        * **B2_sysclock** config: model timestep.
+        * **B2_timers** config: timers info (start, end, timstep...).
+        * **flow** dynmap: water fluxes [m3/s]
+        * **volume** dynmap: water volumes [m3]
 
         Parameters
         ----------
@@ -557,9 +560,9 @@ class DelwaqModel(GridModel):
 
         Adds model layers:
 
-        * **sediment.bin** dynmap: sediment particles from land erosion (fErodIM*)
+        * **sediment** dynmap: sediment particles from land erosion (fErodIM*)
           [g/timestep]
-        * **B7_sediment.inc** config: names of sediment fluxes included in sediment.bin
+        * **B7_sediment** config: names of sediment fluxes included in sediment.bin
 
         Parameters
         ----------
@@ -625,8 +628,8 @@ class DelwaqModel(GridModel):
 
         Adds model layers:
 
-        * **climate.bin** dynmap: climate fuxes for climate_vars
-        * **B7_climate.inc** config: names of climate fluxes included in climate.bin
+        * **climate** dynmap: climate fuxes for climate_vars
+        * **B7_climate** config: names of climate fluxes included in climate.bin
 
         Parameters
         ----------
@@ -1348,7 +1351,7 @@ class DelwaqModel(GridModel):
         else:
             # from config
             fl = self.get_config(
-                "B7_fluxes.l2",
+                "B7_flow.l2",
                 fallback="sfw>sfw inw>sfw",
             )
             fl = fl.split(" ")

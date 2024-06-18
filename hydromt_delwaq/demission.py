@@ -119,9 +119,13 @@ class DemissionModel(DelwaqModel):
         * **ldd** hydromap: flow direction [-]
         * **modelmap** hydromap: mask map [bool]
         * **ptid** hydromap: unique ID of Delwaq segments [-]
-        * **streamorder** map: Strahler stream order map. [-]
-        * **slope** map: slope map [-]
+        * **river** map: river mask map [-]
         * **pointer** poi: delwaq pointer between segments
+        * **B3_nrofseg** config: number of segments
+        * **B3_attributes** config: delwaq complete attributes
+        * **B4_nrofexch** config: number of exchanges
+        * **B5_boundlist** config: list of boundaries and types
+        * **B7_surf** config: surface data
 
         Parameters
         ----------
@@ -296,17 +300,18 @@ class DemissionModel(DelwaqModel):
         content of the soil pores for the root zone ie volumetric water content of the
         root zone divided by the porosity).
 
+        If fluxes are given in mm, they are converted to m3/s using the grid cell area.
+        The unit of the fluxes can be defined in the data catalog in the `attrs`
+        properties.
+
         Adds model layers:
 
-        * **B1_timestamp.inc** config: timestamp at the beginning of the simulation.
-        * **B2_outputtimes.inc** config: start and end timestamp for the delwaq outputs.
-        * **B2_sysclock.inc** config: model timestep.
-        * **B2_timers.inc** config: timers info (start, end, timestep...).
-
-        In EM mode, adds:
-
-        * **hydrology.bin** dynmap: fluxes for EM.
-        * **B7_hydrology.inc** config: names of fluxes included in hydrology.bin
+        * **hydrology** dynmap: fluxes for D-Emission.
+        * **B7_hydrology** config: names of fluxes included in hydrology.bin
+        * **B1_timestamp** config: timestamp at the beginning of the simulation.
+        * **B2_outputtimes** config: start and end timestamp for the delwaq outputs.
+        * **B2_sysclock** config: model timestep.
+        * **B2_timers** config: timers info (start, end, timestep...).
 
         Parameters
         ----------

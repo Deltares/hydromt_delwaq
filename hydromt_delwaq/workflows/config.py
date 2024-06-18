@@ -20,17 +20,19 @@ def base_config(
     boundaries: List[str] = None,
     boundaries_type: List[str] = None,
     fluxes: List[str] = None,
+    volumes: List[str] = None,
 ) -> Dict:
     """
     Prepare base config dictionnary.
 
     Files concerned:
-    - B3_nrofseg
-    - B3_attributes
-    - B4_nrofexch
-    - B5_boundlist
-    - B7_surf (optional)
-    - B7_fluxes (optional)
+    - B3_nrofseg: Number of segments.
+    - B3_attributes: Delwaq complete attributes.
+    - B4_nrofexch: Number of exchanges.
+    - B5_boundlist: List of boundaries and types.
+    - B7_surf (optional): Surface data.
+    - B7_flow (optional): Flow name(s).
+    - B7_volume (optional): Volume name(s).
 
     Parameters
     ----------
@@ -48,7 +50,9 @@ def base_config(
     boundaries_type : List[str], optional
         List of boundaries types matching the order in ``boundaries``. By default None.
     fluxes : List[str], optional
-        List of fluxes to add to B7_fluxes if fluxes is not None. By default None.
+        List of fluxes to add to B7_flow if fluxes is not None. By default None.
+    volumes : List[str], optional
+        List of volumes to add to B7_volume if volumes is not None. By default None.
 
     Returns
     -------
@@ -96,11 +100,18 @@ def base_config(
             "l1": f"PARAMETERS Surf ALL DATA {nrofseg}*1.0",
         }
 
-    # B7_fluxes
+    # B7_flow
     if fluxes is not None:
-        config["B7_fluxes"] = {
+        config["B7_flow"] = {
             "l1": "SEG_FUNCTIONS",
             "l2": " ".join(fluxes),
+        }
+
+    # B7_volume
+    if volumes is not None:
+        config["B7_volume"] = {
+            "l1": "SEG_FUNCTIONS",
+            "l2": " ".join(volumes),
         }
 
     return config

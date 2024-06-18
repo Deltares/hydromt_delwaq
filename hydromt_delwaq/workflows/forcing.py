@@ -36,7 +36,7 @@ def hydrology_forcing(
     As the fluxes order should precisely macth the pointer defined in setup_basemaps,
     the variables names in ``hydro_forcing_fn`` should match names defined in the
     ``fluxes`` argument of setup_basemaps. These names should also have been saved in
-    the file config/B7_fluxes.inc.
+    the file config/B7_flow.inc.
 
     If several sub-variables in ``hydro_forcing_fn`` need to be summed up to get the
     expected flux in pointer, they can be named {flux_name_in_pointer}_{number}
