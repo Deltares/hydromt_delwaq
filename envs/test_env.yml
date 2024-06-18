@@ -30,7 +30,6 @@ dependencies:
   - pydata-sphinx-theme # docs
   - tqdm
   - xarray
-  - xclim
   - xugrid
   - pip:
     - sphinx_design  # docs

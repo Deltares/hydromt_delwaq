@@ -33,7 +33,6 @@ dependencies:
   - ruff # dev
   - tqdm
   - xarray
-  - xclim
   - xugrid
   - pip:
     - sphinx_design # docs

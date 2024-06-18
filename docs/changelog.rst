@@ -11,12 +11,30 @@ Unreleased
 
 Added
 -----
+- **DemissionModel** class: specific class to prepare D-Emission models. Can be accessed in the command line using **demission** entrypoint.
+- **setup_climate_forcing** method to add climate data to a delwaq or demission model.
+- **pointer** property for DelwaqModel to easily access pointer properties such as number of segments, exchanges, fluxes etc.
+- **read_config** method to read the config files from the config folder.
+- **write_waqgeom** method to write a waqgeom file in order to save Delwaq outputs in NetCDF format (not written by default).
+- New workflows to prepare Delwaq config **workflows.config** and forcing **workflows.forcing**.
 
 Changed
 -------
+- **DelwaqModel** (delwaq) only builds classic D-Water Quality models. For D-Emissions model use the new DemissionModel class (demission).
+- DelwaqModel (and DemissionModel) are subclasses of the HydroMT core GridModel and core GridModel methods are now available.
+- **setup_basemaps** method is now more flexible to include any flux and boundary exchange to surface_water that the user wishes to include rather than a few predefined fluxes only.
+- **setup_basemaps** method allows to add any variable from hydromodel to the staticdata grid.
+- **setup_monitoring**: for monitoring areas, 'compartments' option is not available anymore (only surface_water) and a new option for 'riverland' to distinguish between river and land cells was added.
+
 
 Fixed
 -----
+
+Dependencies
+------------
+
+- Added dependency to tqdm for progress bars in the write_forcing method.
+- Added dependency to xugrid to produce the waqgeom file.
 
 v0.2.1 (27 April 2023)
 ======================

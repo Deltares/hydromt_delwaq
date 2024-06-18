@@ -20,6 +20,7 @@ dependencies = [
     "shapely >=2.0.0",
     "tqdm",
     "xarray",
+    "xugrid",
 ]
 requires-python = ">=3.10"
 readme = "README.rst"
@@ -35,9 +36,6 @@ classifiers = [
 dynamic = ['version', 'description']
 
 [project.optional-dependencies]
-extra = [
-    "xclim",
-]
 dev = [
     "black",
     "ruff",
@@ -48,7 +46,7 @@ test = [
 	"pytest>=2.7.3",
 	"pytest-cov",
     "pytest-timeout",
-	"hydromt_delwaq[dev, extra]",
+	"hydromt_delwaq[dev]",
 ]
 doc = [
     "nbsphinx",
@@ -56,7 +54,7 @@ doc = [
     "sphinx_design",
     "pydata-sphinx-theme",
     "sphinx_autosummary_accessors",
-    "hydromt_delwaq[examples,extra]",
+    "hydromt_delwaq[examples]",
 ]
 examples = [
     "jupyterlab",
@@ -64,8 +62,8 @@ examples = [
     "matplotlib",
     "notebook",
 ]
-full = ["hydromt_delwaq[extra,dev,test,doc,examples]"]
-slim = ["hydromt_delwaq[extra,examples]"]
+full = ["hydromt_delwaq[dev,test,doc,examples]"]
+slim = ["hydromt_delwaq[examples]"]
 
 [project.urls]
 Documentation = "https://deltares.github.io/hydromt_delwaq/latest/"
