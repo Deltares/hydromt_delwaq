@@ -108,7 +108,7 @@ General methods
 .. _api_model_emission:
 
 D-Emission model class
-==================
+======================
 
 Initialize
 ----------
@@ -118,7 +118,7 @@ Initialize
 
    DemissionModel
 
-.. _methods:
+.. _methods_emission:
 
 Setup methods
 -------------

@@ -12,7 +12,7 @@ HydroMT in order to build or update D-Water Quality (WQ) models.
 
 When building or updating a model from command line a
 `model region <https://deltares.github.io/hydromt/latest/user_guide/model_region>`_, a model setup
-:ref:`configuration <config_file_WQ>` (.ini file) with model components and options and, optionally,
+:ref:`configuration <config_file_WQ>` (.yml file) with model components and options and, optionally,
 a `data sources <https://deltares.github.io/hydromt/latest/user_guide/data_main>`_ (.yml) file should be prepared.
 
 .. _wq_methods:
@@ -42,6 +42,8 @@ a specific method see its documentation.
       - This component prepares the hydrological fluxes.
     * - :py:func:`~DelwaqModel.setup_sediment_forcing`
       - This component prepares the sediment emission fluxes.
+    * - :py:func:`~DelwaqModel.setup_climate_forcing`
+      - This component prepares the climate forcing (eg for temperature modelling).
     * - :py:func:`~DelwaqModel.setup_emission_raster`
       - This component generates emission related data from a raster data source.
     * - :py:func:`~DelwaqModel.setup_emission_vector`
@@ -52,8 +54,8 @@ a specific method see its documentation.
 
 .. _wq_files:
 
-D-Water Quality datamodel files
-===============================
+D-Water Quality model components
+================================
 
 The following table provides an overview of which :py:class:`~hydromt_delwaq.DelwaqModel`
 attribute contains which D-Water Quality in- and output files. The files are read and written with the associated
@@ -67,7 +69,7 @@ and :py:func:`~DelwaqModel.write_config` for the
    :header-rows: 1
 
    * - :py:class:`~hydromt_delwaq.DelwaqModel` attribute
-     - D-Water Quality files
+     - D-Water Quality model
    * - :py:attr:`~hydromt_delwaq.DelwaqModel.config`
      - several `config/*.inc` files linked to delwaq.inp
    * - :py:attr:`~hydromt_delwaq.DelwaqModel.grid`
@@ -78,3 +80,5 @@ and :py:func:`~DelwaqModel.write_config` for the
      - flow.dat, volume.dat, sediment.dat
    * - :py:attr:`~hydromt_delwaq.DelwaqModel.hydromaps`
      - additional `hydromodel/*.tif` files with information on the coupled hydrology/hydrodynamic model.
+    * - :py:attr:`~hydromt_delwaq.DelwaqModel.pointer`
+      - pointer file `pointer.poi` and linked information.

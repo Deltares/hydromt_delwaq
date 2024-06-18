@@ -5,7 +5,7 @@ Editing the EM run information
 
 .. Tip::
 
-    This page contains additional information on the generic D-Emissions module, not direclty related to the HydroMT-delwaq plugin.
+    This page contains additional information on the generic D-Emissions module, not directly related to the HydroMT-delwaq plugin.
 
 In order to run the D-Emissions module of DELWAQ, an input file is used to set up all the relevant run information such as substances and processes to include,
 run time information, data and model parameters to use etc. This is set up in a **.inp** file. A template of such
@@ -67,7 +67,7 @@ the one-substance D-Emissions model:
 ::
 
     ; source Type B01
-    PARAMETERS EV_B01        ALL BINARY_FILE 'staticdata\GHS-POP_2015.dat' ; locator/EV variable type B    (cap)
+    PARAMETERS EV_B01        ALL BINARY_FILE 'staticdata\ghs_pop_2015.dat' ; locator/EV variable type B    (cap)
     CONSTANTS  EF_B01           DATA 2.2          ; emission factor                                        (Kg/d/cap)
     CONSTANTS  B01toSew         DATA 1.0          ; released fraction receptor                             (-)
     CONSTANTS  B01toPav         DATA 0.0          ; released fraction receptor                             (-)

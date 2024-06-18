@@ -5,7 +5,7 @@ Selection of substance(s) and sources
 
 .. Tip::
 
-    This page contains additional information on the generic D-Emissions module, not direclty related to the HydroMT-delwaq plugin.
+    This page contains additional information on the generic D-Emissions module, not directly related to the HydroMT-delwaq plugin.
 
 The very first part of preparing a water quality model is to define which substances and which emission sources you wish to include in the model.
 
@@ -13,7 +13,7 @@ When a substance is chosen, the sources (or losses) the user wants to consider c
 The sources and their emission releases are then quantified or initialized based on available data. There are two types of sources in D-Emissions:
 
 -  Type A: direct substance release rates by the source (usually in g/day, e.g. atmospheric deposition)
--  Type B: substance release rates based on a locator: for example a domestic source can be charaterized by the locator population (in cap) and its emission factor (in g/cap/day).
+-  Type B: substance release rates based on a locator: for example a domestic source can be characterized by the locator population (in cap) and its emission factor (in g/cap/day).
 
 Then in D-Emissions, the substances can enter the catchment via different receptors that are:
 
@@ -38,17 +38,22 @@ of lateral flows between segments (eg discharge), but also the direction of vert
 This means that external flows into / out of a segment (for example precipitation from the atmosphere) are defined in the pointer as flows between a segment and
 a boundary (for precipitation the boundary is the atmosphere).
 
-By only modelling substances one-by-one, the generic D-Emissions version only considers one environment layer which is the **emission or substance layer**. As
-D-Emissions does not deal with fate and transport (no lateral flux between segments), there is then no need to define either a pointer or a boundary file. In essence,
+By only modelling substances one-by-one, the generic D-Emissions version only considers one environment layer which is the **emission or substance layer**. In essence,
 D-Emissions calculates the various emitted loads per geographic unit (eg Wflow cell).
+
+In the latest version of D-Emissions, D-Emissions can also transport the emitted substances to the river via overland flow and subsurface flow. As the transport process is simple,
+compared to D-Water Quality that needs a pointer with fluxes and boundaries, D-Emissions only requires an additional map with the ID of the downstream cell.
 
 For a D-Emissions model, the required hydrological data is:
 
 - precipitation
 - the amount of the precipitation that infiltrates into the soil from unpaved areas
-- the amount of the precipation that goes directly to surface runoff from paved areas
-- the amount of the precipation that goes directly to surface runoff from unpaved areas
+- the amount of the precipitation that goes directly to surface runoff from paved areas
+- the amount of the precipitation that goes directly to surface runoff from unpaved areas
 
-.. note::
+To include transport and soil processes, the D-Emissions model needs the following additional data:
 
-   In this version of EM, the *amount of the precipitation that **infiltrates** into the soil from unpaved areas* is dealt with as a sink, since the WQ version does not yet contain a Soil compartment.
+- exfiltration from the saturated and unsaturated store of the soil
+- volumetric water content of the soil pores in the root zone ie the root zone soil moisture
+- overland flow
+- subsurface flow

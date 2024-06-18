@@ -9,8 +9,7 @@ Prerequisites
 
 For the necessary prerequisites, see `HydroMT core prerequisites <https://deltares.github.io/hydromt/latest/getting_started/installation.html#prerequisites>`_.
 
-Additional dependencies
------------------------
+**Additional dependencies**
 
 The HydroMT-delwaq Python package makes use of the HydroMT core.
 For a complete list of dependencies, see the pyproject.toml file.
@@ -32,12 +31,11 @@ HydroMT-delwaq is available from pypi and conda-forge. We recommend installing u
 
 Install HydroMT-delwaq in a new environment
 -------------------------------------------
-You can install HydroMT-delwaq in a new environment called `hydromt-delwaq` together with
-all optional (see above) and a few additional dependencies with:
+You can install HydroMT-delwaq in a new environment called `hydromt-delwaq`:
 
 .. code-block:: console
 
-  $ mamba env create -f https://raw.githubusercontent.com/Deltares/hydromt_delwaq/main/environment.yml
+  $ mamba create -n hydromt-delwaq -c conda-forge hydromt_delwaq
 
 Then, activate the environment (as stated by mamba/conda) to start making use of HydroMT-Delwaq:
 

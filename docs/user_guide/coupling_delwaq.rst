@@ -7,7 +7,9 @@ HydroMT can help you prepare models for DELWAQ and uses a generic single substan
 The single substance D-Emissions model writes its emission data into two files, always called:
 
 - outdata_em.bin
-- outdata_em.txtIn this advanced topic, we detailed what are the steps to best make use of HydroMT for this specific version of DELWAQ.
+- outdata_em.txt
+
+In this advanced topic, we detailed what are the steps to best make use of HydroMT for this specific version of DELWAQ.
 
 .. note::
 

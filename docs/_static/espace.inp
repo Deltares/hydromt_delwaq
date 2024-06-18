@@ -135,7 +135,7 @@ CONSTANTS  EF_WDp        DATA 0.0          ; wet deposition rate                
 
 ; source SEWAGE (Type B01)
 
-PARAMETERS EV_B01        ALL BINARY_FILE 'staticdata\GHS-POP_2015.dat' ; locator/EV variable type B    (cap)
+PARAMETERS EV_B01        ALL BINARY_FILE 'staticdata\ghs_pop_2015.dat' ; locator/EV variable type B    (cap)
 CONSTANTS  EF_B01           DATA 2.2          ; emission factor                                        (Kg/d/cap)
 ; the below comes from a supportive project specific process
 CONSTANTS  B01toSew         DATA 1.0          ; released fraction receptor                             (-)
