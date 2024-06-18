@@ -35,8 +35,8 @@ def dw_WriteSegmentOrExchangeData(
             files.
 
     """
-    # Supress potential NaN values to avoid error (replaced by -1.0)
-    datablock[np.isnan(datablock)] = -1.0
+    # Supress potential NaN values to avoid error (replaced by -999.0)
+    datablock[np.isnan(datablock)] = -999.0
     # Convert the array to a 32 bit float
     totareas = datablock
     for i in range(boundids - 1):
