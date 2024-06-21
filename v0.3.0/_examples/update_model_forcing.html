@@ -1,0 +1,1250 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Update forcing data &#8212; HydroMT delwaq  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_examples/update_model_forcing';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Editing the EM run information" href="../user_guide/generic_delwaq_EM_prepare.html" />
+    <link rel="prev" title="Add (local) emission data" href="adding_local_emission.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/hydromt-icon.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/hydromt-icon.svg" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">HydroMT DELWAQ</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../user_guide/generic_delwaq_EM.html">Working with the D-Emissions model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/EM_model.html">D-Emission model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_EM_substances.html">Selection of substance(s) and sources</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/build_config_EM.html">Building a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="build_EM_model.html">Example: Build D-Emission model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../user_guide/update_config_EM.html">Updating a model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="adding_global_emission.html">Example: Add (global) emission data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adding_local_emission.html">Example: Add (local) emission data</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Example: Update forcing data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/generic_delwaq_EM_prepare.html">Editing the EM run information</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/EM_functional_description.html">Further reading: Detailed functional description</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_EM_run.html">Running D-Emissions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/generic_delwaq_WQ.html">Working with the D-Water Quality model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/WQ_model.html">D-Water Quality model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_WQ_substances.html">Selection of substance(s) and processes</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/build_config_WQ.html">Building a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="build_WQ_model.html">Example: Build D-Water Quality model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/update_config_WQ.html">Updating a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="update_model_monitoring.html">Example: Update monitoring data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_WQ_prepare.html">Editing the WQ run information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_WQ_run.html">Running D-Water Quality</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/process_analyze.html">Postprocessing and visualization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="plot_delwaq.html">Example: Plot DELWAQ grid</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/coupling_main.html">Reading more about coupling the individual modules</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/coupling_wflow.html">Explaining the Wflow - DELWAQ coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/coupling_delwaq.html">Explaining the D-Emission - D-Water Quality coupling</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide/intro.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../user_guide/update_config_EM.html" class="nav-link">Updating a model</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Update forcing data</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<div>
+    For an interactive online version click here:
+    <a href="https://mybinder.org/v2/gh/Deltares/hydromt_delwaq/main?urlpath=lab/tree/examples/update_model_forcing.ipynb" target="_blank" rel="noopener noreferrer"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg"></a>
+</div></div>
+<section id="Update-forcing-data">
+<h1>Update forcing data<a class="headerlink" href="#Update-forcing-data" title="Link to this heading">#</a></h1>
+<p>Once you have a <strong>DELWAQ</strong> model, you may want to update your model in order to add new emission data, add sample locations, use different hydrological forcing data, create and run different scenarios etc.</p>
+<p>With HydroMT, you can easily read your model and update one or several components of your model using the <strong>update</strong> function of the command line interface (CLI). Here are the steps and some examples on how to <strong>update the model forcing</strong>.</p>
+<p>All lines in this notebook which starts with ! are executed from the command line. Within the notebook environment the logging messages are shown after completion. You can also copy these lines and paste them in your shell to get more feedback.</p>
+<p><em>This notebook supposes that you already run the</em> <strong>delwaq build EM</strong> <em>example notebook and that you have a</em> <strong>EM_test_full</strong> <em>D-Emissions model available in the examples folder.</em></p>
+<section id="Import-packages">
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Link to this heading">#</a></h2>
+<p>In this notebook, we will use some functions of HydroMT to visualize available data. Here are the libaries to import.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setup logging</span>
+<span class="kn">from</span>  <span class="nn">hydromt.log</span> <span class="kn">import</span> <span class="n">setuplog</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setuplog</span><span class="p">(</span><span class="s2">&quot;update_model_forcing&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2024-06-21 04:25:07,260 - update_model_forcing - log - INFO - HydroMT version: 0.10.0
+</pre></div></div>
+</div>
+</section>
+<section id="Hydrological-forcing-data-from-Wflow">
+<h2>Hydrological forcing data from Wflow<a class="headerlink" href="#Hydrological-forcing-data-from-Wflow" title="Link to this heading">#</a></h2>
+<p>D-Emissions or D-Water Quality models can use meteo/hydrological input data from <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/">Wflow</a>. The steps to get these data available for your model are:</p>
+<ul class="simple">
+<li><p>List the required meteo/hydro fluxes in the <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/structure/#Config-and-TOML">Wflow TOML configuration file</a> in order to save them.</p></li>
+<li><p>Run the Wflow model.</p></li>
+<li><p>Add the outputs of the Wflow model as a new data source for HydroMT.</p></li>
+<li><p>Run HydroMT (specifically the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing.html">setup_hydrology_forcing component</a>) to convert the wflow output to DELWAQ dynamic input.</p></li>
+</ul>
+<p>More information on the meteo/hydrological forcing link between Wflow and DELWAQ is available in <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/advanced/coupling_wflow.html#hydrological-forcing-from-wflow">docs (Wflow_outputs)</a>.</p>
+<section id="Selection-of-the-Wfow-outputs">
+<h3>Selection of the Wfow outputs<a class="headerlink" href="#Selection-of-the-Wfow-outputs" title="Link to this heading">#</a></h3>
+<p>For our D-Emissions model, we will use hydrological data from the <strong>wflow_piave</strong> hydrologic model. For a D-Emissions model, the required meteo/hydrological inputs are:</p>
+<ul class="simple">
+<li><p><strong>precipitation</strong></p></li>
+<li><p>the amount of the precipitation that <strong>infiltrates into the soil</strong> from unpaved areas</p></li>
+<li><p>the amount of the precipitation that goes directly to <strong>surface runoff from paved areas</strong></p></li>
+<li><p>the amount of the precipitation that goes directly to <strong>surface runoff from unpaved areas</strong></p></li>
+<li><p><strong>exfiltration</strong> from the saturated and unsaturated store of the soil</p></li>
+<li><p>volumetric water content of the soil pores in the root zone ie <strong>root zone soil moisture</strong></p></li>
+</ul>
+<p>If you wish to include transport to the river (overland flow and soil) in D-Emission, then also:</p>
+<ul class="simple">
+<li><p><strong>overland flow</strong></p></li>
+<li><p><strong>subsurface flow</strong></p></li>
+</ul>
+<p>In order to get these data from Wflow, you need to save these fluxes after the model run. These output fluxes are specified in the <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/structure/#Config-and-TOML">Wflow TOML configuration file</a>.</p>
+<p>To set these options, you can either edit the TOML file manually or use HydroMT to help you do the trick using the <code class="docutils literal notranslate"><span class="pre">hydromt</span> <span class="pre">update</span></code> CLI API!</p>
+<p>Here is the HydroMT <strong>configuration file</strong> needed to update the <strong>Wflow</strong> model (note in that file both fluxes for demission and for delwaq models are listed):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fn_yml</span> <span class="o">=</span> <span class="s1">&#39;wflow_update.yml&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_yml</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+setup_config:
+  starttime: 2010-02-02T00:00:00
+  endtime: 2010-02-10T00:00:00
+  timestepsecs: 86400
+  # Variables to save for a coupling between wflow and demission + delwaq
+  output.vertical.precipitation: &#34;precip&#34;
+  output.vertical.actinfilt: &#34;infilt&#34;
+  output.vertical.excesswatersoil: &#34;runUnp&#34;
+  output.vertical.excesswaterpath: &#34;runPav&#34;
+  output.vertical.exfiltustore: &#34;exfiltustore&#34;
+  output.vertical.exfiltsatwater: &#34;exfiltsatstore&#34;
+  output.vertical.vwc_percroot: &#34;vwcproot&#34;
+  output.lateral.river.q_av: &#34;q_river&#34;
+  output.lateral.river.volume: &#34;vol_river&#34;
+  output.lateral.land.q_av: &#34;q_land&#34;
+  output.lateral.land.to_river: &#34;land_to_river&#34;
+  output.lateral.subsurface.ssf: &#34;q_ssf&#34;
+  output.lateral.subsurface.to_river: &#34;ssf_to_river&#34;
+  # Only add if reservoirs in the model
+  output.lateral.river.reservoir.volume: &#34;vol_reservoir&#34;
+  output.lateral.river.reservoir.totaloutflow: &#34;q_reservoir&#34;
+  # Only add if lakes in the model
+  output.lateral.river.lake.storage: &#34;vol_lake&#34;
+  output.lateral.river.lake.totaloutflow: &#34;q_lake&#34;
+  # Only add if 1d floodplain in the model
+  # output.lateral.river.floodplain: &#34;vol_floodplain&#34;
+
+write_config:
+
+</pre></div></div>
+</div>
+<p>And the <code class="docutils literal notranslate"><span class="pre">hydromt</span> <span class="pre">update</span></code> CLI to use:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>hydromt<span class="w"> </span>update<span class="w"> </span>wflow<span class="w"> </span>wflow_piave<span class="w"> </span>-i<span class="w"> </span>wflow_update.yml<span class="w"> </span>--fo<span class="w"> </span>-vvv
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2024-06-21 04:25:09,202 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2024-06-21 04:25:09,202 - update - log - INFO - HydroMT version: 0.10.0
+2024-06-21 04:25:09,202 - update - main - INFO - Updating wflow model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave (r+).
+2024-06-21 04:25:09,202 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave
+2024-06-21 04:25:09,202 - update - main - INFO - User settings:
+2024-06-21 04:25:09,224 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms.
+2024-06-21 04:25:09,224 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default.
+2024-06-21 04:25:09,224 - update - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.6.0).
+2024-06-21 04:25:09,224 - update - data_catalog - INFO - Parsing data catalog from /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
+2024-06-21 04:25:09,236 - update - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2024-06-21 04:25:09,237 - update - wflow - INFO - Reading model staticgeom files.
+2024-06-21 04:25:09,264 - update - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2024-06-21 04:25:09,356 - update - model_api - DEBUG - Setting model config options.
+2024-06-21 04:25:09,356 - update - model_api - INFO - write_config.config_name: None
+2024-06-21 04:25:09,356 - update - model_api - INFO - write_config.config_root: None
+2024-06-21 04:25:09,356 - update - model_api - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+
+</pre></div></div>
+</div>
+<p>The example above means the following: run <strong>hydromt</strong> with:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">update</span> <span class="pre">wflow</span></code>: i.e. update a wflow model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wflow_piave_subbasin</span></code>: model folder to update</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">wflow_update_forcing.yml</span></code>: setup configuration file containing the components to update and their different options</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--fo</span></code>: allow to overwrite an existing model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code>: give some extra verbosity (2 * v) to display feedback on screen. Now debug messages are provided.</p></li>
+</ul>
+<p>The next step would then be to run the wflow_piave model using our updated TOML configuration file.</p>
+</section>
+<section id="Available-hydrological-data-from-Wflow">
+<h3>Available hydrological data from Wflow<a class="headerlink" href="#Available-hydrological-data-from-Wflow" title="Link to this heading">#</a></h3>
+<p>For our D-Emissions model, we will use hydrological data from the <strong>wflow_piave</strong> hydrologic model.</p>
+<p>The model was already run beforehand and the <strong>wflow_piave outputs</strong> are stored in the <em>wflow_piave/run_default/output.nc</em> in NetCDF format. Let’s have a look at the model outputs and see what data is available and for which periods.</p>
+<p>Note: You can also inspect the file using <a class="reference external" href="https://www.giss.nasa.gov/tools/panoply/">Panoply</a> or QGIS.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Open the file</span>
+<span class="n">wflow_output_fn</span> <span class="o">=</span> <span class="s1">&#39;wflow_piave/run_default/output.nc&#39;</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">wflow_output_fn</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">})</span>
+<span class="c1">#Print available variables and start and end time</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available outputs from wflow: </span><span class="si">{</span><span class="n">outputs</span><span class="o">.</span><span class="n">data_vars</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">times</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Outputs available from </span><span class="si">{</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Available outputs from wflow: Data variables:
+    infilt          (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    vwcproot        (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    vol_reservoir   (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    runPav          (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    vol_river       (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    precip          (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    exfiltustore    (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    runUnp          (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    exfiltsatstore  (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    q_land          (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    vol_lake        (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    land_to_river   (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    vol_land        (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    q_river         (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    ssf_to_river    (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    q_reservoir     (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    q_ssf           (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+    q_lake          (time, lat, lon) float32 98kB dask.array&lt;chunksize=(8, 53, 58), meta=np.ndarray&gt;
+Outputs available from 2010-02-03T00:00:00.000000000 to 2010-02-10T00:00:00.000000000
+</pre></div></div>
+</div>
+<p>We recognize from above all the variables and names we set previously in the <strong>wflow_update.yml</strong> file. All the required variables are present and available for 9 days in February 2010.</p>
+</section>
+<section id="Registering-the-wflow-outputs-as-a-HydroMT-data-source">
+<h3>Registering the wflow outputs as a HydroMT data source<a class="headerlink" href="#Registering-the-wflow-outputs-as-a-HydroMT-data-source" title="Link to this heading">#</a></h3>
+<p>As we are using hydrological forcing from a user defined run of the wflow model, the wflow output format and attributes can be different depending on the user settings. <strong>Wflow outputs are then considered as local or user data source</strong> and therefore need to be added to the HydroMT list of data sources using a <strong>local yaml library file</strong>.</p>
+<p>Below you can see the <strong>local_sources.yml</strong> file corresponding to our wflow outputs:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fn_yml</span> <span class="o">=</span> <span class="s1">&#39;local_sources.yml&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_yml</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+wflow_output_em:
+  path: ./wflow_piave/run_default/output.nc
+  crs: 4326
+  data_type: RasterDataset
+  driver: netcdf
+  driver_kwargs:
+    chunks:
+      lat: -1
+      lon: -1
+      time: 1
+    preprocess: harmonise_dims
+  meta:
+    category: hydro
+  rename:
+    q_ssf: q_ss
+    ssf_to_river: exfiltssf
+  unit_mult:
+    q_ss: 0.0000115741
+    exfiltssf: 0.0000115741
+  attrs:
+    precip:
+      unit: mm
+    infilt:
+      unit: mm
+    runPav:
+      unit: mm
+    runUnp:
+      unit: mm
+    exfiltustore:
+      unit: mm
+    exfiltsatstore:
+      unit: mm
+    exfiltssf:
+      unit: m3/s
+    vwcproot:
+      unit: &#34;%&#34;
+    q_land:
+      unit: m3/s
+    q_ss:
+      unit: m3/s
+
+wflow_output_wq:
+  path: ./wflow_piave/run_default/output.nc
+  crs: 4326
+  data_type: RasterDataset
+  driver: netcdf
+  driver_kwargs:
+    chunks:
+      lat: -1
+      lon: -1
+      time: 1
+    preprocess: harmonise_dims
+  meta:
+    category: hydro
+  rename:
+    q_river: sfw&gt;sfw_1
+    q_reservoir: sfw&gt;sfw_2
+    q_lake: sfw&gt;sfw_3
+    vol_river: sfw_1
+    vol_reservoir: sfw_2
+    vol_lake: sfw_3
+    # vol_floodplain: sfw_4
+    land_to_river: land&gt;sfw
+    ssf_to_river: soil&gt;sfw
+  unit_mult:
+    soil&gt;sfw: 0.0000115741
+    sfw&gt;sfw_2: 0.0000115741
+    sfw&gt;sfw_3: 0.0000115741
+  attrs:
+    sfw_1:
+      unit: m3
+    sfw_2:
+      unit: m3
+    sfw_3:
+      unit: m3
+    # sfw_4:
+    #   unit: m3
+    sfw&gt;sfw_1:
+      unit: m3/s
+    sfw&gt;sfw_2:
+      unit: m3/s
+    sfw&gt;sfw_3:
+      unit: m3/s
+    land&gt;sfw:
+      unit: m3/s
+    soil&gt;sfw:
+      unit: m3/s
+
+</pre></div></div>
+</div>
+<p>Here are some explanations about the file. You can have a look at the <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data.html">HydroMT yaml data libary documentation</a> for more information.</p>
+<p>The first thing to define in the yaml library is the <strong>name of the data source</strong> you want to add in HydroMT. For example, here we use the name <strong>wflow_output_em</strong> for the EM variables definition and <strong>wflow_output_wq</strong> for the WQ variables. This name is important and is used in the HydroMT config .yml file to tell HydroMT which data source you wish to use. Once the name of the data source is set, the data attributes are listed:</p>
+<ul class="simple">
+<li><p><strong>path</strong>: path to where the data is stored.</p></li>
+<li><p><strong>crs</strong>: coordinate system of the data.</p></li>
+<li><p><strong>data_type</strong>: <code class="docutils literal notranslate"><span class="pre">HydroMT</span> <span class="pre">DataCatalog</span> <span class="pre">type</span></code> either <em>RasterDataset</em> (gridded data), <em>GeoDataFrame</em> (vector data), <em>DataFrame</em> (tables), <em>Dataset</em> (non-geospatial N-dim data) or <em>GeoDataset</em> (point timeseries).</p></li>
+<li><p><strong>driver</strong>: driver used to open the data. For example <em>raster</em> (GDAL compliant raster file), <em>netcdf</em> (NetCDF file), <em>zarr</em> (zarr file) or <em>vector</em> (GDAL compliant vector file). See the hydromt docs for all options.</p></li>
+<li><p><strong>driver_kwargs</strong>: optional arguments to read the data. Depends on the driver.</p></li>
+<li><p><strong>meta</strong>: optional additional information on the data.</p></li>
+<li><p><strong>rename</strong>: list used to rename the variables inside of the data to HydroMT compliant names. The format is “name_in_dataset: name_in_HydroMT”. Note that the names present in the NetCDF file are the ones set up in the wflow TOML file. The list of standard HydroMT names for demission forcing variables are: time, precip, infilt, runPav, runUnp, exfilt*, q_ss and q_land.</p></li>
+<li><p><strong>attrs unit</strong>: unit attribute of the variables in the data. Used by Delwaq only in order to convert from mm to m3/s and from m to m3 (requires complex unit conversion than just a multiplication or addition with a constant value).</p></li>
+</ul>
+</section>
+</section>
+<section id="Model-setup-configuration">
+<h2>Model setup configuration<a class="headerlink" href="#Model-setup-configuration" title="Link to this heading">#</a></h2>
+<p>As with building, you can prepare a HydroMT <strong>configuration file</strong> that includes every components and settings that you want to run during your update.</p>
+<p>The configuratio file (yml) contains the model setup configuration and determines which components are updated and in which sequence and sets optional arguments for each component. This configuration is passed to hydromt using <code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path_to_configuration_file&gt;</span></code>.</p>
+<p>Each header as shown between <code class="docutils literal notranslate"><span class="pre">[...]</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">[setup_hydrology_forcing]</span></code>) corresponds with a model component which are explained in the <a class="reference external" href="https://deltares.github.io/hydromt_wflow/latest/user_guide/wflow/components.html">docs(model_components)</a>.</p>
+<p>Let’s open the example configuration file <strong>delwaq_update_EM_forcing.yml</strong> from the model repository [examples folder] and have a look at the settings.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fn_ini</span> <span class="o">=</span> <span class="s1">&#39;delwaq_update_EM_forcing.yml&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_ini</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+setup_hydrology_forcing:
+  hydro_forcing_fn: wflow_output_em
+  starttime: &#34;2010-02-04 00:00:00&#34;
+  endtime: &#34;2010-02-10 00:00:00&#34;
+  timestepsecs: 86400
+  include_transport: True
+
+write_config:
+
+write_forcing:
+
+write_waqgeom:
+
+</pre></div></div>
+</div>
+<p>Here we can see that we will run <strong>setup_hydrology_forcing</strong> component to prepare daily hydrological forcing for 8 days in February 2010 using our <strong>wflow_output</strong>.</p>
+<p>Note that the <strong>add_volume_offset</strong> function is set to <em>True</em>. This is because Delwaq needs water volumes at the beginning of the timestep. In some models, like wflow, volumes are written at the end of the timestep and therefore an offset of one timestep needs to be added for consistency.</p>
+<p>You can find more information on the different components and their options in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/components.html">docs (model_components)</a>.</p>
+</section>
+<section id="HydroMT-CLI-update-interface">
+<h2>HydroMT CLI update interface<a class="headerlink" href="#HydroMT-CLI-update-interface" title="Link to this heading">#</a></h2>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">hydromt</span> <span class="pre">update</span></code> API, we can update one or several components of an already existing Delwaq model. Let’s get an overview of the available options:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print the options available from the update command</span>
+<span class="o">!</span><span class="w"> </span>hydromt<span class="w"> </span>update<span class="w"> </span>--help
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
+
+  Update a specific component of a model.
+
+  Set an output directory to copy the edited model to a new folder, otherwise
+  maps are overwritten.
+
+  Example usage: --------------
+
+  Update (overwrite!) landuse-landcover based maps in a Wflow model: hydromt
+  update wflow /path/to/model_root -c setup_lulcmaps --opt lulc_fn=vito -d
+  /path/to/data_catalog.yml -v
+
+  Update Wflow model components outlined in an .yml configuration file and
+  write the model to a directory: hydromt update wflow /path/to/model_root  -o
+  /path/to/model_out  -i /path/to/wflow_config.yml  -d
+  /path/to/data_catalog.yml -v
+
+Options:
+  -o, --model-out DIRECTORY  Output model folder. Maps in MODEL_ROOT are
+                             overwritten if left empty.
+  -i, --config PATH          Path to hydroMT configuration file, for the model
+                             specific implementation.
+  -c, --components TEXT      Model methods from configuration file to run
+  --opt TEXT                 Method specific keyword arguments, see the method
+                             documentation of the specific model for more
+                             information about the arguments.
+  -d, --data TEXT            Path to local yaml data catalog file OR name of
+                             predefined data catalog.
+  --dd, --deltares-data      Flag: Shortcut to add the &#34;deltares_data&#34; catalog
+  --fo, --force-overwrite    Flag: If provided overwrite existing model files
+  --cache                    Flag: If provided cache tiled rasterdatasets
+  -q, --quiet                Decrease verbosity.
+  -v, --verbose              Increase verbosity.
+  --help                     Show this message and exit.
+
+</pre></div></div>
+</div>
+</section>
+<section id="Update-demission-forcing-layers">
+<h2>Update demission forcing layers<a class="headerlink" href="#Update-demission-forcing-layers" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
+<span class="o">!</span><span class="w"> </span>hydromt<span class="w"> </span>update<span class="w"> </span>demission<span class="w"> </span>./EM_test_full<span class="w"> </span>-i<span class="w"> </span>delwaq_update_EM_forcing.yml<span class="w"> </span>-d<span class="w"> </span>local_sources.yml<span class="w"> </span>--fo<span class="w"> </span>-vv
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2024-06-21 04:25:14,022 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromt.log.
+2024-06-21 04:25:14,022 - update - log - INFO - HydroMT version: 0.10.0
+2024-06-21 04:25:14,022 - update - main - INFO - Updating demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full (r+).
+2024-06-21 04:25:14,022 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full
+2024-06-21 04:25:14,022 - update - main - INFO - User settings:
+2024-06-21 04:25:14,039 - update - data_catalog - INFO - Parsing data catalog from local_sources.yml
+2024-06-21 04:25:14,044 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromodel.
+2024-06-21 04:25:14,044 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/staticdata.
+2024-06-21 04:25:14,044 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/geoms.
+2024-06-21 04:25:14,044 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/config.
+2024-06-21 04:25:14,044 - update - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.0).
+2024-06-21 04:25:14,045 - update - model_api - DEBUG - Reading model file monareas.
+2024-06-21 04:25:14,074 - update - model_api - DEBUG - Reading model file staticdata.
+2024-06-21 04:25:14,231 - update - model_api - DEBUG - Reading model file basins.
+2024-06-21 04:25:14,242 - update - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output_em
+2024-06-21 04:25:14,242 - update - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-04 00:00:00
+2024-06-21 04:25:14,242 - update - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2024-06-21 04:25:14,242 - update - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2024-06-21 04:25:14,242 - update - model_api - INFO - setup_hydrology_forcing.include_transport: True
+2024-06-21 04:25:14,242 - update - demission - INFO - Setting dynamic data from hydrology source wflow_output_em.
+2024-06-21 04:25:14,245 - update - rasterdataset - INFO - Reading wflow_output_em netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
+2024-06-21 04:25:14,274 - update - rasterdataset - DEBUG - Slicing time dim (&#39;2010-02-04 00:00:00&#39;, &#39;2010-02-10 00:00:00&#39;)
+2024-06-21 04:25:14,283 - update - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
+2024-06-21 04:25:14,285 - update - rasterdataset - DEBUG - Convert units for 2 variables.
+No numerical nodata value found, skipping set_nodata
+2024-06-21 04:25:14,468 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/demission.inp
+2024-06-21 04:25:14,468 - update - delwaq - INFO - Writing model config to file.
+2024-06-21 04:25:14,470 - update - model_api - INFO - write_forcing.write_nc: False
+2024-06-21 04:25:14,491 - update - demission - INFO - Writing dynamicmap files.
+Writing dynamic data: 100%|███████████████████████| 7/7 [00:00&lt;00:00, 33.55it/s]
+2024-06-21 04:25:14,702 - update - delwaq - INFO - Writting waqgeom.nc file
+
+</pre></div></div>
+</div>
+<p>The example above means the following: run <strong>hydromt</strong> with:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">update</span> <span class="pre">demission</span></code>: i.e. update a delwaq model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">./EM_test_full</span></code>: model folder</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">delwaq_update_EM_forcing.yml</span></code>: setup configuration file containing the components to update and their different options</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">local_sources.yml</span></code>: local data library, here containing the hydrological outputs from wflow.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--fo</span></code>: allow to update and overwrite an existing model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code>: give some extra verbosity (2 * v) to display feedback on screen. Now debug messages are provided.</p></li>
+</ul>
+</section>
+<section id="Visualization-of-the-outputs">
+<h2>Visualization of the outputs<a class="headerlink" href="#Visualization-of-the-outputs" title="Link to this heading">#</a></h2>
+<p>From the information above, you can see that the different forcing variables where updated. If you have a look at the output files, you can see that the hydrological data were added to the dynamicdata folder but also several information were added in the config folder.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">root</span> <span class="o">=</span> <span class="s1">&#39;EM_test_full&#39;</span>
+<span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.xml&#39;</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; - </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+EM_test_full
+ - hydromt.log
+EM_test_full/dynamicdata
+ - hydrology.bin
+EM_test_full/staticdata
+ - ptiddown.dat
+ - gdp_world.dat
+ - river.dat
+ - porosity.dat
+ - ghs_pop_2015.dat
+ - SoilThickness.dat
+ - streamorder.dat
+ - slope.dat
+ - staticdata.nc
+EM_test_full/hydromodel
+ - basins.tif
+ - river.tif
+ - ptid.tif
+ - modelmap.tif
+ - resarea.tif
+ - rivwth.tif
+ - rivlen.tif
+ - elevtn.tif
+ - ldd.tif
+ - ptiddown.tif
+ - lakearea.tif
+ - rivarea.tif
+EM_test_full/geoms
+ - monareas.geojson
+ - basins.geojson
+EM_test_full/config
+ - B7_geometry.bin
+ - B2_timers_only.inc
+ - B3_nrofseg.inc
+ - B7_geometry.inc
+ - B7_surf.inc
+ - B2_timers.inc
+ - B3_waqgeom.nc
+ - B2_monareas.inc
+ - B5_boundlist.inc
+ - B2_outputtimes.inc
+ - B1_timestamp.inc
+ - B7_hydrology.inc
+ - B4_nrofexch.inc
+ - B2_sysclock.inc
+ - B7_geometry-parameters.inc
+ - B2_stations.inc
+ - B2_nrofmon.inc
+ - B3_attributes.inc
+EM_test_full/fews
+</pre></div></div>
+</div>
+<p>You can have a look at some of these files:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./EM_test_full&#39;</span>
+<span class="n">fn_config</span> <span class="o">=</span> <span class="s1">&#39;config/B1_timestamp.inc&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="n">fn_config</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;T0: 2010.02.04 00:00:00  (scu=       1s)&#39;
+
+</pre></div></div>
+</div>
+<p>For the hydrological data directly, the main files are:</p>
+<ul class="simple">
+<li><p>dynamicdata/hydrology.bin (Binary data)</p></li>
+<li><p>config/B7_hydrology.inc (Headers for the variables inside of hydrology.bin)</p></li>
+</ul>
+<p>You can also see that a NetCDF file was created: <strong>B3_waqgeom.nc</strong>. This file can be used to produce NetCDF outputs directly when running D-Emissions or D-Water Quality but also to visualize the model in Delft-FEWS.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./EM_test_full&#39;</span>
+<span class="n">fn_config</span> <span class="o">=</span> <span class="s1">&#39;config/B7_hydrology.inc&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="n">fn_config</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SEG_FUNCTIONS
+Rainfall RunoffPav RunoffUnp Infiltr Exfiltr vwcproot Overland Subsurface
+
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="adding_local_emission.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Add (local) emission data</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../user_guide/generic_delwaq_EM_prepare.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Editing the EM run information</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Import-packages">Import packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Hydrological-forcing-data-from-Wflow">Hydrological forcing data from Wflow</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Selection-of-the-Wfow-outputs">Selection of the Wfow outputs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Available-hydrological-data-from-Wflow">Available hydrological data from Wflow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Registering-the-wflow-outputs-as-a-HydroMT-data-source">Registering the wflow outputs as a HydroMT data source</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Model-setup-configuration">Model setup configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#HydroMT-CLI-update-interface">HydroMT CLI update interface</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Update-demission-forcing-layers">Update demission forcing layers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Visualization-of-the-outputs">Visualization of the outputs</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/_examples/update_model_forcing.ipynb">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/_examples/update_model_forcing.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Deltares.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

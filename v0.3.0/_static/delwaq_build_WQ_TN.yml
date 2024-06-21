@@ -1,0 +1,36 @@
+global:
+  data_libs:
+    - local_sources.yml
+
+setup_basemaps:
+  mask: rivers
+  surface_water: sfw
+  boundaries:
+    - land
+    - soil
+    - sett
+  fluxes:
+    - sfw>sfw
+    - land>sfw
+    - soil>sfw
+    - sfw>sett
+  maps:
+    - rivmsk
+    - lndslp
+    - strord
+    - N
+    - SoilThickness
+    - thetaS
+
+setup_monitoring:
+  mon_points: segments
+  mon_areas: subcatch
+
+setup_hydrology_forcing:
+  hydro_forcing_fn: wflow_output_wq
+  starttime: "2010-02-04 00:00:00"
+  endtime: "2010-02-10 00:00:00"
+  timestepsecs: 86400
+  add_volume_offset: True
+  override:
+    - sfw>sfw
