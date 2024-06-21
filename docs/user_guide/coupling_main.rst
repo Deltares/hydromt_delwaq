@@ -8,6 +8,6 @@ These three models need to be coupled. This section describes how to couple the 
 
 .. toctree::
    :maxdepth: 1
-   
+
    coupling_wflow.rst
    coupling_delwaq.rst

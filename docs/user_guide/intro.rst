@@ -3,15 +3,15 @@
 User Guide
 ==========
 
-With the **HydroMT-delwaq plugin**, users can easily benefit from the rich set of tools of the 
+With the **HydroMT-delwaq plugin**, users can easily benefit from the rich set of tools of the
 `HydroMT package <https://deltares.github.io/hydromt/latest/index.html>`_ to build and update
 water quality models from available global and local data.
 As a reminder, a full hydrology/hydrodynamic - water quality simulation is in general separated in three parts:
 
 - the hydrological/hydrodynamic model, for example Wflow, that predicts water movements through the catchments.
-- an emission model, D-Emissions (also referred to as EM in this documentation), that predicts 
+- an emission model, D-Emissions (also referred to as EM in this documentation), that predicts
   the quantity (fluxes) of substances being released from sources of pollutants to the surface waters (mass/time).
-- a fate and transport model, D-Water Quality (also referred to as WQ in this documentation), 
+- a fate and transport model, D-Water Quality (also referred to as WQ in this documentation),
   that predicts the fate and transport of substances in the surface waters (concentrations in mass / volume).
 
 This plugin assist the DELWAQ modeller in:

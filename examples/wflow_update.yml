@@ -1,0 +1,28 @@
+setup_config:
+  starttime: 2010-02-02T00:00:00
+  endtime: 2010-02-10T00:00:00
+  timestepsecs: 86400
+  # Variables to save for a coupling between wflow and demission + delwaq
+  output.vertical.precipitation: "precip"
+  output.vertical.actinfilt: "infilt"
+  output.vertical.excesswatersoil: "runUnp"
+  output.vertical.excesswaterpath: "runPav"
+  output.vertical.exfiltustore: "exfiltustore"
+  output.vertical.exfiltsatwater: "exfiltsatstore"
+  output.vertical.vwc_percroot: "vwcproot"
+  output.lateral.river.q_av: "q_river"
+  output.lateral.river.volume: "vol_river"
+  output.lateral.land.q_av: "q_land"
+  output.lateral.land.to_river: "land_to_river"
+  output.lateral.subsurface.ssf: "q_ssf"
+  output.lateral.subsurface.to_river: "ssf_to_river"
+  # Only add if reservoirs in the model
+  output.lateral.river.reservoir.volume: "vol_reservoir"
+  output.lateral.river.reservoir.totaloutflow: "q_reservoir"
+  # Only add if lakes in the model
+  output.lateral.river.lake.storage: "vol_lake"
+  output.lateral.river.lake.totaloutflow: "q_lake"
+  # Only add if 1d floodplain in the model
+  # output.lateral.river.floodplain: "vol_floodplain"
+
+write_config:

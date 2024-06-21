@@ -1,1 +1,1 @@
-3306 0 0 ; x, y, z direction
+1260 0 0 ; x, y, z direction

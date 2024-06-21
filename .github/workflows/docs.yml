@@ -1,4 +1,4 @@
-name: Build Docs
+name: Build Documentation
 
 # We don't want pushes (or PRs) to gh-pages to kick anything off
 on:
@@ -12,6 +12,7 @@ jobs:
   Docs:
     name: linux docs
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       DOC_VERSION: dev
     defaults:
@@ -20,15 +21,15 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
-      
+
       - name: Setup environment
         uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: "3.9"
+          python-version: "3.11"
           mamba-version: "*"
           channels: conda-forge,defaults
           channel-priority: true
-          environment-file: envs/test_env.yml
+          environment-file: envs/hydromt-delwaq.yml
           activate-environment: hydromt-delwaq
 
       - name: Install plugin

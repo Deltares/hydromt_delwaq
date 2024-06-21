@@ -68,7 +68,10 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-docs/_generated/
+docs/generated/
+docs/examples/examples
+docs/_examples
+docs/_generated
 docs/_examples
 docs/clean.py
 
@@ -80,12 +83,13 @@ target/
 examples/EM_test_base
 examples/EM_test_full
 examples/EM_piave_extended
+examples/EM_piave_extended_local
 examples/WQ_test_base
 examples/WQ_test_full
 examples/WQ_piave_monitoring
-examples/delwaq_update_monitoring.ini
-examples/delwaq_update_emission_cattle.ini
-examples/delwaq_update_emission_local.ini
+examples/delwaq_update_monitoring.yml
+examples/delwaq_update_emission_cattle.yml
+examples/delwaq_update_emission_local.yml
 examples/local_emission_sources.yml
 examples/EM_piave_extended.zip
 

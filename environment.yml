@@ -6,11 +6,12 @@ channels:
 dependencies:
   - cartopy # to run examples
   - descartes # to run examples
-  - hydromt>=0.7.0
-  - hydromt_wflow>=0.2.1
-  - hydromt_delwaq>=0.2.1
+  - hydromt>=0.9.1
+  - hydromt_wflow>=0.4.0
+  - hydromt_delwaq>=0.4.0
   - jupyter # to run examples
   - matplotlib # to run examples
-  - pip
-  - python=3.10 # fixing python version for binder
-
+  - numpy<2
+  - python<=3.11
+  - tqdm # progress bar
+  - xugrid

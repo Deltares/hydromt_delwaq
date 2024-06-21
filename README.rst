@@ -5,13 +5,13 @@ HydroMT-delwaq: DELWAQ plugin for HydroMT
 
 What is HydroMT-delwaq?
 -----------------------
-HydroMT-delwaq is a plugin of the `HydroMT core <https://deltares.github.io/hydromt/latest/index.html>`_, a python package, developed by Deltares, to build 
-and analyse environmental models. This plugin provides an implementation for the `DELWAQ <https://www.deltares.nl/en/software/module/d-water-quality/>`_ water quality engine. 
-It details the different steps and explains how to use HydroMT to easily get started and work on your own DELWAQ model. WIth this plugin 
+HydroMT-delwaq is a plugin of the `HydroMT core <https://deltares.github.io/hydromt/latest/index.html>`_, a python package, developed by Deltares, to build
+and analyse environmental models. This plugin provides an implementation for the `DELWAQ <https://www.deltares.nl/en/software/module/d-water-quality/>`_ water quality engine.
+It details the different steps and explains how to use HydroMT to easily get started and work on your own DELWAQ model. With this plugin
 you can interact with both classic **D-Water Quality** models as well as **D-Emission** models.
 
-With the **HydroMT-delwaq plugin**, users can easily benefit from the rich set of tools of the 
-`HydroMT package <https://github.com/Deltares/hydromt>`_ to build and update 
+With the **HydroMT-delwaq plugin**, users can easily benefit from the rich set of tools of the
+`HydroMT package <https://github.com/Deltares/hydromt>`_ to build and update
 DELWAQ models from available global and local data.
 
 This plugin assists the modeller in:
@@ -20,23 +20,23 @@ This plugin assists the modeller in:
 - Making maximum use of the best available global or local data
 - Adjusting and updating components of a DELWAQ model and their associated parameters in a consistent way
 
-Water quality and emission, fate and transport of pollutants through the landscape, rivers and oceans is very much linked to the water movements. 
-For this reason, HydroMT strongly links DELWAQ modelbuilding to an underlying hydrology / hydraulic or hydrodynamic model. As of now, only the link 
+Water quality and emission, fate and transport of pollutants through the landscape, rivers and oceans is very much linked to the water movements.
+For this reason, HydroMT strongly links DELWAQ model building to an underlying hydrology / hydraulic or hydrodynamic model. As of now, only the link
 between `Wflow and DELWAQ <coupling_wflow>`_ is supported.
 
 This plugin supports both:
 
-- emission models, `D-Emission <https://www.deltares.nl/en/software/module/D-Emissions/>`_ (also referred to as EM in hydroMT), that predicts the quantity (fluxes) of substances being released from sources of pollutants to the surface waters (mass/time).
-- fate and transport models, `D-Water Quality <https://www.deltares.nl/en/software/module/d-water-quality/>`_ (also referred to as WQ in hydroMT), that predicts the fate and transport of substances in the surface waters (concentrations in mass / volume).
+- **demission**: emission models, `D-Emission <https://www.deltares.nl/en/software/module/D-Emissions/>`_ (also referred to as EM in this documentation), that predicts the quantity (fluxes) of substances being released from sources of pollutants to the surface waters (mass/time).
+- **delwaq** fate and transport models, `D-Water Quality <https://www.deltares.nl/en/software/module/d-water-quality/>`_ (also referred to as WQ in this documentation), that predicts the fate and transport of substances in the surface waters (concentrations in mass / volume).
 
 
 Why HydroMT-delwaq?
 -------------------
-Setting up spatial geoscientific models typically requires many (manual) steps 
-to process input data and might therefore be time consuming and hard to reproduce. 
-Like the other HydroMT model plugins, this package aims to make the model building process **fast**, **modular** and **reproducible** 
+Setting up spatial geoscientific models typically requires many (manual) steps
+to process input data and might therefore be time consuming and hard to reproduce.
+Like the other HydroMT model plugins, this package aims to make the model building process **fast**, **modular** and **reproducible**
 by configuring the model building process from a single *ini* configuration file
-and **model- and data-agnostic** through a common model and data interface. 
+and **model- and data-agnostic** through a common model and data interface.
 
 
 How to use HydroMT-delwaq?
@@ -70,7 +70,7 @@ You can find information about contributing to HydroMT at our `Contributing page
 .. |docs_stable| image:: https://img.shields.io/badge/docs-stable-brightgreen.svg
     :target: https://deltares.github.io/hydromt_delwaq/stable
     :alt: Stable docs last release
-    
+
 .. |codecov| image:: https://codecov.io/gh/Deltares/hydromt_delwaq/branch/main/graph/badge.svg?token=ss3EgmwHhH
     :target: https://codecov.io/gh/Deltares/hydromt_delwaq
 
