@@ -12,6 +12,7 @@ jobs:
   Docs:
     name: linux docs
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       DOC_VERSION: dev
     defaults:

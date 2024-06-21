@@ -15,7 +15,7 @@ dependencies:
   - jupyter # to run examples
   - matplotlib # to run examples
   - nbsphinx  # docs
-  - numpy
+  - numpy<2
   - openpyxl
   - pandas
   - pip

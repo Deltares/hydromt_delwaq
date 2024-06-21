@@ -11,6 +11,7 @@ dependencies:
   - hydromt_delwaq>=0.4.0
   - jupyter # to run examples
   - matplotlib # to run examples
+  - numpy<2
   - python<=3.11
   - tqdm # progress bar
   - xugrid
