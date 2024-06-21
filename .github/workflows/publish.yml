@@ -6,7 +6,8 @@ on:
       - published
   push:
     tags:
-      - 'v*'
+      - v*
+  workflow_dispatch:
 
 
 jobs:
@@ -20,12 +21,12 @@ jobs:
       - uses: actions/setup-python@v4
         name: Install Python
         with:
-          python-version: 3.8
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install flit wheel twine
+          python -m pip install tomli flit wheel twine
 
       - name: Build tarball and wheels
         run: |
@@ -50,7 +51,8 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - uses: actions/download-artifact@v3
         with:
           name: releases
@@ -60,20 +62,9 @@ jobs:
           ls -ltrh
           ls -ltrh dist
 
-      - name: Setup environment
-        uses: conda-incubator/setup-miniconda@v2
+      - uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
-          mamba-version: "*"
-          channels: conda-forge,defaults
-          channel-priority: true
-          environment-file: envs/hydromt-delwaq.yml
-          activate-environment: hydromt-delwaq
-
-      - name: Conda info
-        run: |
-          conda info
-          conda list
+          python-version: '3.10'
 
       - name: Verify the built dist/wheel is valid
         run: |

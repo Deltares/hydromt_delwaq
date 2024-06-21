@@ -80,5 +80,5 @@ and :py:func:`~DelwaqModel.write_config` for the
      - flow.dat, volume.dat, sediment.dat
    * - :py:attr:`~hydromt_delwaq.DelwaqModel.hydromaps`
      - additional `hydromodel/*.tif` files with information on the coupled hydrology/hydrodynamic model.
-    * - :py:attr:`~hydromt_delwaq.DelwaqModel.pointer`
-      - pointer file `pointer.poi` and linked information.
+   * - :py:attr:`~hydromt_delwaq.DelwaqModel.pointer`
+     - pointer file `pointer.poi` and linked information.
