@@ -6,8 +6,10 @@ All notable changes to this project will be documented in this page.
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
-Unreleased
-==========
+v0.3.0 (21 June 2023)
+=====================
+This release introduces a new separate class to prepare D-Emission models **DemissionModel** and adds several new features to the **DelwaqModel** class.
+You will need to re-install hydromt-delwaq to use this new version.
 
 Added
 -----
@@ -20,15 +22,12 @@ Added
 
 Changed
 -------
-- **DelwaqModel** (delwaq) only builds classic D-Water Quality models. For D-Emissions model use the new DemissionModel class (demission).
+- **DelwaqModel** (delwaq) only builds classic D-Water Quality models. For D-Emissions model use the new DemissionModel class (hydromt build demission).
 - DelwaqModel (and DemissionModel) are subclasses of the HydroMT core GridModel and core GridModel methods are now available.
 - **setup_basemaps** method is now more flexible to include any flux and boundary exchange to surface_water that the user wishes to include rather than a few predefined fluxes only.
 - **setup_basemaps** method allows to add any variable from hydromodel to the staticdata grid.
 - **setup_monitoring**: for monitoring areas, 'compartments' option is not available anymore (only surface_water) and a new option for 'riverland' to distinguish between river and land cells was added.
-
-
-Fixed
------
+- **setup_hydrology_forcing**: added option to support summing delwaq flux and volumes using different variables from the hydrology forcing data source. Eg. surface water volume can be river+lake+reservoir volumes. Check the documentation for more details.
 
 Dependencies
 ------------
