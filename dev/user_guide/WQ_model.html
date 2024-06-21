@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>D-Water Quality model components &#8212; HydroMT delwaq  documentation</title>
   
@@ -19,28 +18,29 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/WQ_model';</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -56,19 +56,23 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -90,16 +94,23 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
-  <div class="navbar-header-items__start">
+  
+  <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../index.html">
@@ -107,11 +118,12 @@
   
   
   
+  
     
     
     
-    <img src="../_static/hydromt-logo.jpg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../_static/hydromt-logo.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../_static/hydromt-icon.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/hydromt-icon.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">HydroMT DELWAQ</p>
@@ -120,54 +132,48 @@
     
   </div>
   
-  
   <div class="col-lg-9 navbar-header-items">
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../getting_started/intro.html">
-                        Getting Started
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="intro.html">
-                        User Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../api.html">
-                        API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="intro.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../dev/intro.html">
-                        Developments
-                      </a>
-                    </li>
-                
 
-                <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
-                    HydroMT core
-                  </a>
-                </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -178,13 +184,16 @@
       
         <div class="navbar-item navbar-persistent--container">
           
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
         </div>
       
       
@@ -231,27 +240,33 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
     </div>
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
-    </label>
+    </button>
   
 </div>
 
-    </nav>
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -262,51 +277,49 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+          
+          
+            <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../getting_started/intro.html">
-                        Getting Started
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="intro.html">
-                        User Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../api.html">
-                        API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="intro.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../dev/intro.html">
-                        Developments
-                      </a>
-                    </li>
-                
 
-                <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
-                    HydroMT core
-                  </a>
-                </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -356,54 +369,55 @@ document.write(`
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="generic_delwaq_EM.html">Working with the D-Emissions model</a><input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generic_delwaq_EM.html">Working with the D-Emissions model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="EM_model.html">D-Emission model components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generic_delwaq_EM_substances.html">Selection of substance(s) and sources</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="build_config_EM.html">Building a model</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="build_config_EM.html">Building a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../_examples/build_EM_model.html">Example: Build D-Emission model</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="update_config_EM.html">Updating a model</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="update_config_EM.html">Updating a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../_examples/adding_global_emission.html">Example: Add (global) emission data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../_examples/adding_local_emission.html">Example: Add (local) emission data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../_examples/update_model_forcing.html">Example: Update forcing data</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="generic_delwaq_EM_prepare.html">Editing the EM run information</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="generic_delwaq_EM_prepare.html">Editing the EM run information</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="EM_functional_description.html">Further reading: Detailed functional description</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="generic_delwaq_EM_run.html">Running D-Emissions</a></li>
 </ul>
-</li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="generic_delwaq_WQ.html">Working with the D-Water Quality model</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="generic_delwaq_WQ.html">Working with the D-Water Quality model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">D-Water Quality model components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_substances.html">Selection of substance(s) and processes</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="build_config_WQ.html">Building a model</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="build_config_WQ.html">Building a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../_examples/build_WQ_model.html">Example: Build D-Water Quality model</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="update_config_WQ.html">Updating a model</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="update_config_WQ.html">Updating a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../_examples/update_model_monitoring.html">Example: Update monitoring data</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_prepare.html">Editing the WQ run information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_run.html">Running D-Water Quality</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="process_analyze.html">Postprocessing and visualization</a><input checked class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../_examples/plot_delwaq.html">Example: Plot DELWAQ staticmaps</a></li>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="process_analyze.html">Postprocessing and visualization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/plot_delwaq.html">Example: Plot DELWAQ grid</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="coupling_main.html">Reading more about coupling the individual modules</a><input checked class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="coupling_main.html">Reading more about coupling the individual modules</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="coupling_wflow.html">Explaining the Wflow - DELWAQ coupling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coupling_delwaq.html">Explaining the D-Emission - D-Water Quality coupling</a></li>
 </ul>
-</li>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -418,13 +432,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -433,8 +447,8 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumbs">
-  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../index.html" class="nav-link" aria-label="Home">
@@ -447,7 +461,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="generic_delwaq_WQ.html" class="nav-link">Working with the D-Water Quality model</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">D-Water Quality model components</li>
+    <li class="breadcrumb-item active" aria-current="page">D-Water...</li>
   </ul>
 </nav>
 </div>
@@ -462,24 +476,24 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section id="d-water-quality-model-components">
-<span id="wq-model"></span><h1>D-Water Quality model components<a class="headerlink" href="#d-water-quality-model-components" title="Permalink to this heading">#</a></h1>
+<span id="wq-model"></span><h1>D-Water Quality model components<a class="headerlink" href="#d-water-quality-model-components" title="Link to this heading">#</a></h1>
 <p>The HydroMT-delwaq plugin helps you preparing or updating several components of a D-Water Quality model such as emission information or forcing.
 The main interactions are available from the HydroMT Command Line Interface and allow you to configure
 HydroMT in order to build or update D-Water Quality (WQ) models.</p>
 <p>When building or updating a model from command line a
 <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/model_region">model region</a>, a model setup
-<a class="reference internal" href="build_config_WQ.html#config-file-wq"><span class="std std-ref">configuration</span></a> (.ini file) with model components and options and, optionally,
+<a class="reference internal" href="build_config_WQ.html#config-file-wq"><span class="std std-ref">configuration</span></a> (.yml file) with model components and options and, optionally,
 a <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data_main">data sources</a> (.yml) file should be prepared.</p>
 <section id="d-water-quality-model-setup-methods">
-<span id="wq-methods"></span><h2>D-Water Quality model setup methods<a class="headerlink" href="#d-water-quality-model-setup-methods" title="Permalink to this heading">#</a></h2>
+<span id="wq-methods"></span><h2>D-Water Quality model setup methods<a class="headerlink" href="#d-water-quality-model-setup-methods" title="Link to this heading">#</a></h2>
 <p>An overview of the available D-Water Quality model setup components
 is provided in the table below. When using HydroMT from the command line only the
 setup components are exposed. Click on
 a specific method see its documentation.</p>
-<table class="table">
+<div class="pst-scrollable-table-container"><table class="table">
 <colgroup>
 <col style="width: 26.7%" />
 <col style="width: 73.3%" />
@@ -505,53 +519,29 @@ a specific method see its documentation.</p>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.setup_sediment_forcing.html#hydromt_delwaq.DelwaqModel.setup_sediment_forcing" title="hydromt_delwaq.DelwaqModel.setup_sediment_forcing"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_sediment_forcing()</span></code></a></p></th>
 <td><p>This component prepares the sediment emission fluxes.</p></td>
 </tr>
-<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.setup_emission_raster.html#hydromt_delwaq.DelwaqModel.setup_emission_raster" title="hydromt_delwaq.DelwaqModel.setup_emission_raster"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_emission_raster()</span></code></a></p></th>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.setup_climate_forcing.html#hydromt_delwaq.DelwaqModel.setup_climate_forcing" title="hydromt_delwaq.DelwaqModel.setup_climate_forcing"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_climate_forcing()</span></code></a></p></th>
+<td><p>This component prepares the climate forcing (eg for temperature modelling).</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.setup_emission_raster.html#hydromt_delwaq.DelwaqModel.setup_emission_raster" title="hydromt_delwaq.DelwaqModel.setup_emission_raster"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_emission_raster()</span></code></a></p></th>
 <td><p>This component generates emission related data from a raster data source.</p></td>
 </tr>
-<tr class="row-even"><th class="stub"><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.setup_emission_vector.html#hydromt_delwaq.DelwaqModel.setup_emission_vector" title="hydromt_delwaq.DelwaqModel.setup_emission_vector"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_emission_vector()</span></code></a></p></th>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.setup_emission_vector.html#hydromt_delwaq.DelwaqModel.setup_emission_vector" title="hydromt_delwaq.DelwaqModel.setup_emission_vector"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_emission_vector()</span></code></a></p></th>
 <td><p>This component generates emission related data from a vector data source.</p></td>
 </tr>
-<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.setup_emission_mapping.html#hydromt_delwaq.DelwaqModel.setup_emission_mapping" title="hydromt_delwaq.DelwaqModel.setup_emission_mapping"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_emission_mapping()</span></code></a></p></th>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.setup_emission_mapping.html#hydromt_delwaq.DelwaqModel.setup_emission_mapping" title="hydromt_delwaq.DelwaqModel.setup_emission_mapping"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_emission_mapping()</span></code></a></p></th>
 <td><p>This component generates several emission related data based on a table and distributed over related regions (eg administrative boundaries).</p></td>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
-<section id="d-water-quality-datamodel-files">
-<span id="wq-files"></span><h2>D-Water Quality datamodel files<a class="headerlink" href="#d-water-quality-datamodel-files" title="Permalink to this heading">#</a></h2>
+<section id="wq-files">
+<span id="id1"></span><h2>D-Water Quality model components<a class="headerlink" href="#wq-files" title="Link to this heading">#</a></h2>
 <p>The following table provides an overview of which <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.html#hydromt_delwaq.DelwaqModel" title="hydromt_delwaq.DelwaqModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DelwaqModel</span></code></a>
 attribute contains which D-Water Quality in- and output files. The files are read and written with the associated
 read- and write- methods, i.e. <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.read_config.html#hydromt_delwaq.DelwaqModel.read_config" title="hydromt_delwaq.DelwaqModel.read_config"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_config()</span></code></a>
 and <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.write_config.html#hydromt_delwaq.DelwaqModel.write_config" title="hydromt_delwaq.DelwaqModel.write_config"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_config()</span></code></a> for the
 <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.config.html#hydromt_delwaq.DelwaqModel.config" title="hydromt_delwaq.DelwaqModel.config"><code class="xref py py-attr docutils literal notranslate"><span class="pre">config</span></code></a>  attribute.</p>
-<table class="table">
-<colgroup>
-<col style="width: 30.0%" />
-<col style="width: 70.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.html#hydromt_delwaq.DelwaqModel" title="hydromt_delwaq.DelwaqModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DelwaqModel</span></code></a> attribute</p></th>
-<th class="head"><p>D-Water Quality files</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.config.html#hydromt_delwaq.DelwaqModel.config" title="hydromt_delwaq.DelwaqModel.config"><code class="xref py py-attr docutils literal notranslate"><span class="pre">config</span></code></a></p></td>
-<td><p>several <cite>config/*.inc</cite> files linked to delwaq.inp</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.staticmaps.html#hydromt_delwaq.DelwaqModel.staticmaps" title="hydromt_delwaq.DelwaqModel.staticmaps"><code class="xref py py-attr docutils literal notranslate"><span class="pre">staticmaps</span></code></a></p></td>
-<td><p>several static binary data for fate and transport calculation in <cite>staticdata/*.dat</cite></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.staticgeoms.html#hydromt_delwaq.DelwaqModel.staticgeoms" title="hydromt_delwaq.DelwaqModel.staticgeoms"><code class="xref py py-attr docutils literal notranslate"><span class="pre">staticgeoms</span></code></a></p></td>
-<td><p>geometries from the staticgeoms folder (basins.geojson, monareas.geojson etc.)</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.forcing.html#hydromt_delwaq.DelwaqModel.forcing" title="hydromt_delwaq.DelwaqModel.forcing"><code class="xref py py-attr docutils literal notranslate"><span class="pre">forcing</span></code></a></p></td>
-<td><p>flow.dat, volume.dat, sediment.dat</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel.hydromaps.html#hydromt_delwaq.DelwaqModel.hydromaps" title="hydromt_delwaq.DelwaqModel.hydromaps"><code class="xref py py-attr docutils literal notranslate"><span class="pre">hydromaps</span></code></a></p></td>
-<td><p>additional <cite>hydromodel/*.tif</cite> files with information on the coupled hydrology/hydrodynamic model.</p></td>
-</tr>
-</tbody>
-</table>
 </section>
 </section>
 
@@ -560,11 +550,10 @@ and <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel
               
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer d-print-none">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="generic_delwaq_WQ.html"
@@ -584,10 +573,7 @@ and <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -596,18 +582,22 @@ and <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc">
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d-water-quality-model-setup-methods">D-Water Quality model setup methods</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d-water-quality-datamodel-files">D-Water Quality datamodel files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wq-files">D-Water Quality model components</a></li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
+
   
   <div class="tocsection editthispage">
     <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/user_guide/WQ_model.rst">
@@ -623,6 +613,7 @@ and <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel
 </div>
 
   <div class="sidebar-secondary-item">
+
   <div class="tocsection sourcelink">
     <a href="../_sources/user_guide/WQ_model.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
@@ -643,8 +634,8 @@ and <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -652,6 +643,7 @@ and <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright Deltares.
@@ -661,8 +653,9 @@ and <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>
@@ -670,10 +663,12 @@ and <a class="reference internal" href="../_generated/hydromt_delwaq.DelwaqModel
     </div>
   
   
+  
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>

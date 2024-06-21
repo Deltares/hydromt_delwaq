@@ -11,13 +11,13 @@ INCLUDE 'config\B1_timestamp.inc'
 
  6    0
 
-;Nr      Name        
-1       Sew      ;   
-2       Pav      ;    
-3       Unp      ;   
-4       Stw  
-5       Sfw  
-6       Soi  
+;Nr      Name
+1       Sew      ;
+2       Pav      ;
+3       Unp      ;
+4       Stw
+5       Sfw
+6       Soi
 #1;
 
 ;###############################################################################
@@ -25,7 +25,7 @@ INCLUDE 'config\B1_timestamp.inc'
   1 'DDHHMMSS' 'DDHHMMSS'  ; system clock
 ;INCLUDE 'config\B2_sysclock.inc'
 
-     1.03                      ; integration option 
+     1.03                      ; integration option
    BAL_NOLUMPPROCESSES
    BAL_NOLUMPLOADS
    BAL_NOLUMPTRANSPORT
@@ -52,13 +52,13 @@ INCLUDE 'config\B3_nrofseg.inc'
 
 
       2                     ; grid layout not used
-      
+
 ;      0                     ; constant property arrays
 ;      0                     ; time varying property arrays
 INCLUDE 'config\B3_attributes.inc'
 
 
- 
+
       1                     ; volumes in this file
       2                     ; constant with defaults
       1.0                   ; scale factor
@@ -68,7 +68,7 @@ INCLUDE 'config\B3_attributes.inc'
 #3;
 ;###############################################################################
 ; Fourth input block
-; 
+;
 1 0 0 ; nr of exchanges
       0                     ; # of dispersion arrays
       0                     ; # of velocity arrays
@@ -76,7 +76,7 @@ INCLUDE 'config\B3_attributes.inc'
       1                     ; exchange pointers in this file
 0 0 0 0
 
- 
+
       1                     ; dispersions in this file
      1.0      1.0     1.0   ; scale factors in 3 directions
      0.0      0.0     0.0   ; values in 3 directions
@@ -84,12 +84,12 @@ INCLUDE 'config\B3_attributes.inc'
       2                     ; constant, defaults
      1.0      1.0           ; scale and value
       0
-      
+
       1                     ; flows in this file
       2                     ; constant, defaults
      1.0      0.0           ; scale and value
       0
-     
+
       0                     ; constant length
      1.0                    ; scale factor
      1.0      1.0     1.0   ; values in 3 directions
@@ -126,36 +126,36 @@ ALL BINARY_FILE 'dynamicdata\hydrology.bin'
 
 ; infrastructure
 
-CONSTANTS  SewLeakage      DATA 0.0         ; sewer leakage                                          (%)                 
+CONSTANTS  SewLeakage      DATA 0.0         ; sewer leakage                                          (%)
 
 ; source atmospheric deposition
 
-CONSTANTS  EF_DDp        DATA 0.0          ; dry deposition rate                                    (g/m2/d)            
-CONSTANTS  EF_WDp        DATA 0.0          ; wet deposition rate                                    (g/m3)              
+CONSTANTS  EF_DDp        DATA 0.0          ; dry deposition rate                                    (g/m2/d)
+CONSTANTS  EF_WDp        DATA 0.0          ; wet deposition rate                                    (g/m3)
 
 ; source SEWAGE (Type B01)
 
-PARAMETERS EV_B01        ALL BINARY_FILE 'staticdata\GHS-POP_2015.dat' ; locator/EV variable type B    (cap)                
-CONSTANTS  EF_B01           DATA 2.2          ; emission factor                                        (Kg/d/cap)           
+PARAMETERS EV_B01        ALL BINARY_FILE 'staticdata\ghs_pop_2015.dat' ; locator/EV variable type B    (cap)
+CONSTANTS  EF_B01           DATA 2.2          ; emission factor                                        (Kg/d/cap)
 ; the below comes from a supportive project specific process
-CONSTANTS  B01toSew         DATA 1.0          ; released fraction receptor                             (-)                 
-CONSTANTS  B01toPav         DATA 0.0          ; released fraction receptor                             (-)                 
+CONSTANTS  B01toSew         DATA 1.0          ; released fraction receptor                             (-)
+CONSTANTS  B01toPav         DATA 0.0          ; released fraction receptor                             (-)
 CONSTANTS  B01toUnp         DATA 0.0          ; released fraction receptor                             (-)
 CONSTANTS  B01toSoi         DATA 0.0          ; released fraction receptor                             (-)
 CONSTANTS  B01toStw         DATA 0.0          ; released fraction receptor                             (-)
-CONSTANTS  B01toSfw         DATA 0.0          ; released fraction receptor                             (-)                     
+CONSTANTS  B01toSfw         DATA 0.0          ; released fraction receptor                             (-)
 
 ; source Types NOT USED
 
-CONSTANTS  EV_A01        DATA 0.    
-CONSTANTS  EV_B02        DATA 0.    
-CONSTANTS  EV_B03        DATA 0.    
+CONSTANTS  EV_A01        DATA 0.
+CONSTANTS  EV_B02        DATA 0.
+CONSTANTS  EV_B03        DATA 0.
 
 ; fate & transport
 
-CONSTANTS  DecPav        DATA 0.0          ; decay rate paved                                       (/d)                
-CONSTANTS  DecUnp        DATA 0.0          ; decay rate unpaved                                     (/d)                
-CONSTANTS  KdUnpa        DATA 0.5          ; fraction of bound vs unbound                           (-)                 
+CONSTANTS  DecPav        DATA 0.0          ; decay rate paved                                       (/d)
+CONSTANTS  DecUnp        DATA 0.0          ; decay rate unpaved                                     (/d)
+CONSTANTS  KdUnpa        DATA 0.5          ; fraction of bound vs unbound                           (-)
 
 ; preprocessing
 
@@ -168,7 +168,7 @@ PARAMETERS Streamordr ALL BINARY_FILE 'staticdata\streamorder.dat'
 INITIALS  Sew Pav Unp Stw Sfw Soi
 DEFAULTS  6*0.0
 
- 
+
 #8
 ;###############################################################################
 ; Ninth input block
@@ -177,7 +177,7 @@ DEFAULTS  6*0.0
  0                                           		; Grid-file
  1                                                      ; His
  1                                                      ; Map
- 
+
  ; Binary/Nefis and History/Map
  1                                           		; switch on  binary History file
  1                                           		; switch on  binary Map     file

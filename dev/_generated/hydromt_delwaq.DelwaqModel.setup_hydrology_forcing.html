@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>hydromt_delwaq.DelwaqModel.setup_hydrology_forcing &#8212; HydroMT delwaq  documentation</title>
   
@@ -19,28 +18,29 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_generated/hydromt_delwaq.DelwaqModel.setup_hydrology_forcing';</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -56,19 +56,23 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -90,16 +94,23 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
-  <div class="navbar-header-items__start">
+  
+  <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../index.html">
@@ -107,11 +118,12 @@
   
   
   
+  
     
     
     
-    <img src="../_static/hydromt-logo.jpg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../_static/hydromt-logo.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../_static/hydromt-icon.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/hydromt-icon.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">HydroMT DELWAQ</p>
@@ -120,54 +132,48 @@
     
   </div>
   
-  
   <div class="col-lg-9 navbar-header-items">
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../getting_started/intro.html">
-                        Getting Started
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../user_guide/intro.html">
-                        User Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../api.html">
-                        API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../dev/intro.html">
-                        Developments
-                      </a>
-                    </li>
-                
 
-                <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
-                    HydroMT core
-                  </a>
-                </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -178,13 +184,16 @@
       
         <div class="navbar-item navbar-persistent--container">
           
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
         </div>
       
       
@@ -231,27 +240,33 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
     </div>
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
-    </label>
+    </button>
   
 </div>
 
-    </nav>
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -262,51 +277,49 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+          
+          
+            <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../getting_started/intro.html">
-                        Getting Started
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../user_guide/intro.html">
-                        User Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../api.html">
-                        API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../dev/intro.html">
-                        Developments
-                      </a>
-                    </li>
-                
 
-                <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
-                    HydroMT core
-                  </a>
-                </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -356,7 +369,8 @@ document.write(`
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
@@ -368,10 +382,10 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_monitoring.html">hydromt_delwaq.DelwaqModel.setup_monitoring</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">hydromt_delwaq.DelwaqModel.setup_hydrology_forcing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_sediment_forcing.html">hydromt_delwaq.DelwaqModel.setup_sediment_forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_climate_forcing.html">hydromt_delwaq.DelwaqModel.setup_climate_forcing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_emission_raster.html">hydromt_delwaq.DelwaqModel.setup_emission_raster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_emission_vector.html">hydromt_delwaq.DelwaqModel.setup_emission_vector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_emission_mapping.html">hydromt_delwaq.DelwaqModel.setup_emission_mapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_roads.html">hydromt_delwaq.DelwaqModel.setup_roads</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.region.html">hydromt_delwaq.DelwaqModel.region</a></li>
@@ -379,11 +393,16 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.res.html">hydromt_delwaq.DelwaqModel.res</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.root.html">hydromt_delwaq.DelwaqModel.root</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.config.html">hydromt_delwaq.DelwaqModel.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.staticmaps.html">hydromt_delwaq.DelwaqModel.staticmaps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.staticgeoms.html">hydromt_delwaq.DelwaqModel.staticgeoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.grid.html">hydromt_delwaq.DelwaqModel.grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.geoms.html">hydromt_delwaq.DelwaqModel.geoms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.forcing.html">hydromt_delwaq.DelwaqModel.forcing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.basins.html">hydromt_delwaq.DelwaqModel.basins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.hydromaps.html">hydromt_delwaq.DelwaqModel.hydromaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.pointer.html">hydromt_delwaq.DelwaqModel.pointer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.nrofseg.html">hydromt_delwaq.DelwaqModel.nrofseg</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.nrofexch.html">hydromt_delwaq.DelwaqModel.nrofexch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.surface_water.html">hydromt_delwaq.DelwaqModel.surface_water</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.fluxes.html">hydromt_delwaq.DelwaqModel.fluxes</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read.html">hydromt_delwaq.DelwaqModel.read</a></li>
@@ -398,23 +417,106 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_config.html">hydromt_delwaq.DelwaqModel.set_config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_config.html">hydromt_delwaq.DelwaqModel.read_config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_config.html">hydromt_delwaq.DelwaqModel.write_config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_staticmaps.html">hydromt_delwaq.DelwaqModel.set_staticmaps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_staticmaps.html">hydromt_delwaq.DelwaqModel.read_staticmaps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_staticmaps.html">hydromt_delwaq.DelwaqModel.write_staticmaps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_staticgeoms.html">hydromt_delwaq.DelwaqModel.set_staticgeoms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_staticgeoms.html">hydromt_delwaq.DelwaqModel.read_staticgeoms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_staticgeoms.html">hydromt_delwaq.DelwaqModel.write_staticgeoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_grid.html">hydromt_delwaq.DelwaqModel.set_grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_grid.html">hydromt_delwaq.DelwaqModel.read_grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_grid.html">hydromt_delwaq.DelwaqModel.write_grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_geoms.html">hydromt_delwaq.DelwaqModel.set_geoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_geoms.html">hydromt_delwaq.DelwaqModel.read_geoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_geoms.html">hydromt_delwaq.DelwaqModel.write_geoms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_forcing.html">hydromt_delwaq.DelwaqModel.set_forcing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_forcing.html">hydromt_delwaq.DelwaqModel.read_forcing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_forcing.html">hydromt_delwaq.DelwaqModel.write_forcing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_hydromaps.html">hydromt_delwaq.DelwaqModel.set_hydromaps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_hydromaps.html">hydromt_delwaq.DelwaqModel.read_hydromaps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_hydromaps.html">hydromt_delwaq.DelwaqModel.write_hydromaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.set_pointer.html">hydromt_delwaq.DelwaqModel.set_pointer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read_pointer.html">hydromt_delwaq.DelwaqModel.read_pointer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_waqgeom.html">hydromt_delwaq.DelwaqModel.write_waqgeom</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.emissions.html">hydromt_delwaq.workflows.emissions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.segments.html">hydromt_delwaq.workflows.segments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.roads.html">hydromt_delwaq.workflows.roads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.html">hydromt_delwaq.DemissionModel</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_config.html">hydromt_delwaq.DemissionModel.setup_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_basemaps.html">hydromt_delwaq.DemissionModel.setup_basemaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_monitoring.html">hydromt_delwaq.DemissionModel.setup_monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_hydrology_forcing.html">hydromt_delwaq.DemissionModel.setup_hydrology_forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_climate_forcing.html">hydromt_delwaq.DemissionModel.setup_climate_forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_emission_raster.html">hydromt_delwaq.DemissionModel.setup_emission_raster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_emission_vector.html">hydromt_delwaq.DemissionModel.setup_emission_vector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_emission_mapping.html">hydromt_delwaq.DemissionModel.setup_emission_mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_roads.html">hydromt_delwaq.DemissionModel.setup_roads</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.region.html">hydromt_delwaq.DemissionModel.region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.crs.html">hydromt_delwaq.DemissionModel.crs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.res.html">hydromt_delwaq.DemissionModel.res</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.root.html">hydromt_delwaq.DemissionModel.root</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.config.html">hydromt_delwaq.DemissionModel.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.grid.html">hydromt_delwaq.DemissionModel.grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.geoms.html">hydromt_delwaq.DemissionModel.geoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.forcing.html">hydromt_delwaq.DemissionModel.forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.basins.html">hydromt_delwaq.DemissionModel.basins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.hydromaps.html">hydromt_delwaq.DemissionModel.hydromaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.geometry.html">hydromt_delwaq.DemissionModel.geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.nrofseg.html">hydromt_delwaq.DemissionModel.nrofseg</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.nrofexch.html">hydromt_delwaq.DemissionModel.nrofexch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.fluxes.html">hydromt_delwaq.DemissionModel.fluxes</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.read.html">hydromt_delwaq.DemissionModel.read</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.write.html">hydromt_delwaq.DemissionModel.write</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.build.html">hydromt_delwaq.DemissionModel.build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.update.html">hydromt_delwaq.DemissionModel.update</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.set_root.html">hydromt_delwaq.DemissionModel.set_root</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_config.html">hydromt_delwaq.DemissionModel.setup_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.get_config.html">hydromt_delwaq.DemissionModel.get_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.set_config.html">hydromt_delwaq.DemissionModel.set_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.read_config.html">hydromt_delwaq.DemissionModel.read_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.write_config.html">hydromt_delwaq.DemissionModel.write_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.set_grid.html">hydromt_delwaq.DemissionModel.set_grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.read_grid.html">hydromt_delwaq.DemissionModel.read_grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.write_grid.html">hydromt_delwaq.DemissionModel.write_grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.set_geoms.html">hydromt_delwaq.DemissionModel.set_geoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.read_geoms.html">hydromt_delwaq.DemissionModel.read_geoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.write_geoms.html">hydromt_delwaq.DemissionModel.write_geoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.set_forcing.html">hydromt_delwaq.DemissionModel.set_forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.read_forcing.html">hydromt_delwaq.DemissionModel.read_forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.write_forcing.html">hydromt_delwaq.DemissionModel.write_forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.set_hydromaps.html">hydromt_delwaq.DemissionModel.set_hydromaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.read_hydromaps.html">hydromt_delwaq.DemissionModel.read_hydromaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.write_hydromaps.html">hydromt_delwaq.DemissionModel.write_hydromaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.write_geometry.html">hydromt_delwaq.DemissionModel.write_geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.DemissionModel.write_waqgeom.html">hydromt_delwaq.DemissionModel.write_waqgeom</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.config.base_config.html">hydromt_delwaq.workflows.config.base_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.config.time_config.html">hydromt_delwaq.workflows.config.time_config</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.emissions.emission_raster.html">hydromt_delwaq.workflows.emissions.emission_raster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.emissions.emission_vector.html">hydromt_delwaq.workflows.emissions.emission_vector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.emissions.admin.html">hydromt_delwaq.workflows.emissions.admin</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.forcing.hydrology_forcing.html">hydromt_delwaq.workflows.forcing.hydrology_forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.forcing.hydrology_forcing_em.html">hydromt_delwaq.workflows.forcing.hydrology_forcing_em</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.forcing.sediment_forcing.html">hydromt_delwaq.workflows.forcing.sediment_forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.forcing.climate_forcing.html">hydromt_delwaq.workflows.forcing.climate_forcing</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.geometry.compute_geometry.html">hydromt_delwaq.workflows.geometry.compute_geometry</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.roads.roads_emissions_country.html">hydromt_delwaq.workflows.roads.roads_emissions_country</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.roads.roads_emissions_segments.html">hydromt_delwaq.workflows.roads.roads_emissions_segments</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.segments.hydromaps.html">hydromt_delwaq.workflows.segments.hydromaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.segments.geometrymaps.html">hydromt_delwaq.workflows.segments.geometrymaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hydromt_delwaq.workflows.segments.pointer.html">hydromt_delwaq.workflows.segments.pointer</a></li>
 </ul>
 </div>
 </nav></div>
@@ -429,13 +531,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -444,8 +546,8 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumbs">
-  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../index.html" class="nav-link" aria-label="Home">
@@ -455,7 +557,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">hydromt_delwaq.DelwaqModel.setup_hydrology_forcing</li>
+    <li class="breadcrumb-item active" aria-current="page">hydromt_delw...</li>
   </ul>
 </nav>
 </div>
@@ -470,51 +572,61 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section id="hydromt-delwaq-delwaqmodel-setup-hydrology-forcing">
-<h1>hydromt_delwaq.DelwaqModel.setup_hydrology_forcing<a class="headerlink" href="#hydromt-delwaq-delwaqmodel-setup-hydrology-forcing" title="Permalink to this heading">#</a></h1>
+<h1>hydromt_delwaq.DelwaqModel.setup_hydrology_forcing<a class="headerlink" href="#hydromt-delwaq-delwaqmodel-setup-hydrology-forcing" title="Link to this heading">#</a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="hydromt_delwaq.DelwaqModel.setup_hydrology_forcing">
-<span class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></span><span class="sig-name descname"><span class="pre">setup_hydrology_forcing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hydro_forcing_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestepsecs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_volume_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_volume</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.setup_hydrology_forcing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.DelwaqModel.setup_hydrology_forcing" title="Permalink to this definition">#</a></dt>
-<dd><p>Setup Delwaq hydrological fluxes.</p>
+<span class="sig-prename descclassname"><span class="pre">DelwaqModel.</span></span><span class="sig-name descname"><span class="pre">setup_hydrology_forcing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hydro_forcing_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestepsecs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">86400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_volume_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.setup_hydrology_forcing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.DelwaqModel.setup_hydrology_forcing" title="Link to this definition">#</a></dt>
+<dd><p>Prepare Delwaq hydrological fluxes.</p>
+<p>As the fluxes order should precisely match the pointer defined in
+setup_basemaps, the variables names in <code class="docutils literal notranslate"><span class="pre">hydro_forcing_fn</span></code> should match names
+defined in the <code class="docutils literal notranslate"><span class="pre">fluxes</span></code> argument of setup_basemaps. These names should also
+have been saved in the file config/B7_flow.inc.</p>
+<p>If several sub-variables in <code class="docutils literal notranslate"><span class="pre">hydro_forcing_fn</span></code> need to be summed up to get
+the expected flux in pointer, they can be named {flux_name_in_pointer}_{number}
+(eg “sfw&gt;sfw_1” and “sfw&gt;sfw_2” to get “sfw&gt;sfw”) and the function will sum them
+on the fly. To remove (- instead of +) use unit_mult attribute of the data
+catalogwith -1 for the sub-variables of interest.
+To override rather than sum fluxes, use the <code class="docutils literal notranslate"><span class="pre">override</span></code> argument and name of
+the concerned flux (eg “sfw&gt;sfw”). The flux are overwritten (excluding nodata)
+in the order of the list, so the last one will be the one used.</p>
+<p>Unit conversions are possible from mm/area to m3/s for fluxes, volumes should be
+provided directly in m3. For conversion from mm to m3/s, it is possible to
+specify over wich surface area the mm are calculated. If ‘mm’ (default), the
+cellarea is assumed. Else, you can use ‘mm/{surfacearea}’ where {surfacearea}
+should be a map available in hydromaps (rivarea, lakearea, resarea).</p>
 <p>Adds model layers:</p>
 <ul class="simple">
-<li><p><strong>B1_timestamp.inc</strong> config: timestamp at the beginning of the simulation.</p></li>
-<li><p><strong>B2_outputtimes.inc</strong> config: start and end timestamp for the delwaq outputs.</p></li>
-<li><p><strong>B2_sysclock.inc</strong> config: model timestep.</p></li>
-<li><p><strong>B2_timers.inc</strong> config: timers info (start, end, timstep…).</p></li>
-</ul>
-<p>In EM mode, adds:</p>
-<ul class="simple">
-<li><p><strong>hydrology.bin</strong> dynmap: fluxes for EM (Rainfall RunoffPav  RunoffUnp Infiltr TotalFlow) [mm]</p></li>
-<li><p><strong>B7_hydrology.inc</strong> config: names of fluxes included in hydrology.bin</p></li>
-</ul>
-<p>In WQ mode, adds:</p>
-<ul class="simple">
-<li><p><strong>flow.dat</strong> dynmap: fluxes for WQ (SurfaceRunoff Inwater) [m3/s]</p></li>
-<li><p><strong>volume.dat</strong> dynmap: water volumes [m3]</p></li>
-<li><p><strong>area.dat</strong> dynmap: water cross sections [m2]</p></li>
-<li><p><strong>velocity.dat</strong> dynmap: flow velocity [m/s]</p></li>
+<li><p><strong>B1_timestamp</strong> config: timestamp at the beginning of the simulation.</p></li>
+<li><p><strong>B2_outputtimes</strong> config: start and end timestamp for the delwaq outputs.</p></li>
+<li><p><strong>B2_sysclock</strong> config: model timestep.</p></li>
+<li><p><strong>B2_timers</strong> config: timers info (start, end, timstep…).</p></li>
+<li><p><strong>flow</strong> dynmap: water fluxes [m3/s]</p></li>
+<li><p><strong>volume</strong> dynmap: water volumes [m3]</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hydro_forcing_fn</strong> (<em>{'None'</em><em>, </em><em>'name in local_sources.yml'}</em>) – <p>Either None, or name in a local or global data_sources.yml file.</p>
+<li><p><strong>hydro_forcing_fn</strong> (<em>{'None'</em><em>, </em><em>'name in local_sources.yml'}</em>) – <p>Either None, or name in a local or global data_sources.yml file.
+Names of fluxes should match those as set in the <code class="docutils literal notranslate"><span class="pre">fluxes</span></code> list of
+setup_basemaps methods (pointer creation).</p>
 <ul>
-<li><p>Required variables for EM: [‘time’, ‘precip’, ‘infilt’, ‘runPav’, ‘runUnp’]</p></li>
-<li><p>Required variables for WQ (option1): [‘time’, ‘run’, ‘vol’ or ‘lev’, ‘inwater’]</p></li>
-<li><p>Required variables for WQ (option2): [‘time’, ‘runRiv’ and ‘runLand’, ‘volRiv’ and ‘volLand’ or ‘levRiv’ and ‘levLand’, ‘inwaterRiv’ and ‘inwaterLand’]</p></li>
-<li><p>Optional variable for WQ: [‘inwaterInternal’]</p></li>
+<li><p>Required variables (to be deprecated): [‘time’, ‘run’, ‘vol’ or ‘lev’,
+‘inwater’]</p></li>
 </ul>
 </p></li>
-<li><p><strong>startime</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS</p></li>
-<li><p><strong>endtime</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS</p></li>
-<li><p><strong>timestepsecs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Model timestep in seconds.</p></li>
-<li><p><strong>add_volume_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Delwaq needs water volumes at the beginning of the timestep.
-In some models, like wflow, volumes are written at the end of the timestep and therefore
-an offset of one timestep needs to be added for consistency.</p></li>
-<li><p><strong>min_volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Add a minimum value to all the volumes in Delwaq to avoid zeros. Default is 0.1m3.</p></li>
+<li><p><strong>startime</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS</p></li>
+<li><p><strong>endtime</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS</p></li>
+<li><p><strong>timestepsecs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Model timestep in seconds. By default 86400.</p></li>
+<li><p><strong>add_volume_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Delwaq needs water volumes at the beginning of the timestep.
+In some models, like wflow, volumes are written at the end of the timestep
+and therefore an offset of one timestep needs to be added for consistency.</p></li>
+<li><p><strong>min_volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>optional</em>) – Add a minimum value to all the volumes in Delwaq to avoid zeros. Default is
+0.1m3.</p></li>
+<li><p><strong>override</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – List of fluxes/volumes to override for non nodata values rather than sum.
+The last one (based on _number) has priority.</p></li>
 </ul>
 </dd>
 </dl>
@@ -527,11 +639,10 @@ an offset of one timestep needs to be added for consistency.</p></li>
               
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer d-print-none">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="hydromt_delwaq.DelwaqModel.setup_monitoring.html"
@@ -551,10 +662,7 @@ an offset of one timestep needs to be added for consistency.</p></li>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -563,17 +671,21 @@ an offset of one timestep needs to be added for consistency.</p></li>
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc">
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hydromt_delwaq.DelwaqModel.setup_hydrology_forcing"><code class="docutils literal notranslate"><span class="pre">DelwaqModel.setup_hydrology_forcing()</span></code></a></li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
+
   
   <div class="tocsection editthispage">
     <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/_generated/hydromt_delwaq.DelwaqModel.setup_hydrology_forcing.rst">
@@ -589,6 +701,7 @@ an offset of one timestep needs to be added for consistency.</p></li>
 </div>
 
   <div class="sidebar-secondary-item">
+
   <div class="tocsection sourcelink">
     <a href="../_sources/_generated/hydromt_delwaq.DelwaqModel.setup_hydrology_forcing.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
@@ -609,8 +722,8 @@ an offset of one timestep needs to be added for consistency.</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -618,6 +731,7 @@ an offset of one timestep needs to be added for consistency.</p></li>
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright Deltares.
@@ -627,8 +741,9 @@ an offset of one timestep needs to be added for consistency.</p></li>
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>
@@ -636,10 +751,12 @@ an offset of one timestep needs to be added for consistency.</p></li>
     </div>
   
   
+  
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>

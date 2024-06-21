@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Add (global) emission data &#8212; HydroMT delwaq  documentation</title>
   
@@ -19,29 +18,30 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -59,19 +59,23 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -93,16 +97,23 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
-  <div class="navbar-header-items__start">
+  
+  <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../index.html">
@@ -110,11 +121,12 @@
   
   
   
+  
     
     
     
-    <img src="../_static/hydromt-logo.jpg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../_static/hydromt-logo.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../_static/hydromt-icon.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/hydromt-icon.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">HydroMT DELWAQ</p>
@@ -123,54 +135,48 @@
     
   </div>
   
-  
   <div class="col-lg-9 navbar-header-items">
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../getting_started/intro.html">
-                        Getting Started
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../user_guide/intro.html">
-                        User Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../api.html">
-                        API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../dev/intro.html">
-                        Developments
-                      </a>
-                    </li>
-                
 
-                <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
-                    HydroMT core
-                  </a>
-                </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -181,13 +187,16 @@
       
         <div class="navbar-item navbar-persistent--container">
           
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
         </div>
       
       
@@ -234,27 +243,33 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
     </div>
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
-    </label>
+    </button>
   
 </div>
 
-    </nav>
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -265,51 +280,49 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+          
+          
+            <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../getting_started/intro.html">
-                        Getting Started
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../user_guide/intro.html">
-                        User Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../api.html">
-                        API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../dev/intro.html">
-                        Developments
-                      </a>
-                    </li>
-                
 
-                <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
-                    HydroMT core
-                  </a>
-                </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -359,54 +372,55 @@ document.write(`
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../user_guide/generic_delwaq_EM.html">Working with the D-Emissions model</a><input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../user_guide/generic_delwaq_EM.html">Working with the D-Emissions model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/EM_model.html">D-Emission model components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_EM_substances.html">Selection of substance(s) and sources</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/build_config_EM.html">Building a model</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/build_config_EM.html">Building a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="build_EM_model.html">Example: Build D-Emission model</a></li>
 </ul>
-</li>
-<li class="toctree-l2 current active has-children"><a class="reference internal" href="../user_guide/update_config_EM.html">Updating a model</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../user_guide/update_config_EM.html">Updating a model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">Example: Add (global) emission data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="adding_local_emission.html">Example: Add (local) emission data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="update_model_forcing.html">Example: Update forcing data</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/generic_delwaq_EM_prepare.html">Editing the EM run information</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/generic_delwaq_EM_prepare.html">Editing the EM run information</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../user_guide/EM_functional_description.html">Further reading: Detailed functional description</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_EM_run.html">Running D-Emissions</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/generic_delwaq_WQ.html">Working with the D-Water Quality model</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/generic_delwaq_WQ.html">Working with the D-Water Quality model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/WQ_model.html">D-Water Quality model components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_WQ_substances.html">Selection of substance(s) and processes</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/build_config_WQ.html">Building a model</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/build_config_WQ.html">Building a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="build_WQ_model.html">Example: Build D-Water Quality model</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/update_config_WQ.html">Updating a model</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/update_config_WQ.html">Updating a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="update_model_monitoring.html">Example: Update monitoring data</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_WQ_prepare.html">Editing the WQ run information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_WQ_run.html">Running D-Water Quality</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/process_analyze.html">Postprocessing and visualization</a><input checked class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="plot_delwaq.html">Example: Plot DELWAQ staticmaps</a></li>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/process_analyze.html">Postprocessing and visualization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="plot_delwaq.html">Example: Plot DELWAQ grid</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/coupling_main.html">Reading more about coupling the individual modules</a><input checked class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/coupling_main.html">Reading more about coupling the individual modules</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/coupling_wflow.html">Explaining the Wflow - DELWAQ coupling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/coupling_delwaq.html">Explaining the D-Emission - D-Water Quality coupling</a></li>
 </ul>
-</li>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -421,13 +435,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -438,8 +452,8 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumbs">
-  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../index.html" class="nav-link" aria-label="Home">
@@ -455,7 +469,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../user_guide/update_config_EM.html" class="nav-link">Updating a model</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Add (global) emission data</li>
+    <li class="breadcrumb-item active" aria-current="page">Add...</li>
   </ul>
 </nav>
 </div>
@@ -470,7 +484,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -479,13 +493,13 @@ document.write(`
     <a href="https://mybinder.org/v2/gh/Deltares/hydromt_delwaq/main?urlpath=lab/tree/examples/adding_global_emission.ipynb" target="_blank" rel="noopener noreferrer"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg"></a>
 </div></div>
 <section id="Add-(global)-emission-data">
-<h1>Add (global) emission data<a class="headerlink" href="#Add-(global)-emission-data" title="Permalink to this heading">#</a></h1>
+<h1>Add (global) emission data<a class="headerlink" href="#Add-(global)-emission-data" title="Link to this heading">#</a></h1>
 <p>Once you have a <strong>DELWAQ</strong> model, you may want to update your model in order to add new emission data, add sample locations, use different hydrological forcing data, create and run different scenarios etc.</p>
 <p>With HydroMT, you can easily read your model and update one or several components of your model using the <strong>update</strong> function of the command line interface (CLI). Here are the steps and some examples on how to <strong>update and add global emission data to your model</strong>.</p>
 <p>All lines in this notebook which starts with ! are executed from the command line. Within the notebook environment the logging messages are shown after completion. You can also copy these lines and paste them in your shell to get more feedback.</p>
 <section id="Import-packages">
-<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">#</a></h2>
-<p>In this notebook, we will use some functions of HydroMT to prepare hydroMT configuration and library file and plot the new emission data of the updated model. Here are the libraries to import to realize these steps.</p>
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Link to this heading">#</a></h2>
+<p>In this notebook, we will use some functions of HydroMT to prepare configuration and catalog files and plot the new emission data of the updated model. Here are the libraries to import to realize these steps.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -512,7 +526,7 @@ document.write(`
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import hydromt</span>
 <span class="kn">import</span> <span class="nn">hydromt</span>
-<span class="kn">from</span> <span class="nn">hydromt_delwaq</span> <span class="kn">import</span> <span class="n">DelwaqModel</span>
+<span class="kn">from</span> <span class="nn">hydromt_delwaq</span> <span class="kn">import</span> <span class="n">DelwaqModel</span><span class="p">,</span> <span class="n">DemissionModel</span>
 </pre></div>
 </div>
 </div>
@@ -531,13 +545,13 @@ document.write(`
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2023-05-01 01:53:34,178 - update_model_emission - log - INFO - HydroMT version: 0.7.2.dev0
+2024-06-21 02:53:32,433 - update_model_emission - log - INFO - HydroMT version: 0.10.0
 </pre></div></div>
 </div>
 </section>
 <section id="hydroMT-CLI-update-interface">
-<h2>hydroMT CLI update interface<a class="headerlink" href="#hydroMT-CLI-update-interface" title="Permalink to this heading">#</a></h2>
-<p>Using the <code class="docutils literal notranslate"><span class="pre">hydroMT</span> <span class="pre">update</span></code> API, we can update one or several components of an already existing DELWAQ model. Let’s get an overview of the available options:</p>
+<h2>hydroMT CLI update interface<a class="headerlink" href="#hydroMT-CLI-update-interface" title="Link to this heading">#</a></h2>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">hydromt</span> <span class="pre">update</span></code> API, we can update one or several components of an already existing DELWAQ model. Let’s get an overview of the available options:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -554,30 +568,35 @@ document.write(`
 <div class="highlight"><pre>
 Usage: hydromt update [OPTIONS] MODEL MODEL_ROOT
 
-  Update a specific component of a model. Set an output directory to copy the
-  edited model to a new folder, otherwise maps are overwritten.
+  Update a specific component of a model.
 
-  Example usage:
-  --------------
+  Set an output directory to copy the edited model to a new folder, otherwise
+  maps are overwritten.
 
-  Update (overwrite!) landuse-landcover based maps in a Wflow model
-  hydromt update wflow /path/to/model_root -c setup_lulcmaps --opt lulc_fn=vito -d /path/to/data_catalog.yml -v
+  Example usage: --------------
 
-  Update Wflow model components outlined in an .ini configuration file and write the model to a directory
-  hydromt update wflow /path/to/model_root -o /path/to/model_out -i /path/to/wflow_config.ini -d /path/to/data_catalog.yml -v
+  Update (overwrite!) landuse-landcover based maps in a Wflow model: hydromt
+  update wflow /path/to/model_root -c setup_lulcmaps --opt lulc_fn=vito -d
+  /path/to/data_catalog.yml -v
+
+  Update Wflow model components outlined in an .yml configuration file and
+  write the model to a directory: hydromt update wflow /path/to/model_root  -o
+  /path/to/model_out  -i /path/to/wflow_config.yml  -d
+  /path/to/data_catalog.yml -v
 
 Options:
   -o, --model-out DIRECTORY  Output model folder. Maps in MODEL_ROOT are
                              overwritten if left empty.
   -i, --config PATH          Path to hydroMT configuration file, for the model
                              specific implementation.
-  -c, --components TEXT      Model methods from ini file to run
+  -c, --components TEXT      Model methods from configuration file to run
   --opt TEXT                 Method specific keyword arguments, see the method
                              documentation of the specific model for more
                              information about the arguments.
   -d, --data TEXT            Path to local yaml data catalog file OR name of
                              predefined data catalog.
   --dd, --deltares-data      Flag: Shortcut to add the &#34;deltares_data&#34; catalog
+  --fo, --force-overwrite    Flag: If provided overwrite existing model files
   --cache                    Flag: If provided cache tiled rasterdatasets
   -q, --quiet                Decrease verbosity.
   -v, --verbose              Increase verbosity.
@@ -587,7 +606,7 @@ Options:
 </div>
 </section>
 <section id="Adding-global-data-to-the-model">
-<h2>Adding global data to the model<a class="headerlink" href="#Adding-global-data-to-the-model" title="Permalink to this heading">#</a></h2>
+<h2>Adding global data to the model<a class="headerlink" href="#Adding-global-data-to-the-model" title="Link to this heading">#</a></h2>
 <p>Using HydroMT, it is quite easy to add additional emission data from already available global data. Here we will see an example where we <strong>add a cattle map (glw_cattle)</strong> from the <a class="reference external" href="https://dataverse.harvard.edu/dataverse/glw_3">GLW 3</a> data.</p>
 <p>You can see a list of all readily available data in HydroMT in the <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data.html#available-global-datasets">docs</a>.</p>
 <div class="nbinput docutils container">
@@ -600,6 +619,18 @@ Options:
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+Downloading file &#39;v0.0.9/data_catalog.yml&#39; from &#39;https://raw.githubusercontent.com/Deltares/hydromt/main/data/catalogs/artifact_data/v0.0.9/data_catalog.yml&#39; to &#39;/home/runner/.hydromt_data/artifact_data&#39;.
+Downloading data from &#39;https://github.com/DirkEilander/hydromt-artifacts/releases/download/v0.0.9/data.tar.gz&#39; to file &#39;/home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar.gz&#39;.
+SHA256 hash of downloaded file: 32de5b95c171628547f303d7f65d53cbb1b9da9af4834717c8efff93fe55aad4
+Use this value as the &#39;known_hash&#39; argument of &#39;pooch.retrieve&#39; to ensure that the file hasn&#39;t changed if it is downloaded again in the future.
+Untarring contents of &#39;/home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar.gz&#39; to &#39;/home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar&#39;
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -609,7 +640,6 @@ Options:
 crs: 4326
 data_type: RasterDataset
 driver: raster
-filesystem: local
 meta:
   category: socio economic
   paper_doi: 10.7910/DVN/GIVQ75
@@ -618,10 +648,10 @@ meta:
   source_license: CC 4.0
   source_url: https://dataverse.harvard.edu/dataverse/glw_3
   source_version: GLW 3, last downloaded 2020-06-11
-path: /home/runner/.hydromt_data/artifact_data/v0.0.8/glw_cattle.tif
+path: /home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar/glw_cattle.tif
 </pre></div></div>
 </div>
-<p>Here we can see that our cattle grid is a raster <em>.tif</em> file. The important properties for hydroMT are:</p>
+<p>Here we can see that our cattle grid is a raster <em>.tif</em> file. The important properties for HydroMT are:</p>
 <ul class="simple">
 <li><p><strong>path</strong>: path to where the data is stored.</p></li>
 <li><p><strong>data_type</strong>: <code class="docutils literal notranslate"><span class="pre">HydroMT</span> <span class="pre">DataCatalog</span> <span class="pre">type</span></code> either <em>RasterDataset</em> (gridded data), <em>GeoDataFrame</em> (vector data) or <em>GeoDataset</em> (point timeseries). Our file is a gridded tif file so <em>RasterDataset</em>.</p></li>
@@ -630,8 +660,8 @@ path: /home/runner/.hydromt_data/artifact_data/v0.0.8/glw_cattle.tif
 <p>The rest are just additional <strong>meta</strong> information on the data source. You can notice that the <strong>crs</strong> property is not mentionned. This is because this data source has the same crs as the default hydroMT one EPS<em>4326</em>.</p>
 </section>
 <section id="Preparing-the-configuration-file">
-<h2>Preparing the configuration file<a class="headerlink" href="#Preparing-the-configuration-file" title="Permalink to this heading">#</a></h2>
-<p>As the <strong>glw_cattle</strong> data is a <strong>raster</strong> data, we will add it to our model using the <code class="docutils literal notranslate"><span class="pre">[setup_emission_raster]</span></code> component of hydroMT Delwaq.</p>
+<h2>Preparing the configuration file<a class="headerlink" href="#Preparing-the-configuration-file" title="Link to this heading">#</a></h2>
+<p>As the <strong>glw_cattle</strong> data is a <strong>raster</strong> data, we will add it to our model using the <code class="docutils literal notranslate"><span class="pre">[setup_emission_raster]</span></code> component of HydroMT Delwaq.</p>
 <p>Let’s prepare a <strong>HydroMT configuration file</strong> with our options for preparing the cattle emission raster. All available options are available in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_emission_raster.html">docs(setup_emission_raster)</a>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -639,7 +669,6 @@ path: /home/runner/.hydromt_data/artifact_data/v0.0.8/glw_cattle.tif
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dictionnary with all the components and options we want to update</span>
 <span class="n">emission_raster_options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;global&#39;</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;mtype&#39;</span><span class="p">:</span> <span class="s1">&#39;EM&#39;</span><span class="p">},</span>
     <span class="s1">&#39;setup_emission_raster&#39;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s1">&#39;emission_fn&#39;</span><span class="p">:</span> <span class="s1">&#39;glw_cattle&#39;</span><span class="p">,</span>
         <span class="s1">&#39;scale_method&#39;</span><span class="p">:</span> <span class="s1">&#39;average&#39;</span><span class="p">,</span>
@@ -649,11 +678,11 @@ path: /home/runner/.hydromt_data/artifact_data/v0.0.8/glw_cattle.tif
 <span class="p">}</span>
 
 <span class="c1"># Save it to a hydroMT ini file</span>
-<span class="n">fn_ini</span> <span class="o">=</span> <span class="s2">&quot;delwaq_update_emission_cattle.ini&quot;</span>
-<span class="n">hydromt</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">configwrite</span><span class="p">(</span><span class="n">fn_ini</span><span class="p">,</span> <span class="n">emission_raster_options</span><span class="p">)</span>
+<span class="n">fn_yml</span> <span class="o">=</span> <span class="s2">&quot;delwaq_update_emission_cattle.yml&quot;</span>
+<span class="n">hydromt</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">configwrite</span><span class="p">(</span><span class="n">fn_yml</span><span class="p">,</span> <span class="n">emission_raster_options</span><span class="p">)</span>
 
 <span class="c1"># Open the file and visualize the content</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_ini</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_yml</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
 </pre></div>
@@ -664,34 +693,30 @@ path: /home/runner/.hydromt_data/artifact_data/v0.0.8/glw_cattle.tif
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[global]
-mtype = EM
-
-[setup_emission_raster]
-emission_fn = glw_cattle
-scale_method = average
-fillna_method = zero
-area_division = True
-
+setup_emission_raster:
+  emission_fn: glw_cattle
+  scale_method: average
+  fillna_method: zero
+  area_division: true
 
 </pre></div></div>
 </div>
 <p>Some explanations about the option we chose here:</p>
 <ul class="simple">
 <li><p><strong>emission_fn</strong>: name of the cattle data source in hydroMT Data Catalog.</p></li>
-<li><p><strong>scale_method</strong>: method for resampling from the data resolution (10km<em>10km for GLW) to the model resolution (5km</em>5km, same as the wflow_piave model resolution). Available methods are <em>nearest</em>, <em>average</em>, <em>mode</em> (for classification).</p></li>
+<li><p><strong>scale_method</strong>: method for resampling from the data resolution (10km x 10km for GLW) to the model resolution (5km<em>5km, same as the wflow_piave model resolution). Available methods are</em> nearest<em>,</em> average<em>,</em> mode* (for classification).</p></li>
 <li><p><strong>fillna_method</strong>: method to fill NaN values in the data sources either <em>nearest</em>, <em>zero</em> or <em>value</em> to fill with a user defined value.</p></li>
 <li><p><strong>area_division</strong>: if needed do the resampling in head/m2 (True) instead of head (False). The GLW cattle grid presents the number of cows per grid cell. To resample to a different grid resolution, we need to resample cow densities instead. After resampling, the cattle grid will be again in cows per model grid cell.</p></li>
 </ul>
 </section>
 <section id="Updating-the-model-with-the-cattle-grid">
-<h2>Updating the model with the cattle grid<a class="headerlink" href="#Updating-the-model-with-the-cattle-grid" title="Permalink to this heading">#</a></h2>
+<h2>Updating the model with the cattle grid<a class="headerlink" href="#Updating-the-model-with-the-cattle-grid" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
-<span class="o">!</span><span class="w"> </span>hydromt<span class="w"> </span>update<span class="w"> </span>delwaq<span class="w"> </span>EM_piave<span class="w"> </span>-o<span class="w"> </span>./EM_piave_extended<span class="w"> </span>-i<span class="w"> </span>delwaq_update_emission_cattle.ini<span class="w"> </span>-d<span class="w"> </span>artifact_data<span class="w"> </span>-vv
+<span class="o">!</span><span class="w"> </span>hydromt<span class="w"> </span>update<span class="w"> </span>demission<span class="w"> </span>EM_piave<span class="w"> </span>-o<span class="w"> </span>./EM_piave_extended<span class="w"> </span>-i<span class="w"> </span>delwaq_update_emission_cattle.yml<span class="w"> </span>-d<span class="w"> </span>artifact_data<span class="w"> </span>--fo<span class="w"> </span>-vv
 </pre></div>
 </div>
 </div>
@@ -700,33 +725,49 @@ area_division = True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2023-05-01 01:53:39,344 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
-2023-05-01 01:53:39,345 - update - log - INFO - HydroMT version: 0.7.2.dev0
-2023-05-01 01:53:39,345 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave (r).
-2023-05-01 01:53:39,345 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
-2023-05-01 01:53:39,345 - update - main - INFO - User settings:
-2023-05-01 01:53:39,397 - update - data_catalog - INFO - Reading data catalog artifact_data v0.0.8 from archive
-2023-05-01 01:53:39,397 - update - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.8/data_catalog.yml
-2023-05-01 01:53:39,470 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromt.log.
-2023-05-01 01:53:39,470 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.2.2.dev0).
-2023-05-01 01:53:39,470 - update - delwaq - INFO - Reading model staticgeom files.
-2023-05-01 01:53:39,592 - update - delwaq - INFO - Read staticmaps from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/staticdata/staticmaps.nc
-2023-05-01 01:53:39,604 - update - delwaq - INFO - Model read
-2023-05-01 01:53:39,604 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
-2023-05-01 01:53:39,609 - update - model_api - INFO - setup_emission_raster.emission_fn: glw_cattle
-2023-05-01 01:53:39,609 - update - model_api - INFO - setup_emission_raster.scale_method: average
-2023-05-01 01:53:39,609 - update - model_api - INFO - setup_emission_raster.fillna_method: zero
-2023-05-01 01:53:39,609 - update - model_api - INFO - setup_emission_raster.fillna_value: 0.0
-2023-05-01 01:53:39,609 - update - model_api - INFO - setup_emission_raster.area_division: True
-2023-05-01 01:53:39,609 - update - delwaq - INFO - Preparing &#39;glw_cattle&#39; map.
-2023-05-01 01:53:39,613 - update - data_catalog - INFO - DataCatalog: Getting glw_cattle RasterDataset raster data from /home/runner/.hydromt_data/artifact_data/v0.0.8/glw_cattle.tif
-2023-05-01 01:53:39,632 - update - rasterdataset - DEBUG - RasterDataset: Clip with geom - [11.775, 45.808, 12.742, 46.692]
-2023-05-01 01:53:39,799 - update - emissions - INFO - Deriving None using average resampling (nodata=-1.7e+308).
-2023-05-01 01:53:39,926 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
-2023-05-01 01:53:39,941 - update - delwaq - INFO - Writing staticmap files.
-2023-05-01 01:53:40,004 - update - delwaq - INFO - Writing model staticgeom to file.
-2023-05-01 01:53:40,032 - update - delwaq - INFO - Writing hydromap files.
-2023-05-01 01:53:40,105 - update - delwaq - WARNING - Warning: no forcing available, skipping write_forcing.
+2024-06-21 02:53:39,426 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
+2024-06-21 02:53:39,426 - update - log - INFO - HydroMT version: 0.10.0
+2024-06-21 02:53:39,426 - update - main - INFO - Updating demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave (r).
+2024-06-21 02:53:39,426 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
+2024-06-21 02:53:39,426 - update - main - INFO - User settings:
+2024-06-21 02:53:39,573 - update - data_catalog - INFO - Reading data catalog artifact_data latest
+2024-06-21 02:53:39,573 - update - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.9/data_catalog.yml
+2024-06-21 02:53:40,162 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromt.log.
+2024-06-21 02:53:40,162 - update - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.2.2.dev0).
+2024-06-21 02:53:40,162 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/demission.inp
+2024-06-21 02:53:40,162 - update - model_api - DEBUG - Reading model file monareas.
+2024-06-21 02:53:40,191 - update - model_api - DEBUG - Reading model file staticdata.
+2024-06-21 02:53:40,236 - update - model_api - DEBUG - Reading model file basins.
+nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromodel/rivarea.tif
+2024-06-21 02:53:40,364 - update - model_api - DEBUG - Reading model file staticdata.
+2024-06-21 02:53:40,372 - update - model_grid - WARNING - Replacing grid map: river
+2024-06-21 02:53:40,372 - update - model_grid - WARNING - Replacing grid map: slope
+2024-06-21 02:53:40,373 - update - model_grid - WARNING - Replacing grid map: streamorder
+2024-06-21 02:53:40,374 - update - model_grid - WARNING - Replacing grid map: SoilThickness
+2024-06-21 02:53:40,375 - update - model_grid - WARNING - Replacing grid map: porosity
+2024-06-21 02:53:40,376 - update - model_grid - WARNING - Replacing grid map: ptiddown
+2024-06-21 02:53:40,376 - update - model_grid - WARNING - Replacing grid map: monareas
+2024-06-21 02:53:40,377 - update - model_grid - WARNING - Replacing grid map: ghs_pop_2015
+2024-06-21 02:53:40,378 - update - model_grid - WARNING - Replacing grid map: gdp_world
+2024-06-21 02:53:40,378 - update - demission - INFO - Model read
+2024-06-21 02:53:40,379 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
+2024-06-21 02:53:40,386 - update - model_api - INFO - setup_emission_raster.emission_fn: glw_cattle
+2024-06-21 02:53:40,386 - update - model_api - INFO - setup_emission_raster.scale_method: average
+2024-06-21 02:53:40,386 - update - model_api - INFO - setup_emission_raster.fillna_method: zero
+2024-06-21 02:53:40,386 - update - model_api - INFO - setup_emission_raster.fillna_value: 0.0
+2024-06-21 02:53:40,386 - update - model_api - INFO - setup_emission_raster.area_division: True
+2024-06-21 02:53:40,386 - update - delwaq - INFO - Preparing &#39;glw_cattle&#39; map.
+2024-06-21 02:53:40,390 - update - rasterdataset - INFO - Reading glw_cattle raster data from /home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar/glw_cattle.tif
+2024-06-21 02:53:40,406 - update - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
+2024-06-21 02:53:40,526 - update - emissions - INFO - Deriving None using average resampling (nodata=-1.7e+308).
+2024-06-21 02:53:40,566 - update - demission - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
+2024-06-21 02:53:40,593 - update - delwaq - INFO - Writing staticmap files.
+2024-06-21 02:53:40,656 - update - model_api - DEBUG - Writing file geoms/monareas.geojson
+2024-06-21 02:53:40,667 - update - model_api - DEBUG - Writing file geoms/basins.geojson
+2024-06-21 02:53:40,673 - update - delwaq - INFO - Writing model config to file.
+2024-06-21 02:53:40,673 - update - delwaq - INFO - Writing hydromap files.
+nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromodel/rivarea.tif
+2024-06-21 02:53:40,791 - update - demission - DEBUG - No forcing data found, skip writing.
 
 </pre></div></div>
 </div>
@@ -735,20 +776,20 @@ area_division = True
 <li><p><code class="docutils literal notranslate"><span class="pre">update</span> <span class="pre">delwaq</span></code>: i.e. update a delwaq model</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">EM_piave</span></code>: original model folder</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">./EM_piave_extended</span></code>: output updated model folder</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">delwaq_update_emission_cattle.ini</span></code>: hydroMT configuration file containing the components and options to update</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">delwaq_update_emission_cattle.yml</span></code>: hydroMT configuration file containing the components and options to update</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">artifact_data</span></code>: predefined or local data catalog to use. Here the openly available predefined artifact_data catalog</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code>: give some extra verbosity (2 * v) to display feedback on screen. Now debug messages are provided.</p></li>
 </ul>
 </section>
 <section id="Visualization-of-the-new-emission-map">
-<h2>Visualization of the new emission map<a class="headerlink" href="#Visualization-of-the-new-emission-map" title="Permalink to this heading">#</a></h2>
+<h2>Visualization of the new emission map<a class="headerlink" href="#Visualization-of-the-new-emission-map" title="Link to this heading">#</a></h2>
 <p>We can now plot our newly created cattle grid.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the original and updated model with hydromt</span>
-<span class="n">mod</span> <span class="o">=</span> <span class="n">DelwaqModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;EM_piave_extended&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="n">DemissionModel</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;EM_piave_extended&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -761,11 +802,10 @@ area_division = True
 <span class="n">colormap</span> <span class="o">=</span> <span class="s1">&#39;Reds&#39;</span>
 
 <span class="c1">#Load the emission map</span>
-<span class="n">da</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">staticmaps</span><span class="p">[</span><span class="n">emissionmap</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">mask_nodata</span><span class="p">()</span>
+<span class="n">da</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">emissionmap</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">mask_nodata</span><span class="p">()</span>
 <span class="n">da</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="n">emissionmap</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
 
 <span class="c1">#Plot</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;seaborn-whitegrid&#39;</span><span class="p">)</span> <span class="c1"># set nice style</span>
 <span class="c1"># we assume the model maps are in the geographic CRS EPSG:4326</span>
 <span class="n">proj</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
 <span class="c1"># adjust zoomlevel and figure size to your basis size &amp; aspect</span>
@@ -810,11 +850,10 @@ area_division = True
               
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer d-print-none">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../user_guide/update_config_EM.html"
@@ -834,10 +873,7 @@ area_division = True
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -846,11 +882,14 @@ area_division = True
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc">
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hydroMT-CLI-update-interface">hydroMT CLI update interface</a></li>
@@ -862,6 +901,7 @@ area_division = True
   </nav></div>
 
   <div class="sidebar-secondary-item">
+
   
   <div class="tocsection editthispage">
     <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/_examples/adding_global_emission.ipynb">
@@ -877,6 +917,7 @@ area_division = True
 </div>
 
   <div class="sidebar-secondary-item">
+
   <div class="tocsection sourcelink">
     <a href="../_sources/_examples/adding_global_emission.ipynb.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
@@ -897,8 +938,8 @@ area_division = True
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -906,6 +947,7 @@ area_division = True
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright Deltares.
@@ -915,8 +957,9 @@ area_division = True
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>
@@ -924,10 +967,12 @@ area_division = True
     </div>
   
   
+  
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>

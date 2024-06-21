@@ -1,9 +1,8 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="./" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -18,28 +17,29 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="_static/theme-deltares.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="_static/theme-deltares.css?v=d8b05058" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/design-tabs.js"></script>
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
     <link rel="index" title="Index" href="#" />
@@ -53,19 +53,23 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -87,16 +91,23 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
-  <div class="navbar-header-items__start">
+  
+  <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="index.html">
@@ -104,11 +115,12 @@
   
   
   
+  
     
     
     
-    <img src="_static/hydromt-logo.jpg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="_static/hydromt-logo.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="_static/hydromt-icon.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="_static/hydromt-icon.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">HydroMT DELWAQ</p>
@@ -117,54 +129,48 @@
     
   </div>
   
-  
   <div class="col-lg-9 navbar-header-items">
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="getting_started/intro.html">
-                        Getting Started
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="user_guide/intro.html">
-                        User Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="api.html">
-                        API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="user_guide/intro.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="dev/intro.html">
-                        Developments
-                      </a>
-                    </li>
-                
 
-                <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
-                    HydroMT core
-                  </a>
-                </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -175,13 +181,16 @@
       
         <div class="navbar-item navbar-persistent--container">
           
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
         </div>
       
       
@@ -228,23 +237,31 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
     </div>
   
 
   
 </div>
 
-    </nav>
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
@@ -255,51 +272,49 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+          
+          
+            <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="getting_started/intro.html">
-                        Getting Started
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="user_guide/intro.html">
-                        User Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="api.html">
-                        API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="user_guide/intro.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="dev/intro.html">
-                        Developments
-                      </a>
-                    </li>
-                
 
-                <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
-                    HydroMT core
-                  </a>
-                </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -357,34 +372,38 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article"></div>
+              <div class="bd-header-article d-print-none"></div>
               
               
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
 
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
  <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
- | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#W"><strong>W</strong></a>
  
@@ -393,6 +412,18 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.html#hydromt_delwaq.DelwaqModel.__init__">__init__() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.html#hydromt_delwaq.DemissionModel.__init__">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.workflows.emissions.admin.html#hydromt_delwaq.workflows.emissions.admin">admin() (in module hydromt_delwaq.workflows.emissions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -400,24 +431,46 @@ document.write(`
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.basins.html#hydromt_delwaq.DelwaqModel.basins">basins (hydromt_delwaq.DelwaqModel property)</a>
+      <li><a href="_generated/hydromt_delwaq.workflows.config.base_config.html#hydromt_delwaq.workflows.config.base_config">base_config() (in module hydromt_delwaq.workflows.config)</a>
 </li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.basins.html#hydromt_delwaq.DelwaqModel.basins">basins (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.basins.html#hydromt_delwaq.DemissionModel.basins">(hydromt_delwaq.DemissionModel property)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.build.html#hydromt_delwaq.DelwaqModel.build">build() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.build.html#hydromt_delwaq.DemissionModel.build">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.config.html#hydromt_delwaq.DelwaqModel.config">config (hydromt_delwaq.DelwaqModel property)</a>
+      <li><a href="_generated/hydromt_delwaq.workflows.forcing.climate_forcing.html#hydromt_delwaq.workflows.forcing.climate_forcing">climate_forcing() (in module hydromt_delwaq.workflows.forcing)</a>
 </li>
+      <li><a href="_generated/hydromt_delwaq.workflows.geometry.compute_geometry.html#hydromt_delwaq.workflows.geometry.compute_geometry">compute_geometry() (in module hydromt_delwaq.workflows.geometry)</a>
+</li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.config.html#hydromt_delwaq.DelwaqModel.config">config (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.config.html#hydromt_delwaq.DemissionModel.config">(hydromt_delwaq.DemissionModel property)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.crs.html#hydromt_delwaq.DelwaqModel.crs">crs (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.crs.html#hydromt_delwaq.DemissionModel.crs">(hydromt_delwaq.DemissionModel property)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -427,69 +480,123 @@ document.write(`
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.html#hydromt_delwaq.DelwaqModel">DelwaqModel (class in hydromt_delwaq)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.DemissionModel.html#hydromt_delwaq.DemissionModel">DemissionModel (class in hydromt_delwaq)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.workflows.emissions.emission_raster.html#hydromt_delwaq.workflows.emissions.emission_raster">emission_raster() (in module hydromt_delwaq.workflows.emissions)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.workflows.emissions.emission_vector.html#hydromt_delwaq.workflows.emissions.emission_vector">emission_vector() (in module hydromt_delwaq.workflows.emissions)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.forcing.html#hydromt_delwaq.DelwaqModel.forcing">forcing (hydromt_delwaq.DelwaqModel property)</a>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.fluxes.html#hydromt_delwaq.DelwaqModel.fluxes">fluxes (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.fluxes.html#hydromt_delwaq.DemissionModel.fluxes">(hydromt_delwaq.DemissionModel property)</a>
 </li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.forcing.html#hydromt_delwaq.DelwaqModel.forcing">forcing (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.forcing.html#hydromt_delwaq.DemissionModel.forcing">(hydromt_delwaq.DemissionModel property)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.get_config.html#hydromt_delwaq.DelwaqModel.get_config">get_config() (hydromt_delwaq.DelwaqModel method)</a>
+      <li><a href="_generated/hydromt_delwaq.DemissionModel.geometry.html#hydromt_delwaq.DemissionModel.geometry">geometry (hydromt_delwaq.DemissionModel property)</a>
 </li>
+      <li><a href="_generated/hydromt_delwaq.workflows.segments.geometrymaps.html#hydromt_delwaq.workflows.segments.geometrymaps">geometrymaps() (in module hydromt_delwaq.workflows.segments)</a>
+</li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.geoms.html#hydromt_delwaq.DelwaqModel.geoms">geoms (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.geoms.html#hydromt_delwaq.DemissionModel.geoms">(hydromt_delwaq.DemissionModel property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.get_config.html#hydromt_delwaq.DelwaqModel.get_config">get_config() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.get_config.html#hydromt_delwaq.DemissionModel.get_config">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.grid.html#hydromt_delwaq.DelwaqModel.grid">grid (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.grid.html#hydromt_delwaq.DemissionModel.grid">(hydromt_delwaq.DemissionModel property)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.hydromaps.html#hydromt_delwaq.DelwaqModel.hydromaps">hydromaps (hydromt_delwaq.DelwaqModel property)</a>
+      <li><a href="_generated/hydromt_delwaq.workflows.forcing.hydrology_forcing.html#hydromt_delwaq.workflows.forcing.hydrology_forcing">hydrology_forcing() (in module hydromt_delwaq.workflows.forcing)</a>
 </li>
-      <li>
-    hydromt_delwaq.workflows.emissions
+      <li><a href="_generated/hydromt_delwaq.workflows.forcing.hydrology_forcing_em.html#hydromt_delwaq.workflows.forcing.hydrology_forcing_em">hydrology_forcing_em() (in module hydromt_delwaq.workflows.forcing)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.hydromaps.html#hydromt_delwaq.DelwaqModel.hydromaps">hydromaps (hydromt_delwaq.DelwaqModel property)</a>
 
       <ul>
-        <li><a href="_generated/hydromt_delwaq.workflows.emissions.html#module-hydromt_delwaq.workflows.emissions">module</a>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.hydromaps.html#hydromt_delwaq.DemissionModel.hydromaps">(hydromt_delwaq.DemissionModel property)</a>
+</li>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.workflows.segments.hydromaps.html#hydromt_delwaq.workflows.segments.hydromaps">hydromaps() (in module hydromt_delwaq.workflows.segments)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.nrofexch.html#hydromt_delwaq.DelwaqModel.nrofexch">nrofexch (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.nrofexch.html#hydromt_delwaq.DemissionModel.nrofexch">(hydromt_delwaq.DemissionModel property)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    hydromt_delwaq.workflows.roads
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.nrofseg.html#hydromt_delwaq.DelwaqModel.nrofseg">nrofseg (hydromt_delwaq.DelwaqModel property)</a>
 
       <ul>
-        <li><a href="_generated/hydromt_delwaq.workflows.roads.html#module-hydromt_delwaq.workflows.roads">module</a>
-</li>
-      </ul></li>
-      <li>
-    hydromt_delwaq.workflows.segments
-
-      <ul>
-        <li><a href="_generated/hydromt_delwaq.workflows.segments.html#module-hydromt_delwaq.workflows.segments">module</a>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.nrofseg.html#hydromt_delwaq.DemissionModel.nrofseg">(hydromt_delwaq.DemissionModel property)</a>
 </li>
       </ul></li>
   </ul></td>
 </tr></table>
 
-<h2 id="M">M</h2>
+<h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    module
-
-      <ul>
-        <li><a href="_generated/hydromt_delwaq.workflows.emissions.html#module-hydromt_delwaq.workflows.emissions">hydromt_delwaq.workflows.emissions</a>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.pointer.html#hydromt_delwaq.DelwaqModel.pointer">pointer (hydromt_delwaq.DelwaqModel property)</a>
 </li>
-        <li><a href="_generated/hydromt_delwaq.workflows.roads.html#module-hydromt_delwaq.workflows.roads">hydromt_delwaq.workflows.roads</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.workflows.segments.pointer.html#hydromt_delwaq.workflows.segments.pointer">pointer() (in module hydromt_delwaq.workflows.segments)</a>
 </li>
-        <li><a href="_generated/hydromt_delwaq.workflows.segments.html#module-hydromt_delwaq.workflows.segments">hydromt_delwaq.workflows.segments</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -497,66 +604,176 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.read.html#hydromt_delwaq.DelwaqModel.read">read() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.read.html#hydromt_delwaq.DemissionModel.read">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.read_config.html#hydromt_delwaq.DelwaqModel.read_config">read_config() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.read_config.html#hydromt_delwaq.DemissionModel.read_config">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.read_forcing.html#hydromt_delwaq.DelwaqModel.read_forcing">read_forcing() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.read_forcing.html#hydromt_delwaq.DemissionModel.read_forcing">(hydromt_delwaq.DemissionModel method)</a>
 </li>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.read_hydromaps.html#hydromt_delwaq.DelwaqModel.read_hydromaps">read_hydromaps() (hydromt_delwaq.DelwaqModel method)</a>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.read_geoms.html#hydromt_delwaq.DelwaqModel.read_geoms">read_geoms() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.read_geoms.html#hydromt_delwaq.DemissionModel.read_geoms">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.read_grid.html#hydromt_delwaq.DelwaqModel.read_grid">read_grid() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.read_grid.html#hydromt_delwaq.DemissionModel.read_grid">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.read_staticgeoms.html#hydromt_delwaq.DelwaqModel.read_staticgeoms">read_staticgeoms() (hydromt_delwaq.DelwaqModel method)</a>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.read_hydromaps.html#hydromt_delwaq.DelwaqModel.read_hydromaps">read_hydromaps() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.read_hydromaps.html#hydromt_delwaq.DemissionModel.read_hydromaps">(hydromt_delwaq.DemissionModel method)</a>
 </li>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.read_staticmaps.html#hydromt_delwaq.DelwaqModel.read_staticmaps">read_staticmaps() (hydromt_delwaq.DelwaqModel method)</a>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.read_pointer.html#hydromt_delwaq.DelwaqModel.read_pointer">read_pointer() (hydromt_delwaq.DelwaqModel method)</a>
 </li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.region.html#hydromt_delwaq.DelwaqModel.region">region (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.region.html#hydromt_delwaq.DemissionModel.region">(hydromt_delwaq.DemissionModel property)</a>
 </li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.res.html#hydromt_delwaq.DelwaqModel.res">res (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.res.html#hydromt_delwaq.DemissionModel.res">(hydromt_delwaq.DemissionModel property)</a>
+</li>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.workflows.roads.roads_emissions_country.html#hydromt_delwaq.workflows.roads.roads_emissions_country">roads_emissions_country() (in module hydromt_delwaq.workflows.roads)</a>
+</li>
+      <li><a href="_generated/hydromt_delwaq.workflows.roads.roads_emissions_segments.html#hydromt_delwaq.workflows.roads.roads_emissions_segments">roads_emissions_segments() (in module hydromt_delwaq.workflows.roads)</a>
 </li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.root.html#hydromt_delwaq.DelwaqModel.root">root (hydromt_delwaq.DelwaqModel property)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.root.html#hydromt_delwaq.DemissionModel.root">(hydromt_delwaq.DemissionModel property)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.workflows.forcing.sediment_forcing.html#hydromt_delwaq.workflows.forcing.sediment_forcing">sediment_forcing() (in module hydromt_delwaq.workflows.forcing)</a>
+</li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.set_config.html#hydromt_delwaq.DelwaqModel.set_config">set_config() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.set_config.html#hydromt_delwaq.DemissionModel.set_config">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.set_forcing.html#hydromt_delwaq.DelwaqModel.set_forcing">set_forcing() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.set_forcing.html#hydromt_delwaq.DemissionModel.set_forcing">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.set_geoms.html#hydromt_delwaq.DelwaqModel.set_geoms">set_geoms() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.set_geoms.html#hydromt_delwaq.DemissionModel.set_geoms">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.set_grid.html#hydromt_delwaq.DelwaqModel.set_grid">set_grid() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.set_grid.html#hydromt_delwaq.DemissionModel.set_grid">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.set_hydromaps.html#hydromt_delwaq.DelwaqModel.set_hydromaps">set_hydromaps() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.set_hydromaps.html#hydromt_delwaq.DemissionModel.set_hydromaps">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.set_pointer.html#hydromt_delwaq.DelwaqModel.set_pointer">set_pointer() (hydromt_delwaq.DelwaqModel method)</a>
 </li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.set_root.html#hydromt_delwaq.DelwaqModel.set_root">set_root() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.set_root.html#hydromt_delwaq.DemissionModel.set_root">(hydromt_delwaq.DemissionModel method)</a>
 </li>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.set_staticgeoms.html#hydromt_delwaq.DelwaqModel.set_staticgeoms">set_staticgeoms() (hydromt_delwaq.DelwaqModel method)</a>
-</li>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.set_staticmaps.html#hydromt_delwaq.DelwaqModel.set_staticmaps">set_staticmaps() (hydromt_delwaq.DelwaqModel method)</a>
-</li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_basemaps.html#hydromt_delwaq.DelwaqModel.setup_basemaps">setup_basemaps() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.setup_basemaps.html#hydromt_delwaq.DemissionModel.setup_basemaps">(hydromt_delwaq.DemissionModel method)</a>
 </li>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_config.html#hydromt_delwaq.DelwaqModel.setup_config">setup_config() (hydromt_delwaq.DelwaqModel method)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_climate_forcing.html#hydromt_delwaq.DelwaqModel.setup_climate_forcing">setup_climate_forcing() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.setup_climate_forcing.html#hydromt_delwaq.DemissionModel.setup_climate_forcing">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_config.html#hydromt_delwaq.DelwaqModel.setup_config">setup_config() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.setup_config.html#hydromt_delwaq.DemissionModel.setup_config">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_emission_mapping.html#hydromt_delwaq.DelwaqModel.setup_emission_mapping">setup_emission_mapping() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.setup_emission_mapping.html#hydromt_delwaq.DemissionModel.setup_emission_mapping">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_emission_raster.html#hydromt_delwaq.DelwaqModel.setup_emission_raster">setup_emission_raster() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.setup_emission_raster.html#hydromt_delwaq.DemissionModel.setup_emission_raster">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_emission_vector.html#hydromt_delwaq.DelwaqModel.setup_emission_vector">setup_emission_vector() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.setup_emission_vector.html#hydromt_delwaq.DemissionModel.setup_emission_vector">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_hydrology_forcing.html#hydromt_delwaq.DelwaqModel.setup_hydrology_forcing">setup_hydrology_forcing() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.setup_hydrology_forcing.html#hydromt_delwaq.DemissionModel.setup_hydrology_forcing">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_monitoring.html#hydromt_delwaq.DelwaqModel.setup_monitoring">setup_monitoring() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.setup_monitoring.html#hydromt_delwaq.DemissionModel.setup_monitoring">(hydromt_delwaq.DemissionModel method)</a>
 </li>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_roads.html#hydromt_delwaq.DelwaqModel.setup_roads">setup_roads() (hydromt_delwaq.DelwaqModel method)</a>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DemissionModel.setup_roads.html#hydromt_delwaq.DemissionModel.setup_roads">setup_roads() (hydromt_delwaq.DemissionModel method)</a>
 </li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.setup_sediment_forcing.html#hydromt_delwaq.DelwaqModel.setup_sediment_forcing">setup_sediment_forcing() (hydromt_delwaq.DelwaqModel method)</a>
 </li>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.staticgeoms.html#hydromt_delwaq.DelwaqModel.staticgeoms">staticgeoms (hydromt_delwaq.DelwaqModel property)</a>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.surface_water.html#hydromt_delwaq.DelwaqModel.surface_water">surface_water (hydromt_delwaq.DelwaqModel property)</a>
 </li>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.staticmaps.html#hydromt_delwaq.DelwaqModel.staticmaps">staticmaps (hydromt_delwaq.DelwaqModel property)</a>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.workflows.config.time_config.html#hydromt_delwaq.workflows.config.time_config">time_config() (in module hydromt_delwaq.workflows.config)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -565,7 +782,11 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.update.html#hydromt_delwaq.DelwaqModel.update">update() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.update.html#hydromt_delwaq.DemissionModel.update">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -573,19 +794,51 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.write.html#hydromt_delwaq.DelwaqModel.write">write() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.write.html#hydromt_delwaq.DemissionModel.write">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.write_config.html#hydromt_delwaq.DelwaqModel.write_config">write_config() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.write_config.html#hydromt_delwaq.DemissionModel.write_config">(hydromt_delwaq.DemissionModel method)</a>
 </li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.write_forcing.html#hydromt_delwaq.DelwaqModel.write_forcing">write_forcing() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.write_forcing.html#hydromt_delwaq.DemissionModel.write_forcing">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DemissionModel.write_geometry.html#hydromt_delwaq.DemissionModel.write_geometry">write_geometry() (hydromt_delwaq.DemissionModel method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.write_geoms.html#hydromt_delwaq.DelwaqModel.write_geoms">write_geoms() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.write_geoms.html#hydromt_delwaq.DemissionModel.write_geoms">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.write_grid.html#hydromt_delwaq.DelwaqModel.write_grid">write_grid() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.write_grid.html#hydromt_delwaq.DemissionModel.write_grid">(hydromt_delwaq.DemissionModel method)</a>
+</li>
+      </ul></li>
       <li><a href="_generated/hydromt_delwaq.DelwaqModel.write_hydromaps.html#hydromt_delwaq.DelwaqModel.write_hydromaps">write_hydromaps() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.write_hydromaps.html#hydromt_delwaq.DemissionModel.write_hydromaps">(hydromt_delwaq.DemissionModel method)</a>
 </li>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.write_staticgeoms.html#hydromt_delwaq.DelwaqModel.write_staticgeoms">write_staticgeoms() (hydromt_delwaq.DelwaqModel method)</a>
+      </ul></li>
+      <li><a href="_generated/hydromt_delwaq.DelwaqModel.write_waqgeom.html#hydromt_delwaq.DelwaqModel.write_waqgeom">write_waqgeom() (hydromt_delwaq.DelwaqModel method)</a>
+
+      <ul>
+        <li><a href="_generated/hydromt_delwaq.DemissionModel.write_waqgeom.html#hydromt_delwaq.DemissionModel.write_waqgeom">(hydromt_delwaq.DemissionModel method)</a>
 </li>
-      <li><a href="_generated/hydromt_delwaq.DelwaqModel.write_staticmaps.html#hydromt_delwaq.DelwaqModel.write_staticmaps">write_staticmaps() (hydromt_delwaq.DelwaqModel method)</a>
-</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -595,16 +848,12 @@ document.write(`
               
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer d-print-none">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -622,8 +871,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -631,6 +880,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright Deltares.
@@ -640,8 +890,9 @@ document.write(`
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>
@@ -649,10 +900,12 @@ document.write(`
     </div>
   
   
+  
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>
