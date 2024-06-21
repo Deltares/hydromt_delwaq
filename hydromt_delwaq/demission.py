@@ -101,6 +101,9 @@ class DemissionModel(DelwaqModel):
             logger=logger,
         )
 
+        # d-emission specific
+        self._geometry = None
+
     def setup_basemaps(
         self,
         region: Dict,
@@ -428,6 +431,24 @@ class DemissionModel(DelwaqModel):
         # Skip geometry file (should be read with read_geometry())
         # Skip monitoring files (should be read with read_monitoring())
         super().read_config(skip=skip)
+
+    @property
+    def geometry(self):
+        """
+        Pandas DataFrame containing the geometry of the EM compartment.
+
+        Columns of the DataFrame are:
+        * TotArea: area of the segment
+        * fPaved: fraction of the segment that is paved
+        * fUnpaved: fraction of the segment that is unpaved
+        * fOpenWater: fraction of the segment that is open water
+        """
+        # if not self._geometry:
+        #     # not implemented yet, fix later
+        #     self._geometry = pd.DataFrame()
+        #     if self._read:
+        #         self.read_geometry()
+        return self._geometry
 
     def read_geometry(self):
         """Read Delwaq EM geometry file."""

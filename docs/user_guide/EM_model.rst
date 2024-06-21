@@ -80,3 +80,5 @@ and :py:func:`~DemissionModel.write_config` for the
      - hydrology.bin
    * - :py:attr:`~hydromt_delwaq.DemissionModel.hydromaps`
      - additional `hydromodel/*.tif` files with information on the coupled hydrology/hydrodynamic model.
+   * - :py:attr:`~hydromt_delwaq.DemissionModel.geometry`
+     - geometry of the D-Emissions segments (area, fraction paved, unpaved and open water) saved in the config folder.

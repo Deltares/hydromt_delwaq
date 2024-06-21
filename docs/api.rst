@@ -152,6 +152,7 @@ Attributes
    DemissionModel.forcing
    DemissionModel.basins
    DemissionModel.hydromaps
+   DemissionModel.geometry
    DemissionModel.nrofseg
    DemissionModel.nrofexch
    DemissionModel.fluxes

@@ -120,7 +120,6 @@ class DelwaqModel(GridModel):
         self._pointer = (
             None  # dictionnary of pointer values and related model attributes
         )
-        self._geometry = None
         self._fewsadapter = None
 
         self.timestepsecs = 86400
@@ -1215,10 +1214,16 @@ class DelwaqModel(GridModel):
                     "np.ndarray with four columns."
                 )
                 return
-        elif np.isin(name, ["csurface_water", "boundaries", "fluxes"]):
+        elif np.isin(name, ["boundaries", "fluxes"]):
             if not isinstance(attr, list):
                 self.logger.warning(
                     f"{name} object in self.pointer should be a list of names."
+                )
+                return
+        elif np.isin(name, ["surface_water"]):
+            if not isinstance(attr, str):
+                self.logger.warning(
+                    f"{name} object in self.pointer should be a string."
                 )
                 return
         elif np.isin(name, ["nrofseg", "nrofexch"]):
