@@ -63,11 +63,11 @@ class DelwaqModel(GridModel):
     }
     _FOLDERS = [
         "hydromodel",
-        "staticdata",
+        # "staticdata",
         "geoms",
         "config",
-        "dynamicdata",
-        "fews",
+        # "dynamicdata",
+        # "fews",
     ]
 
     def __init__(
@@ -732,7 +732,7 @@ class DelwaqModel(GridModel):
     def setup_emission_mapping(
         self,
         region_fn: Union[str, gpd.GeoDataFrame],
-        mapping_fn: Union[str, Path] = None,
+        mapping_fn: Optional[Union[str, Path]] = None,
     ):
         """
         Derive several emission maps based on administrative boundaries.
@@ -845,8 +845,11 @@ class DelwaqModel(GridModel):
             return
 
         self._assert_write_mode()
-        ds_out = self.grid
+        # Create output folder if it does not exist
+        if not os.path.exists(dirname(join(self.root, fn))):
+            os.makedirs(dirname(join(self.root, fn)))
 
+        ds_out = self.grid
         # Filter data with mask
         for dvar in ds_out.data_vars:
             ds_out[dvar] = ds_out[dvar].raster.mask(mask=ds_out["mask"])
@@ -862,7 +865,20 @@ class DelwaqModel(GridModel):
         # Binary format
         mask = ds_out["mask"].values.flatten()
         for dvar in ds_out.data_vars:
-            if dvar != "monpoints" and dvar != "monareas":
+            if dvar == "monpoints" or dvar == "monareas":
+                continue
+            # Check if data is 3D
+            if len(ds_out[dvar].shape) == 3:
+                dim0 = ds_out[dvar].raster.dim0
+                for i in range(len(ds_out[dim0])):
+                    dim0_val = ds_out[dim0][i].item()
+                    fname = join(self.root, fn.format(name=f"{dvar}_{dim0}_{dim0_val}"))
+                    data = ds_out[dvar].sel({dim0: dim0_val}).values.flatten()
+                    data = data[mask]
+                    dw_WriteSegmentOrExchangeData(
+                        0, fname, data, 1, WriteAscii=False, mode="w"
+                    )
+            else:
                 fname = join(self.root, fn.format(name=dvar))
                 data = ds_out[dvar].values.flatten()
                 data = data[mask]
@@ -1027,6 +1043,10 @@ class DelwaqModel(GridModel):
         if len(self.forcing) == 0:
             self.logger.debug("No forcing data found, skip writing.")
             return
+
+        # Create output folder if it does not exist
+        if not os.path.exists(dirname(join(self.root, fn))):
+            os.makedirs(dirname(join(self.root, fn)))
 
         # Go from dictionnary to xr.DataSet
         ds_out = xr.Dataset()

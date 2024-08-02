@@ -509,6 +509,10 @@ class DemissionModel(DelwaqModel):
             self.logger.debug("No forcing data found, skip writing.")
             return
 
+        # Create output folder if it does not exist
+        if not os.path.exists(dirname(join(self.root, fn))):
+            os.makedirs(dirname(join(self.root, fn)))
+
         # Go from dictionnary to xr.DataSet
         ds_out = xr.Dataset()
         for name, da in self.forcing.items():
