@@ -4,7 +4,7 @@ import glob
 import logging
 import os
 import struct
-from os.path import isfile, join
+from os.path import dirname, isfile, join
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
@@ -812,13 +812,34 @@ class DelwaqModel(GridModel):
         self.write_pointer()
         self.write_forcing()
 
-    def read_grid(self, **kwargs):
-        """Read grid at <root/staticdata> and parse to xarray."""
-        fn = join(self.root, "staticdata", "staticdata.nc")
-        super().read_grid(fn, **kwargs)
+    def read_grid(self, fn: str = "staticdata/{name}.dat", **kwargs):
+        """
+        Read grid at <root/fn> and parse to xarray.
 
-    def write_grid(self):
-        """Write grid at <root/staticdata> in NetCDF and binary format."""
+        For now, this function only allows to read the netcdf version of the grid.
+
+        Parameters
+        ----------
+        fn : str, optional
+            filename relative to model root and should contain a {name} placeholder,
+            by default 'staticdata/{name}.dat'. For the netcdf file, the placeholder
+            will be replaced by the name staticdata.
+        """
+        fname = join(self.root, fn.format(name="staticdata"))
+        fname = os.path.splitext(fname)[0] + ".nc"
+        super().read_grid(fname, **kwargs)
+
+    def write_grid(self, fn: str = "staticdata/{name}.dat"):
+        """
+        Write grid at <root/fn> in NetCDF and binary format.
+
+        Parameters
+        ----------
+        fn : str, optional
+            filename relative to model root and should contain a {name} placeholder,
+            by default 'staticdata/{name}.dat'. For the netcdf file, the placeholder
+            will be replaced by the name staticdata.
+        """
         if len(self.grid) == 0:
             self.logger.debug("No grid data found, skip writing.")
             return
@@ -832,7 +853,8 @@ class DelwaqModel(GridModel):
 
         self.logger.info("Writing staticmap files.")
         # Netcdf format
-        fname = join(self.root, "staticdata", "staticdata.nc")
+        fname = join(self.root, fn.format(name="staticdata"))
+        fname = os.path.splitext(fname)[0] + ".nc"
         # Update attributes for gdal compliance
         # ds_out = ds_out.raster.gdal_compliant(rename_dims=False)
         ds_out.to_netcdf(path=fname)
@@ -841,7 +863,7 @@ class DelwaqModel(GridModel):
         mask = ds_out["mask"].values.flatten()
         for dvar in ds_out.data_vars:
             if dvar != "monpoints" and dvar != "monareas":
-                fname = join(self.root, "staticdata", dvar + ".dat")
+                fname = join(self.root, fn.format(name=dvar))
                 data = ds_out[dvar].values.flatten()
                 data = data[mask]
                 dw_WriteSegmentOrExchangeData(
@@ -981,11 +1003,25 @@ class DelwaqModel(GridModel):
         self._forcing = dict()
         # raise NotImplementedError()
 
-    def write_forcing(self, write_nc=False):
+    def write_forcing(self, fn: str = "dynamicdata/{name}.dat", write_nc: bool = False):
         """
-        Write grid at <root/staticdata> in binary format.
+        Write forcing at <root/fn> in binary format.
 
         Can also write a NetCDF copy if write_nc is True.
+        The output files are:
+
+        * **flow.dat** binary: water fluxes [m3/s]
+        * **volume.dat** binary: water volumes [m3]
+        * **sediment.dat** binary: sediment particles from land erosion [g/timestep]
+        * **climate.dat** binary: climate fuxes for climate_vars
+
+        Parameters
+        ----------
+        fn : str, optional
+            filename relative to model root and should contain a {name} placeholder,
+            by default 'dynamicdata/{name}.dat'
+        write_nc : bool, optional
+            If True, write a NetCDF copy of the forcing data, by default False.
         """
         self._assert_write_mode()
         if len(self.forcing) == 0:
@@ -998,7 +1034,7 @@ class DelwaqModel(GridModel):
             ds_out[name] = da
 
         # To avoid appending data to existing file, first delete all the .dat files
-        dynDir = join(self.root, "dynamicdata")
+        dynDir = dirname(join(self.root, fn))
         if os.path.exists(dynDir):
             filelist = os.listdir(dynDir)
             for f in filelist:
@@ -1014,7 +1050,9 @@ class DelwaqModel(GridModel):
         self.logger.info("Writing dynamicmap files.")
         # Netcdf format
         if write_nc:
-            fname = join(self.root, "dynamicdata", "dynamicmaps.nc")
+            fname = join(self.root, fn.format(name="dynamicdata"))
+            fname = os.path.splitext(fname)[0] + ".nc"
+            self.logger.info(f"Writing NetCDF copy of the forcing data to {fname}.")
             ds_out = ds_out.drop_vars(["mask", "spatial_ref"], errors="ignore")
             ds_out.to_netcdf(path=fname)
 
@@ -1030,7 +1068,7 @@ class DelwaqModel(GridModel):
             # if last timestep only write volumes
             if i != len(ds_out.time.values) - 1:
                 # Flow
-                flname = join(self.root, "dynamicdata", "flow.dat")
+                flname = join(self.root, fn.format(name="flow"))
                 flow_vars = self.fluxes
                 flowblock = []
                 for dvar in flow_vars:
@@ -1049,7 +1087,7 @@ class DelwaqModel(GridModel):
                         timestepstamp[i], flname, flowblock, 1, WriteAscii=False
                     )
             # volume
-            voname = join(self.root, "dynamicdata", "volume.dat")
+            voname = join(self.root, fn.format(name="volume"))
             vol_vars = [self.surface_water]
             volblock = []
             for dvar in vol_vars:
@@ -1065,7 +1103,7 @@ class DelwaqModel(GridModel):
                 )
             # sediment
             if "B7_sediment" in self.config and i != len(ds_out.time.values) - 1:
-                sedname = join(self.root, "dynamicdata", "sediment.dat")
+                sedname = join(self.root, fn.format(name="sediment"))
                 sed_vars = self.get_config("B7_sediment.l2").split(" ")
                 sedblock = []
                 for dvar in sed_vars:
@@ -1081,7 +1119,7 @@ class DelwaqModel(GridModel):
                     )
             # climate
             if "B7_climate" in self.config and i != len(ds_out.time.values) - 1:
-                climname = join(self.root, "dynamicdata", "climate.dat")
+                climname = join(self.root, fn.format(name="climate"))
                 clim_vars = self.get_config("B7_climate.l2").split(" ")
                 climblock = []
                 for dvar in clim_vars:
