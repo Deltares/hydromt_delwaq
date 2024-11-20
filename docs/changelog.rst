@@ -6,6 +6,20 @@ All notable changes to this project will be documented in this page.
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
+Unreleased
+==========
+
+Added
+-----
+- Support for 3D data (example for cyclic data) in ``grid``.
+- Flexible names for ``grid`` and ``forcing``.
+
+Changed
+-------
+
+Fixed
+-----
+
 v0.3.0 (21 June 2023)
 =====================
 This release introduces a new separate class to prepare D-Emission models **DemissionModel** and adds several new features to the **DelwaqModel** class.
