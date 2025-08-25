@@ -21,18 +21,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup environment
+      - name: Setup environment and info
         uses: mamba-org/setup-micromamba@v1
         with:
           environment-file: envs/hydromt-delwaq.yml
           cache-downloads: true
           init-shell: bash
-
-      - name: Conda info
-        run: |
-         micromamba activate hydromt-delwaq
-         conda info
-         conda list
 
       - name: Install plugin
         run: |
