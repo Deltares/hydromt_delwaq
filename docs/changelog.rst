@@ -12,13 +12,14 @@ Unreleased
 Added
 -----
 - Support for 3D data (example for cyclic data) in ``grid``.
-- Flexible names for ``grid`` and ``forcing``.
+- Flexible names for ``grid`` and ``forcing`` filenames in read/write methods.
 
 Changed
 -------
 
 Fixed
 -----
+- Errors in ``setup_roads`` method.
 
 v0.3.0 (21 June 2023)
 =====================

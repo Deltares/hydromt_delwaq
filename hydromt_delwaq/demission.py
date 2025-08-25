@@ -234,7 +234,7 @@ class DemissionModel(DelwaqModel):
             List of non highway roads in the type variable of roads_fn. If not provided
             takes every roads except the ones in highway_list.
         country_list: str or list of str, optional.
-            List of countries for the model area in country_fn and optionnally in
+            List of countries for the model area in country_fn and optionally in
             country_code variable of roads_fn.
         country_fn: str, optional.
             Name of country boundaries data source in data_sources.yml file.
@@ -261,6 +261,8 @@ class DemissionModel(DelwaqModel):
             # Compute country statistics
             ds_country = roads.roads_emissions_country(
                 gdf_roads=gdf_roads,
+                gdf_country=gdf_country,
+                ds_like=self.grid,
                 highway_list=highway_list,
                 non_highway_list=non_highway_list,
                 logger=self.logger,
@@ -275,8 +277,9 @@ class DemissionModel(DelwaqModel):
             roads_fn, dst_crs=self.crs, geom=mask, variables=["road_type"]
         )
         # Compute segment statistics
-        ds_segments = roads.roads_emissions_segment(
+        ds_segments = roads.roads_emissions_segments(
             gdf_roads=gdf_roads,
+            ds_like=self.grid,
             highway_list=highway_list,
             non_highway_list=non_highway_list,
             logger=self.logger,
