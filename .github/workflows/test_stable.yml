@@ -21,14 +21,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: conda-incubator/setup-miniconda@v2
+      - name: Setup environment
+        uses: mamba-org/setup-micromamba@v1
         with:
-          python-version: ${{ matrix.python-version }}
-          mamba-version: "*"
-          channels: conda-forge,defaults
-          channel-priority: true
           environment-file: envs/hydromt-delwaq.yml
           activate-environment: hydromt-delwaq
+          cache-downloads: true
 
       - name: Conda info
         run: |
