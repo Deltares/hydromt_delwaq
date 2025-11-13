@@ -433,7 +433,7 @@ class DelwaqModel(GridModel):
             List of fluxes/volumes to override for non nodata values rather than sum.
             The last one (based on _number) has priority.
         """
-        if hydro_forcing_fn not in self.data_catalog:
+        if not self.data_catalog.contains_source(hydro_forcing_fn):
             self.logger.warning(
                 f"None or Invalid source {hydro_forcing_fn} ",
                 "skipping setup_hydrology_forcing.",
@@ -1462,7 +1462,7 @@ class DelwaqModel(GridModel):
         if ptid.raster.x_dim != "x":
             ptid = ptid.rename({ptid.raster.x_dim: "x"})
         # ptid = ptid.rename({"lat": "y", "lon": "x"})
-        da_ptid = xu.UgridDataArray.from_structured(ptid)
+        da_ptid = xu.UgridDataArray.from_structured2d(ptid)
         da_ptid = da_ptid.dropna(dim=da_ptid.ugrid.grid.face_dimension)
         da_ptid.ugrid.set_crs(crs=self.crs)  # "EPSG:4326"
         uda_waqgeom = da_ptid.ugrid.to_dataset(
