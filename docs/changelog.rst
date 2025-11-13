@@ -20,6 +20,7 @@ Changed
 Fixed
 -----
 - Errors in ``setup_roads`` method.
+- Fix dimension mismatch for waqgeom file by upgrading xugrid dependency.
 
 v0.3.0 (21 June 2023)
 =====================
