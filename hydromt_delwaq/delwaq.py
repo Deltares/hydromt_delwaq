@@ -67,7 +67,6 @@ class DelwaqModel(GridModel):
         "geoms",
         "config",
         "dynamicdata",
-        "fews",
     ]
 
     def __init__(
