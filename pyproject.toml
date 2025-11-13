@@ -10,19 +10,19 @@ authors = [
 ]
 dependencies = [
     "hydromt >=0.9.1,<0.11",
-    "hydromt_wflow >=0.5.0",
+    "hydromt_wflow >=0.5.0,<0.9",
     "geopandas >=0.10",
-    "numpy>=1.23, <2",
+    "numpy",
     "pandas",
     "pyproj",
     "rasterio",
     "scipy",
-    "shapely >=2.0.0",
+    "shapely",
     "tqdm",
-    "xarray<=2024.3.0",
-    "xugrid",
+    "xarray",
+    "xugrid >=0.14.3",
 ]
-requires-python = ">=3.10,<3.12"
+requires-python = ">=3.10"
 readme = "README.rst"
 classifiers = [
     # https://pypi.python.org/pypi?%3Aaction=list_classifiers
