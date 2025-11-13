@@ -3,8 +3,18 @@ name: Test stable
 on:
   push:
     branches: [ main ]
+    paths:
+      - hydromt_delwaq/**/*
+      - tests/**/*
+      - pyproject.toml
+      - .github/workflows/test.yml
   pull_request:
     branches: [ main ]
+    paths:
+      - hydromt_delwaq/**/*
+      - tests/**/*
+      - pyproject.toml
+      - .github/workflows/test.yml
 
 jobs:
   Test:
@@ -20,7 +30,7 @@ jobs:
         python-version: ["3.11"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Setup environment and info
         uses: mamba-org/setup-micromamba@v1
         with:
