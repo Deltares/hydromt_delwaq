@@ -63,11 +63,8 @@ class DelwaqModel(GridModel):
     }
     _FOLDERS = [
         "hydromodel",
-        # "staticdata",
         "geoms",
         "config",
-        # "dynamicdata",
-        # "fews",
     ]
 
     def __init__(
