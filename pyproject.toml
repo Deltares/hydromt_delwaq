@@ -58,6 +58,7 @@ examples = [
     "jupyterlab",
     "cartopy",
     "matplotlib",
+    "nbconvert",
     "notebook",
 ]
 full = ["hydromt_delwaq[dev,test,doc,examples]"]
