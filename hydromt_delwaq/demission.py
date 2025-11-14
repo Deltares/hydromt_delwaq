@@ -2,7 +2,7 @@
 
 import logging
 import os
-from os.path import join
+from os.path import dirname, join
 from pathlib import Path
 from typing import Dict, List, Union
 
@@ -234,7 +234,7 @@ class DemissionModel(DelwaqModel):
             List of non highway roads in the type variable of roads_fn. If not provided
             takes every roads except the ones in highway_list.
         country_list: str or list of str, optional.
-            List of countries for the model area in country_fn and optionnally in
+            List of countries for the model area in country_fn and optionally in
             country_code variable of roads_fn.
         country_fn: str, optional.
             Name of country boundaries data source in data_sources.yml file.
@@ -261,6 +261,8 @@ class DemissionModel(DelwaqModel):
             # Compute country statistics
             ds_country = roads.roads_emissions_country(
                 gdf_roads=gdf_roads,
+                gdf_country=gdf_country,
+                ds_like=self.grid,
                 highway_list=highway_list,
                 non_highway_list=non_highway_list,
                 logger=self.logger,
@@ -275,8 +277,9 @@ class DemissionModel(DelwaqModel):
             roads_fn, dst_crs=self.crs, geom=mask, variables=["road_type"]
         )
         # Compute segment statistics
-        ds_segments = roads.roads_emissions_segment(
+        ds_segments = roads.roads_emissions_segments(
             gdf_roads=gdf_roads,
+            ds_like=self.grid,
             highway_list=highway_list,
             non_highway_list=non_highway_list,
             logger=self.logger,
@@ -486,15 +489,32 @@ class DemissionModel(DelwaqModel):
             print("PARAMETERS TotArea fPaved fUnpaved fOpenWater", file=fpa)
             fpa.close()
 
-    def write_forcing(self, write_nc: bool = False):
-        """Write forcing at <root/dynamicdata> in binary format.
+    def write_forcing(self, fn: str = "dynamicdata/{name}.dat", write_nc: bool = False):
+        """Write forcing at <root/fn> in binary format.
 
         Can also write a netcdf copy if ``write_nc`` is True.
+        The output files are:
+
+        * **hydrology.bin** binary file containing the hydrology data.
+        * **sediment.dat** binary file containing the sediment data.
+        * **climate.dat** binary file containing the climate data.
+
+        Parameters
+        ----------
+        fn : str, optional
+            filename relative to model root and should contain a {name} placeholder,
+            by default 'dynamicdata/{name}.dat'
+        write_nc : bool, optional
+            If True, write a NetCDF copy of the forcing data, by default False.
         """
         self._assert_write_mode()
         if len(self.forcing) == 0:
             self.logger.debug("No forcing data found, skip writing.")
             return
+
+        # Create output folder if it does not exist
+        if not os.path.exists(dirname(join(self.root, fn))):
+            os.makedirs(dirname(join(self.root, fn)))
 
         # Go from dictionnary to xr.DataSet
         ds_out = xr.Dataset()
@@ -502,7 +522,7 @@ class DemissionModel(DelwaqModel):
             ds_out[name] = da
 
         # To avoid appending data to existing file, first delete all the .dat files
-        dynDir = join(self.root, "dynamicdata")
+        dynDir = dirname(join(self.root, fn))
         if os.path.exists(dynDir):
             filelist = os.listdir(dynDir)
             for f in filelist:
@@ -518,7 +538,9 @@ class DemissionModel(DelwaqModel):
         self.logger.info("Writing dynamicmap files.")
         # Netcdf format
         if write_nc:
-            fname = join(self.root, "dynamicdata", "dynamicmaps.nc")
+            fname = join(self.root, fn.format(name="dynamicdata"))
+            fname = os.path.splitext(fname)[0] + ".nc"
+            self.logger.info(f"Writing NetCDF copy of the forcing data to {fname}.")
             ds_out = ds_out.drop_vars(["mask", "spatial_ref"], errors="ignore")
             ds_out.to_netcdf(path=fname)
 
@@ -529,7 +551,8 @@ class DemissionModel(DelwaqModel):
         )
         for i in tqdm(timesteps, desc="Writing dynamic data"):
             # hydrology
-            fname = join(self.root, "dynamicdata", "hydrology.bin")
+            fname = join(self.root, fn.format(name="hydrology"))
+            fname = os.path.splitext(fname)[0] + ".bin"
             datablock = []
             dvars = ["precip", "runPav", "runUnp", "infilt"]
             if "totflw" in ds_out.data_vars:
@@ -553,7 +576,7 @@ class DemissionModel(DelwaqModel):
                 self.logger.info("No hydrology data found.")
             # sediment
             if "B7_sediment" in self.config:
-                sedname = join(self.root, "dynamicdata", "sediment.dat")
+                sedname = join(self.root, fn.format(name="sediment"))
                 sed_vars = self.get_config("B7_sediment.l2").split(" ")
                 sedblock = []
                 for dvar in sed_vars:
@@ -569,7 +592,7 @@ class DemissionModel(DelwaqModel):
                     )
             # climate
             if "B7_climate" in self.config:
-                climname = join(self.root, "dynamicdata", "climate.dat")
+                climname = join(self.root, fn.format(name="climate"))
                 clim_vars = self.get_config("B7_climate.l2").split(" ")
                 climblock = []
                 for dvar in clim_vars:
