@@ -51,6 +51,7 @@ doc = [
     "nbsphinx",
     "sphinx",
     "sphinx_design",
+    "pandoc",
     "pydata-sphinx-theme",
     "sphinx_autosummary_accessors",
 ]
@@ -58,7 +59,6 @@ examples = [
     "jupyterlab",
     "cartopy",
     "matplotlib",
-    "nbconvert",
     "notebook",
 ]
 full = ["hydromt_delwaq[dev,test,doc,examples]"]
