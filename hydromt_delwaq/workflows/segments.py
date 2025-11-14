@@ -5,7 +5,7 @@ from typing import List
 
 import numpy as np
 import xarray as xr
-from hydromt import flw
+from hydromt.gis import flw
 
 from .emissions import gridarea, gridlength_gridwidth
 

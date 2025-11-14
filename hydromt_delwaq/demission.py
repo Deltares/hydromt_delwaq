@@ -4,41 +4,30 @@ import logging
 import os
 from os.path import dirname, join
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, List
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
 import xarray as xr
-from hydromt import workflows
+from hydromt.model import processes
 from tqdm import tqdm
 
-from . import DATADIR
-from .delwaq import DelwaqModel
-from .utils import dw_WriteSegmentOrExchangeData
-from .workflows import config, forcing, geometry, roads, segments
+from hydromt_delwaq.delwaq import DelwaqModel
+from hydromt_delwaq.utils import dw_WriteSegmentOrExchangeData
+from hydromt_delwaq.workflows import config, forcing, geometry, roads, segments
 
 __all__ = ["DemissionModel"]
-
+__hydromt_eps__ = ["DemissionModel"]  # core entrypoints
 logger = logging.getLogger(__name__)
-
-# specify pcraster map types for non scalar (float) data types
-PCR_VS_MAP = {
-    "modelmap": "bool",
-    "basins": "nominal",
-    "ldd": "ldd",
-    "ptid": "ordinal",
-}
 
 
 class DemissionModel(DelwaqModel):
     """Demission model class."""
 
-    _NAME = "demission"
+    name: str = "demission"
     _CONF = "demission.inp"
-    _DATADIR = DATADIR
-    _CF = dict()  # configreader kwargs
-    _GEOMS = {}
+
     _MAPS = {
         "basmsk": "modelmap",
         "flwdir": "ldd",
@@ -48,23 +37,15 @@ class DemissionModel(DelwaqModel):
         "strord": "streamorder",
         "thetaS": "porosity",
     }
-    _FOLDERS = [
-        "hydromodel",
-        "staticdata",
-        "geoms",
-        "config",
-        "dynamicdata",
-        "fews",
-    ]
 
     def __init__(
         self,
-        root: Union[str, Path] = None,
+        root: str | Path | None = None,
         mode: str = "w",
-        config_fn: Union[str, Path] = None,
+        config_fn: str | Path | None = None,
         hydromodel_name: str = "wflow",
-        hydromodel_root: Union[str, Path] = None,
-        data_libs: List[Union[str, Path]] = None,
+        hydromodel_root: str | Path | None = None,
+        data_libs: List[str | Path] | None = None,
         logger=logger,
     ):
         """Initialize a model.
@@ -140,10 +121,8 @@ class DemissionModel(DelwaqModel):
             By default ['rivmsk', 'lndslp', 'strord'].
         """
         # Initialise hydromodel from region
-        kind, region = workflows.parse_region(region, logger=self.logger)
-        if kind != "model":
-            raise ValueError("Delwaq model can only be built from 'model' region.")
-        hydromodel = region["mod"]
+        hydromodel = processes.parse_region_other_model(region)
+
         if hydromodel._NAME != "wflow":
             raise NotImplementedError(
                 "Demission build function only implemented for wflow base model."
@@ -199,11 +178,11 @@ class DemissionModel(DelwaqModel):
 
     def setup_roads(
         self,
-        roads_fn: Union[str, gpd.GeoDataFrame],
-        highway_list: Union[str, List[str]],
-        country_list: Union[str, List[str]],
-        non_highway_list: Union[str, List[str]] = None,
-        country_fn: Union[str, gpd.GeoDataFrame] = None,
+        roads_fn: str | Path | gpd.GeoDataFrame,
+        highway_list: str | List[str],
+        country_list: str | List[str],
+        non_highway_list: str | List[str] | None = None,
+        country_fn: str | Path | gpd.GeoDataFrame | None = None,
     ):
         """Prepare roads statistics needed for emission modelling.
 
@@ -288,7 +267,7 @@ class DemissionModel(DelwaqModel):
 
     def setup_hydrology_forcing(
         self,
-        hydro_forcing_fn: Union[str, xr.Dataset],
+        hydro_forcing_fn: str | Path | xr.Dataset,
         starttime: str,
         endtime: str,
         timestepsecs: int,

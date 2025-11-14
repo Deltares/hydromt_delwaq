@@ -1,20 +1,22 @@
 """Utilities for hydromt_delwaq."""
 import logging
 import os
+from os.path import abspath, dirname, join
 from pathlib import Path
-from typing import Union
 
 import numpy as np
 
 logger = logging.getLogger(__name__)
 
 
-__all__ = ["dw_WriteSegmentOrExchangeData"]
+__all__ = ["DATADIR", "dw_WriteSegmentOrExchangeData"]
+
+DATADIR = join(dirname(abspath(__file__)), "data")
 
 
 def dw_WriteSegmentOrExchangeData(
     ttime: int,
-    fname: Union[str, Path],
+    fname: str | Path,
     datablock: np.ndarray,
     boundids: int,
     WriteAscii: bool = True,

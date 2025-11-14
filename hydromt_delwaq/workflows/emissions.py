@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import pandas as pd
 import xarray as xr
-from hydromt import gis_utils
+from hydromt.gis import gis_utils, raster_utils
 from rasterio.enums import MergeAlg
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ def gridarea(ds):
         DataArray containing area in m2 of the reference grid.
 
     """
-    realarea = gis_utils.reggrid_area(
+    realarea = raster_utils.reggrid_area(
         ds.raster.ycoords.values, ds.raster.xcoords.values
     )
     da_out = xr.DataArray(
@@ -51,7 +51,7 @@ def gridlength_gridwidth(ds):
     yres = np.abs(np.mean(np.diff(lats)))
     ones = np.ones((lats.size, lons.size), dtype=lats.dtype)
 
-    w, l = gis_utils.cellres(lats, xres, yres)
+    w, l = raster_utils.cellres(lats, xres, yres)
     width = w[:, None] * ones
     length = l[:, None] * ones
 
