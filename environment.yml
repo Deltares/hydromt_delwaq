@@ -1,17 +1,12 @@
-name: hydromt-delwaq
+name: hydromt_delwaq
 
 channels:
   - conda-forge
 
 dependencies:
   - cartopy # to run examples
-  - descartes # to run examples
-  - hydromt>=0.9.1
-  - hydromt_wflow>=0.4.0
-  - hydromt_delwaq>=0.4.0
-  - jupyter # to run examples
+  - hydromt_delwaq>=0.3.0
+  - jupyterlab # to run examples
   - matplotlib # to run examples
-  - numpy<2
+  - notebook # to run examples
   - python<=3.11
-  - tqdm # progress bar
-  - xugrid

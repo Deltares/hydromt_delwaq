@@ -3,8 +3,18 @@ name: Test stable
 on:
   push:
     branches: [ main ]
+    paths:
+      - hydromt_delwaq/**/*
+      - tests/**/*
+      - pyproject.toml
+      - .github/workflows/test_stable.yml
   pull_request:
     branches: [ main ]
+    paths:
+      - hydromt_delwaq/**/*
+      - tests/**/*
+      - pyproject.toml
+      - .github/workflows/test_stable.yml
 
 jobs:
   Test:
@@ -12,7 +22,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -el {0}
     strategy:
       fail-fast: false
       matrix:
@@ -20,22 +30,22 @@ jobs:
         python-version: ["3.11"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Setup environment and info
-        uses: mamba-org/setup-micromamba@v1
+        uses: conda-incubator/setup-miniconda@v3
         with:
-          environment-file: envs/hydromt-delwaq.yml
-          cache-downloads: true
-          init-shell: bash
+          miniforge-version: latest
+          python-version: ${{ matrix.python-version }}
+          activate-environment: hydromt_delwaq
 
       - name: Install plugin
         run: |
-         micromamba activate hydromt-delwaq
-         flit install --deps all
+         mamba install uv
+         uv pip install .[test,dev]
+         mamba list
 
       - name: Run Tests
         run: |
-         micromamba activate hydromt-delwaq
          python -m pytest --verbose --cov=hydromt_delwaq --cov-report xml
 
       - name: Upload code coverage

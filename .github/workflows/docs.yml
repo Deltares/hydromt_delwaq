@@ -4,48 +4,60 @@ name: Build Documentation
 on:
   push:
     branches: [ main ]
+    paths:
+      - .github/workflows/docs.yml
+      - hydromt_delwaq/*
+      - docs/*
+      - examples/*
+      - pyproject.toml
   pull_request:
     branches: [ main ]
+    paths:
+      - .github/workflows/docs.yml
+      - hydromt_delwaq/*
+      - docs/*
+      - examples/*
+      - pyproject.toml
 
 jobs:
   # Build docs on Linux
   Docs:
     name: linux docs
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     env:
       DOC_VERSION: dev
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -el {0}
+
     steps:
       - name: Checkout source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
-      - name: Setup environment and info
-        uses: mamba-org/setup-micromamba@v1
+      - name: Setup environment
+        uses: conda-incubator/setup-miniconda@v3
         with:
-          environment-file: envs/hydromt-delwaq.yml
-          cache-downloads: true
-          init-shell: bash
+          python-version: "3.11"
+          miniforge-version: latest
+          activate-environment: hydromt_delwaq
 
+      ## mamba required to install pandoc with nbsphinx (does not work via pip)
       - name: Install plugin
         run: |
-         micromamba activate hydromt-delwaq
-         flit install
+         mamba install uv
+         uv pip install .[doc,examples]
+         mamba install pandoc
 
       - name: Build docs
         run: |
-          micromamba activate hydromt-delwaq
-          pushd docs
-          make html
-          popd
+          sphinx-build -M html ./docs ./docs/_build -W
 
       # This overrides the version "dev" with the proper version if we're building off a
-      # branch that's not master (which is confined to n.nn.x above) or on a tag.
+      # branch that's not main (which is confined to n.nn.x above) or on a tag.
       - name: Set doc version
         # run: echo "DOC_VERSION=preview" >> $GITHUB_ENV
-        run: echo "DOC_VERSION=$(python -c 'from hydromt_delwaq import __version__ as v; print("dev" if "dev" in v else "v"+v.replace(".dev",""))')" >> $GITHUB_ENV
+        run: echo "DOC_VERSION=$(python -c 'from hydromt_delwaq import __version__ as v; print("dev" if "dev" in v else "v"+v)')" >> $GITHUB_ENV
 
       - name: Upload to GitHub Pages
         if: ${{ github.event_name != 'pull_request'}}

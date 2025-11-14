@@ -9,18 +9,18 @@ authors = [
     {name = "Sibren Loos", email = "sibren.loos@deltares.nl"},
 ]
 dependencies = [
-    "hydromt >=0.9.1",
-    "hydromt_wflow >=0.4.0",
+    "hydromt >=0.9.1,<0.11",
+    "hydromt_wflow >=0.5.0,<0.9",
     "geopandas >=0.10",
-    "numpy>=1.23, <2",
+    "numpy",
     "pandas",
     "pyproj",
     "rasterio",
     "scipy",
-    "shapely >=2.0.0",
+    "shapely",
     "tqdm",
     "xarray",
-    "xugrid",
+    "xugrid >=0.14.3",
 ]
 requires-python = ">=3.10"
 readme = "README.rst"
@@ -46,7 +46,6 @@ test = [
 	"pytest>=2.7.3",
 	"pytest-cov",
     "pytest-timeout",
-	"hydromt_delwaq[dev]",
 ]
 doc = [
     "nbsphinx",
@@ -54,7 +53,6 @@ doc = [
     "sphinx_design",
     "pydata-sphinx-theme",
     "sphinx_autosummary_accessors",
-    "hydromt_delwaq[examples]",
 ]
 examples = [
     "jupyterlab",
