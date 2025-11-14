@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/theme-deltares.css?v=d8b05058" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -352,9 +352,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -403,23 +408,23 @@
   <h1>Source code for hydromt_delwaq.demission</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Implement demission model class.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">join</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
-<span class="kn">from</span> <span class="nn">hydromt</span> <span class="kn">import</span> <span class="n">workflows</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hydromt</span><span class="w"> </span><span class="kn">import</span> <span class="n">workflows</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">DATADIR</span>
-<span class="kn">from</span> <span class="nn">.delwaq</span> <span class="kn">import</span> <span class="n">DelwaqModel</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">dw_WriteSegmentOrExchangeData</span>
-<span class="kn">from</span> <span class="nn">.workflows</span> <span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">forcing</span><span class="p">,</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">roads</span><span class="p">,</span> <span class="n">segments</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATADIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.delwaq</span><span class="w"> </span><span class="kn">import</span> <span class="n">DelwaqModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">dw_WriteSegmentOrExchangeData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.workflows</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">forcing</span><span class="p">,</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">roads</span><span class="p">,</span> <span class="n">segments</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DemissionModel&quot;</span><span class="p">]</span>
 
@@ -436,7 +441,7 @@
 
 <div class="viewcode-block" id="DemissionModel">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DemissionModel.html#hydromt_delwaq.DemissionModel">[docs]</a>
-<span class="k">class</span> <span class="nc">DemissionModel</span><span class="p">(</span><span class="n">DelwaqModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DemissionModel</span><span class="p">(</span><span class="n">DelwaqModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Demission model class.&quot;&quot;&quot;</span>
 
     <span class="n">_NAME</span> <span class="o">=</span> <span class="s2">&quot;demission&quot;</span>
@@ -464,7 +469,7 @@
 
 <div class="viewcode-block" id="DemissionModel.__init__">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DemissionModel.html#hydromt_delwaq.DemissionModel.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">root</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span>
@@ -514,7 +519,7 @@
 
 <div class="viewcode-block" id="DemissionModel.setup_basemaps">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DemissionModel.setup_basemaps.html#hydromt_delwaq.DemissionModel.setup_basemaps">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_basemaps</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_basemaps</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">region</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
         <span class="n">maps</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rivmsk&quot;</span><span class="p">,</span> <span class="s2">&quot;lndslp&quot;</span><span class="p">,</span> <span class="s2">&quot;strord&quot;</span><span class="p">],</span>
@@ -610,7 +615,7 @@
 
 <div class="viewcode-block" id="DemissionModel.setup_roads">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DemissionModel.setup_roads.html#hydromt_delwaq.DemissionModel.setup_roads">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_roads</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_roads</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">roads_fn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">],</span>
         <span class="n">highway_list</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
@@ -699,7 +704,7 @@
 
 <div class="viewcode-block" id="DemissionModel.setup_hydrology_forcing">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DemissionModel.setup_hydrology_forcing.html#hydromt_delwaq.DemissionModel.setup_hydrology_forcing">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_hydrology_forcing</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_hydrology_forcing</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">hydro_forcing_fn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">],</span>
         <span class="n">starttime</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -815,7 +820,7 @@
     <span class="c1"># I/O</span>
 <div class="viewcode-block" id="DemissionModel.read">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DemissionModel.read.html#hydromt_delwaq.DemissionModel.read">[docs]</a>
-    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read the complete model schematization and configuration from file.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">read_config</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">read_geoms</span><span class="p">()</span>
@@ -829,7 +834,7 @@
 
 <div class="viewcode-block" id="DemissionModel.write">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DemissionModel.write.html#hydromt_delwaq.DemissionModel.write">[docs]</a>
-    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write the complete model schematization and configuration to file.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Write model data to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="c1"># if in r, r+ mode, only write updated components</span>
@@ -843,7 +848,7 @@
 
 <div class="viewcode-block" id="DemissionModel.read_config">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DemissionModel.read_config.html#hydromt_delwaq.DemissionModel.read_config">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_config</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_config</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">skip</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;B7_geometry&quot;</span><span class="p">,</span>
@@ -859,7 +864,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Pandas DataFrame containing the geometry of the EM compartment.</span>
 
@@ -876,13 +881,13 @@
         <span class="c1">#         self.read_geometry()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_geometry</span>
 
-    <span class="k">def</span> <span class="nf">read_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read Delwaq EM geometry file.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 
 <div class="viewcode-block" id="DemissionModel.write_geometry">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DemissionModel.write_geometry.html#hydromt_delwaq.DemissionModel.write_geometry">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write geometry at &lt;root/staticdata&gt; in ASCII and binary format.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_write_mode</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_geometry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -917,7 +922,7 @@
 
 <div class="viewcode-block" id="DemissionModel.write_forcing">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DemissionModel.write_forcing.html#hydromt_delwaq.DemissionModel.write_forcing">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_forcing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">write_nc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_forcing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">write_nc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write forcing at &lt;root/dynamicdata&gt; in binary format.</span>
 
 <span class="sd">        Can also write a netcdf copy if ``write_nc`` is True.</span>
@@ -1017,7 +1022,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">nrofseg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nrofseg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fast accessor to nrofseg property of pointer.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;nrofseg&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">:</span>
             <span class="n">nseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">[</span><span class="s2">&quot;nrofseg&quot;</span><span class="p">]</span>
@@ -1029,7 +1034,7 @@
         <span class="k">return</span> <span class="n">nseg</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">nrofexch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nrofexch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fast accessor to nrofexch property of pointer.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;nrofexch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">:</span>
             <span class="n">nexch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">[</span><span class="s2">&quot;nrofexch&quot;</span><span class="p">]</span>
@@ -1039,7 +1044,7 @@
         <span class="k">return</span> <span class="n">nexch</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">fluxes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fluxes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fast accessor to fluxes property of pointer.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;fluxes&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">:</span>
             <span class="n">fl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">[</span><span class="s2">&quot;fluxes&quot;</span><span class="p">]</span>
@@ -1085,8 +1090,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1119,7 +1124,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

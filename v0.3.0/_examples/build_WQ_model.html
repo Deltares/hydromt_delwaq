@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,19 +27,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -415,9 +415,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -498,16 +503,15 @@
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 model plugins:
+ - wflow (hydromt_wflow 0.8.0)
+ - wflow_sediment (hydromt_wflow 0.8.0)
  - delwaq (hydromt_delwaq 0.3.0)
  - demission (hydromt_delwaq 0.3.0)
- - wflow (hydromt_wflow 0.7.0)
- - wflow_sediment (hydromt_wflow 0.7.0)
-generic models (hydromt 0.10.0):
+generic models (hydromt 0.10.1):
  - grid_model
  - vector_model
  - mesh_model
  - network_model
-
 
 </pre></div></div>
 </div>
@@ -556,7 +560,6 @@ Options:
   -v, --verbose            Increase verbosity.
   -q, --quiet              Decrease verbosity.
   --help                   Show this message and exit.
-
 </pre></div></div>
 </div>
 </section>
@@ -579,35 +582,34 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2024-11-20 04:08:57,761 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base/hydromt.log.
-2024-11-20 04:08:57,761 - build - log - INFO - HydroMT version: 0.10.0
-2024-11-20 04:08:57,761 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base.
-2024-11-20 04:08:57,761 - build - main - INFO - User settings:
-2024-11-20 04:08:57,774 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.3.0).
-2024-11-20 04:08:57,775 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2024-11-20 04:08:57,775 - build - model_api - INFO - setup_basemaps.mask: basins
-2024-11-20 04:08:57,775 - build - model_api - INFO - setup_basemaps.surface_water: sfw
-2024-11-20 04:08:57,775 - build - model_api - INFO - setup_basemaps.boundaries: [&#39;bd&#39;]
-2024-11-20 04:08:57,775 - build - model_api - INFO - setup_basemaps.fluxes: [&#39;sfw&gt;sfw&#39;, &#39;bd&gt;sfw&#39;]
-2024-11-20 04:08:57,775 - build - model_api - INFO - setup_basemaps.maps: [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;, &#39;N&#39;]
-2024-11-20 04:08:57,782 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2024-11-20 04:08:57,782 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.7.0).
-2024-11-20 04:08:57,782 - build - data_catalog - INFO - Parsing data catalog from /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
-2024-11-20 04:08:57,795 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7fbc7d5219d0&gt;}
-2024-11-20 04:08:57,795 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2024-11-20 04:08:57,797 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2024-11-20 04:08:57,797 - build - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2024-11-20 04:08:58,593 - build - delwaq - WARNING - nrofseg object in self.pointer should be an integer.
-2024-11-20 04:08:58,594 - build - delwaq - WARNING - boundaries object in self.pointer should be a list of names.
-2024-11-20 04:08:58,613 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.11/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2024-11-20 04:08:58,613 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base
-2024-11-20 04:08:58,623 - build - delwaq - INFO - Writing staticmap files.
-2024-11-20 04:08:58,740 - build - model_api - DEBUG - No geoms data found, skip writing.
-2024-11-20 04:08:58,741 - build - delwaq - INFO - Writing model config to file.
-2024-11-20 04:08:58,741 - build - delwaq - INFO - Writing hydromap files.
-2024-11-20 04:08:58,808 - build - delwaq - INFO - Writting pointer file in root/config
-2024-11-20 04:08:58,820 - build - delwaq - DEBUG - No forcing data found, skip writing.
-
+2025-11-14 03:42:37,144 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base/hydromt.log.
+2025-11-14 03:42:37,144 - build - log - INFO - HydroMT version: 0.10.1
+2025-11-14 03:42:37,144 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base.
+2025-11-14 03:42:37,144 - build - main - INFO - User settings:
+2025-11-14 03:42:37,155 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.3.0).
+2025-11-14 03:42:37,155 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2025-11-14 03:42:37,156 - build - model_api - INFO - setup_basemaps.mask: basins
+2025-11-14 03:42:37,156 - build - model_api - INFO - setup_basemaps.surface_water: sfw
+2025-11-14 03:42:37,156 - build - model_api - INFO - setup_basemaps.boundaries: [&#39;bd&#39;]
+2025-11-14 03:42:37,156 - build - model_api - INFO - setup_basemaps.fluxes: [&#39;sfw&gt;sfw&#39;, &#39;bd&gt;sfw&#39;]
+2025-11-14 03:42:37,156 - build - model_api - INFO - setup_basemaps.maps: [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;, &#39;N&#39;]
+2025-11-14 03:42:37,164 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2025-11-14 03:42:37,164 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.8.0).
+2025-11-14 03:42:37,164 - build - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
+2025-11-14 03:42:37,177 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f1b021bd090&gt;}
+2025-11-14 03:42:37,177 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2025-11-14 03:42:37,179 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2025-11-14 03:42:37,179 - build - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2025-11-14 03:42:38,033 - build - delwaq - WARNING - nrofseg object in self.pointer should be an integer.
+2025-11-14 03:42:38,033 - build - delwaq - WARNING - boundaries object in self.pointer should be a list of names.
+2025-11-14 03:42:38,059 - build - model_api - ERROR - Default config file not found at /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
+2025-11-14 03:42:38,059 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_base
+2025-11-14 03:42:38,070 - build - delwaq - INFO - Writing staticmap files.
+2025-11-14 03:42:38,080 - build - model_api - DEBUG - No geoms data found, skip writing.
+2025-11-14 03:42:38,080 - build - delwaq - INFO - Writing model config to file.
+2025-11-14 03:42:38,080 - build - delwaq - INFO - Writing hydromap files.
+2025-11-14 03:42:38,139 - build - delwaq - INFO - Writting pointer file in root/config
+2025-11-14 03:42:38,150 - build - delwaq - DEBUG - No forcing data found, skip writing.
 </pre></div></div>
 </div>
 <p>The example above means the following: run <strong>hydromt build</strong> with:</p>
@@ -717,63 +719,65 @@ write_waqgeom:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2024-11-20 04:09:01,035 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full/hydromt.log.
-2024-11-20 04:09:01,035 - build - log - INFO - HydroMT version: 0.10.0
-2024-11-20 04:09:01,035 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full.
-2024-11-20 04:09:01,035 - build - main - INFO - User settings:
-2024-11-20 04:09:01,049 - build - data_catalog - INFO - Parsing data catalog from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/local_sources.yml
-2024-11-20 04:09:01,064 - build - data_catalog - INFO - Reading data catalog artifact_data latest
-2024-11-20 04:09:01,064 - build - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.9/data_catalog.yml
-2024-11-20 04:09:01,657 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.3.0).
-2024-11-20 04:09:01,657 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2024-11-20 04:09:01,657 - build - model_api - INFO - setup_basemaps.mask: rivers
-2024-11-20 04:09:01,657 - build - model_api - INFO - setup_basemaps.surface_water: sfw
-2024-11-20 04:09:01,657 - build - model_api - INFO - setup_basemaps.boundaries: [&#39;land&#39;, &#39;soil&#39;, &#39;sett&#39;]
-2024-11-20 04:09:01,657 - build - model_api - INFO - setup_basemaps.fluxes: [&#39;sfw&gt;sfw&#39;, &#39;land&gt;sfw&#39;, &#39;soil&gt;sfw&#39;, &#39;sfw&gt;sett&#39;]
-2024-11-20 04:09:01,657 - build - model_api - INFO - setup_basemaps.maps: [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;, &#39;N&#39;, &#39;SoilThickness&#39;, &#39;thetaS&#39;]
-2024-11-20 04:09:01,665 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2024-11-20 04:09:01,665 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.7.0).
-2024-11-20 04:09:01,665 - build - data_catalog - INFO - Parsing data catalog from /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
-2024-11-20 04:09:01,677 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7fd50a6f12d0&gt;}
-2024-11-20 04:09:01,677 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2024-11-20 04:09:01,679 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2024-11-20 04:09:01,679 - build - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2024-11-20 04:09:02,474 - build - delwaq - WARNING - nrofseg object in self.pointer should be an integer.
-2024-11-20 04:09:02,474 - build - delwaq - WARNING - boundaries object in self.pointer should be a list of names.
-2024-11-20 04:09:02,495 - build - model_api - ERROR - Default config file not found at /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.11/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
-2024-11-20 04:09:02,495 - build - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
-2024-11-20 04:09:02,495 - build - model_api - INFO - setup_monitoring.mon_areas: subcatch
-2024-11-20 04:09:02,495 - build - delwaq - INFO - Setting monitoring points and areas
-2024-11-20 04:09:02,503 - build - geodataframe - INFO - Reading  vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
-2024-11-20 04:09:02,509 - build - geodataframe - DEBUG - Clip intersects [11.775, 45.808, 12.742, 46.692] (EPSG:4326)
-2024-11-20 04:09:02,516 - build - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
-2024-11-20 04:09:02,524 - build - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output_wq
-2024-11-20 04:09:02,524 - build - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
-2024-11-20 04:09:02,524 - build - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2024-11-20 04:09:02,524 - build - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
-2024-11-20 04:09:02,524 - build - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
-2024-11-20 04:09:02,524 - build - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
-2024-11-20 04:09:02,524 - build - model_api - INFO - setup_hydrology_forcing.override: [&#39;sfw&gt;sfw&#39;]
-2024-11-20 04:09:02,524 - build - delwaq - INFO - Setting dynamic data from hydrology source wflow_output_wq.
-2024-11-20 04:09:02,526 - build - rasterdataset - INFO - Reading wflow_output_wq netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
-2024-11-20 04:09:02,566 - build - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
-2024-11-20 04:09:02,568 - build - rasterdataset - DEBUG - Convert units for 3 variables.
-2024-11-20 04:09:02,621 - build - forcing - WARNING - Flux sfw&gt;sett not found in hydro_forcing_fn. Using zeros.
-2024-11-20 04:09:02,689 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full
-2024-11-20 04:09:02,702 - build - delwaq - INFO - Writing staticmap files.
-2024-11-20 04:09:02,822 - build - model_api - DEBUG - Writing file geoms/basins.geojson
-2024-11-20 04:09:02,825 - build - model_api - DEBUG - Writing file geoms/monpoints.geojson
-2024-11-20 04:09:02,827 - build - model_api - DEBUG - Writing file geoms/monareas.geojson
-2024-11-20 04:09:02,829 - build - delwaq - INFO - Writing model config to file.
-2024-11-20 04:09:02,830 - build - delwaq - INFO - Writing hydromap files.
-2024-11-20 04:09:02,898 - build - delwaq - INFO - Writting pointer file in root/config
-2024-11-20 04:09:02,915 - build - delwaq - INFO - Writing dynamicmap files.
-Writing dynamic data: 100%|███████████████████████| 9/9 [00:00&lt;00:00, 30.13it/s]
-2024-11-20 04:09:03,216 - build - delwaq - INFO - Writting waqgeom.nc file
-
+2025-11-14 03:42:41,635 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full/hydromt.log.
+2025-11-14 03:42:41,635 - build - log - INFO - HydroMT version: 0.10.1
+2025-11-14 03:42:41,635 - build - main - INFO - Building instance of delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full.
+2025-11-14 03:42:41,635 - build - main - INFO - User settings:
+2025-11-14 03:42:41,648 - build - data_catalog - INFO - Parsing data catalog from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/local_sources.yml
+2025-11-14 03:42:41,711 - build - data_catalog - INFO - Reading data catalog artifact_data latest
+2025-11-14 03:42:41,711 - build - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.9/data_catalog.yml
+2025-11-14 03:42:42,304 - build - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.3.0).
+2025-11-14 03:42:42,304 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2025-11-14 03:42:42,304 - build - model_api - INFO - setup_basemaps.mask: rivers
+2025-11-14 03:42:42,304 - build - model_api - INFO - setup_basemaps.surface_water: sfw
+2025-11-14 03:42:42,304 - build - model_api - INFO - setup_basemaps.boundaries: [&#39;land&#39;, &#39;soil&#39;, &#39;sett&#39;]
+2025-11-14 03:42:42,304 - build - model_api - INFO - setup_basemaps.fluxes: [&#39;sfw&gt;sfw&#39;, &#39;land&gt;sfw&#39;, &#39;soil&gt;sfw&#39;, &#39;sfw&gt;sett&#39;]
+2025-11-14 03:42:42,304 - build - model_api - INFO - setup_basemaps.maps: [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;, &#39;N&#39;, &#39;SoilThickness&#39;, &#39;thetaS&#39;]
+2025-11-14 03:42:42,312 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2025-11-14 03:42:42,312 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.8.0).
+2025-11-14 03:42:42,312 - build - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
+2025-11-14 03:42:42,325 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f6f1c5d19d0&gt;}
+2025-11-14 03:42:42,325 - build - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2025-11-14 03:42:42,327 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2025-11-14 03:42:42,327 - build - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2025-11-14 03:42:43,170 - build - delwaq - WARNING - nrofseg object in self.pointer should be an integer.
+2025-11-14 03:42:43,170 - build - delwaq - WARNING - boundaries object in self.pointer should be a list of names.
+2025-11-14 03:42:43,196 - build - model_api - ERROR - Default config file not found at /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_delwaq/data/delwaq/delwaq.inp
+2025-11-14 03:42:43,196 - build - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
+2025-11-14 03:42:43,196 - build - model_api - INFO - setup_monitoring.mon_areas: subcatch
+2025-11-14 03:42:43,196 - build - delwaq - INFO - Setting monitoring points and areas
+2025-11-14 03:42:43,204 - build - geodataframe - INFO - Reading  vector data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
+2025-11-14 03:42:43,212 - build - geodataframe - DEBUG - Clip intersects [11.775, 45.808, 12.742, 46.692] (EPSG:4326)
+2025-11-14 03:42:43,217 - build - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/gauges.geojson
+2025-11-14 03:42:43,224 - build - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output_wq
+2025-11-14 03:42:43,224 - build - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-03 00:00:00
+2025-11-14 03:42:43,224 - build - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2025-11-14 03:42:43,224 - build - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2025-11-14 03:42:43,224 - build - model_api - INFO - setup_hydrology_forcing.add_volume_offset: True
+2025-11-14 03:42:43,224 - build - model_api - INFO - setup_hydrology_forcing.min_volume: 0.1
+2025-11-14 03:42:43,224 - build - model_api - INFO - setup_hydrology_forcing.override: [&#39;sfw&gt;sfw&#39;]
+2025-11-14 03:42:43,224 - build - delwaq - INFO - Setting dynamic data from hydrology source wflow_output_wq.
+2025-11-14 03:42:43,227 - build - rasterdataset - INFO - Reading wflow_output_wq netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
+2025-11-14 03:42:43,266 - build - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
+2025-11-14 03:42:43,268 - build - rasterdataset - DEBUG - Convert units for 3 variables.
+2025-11-14 03:42:43,322 - build - forcing - WARNING - Flux sfw&gt;sett not found in hydro_forcing_fn. Using zeros.
+2025-11-14 03:42:43,391 - build - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test_full
+2025-11-14 03:42:43,407 - build - delwaq - INFO - Writing staticmap files.
+2025-11-14 03:42:43,419 - build - model_api - DEBUG - Writing file geoms/basins.geojson
+2025-11-14 03:42:43,422 - build - model_api - DEBUG - Writing file geoms/monpoints.geojson
+2025-11-14 03:42:43,424 - build - model_api - DEBUG - Writing file geoms/monareas.geojson
+2025-11-14 03:42:43,426 - build - delwaq - INFO - Writing model config to file.
+2025-11-14 03:42:43,427 - build - delwaq - INFO - Writing hydromap files.
+2025-11-14 03:42:43,483 - build - delwaq - INFO - Writting pointer file in root/config
+2025-11-14 03:42:43,500 - build - delwaq - INFO - Writing dynamicmap files.
+Writing dynamic data: 100%|███████████████████████| 9/9 [00:00&lt;00:00, 34.31it/s]
+2025-11-14 03:42:43,763 - build - delwaq - INFO - Writting waqgeom.nc file
 </pre></div></div>
 </div>
-<p>With this example we build a complete delwaq model including hydrological data. Compared to the previous <strong>hydromt build</strong> we have added: * <code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">delwaq_build_WQ.yml</span></code> : setup configuration file including all components to build and their arguments.</p>
+<p>With this example we build a complete delwaq model including hydrological data. Compared to the previous <strong>hydromt build</strong> we have added:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">delwaq_build_WQ.yml</span></code> : setup configuration file including all components to build and their arguments.</p></li>
+</ul>
 <p>Next we check which files and folders have been created:</p>
 <ul class="simple">
 <li><p><strong>config</strong>: basic configuration setups for the Delwaq input file .inp. Names of the ASCII files start with the corresponding block in the .inp file.</p></li>
@@ -787,7 +791,7 @@ Writing dynamic data: 100%|█████████████████�
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">root</span> <span class="o">=</span> <span class="s1">&#39;WQ_test_full&#39;</span>
 <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -805,59 +809,58 @@ Writing dynamic data: 100%|█████████████████�
 <div class="highlight"><pre>
 WQ_test_full
  - hydromt.log
-WQ_test_full/fews
-WQ_test_full/dynamicdata
- - volume.dat
- - flow.dat
+WQ_test_full/staticdata
+ - bankfull_volume.dat
+ - surface.dat
+ - width.dat
+ - length.dat
+ - slope.dat
+ - river.dat
+ - streamorder.dat
+ - latitude_grid.dat
+ - porosity.dat
+ - manning.dat
+ - SoilThickness.dat
+ - staticdata.nc
 WQ_test_full/hydromodel
- - lakearea.tif
- - basins.tif
- - ptiddown.tif
- - rivarea.tif
  - river.tif
  - modelmap.tif
- - rivwth.tif
- - ldd.tif
+ - ptiddown.tif
  - elevtn.tif
  - ptid.tif
- - rivlen.tif
+ - rivarea.tif
+ - basins.tif
  - resarea.tif
+ - rivwth.tif
+ - ldd.tif
+ - rivlen.tif
+ - lakearea.tif
+WQ_test_full/config
+ - B7_volume.inc
+ - B2_outputtimes.inc
+ - B4_nrofexch.inc
+ - B2_stations-balance.inc
+ - B2_stations.inc
+ - B4_pointer.inc
+ - B1_timestamp.inc
+ - B5_boundlist.inc
+ - B2_nrofmon.inc
+ - B2_timers_only.inc
+ - B3_nrofseg.inc
+ - B3_attributes.inc
+ - B2_monareas.inc
+ - B7_flow.inc
+ - B3_waqgeom.nc
+ - B2_timers.inc
+ - B2_sysclock.inc
+ - B4_pointer.poi
+WQ_test_full/dynamicdata
+ - flow.dat
+ - volume.dat
 WQ_test_full/geoms
+ - monpoints.geojson
  - monareas.geojson
  - basins.geojson
- - monpoints.geojson
-WQ_test_full/config
- - B2_sysclock.inc
- - B3_nrofseg.inc
- - B2_timers_only.inc
- - B2_nrofmon.inc
- - B1_timestamp.inc
- - B4_pointer.inc
- - B4_nrofexch.inc
- - B5_boundlist.inc
- - B2_monareas.inc
- - B4_pointer.poi
- - B2_outputtimes.inc
- - B3_attributes.inc
- - B2_stations.inc
- - B3_waqgeom.nc
- - B7_flow.inc
- - B2_stations-balance.inc
- - B7_volume.inc
- - B2_timers.inc
-WQ_test_full/staticdata
- - length.dat
- - latitude_grid.dat
- - manning.dat
- - river.dat
- - surface.dat
- - staticdata.nc
- - SoilThickness.dat
- - width.dat
- - streamorder.dat
- - bankfull_volume.dat
- - slope.dat
- - porosity.dat
 </pre></div></div>
 </div>
 <p>You can see that we didn’t create any emission data here. In some cases, you may require some additional GIS data in order to run a D-Water Quality model, for example, when you do not need to run the D-Emissions model beforehand, but include point sources that emit pollutants into the surface water directly. When this is the case, you can still use the various [setup_emission_*] components of hydromt_delwaq.</p>
@@ -872,7 +875,7 @@ WQ_test_full/staticdata
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./WQ_test_full&#39;</span>
 <span class="n">fn_config</span> <span class="o">=</span> <span class="s1">&#39;config/B3_nrofseg.inc&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="n">fn_config</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -972,13 +975,13 @@ WQ_test_full/staticdata
 </div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../_sources/_examples/build_WQ_model.ipynb.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/_examples/build_WQ_model.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -993,8 +996,8 @@ WQ_test_full/staticdata
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1027,7 +1030,8 @@ WQ_test_full/staticdata
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

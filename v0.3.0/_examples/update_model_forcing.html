@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,19 +27,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -415,9 +415,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -488,7 +493,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 </pre></div>
 </div>
 </div>
@@ -497,7 +502,7 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setup logging</span>
-<span class="kn">from</span>  <span class="nn">hydromt.log</span> <span class="kn">import</span> <span class="n">setuplog</span>
+<span class="kn">from</span><span class="w">  </span><span class="nn">hydromt.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">setuplog</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">setuplog</span><span class="p">(</span><span class="s2">&quot;update_model_forcing&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -507,7 +512,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2024-11-20 04:09:13,970 - update_model_forcing - log - INFO - HydroMT version: 0.10.0
+2025-11-14 03:43:01,152 - update_model_forcing - log - INFO - HydroMT version: 0.10.1
 </pre></div></div>
 </div>
 </section>
@@ -601,22 +606,21 @@ write_config:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2024-11-20 04:09:15,740 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2024-11-20 04:09:15,740 - update - log - INFO - HydroMT version: 0.10.0
-2024-11-20 04:09:15,740 - update - main - INFO - Updating wflow model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave (r+).
-2024-11-20 04:09:15,740 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave
-2024-11-20 04:09:15,741 - update - main - INFO - User settings:
-2024-11-20 04:09:15,759 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default.
-2024-11-20 04:09:15,759 - update - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.7.0).
-2024-11-20 04:09:15,759 - update - data_catalog - INFO - Parsing data catalog from /usr/share/miniconda/envs/hydromt-delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
-2024-11-20 04:09:15,774 - update - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2024-11-20 04:09:15,774 - update - wflow - INFO - Reading model staticgeom files.
-2024-11-20 04:09:15,780 - update - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2024-11-20 04:09:15,848 - update - model_api - DEBUG - Setting model config options.
-2024-11-20 04:09:15,848 - update - model_api - INFO - write_config.config_name: None
-2024-11-20 04:09:15,848 - update - model_api - INFO - write_config.config_root: None
-2024-11-20 04:09:15,848 - update - wflow - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-
+2025-11-14 03:43:04,011 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2025-11-14 03:43:04,011 - update - log - INFO - HydroMT version: 0.10.1
+2025-11-14 03:43:04,011 - update - main - INFO - Updating wflow model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave (r+).
+2025-11-14 03:43:04,011 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave
+2025-11-14 03:43:04,011 - update - main - INFO - User settings:
+2025-11-14 03:43:04,029 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default.
+2025-11-14 03:43:04,029 - update - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.8.0).
+2025-11-14 03:43:04,029 - update - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
+2025-11-14 03:43:04,044 - update - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2025-11-14 03:43:04,044 - update - wflow - INFO - Reading model staticgeom files.
+2025-11-14 03:43:04,055 - update - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2025-11-14 03:43:04,120 - update - model_api - DEBUG - Setting model config options.
+2025-11-14 03:43:04,120 - update - model_api - INFO - write_config.config_name: None
+2025-11-14 03:43:04,120 - update - model_api - INFO - write_config.config_root: None
+2025-11-14 03:43:04,120 - update - wflow - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
 </pre></div></div>
 </div>
 <p>The example above means the following: run <strong>hydromt</strong> with:</p>
@@ -894,7 +898,6 @@ Options:
   -q, --quiet                Decrease verbosity.
   -v, --verbose              Increase verbosity.
   --help                     Show this message and exit.
-
 </pre></div></div>
 </div>
 </section>
@@ -914,38 +917,37 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2024-11-20 04:09:20,265 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromt.log.
-2024-11-20 04:09:20,265 - update - log - INFO - HydroMT version: 0.10.0
-2024-11-20 04:09:20,265 - update - main - INFO - Updating demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full (r+).
-2024-11-20 04:09:20,265 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full
-2024-11-20 04:09:20,265 - update - main - INFO - User settings:
-2024-11-20 04:09:20,278 - update - data_catalog - INFO - Parsing data catalog from local_sources.yml
-2024-11-20 04:09:20,283 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromodel.
-2024-11-20 04:09:20,283 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/staticdata.
-2024-11-20 04:09:20,283 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/geoms.
-2024-11-20 04:09:20,283 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/config.
-2024-11-20 04:09:20,283 - update - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.0).
-2024-11-20 04:09:20,284 - update - model_api - DEBUG - Reading model file monareas.
-2024-11-20 04:09:20,289 - update - model_api - DEBUG - Reading model file staticdata.
-2024-11-20 04:09:20,440 - update - model_api - DEBUG - Reading model file basins.
-2024-11-20 04:09:20,446 - update - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output_em
-2024-11-20 04:09:20,446 - update - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-04 00:00:00
-2024-11-20 04:09:20,446 - update - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
-2024-11-20 04:09:20,446 - update - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
-2024-11-20 04:09:20,446 - update - model_api - INFO - setup_hydrology_forcing.include_transport: True
-2024-11-20 04:09:20,446 - update - demission - INFO - Setting dynamic data from hydrology source wflow_output_em.
-2024-11-20 04:09:20,448 - update - rasterdataset - INFO - Reading wflow_output_em netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
-2024-11-20 04:09:20,479 - update - rasterdataset - DEBUG - Slicing time dim (&#39;2010-02-04 00:00:00&#39;, &#39;2010-02-10 00:00:00&#39;)
-2024-11-20 04:09:20,486 - update - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
-2024-11-20 04:09:20,488 - update - rasterdataset - DEBUG - Convert units for 2 variables.
+2025-11-14 03:43:11,096 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromt.log.
+2025-11-14 03:43:11,096 - update - log - INFO - HydroMT version: 0.10.1
+2025-11-14 03:43:11,096 - update - main - INFO - Updating demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full (r+).
+2025-11-14 03:43:11,096 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full
+2025-11-14 03:43:11,096 - update - main - INFO - User settings:
+2025-11-14 03:43:11,108 - update - data_catalog - INFO - Parsing data catalog from local_sources.yml
+2025-11-14 03:43:11,113 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromodel.
+2025-11-14 03:43:11,113 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/staticdata.
+2025-11-14 03:43:11,113 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/geoms.
+2025-11-14 03:43:11,113 - update - model_api - WARNING - Model dir already exists and files might be overwritten: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/config.
+2025-11-14 03:43:11,114 - update - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.0).
+2025-11-14 03:43:11,115 - update - model_api - DEBUG - Reading model file monareas.
+2025-11-14 03:43:11,121 - update - model_api - DEBUG - Reading model file staticdata.
+2025-11-14 03:43:11,167 - update - model_api - DEBUG - Reading model file basins.
+2025-11-14 03:43:11,173 - update - model_api - INFO - setup_hydrology_forcing.hydro_forcing_fn: wflow_output_em
+2025-11-14 03:43:11,173 - update - model_api - INFO - setup_hydrology_forcing.starttime: 2010-02-04 00:00:00
+2025-11-14 03:43:11,173 - update - model_api - INFO - setup_hydrology_forcing.endtime: 2010-02-10 00:00:00
+2025-11-14 03:43:11,173 - update - model_api - INFO - setup_hydrology_forcing.timestepsecs: 86400
+2025-11-14 03:43:11,173 - update - model_api - INFO - setup_hydrology_forcing.include_transport: True
+2025-11-14 03:43:11,173 - update - demission - INFO - Setting dynamic data from hydrology source wflow_output_em.
+2025-11-14 03:43:11,176 - update - rasterdataset - INFO - Reading wflow_output_em netcdf data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
+2025-11-14 03:43:11,205 - update - rasterdataset - DEBUG - Slicing time dim (&#39;2010-02-04 00:00:00&#39;, &#39;2010-02-10 00:00:00&#39;)
+2025-11-14 03:43:11,214 - update - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
+2025-11-14 03:43:11,216 - update - rasterdataset - DEBUG - Convert units for 2 variables.
 No numerical nodata value found, skipping set_nodata
-2024-11-20 04:09:20,643 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/demission.inp
-2024-11-20 04:09:20,644 - update - delwaq - INFO - Writing model config to file.
-2024-11-20 04:09:20,645 - update - model_api - INFO - write_forcing.write_nc: False
-2024-11-20 04:09:20,667 - update - demission - INFO - Writing dynamicmap files.
-Writing dynamic data: 100%|███████████████████████| 7/7 [00:00&lt;00:00, 26.05it/s]
-2024-11-20 04:09:20,938 - update - delwaq - INFO - Writting waqgeom.nc file
-
+2025-11-14 03:43:11,401 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/demission.inp
+2025-11-14 03:43:11,402 - update - delwaq - INFO - Writing model config to file.
+2025-11-14 03:43:11,403 - update - model_api - INFO - write_forcing.write_nc: False
+2025-11-14 03:43:11,426 - update - demission - INFO - Writing dynamicmap files.
+Writing dynamic data: 100%|███████████████████████| 7/7 [00:00&lt;00:00, 25.38it/s]
+2025-11-14 03:43:11,703 - update - delwaq - INFO - Writting waqgeom.nc file
 </pre></div></div>
 </div>
 <p>The example above means the following: run <strong>hydromt</strong> with:</p>
@@ -965,7 +967,7 @@ Writing dynamic data: 100%|█████████████████�
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">root</span> <span class="o">=</span> <span class="s1">&#39;EM_test_full&#39;</span>
 <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -983,54 +985,54 @@ Writing dynamic data: 100%|█████████████████�
 <div class="highlight"><pre>
 EM_test_full
  - hydromt.log
+EM_test_full/staticdata
+ - ghs_pop_2015.dat
+ - slope.dat
+ - river.dat
+ - streamorder.dat
+ - ptiddown.dat
+ - porosity.dat
+ - SoilThickness.dat
+ - staticdata.nc
+ - gdp_world.dat
 EM_test_full/fews
-EM_test_full/dynamicdata
- - hydrology.bin
 EM_test_full/hydromodel
- - lakearea.tif
- - basins.tif
- - ptiddown.tif
- - rivarea.tif
  - river.tif
  - modelmap.tif
- - rivwth.tif
- - ldd.tif
+ - ptiddown.tif
  - elevtn.tif
  - ptid.tif
- - rivlen.tif
+ - rivarea.tif
+ - basins.tif
  - resarea.tif
+ - rivwth.tif
+ - ldd.tif
+ - rivlen.tif
+ - lakearea.tif
+EM_test_full/config
+ - B2_outputtimes.inc
+ - B7_geometry.inc
+ - B4_nrofexch.inc
+ - B2_stations.inc
+ - B7_geometry.bin
+ - B1_timestamp.inc
+ - B5_boundlist.inc
+ - B2_nrofmon.inc
+ - B7_hydrology.inc
+ - B2_timers_only.inc
+ - B7_geometry-parameters.inc
+ - B3_nrofseg.inc
+ - B3_attributes.inc
+ - B2_monareas.inc
+ - B3_waqgeom.nc
+ - B2_timers.inc
+ - B2_sysclock.inc
+ - B7_surf.inc
+EM_test_full/dynamicdata
+ - hydrology.bin
 EM_test_full/geoms
  - monareas.geojson
  - basins.geojson
-EM_test_full/config
- - B2_sysclock.inc
- - B3_nrofseg.inc
- - B7_hydrology.inc
- - B2_timers_only.inc
- - B2_nrofmon.inc
- - B1_timestamp.inc
- - B4_nrofexch.inc
- - B5_boundlist.inc
- - B7_geometry.bin
- - B2_monareas.inc
- - B7_geometry-parameters.inc
- - B7_surf.inc
- - B2_outputtimes.inc
- - B3_attributes.inc
- - B7_geometry.inc
- - B2_stations.inc
- - B3_waqgeom.nc
- - B2_timers.inc
-EM_test_full/staticdata
- - ptiddown.dat
- - river.dat
- - gdp_world.dat
- - staticdata.nc
- - SoilThickness.dat
- - streamorder.dat
- - ghs_pop_2015.dat
- - slope.dat
- - porosity.dat
 </pre></div></div>
 </div>
 <p>You can have a look at some of these files:</p>
@@ -1038,7 +1040,7 @@ EM_test_full/staticdata
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./EM_test_full&#39;</span>
 <span class="n">fn_config</span> <span class="o">=</span> <span class="s1">&#39;config/B1_timestamp.inc&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="n">fn_config</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -1066,7 +1068,7 @@ EM_test_full/staticdata
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./EM_test_full&#39;</span>
 <span class="n">fn_config</span> <span class="o">=</span> <span class="s1">&#39;config/B7_hydrology.inc&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="n">fn_config</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -1166,13 +1168,13 @@ Rainfall RunoffPav RunoffUnp Infiltr Exfiltr vwcproot Overland Subsurface
 </div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../_sources/_examples/update_model_forcing.ipynb.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/_examples/update_model_forcing.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -1187,8 +1189,8 @@ Rainfall RunoffPav RunoffUnp Infiltr Exfiltr vwcproot Overland Subsurface
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1221,7 +1223,8 @@ Rainfall RunoffPav RunoffUnp Infiltr Exfiltr vwcproot Overland Subsurface
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

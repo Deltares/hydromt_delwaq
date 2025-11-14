@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,19 +27,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -415,9 +415,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -487,7 +492,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -496,9 +501,9 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for plotting</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">cartopy.io.img_tiles</span> <span class="k">as</span> <span class="nn">cimgt</span>
-<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.io.img_tiles</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cimgt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span>
 <span class="n">proj</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span> <span class="c1"># plot projection</span>
 </pre></div>
 </div>
@@ -508,8 +513,8 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import hydromt</span>
-<span class="kn">import</span> <span class="nn">hydromt</span>
-<span class="kn">from</span> <span class="nn">hydromt_delwaq</span> <span class="kn">import</span> <span class="n">DelwaqModel</span><span class="p">,</span> <span class="n">DemissionModel</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hydromt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hydromt_delwaq</span><span class="w"> </span><span class="kn">import</span> <span class="n">DelwaqModel</span><span class="p">,</span> <span class="n">DemissionModel</span>
 </pre></div>
 </div>
 </div>
@@ -518,7 +523,7 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setup logging</span>
-<span class="kn">from</span>  <span class="nn">hydromt.log</span> <span class="kn">import</span> <span class="n">setuplog</span>
+<span class="kn">from</span><span class="w">  </span><span class="nn">hydromt.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">setuplog</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">setuplog</span><span class="p">(</span><span class="s2">&quot;update_model_emission&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -528,7 +533,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2024-11-20 04:08:15,473 - update_model_emission - log - INFO - HydroMT version: 0.10.0
+2025-11-14 03:41:39,182 - update_model_emission - log - INFO - HydroMT version: 0.10.1
 </pre></div></div>
 </div>
 </section>
@@ -584,7 +589,6 @@ Options:
   -q, --quiet                Decrease verbosity.
   -v, --verbose              Increase verbosity.
   --help                     Show this message and exit.
-
 </pre></div></div>
 </div>
 </section>
@@ -650,24 +654,13 @@ version: &#39;3&#39;
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dictionnary with all the components and options we want to update</span>
-<span class="n">emission_raster_options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;setup_emission_raster&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;emission_fn&#39;</span><span class="p">:</span> <span class="s1">&#39;glw_cattle&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;scale_method&#39;</span><span class="p">:</span> <span class="s1">&#39;average&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;fillna_method&#39;</span><span class="p">:</span> <span class="s1">&#39;zero&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;area_division&#39;</span><span class="p">:</span> <span class="kc">True</span>
-    <span class="p">},</span>
-<span class="p">}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%writefile</span> delwaq_update_emission_cattle.yml
 
-<span class="c1"># Save it to a hydroMT ini file</span>
-<span class="n">fn_yml</span> <span class="o">=</span> <span class="s2">&quot;delwaq_update_emission_cattle.yml&quot;</span>
-<span class="n">hydromt</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">configwrite</span><span class="p">(</span><span class="n">fn_yml</span><span class="p">,</span> <span class="n">emission_raster_options</span><span class="p">)</span>
-
-<span class="c1"># Open the file and visualize the content</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_yml</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+<span class="n">setup_emission_raster</span><span class="p">:</span>
+    <span class="n">emission_fn</span><span class="p">:</span> <span class="n">glw_cattle</span>
+    <span class="n">scale_method</span><span class="p">:</span> <span class="n">average</span>
+    <span class="n">fillna_method</span><span class="p">:</span> <span class="n">zero</span>
+    <span class="n">area_division</span><span class="p">:</span> <span class="kc">True</span>
 </pre></div>
 </div>
 </div>
@@ -676,12 +669,7 @@ version: &#39;3&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-setup_emission_raster:
-  emission_fn: glw_cattle
-  scale_method: average
-  fillna_method: zero
-  area_division: true
-
+Writing delwaq_update_emission_cattle.yml
 </pre></div></div>
 </div>
 <p>Some explanations about the option we chose here:</p>
@@ -708,50 +696,49 @@ setup_emission_raster:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2024-11-20 04:08:21,833 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
-2024-11-20 04:08:21,833 - update - log - INFO - HydroMT version: 0.10.0
-2024-11-20 04:08:21,833 - update - main - INFO - Updating demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave (r).
-2024-11-20 04:08:21,833 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
-2024-11-20 04:08:21,833 - update - main - INFO - User settings:
-2024-11-20 04:08:21,857 - update - data_catalog - INFO - Reading data catalog artifact_data latest
-2024-11-20 04:08:21,857 - update - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.9/data_catalog.yml
-2024-11-20 04:08:22,450 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromt.log.
-2024-11-20 04:08:22,450 - update - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.0).
-2024-11-20 04:08:22,450 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/demission.inp
-2024-11-20 04:08:22,451 - update - model_api - DEBUG - Reading model file monareas.
-2024-11-20 04:08:22,456 - update - model_api - DEBUG - Reading model file staticdata.
-2024-11-20 04:08:22,493 - update - model_api - DEBUG - Reading model file basins.
+2025-11-14 03:41:48,298 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
+2025-11-14 03:41:48,299 - update - log - INFO - HydroMT version: 0.10.1
+2025-11-14 03:41:48,299 - update - main - INFO - Updating demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave (r).
+2025-11-14 03:41:48,299 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
+2025-11-14 03:41:48,299 - update - main - INFO - User settings:
+2025-11-14 03:41:48,368 - update - data_catalog - INFO - Reading data catalog artifact_data latest
+2025-11-14 03:41:48,368 - update - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.9/data_catalog.yml
+2025-11-14 03:41:48,970 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromt.log.
+2025-11-14 03:41:48,970 - update - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.0).
+2025-11-14 03:41:48,970 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/demission.inp
+2025-11-14 03:41:48,971 - update - model_api - DEBUG - Reading model file monareas.
+2025-11-14 03:41:48,978 - update - model_api - DEBUG - Reading model file staticdata.
+2025-11-14 03:41:49,016 - update - model_api - DEBUG - Reading model file basins.
 nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/hydromodel/rivarea.tif
-2024-11-20 04:08:22,594 - update - model_api - DEBUG - Reading model file staticdata.
-2024-11-20 04:08:22,602 - update - model_grid - WARNING - Replacing grid map: river
-2024-11-20 04:08:22,602 - update - model_grid - WARNING - Replacing grid map: slope
-2024-11-20 04:08:22,603 - update - model_grid - WARNING - Replacing grid map: streamorder
-2024-11-20 04:08:22,604 - update - model_grid - WARNING - Replacing grid map: SoilThickness
-2024-11-20 04:08:22,605 - update - model_grid - WARNING - Replacing grid map: porosity
-2024-11-20 04:08:22,605 - update - model_grid - WARNING - Replacing grid map: ptiddown
-2024-11-20 04:08:22,606 - update - model_grid - WARNING - Replacing grid map: monareas
-2024-11-20 04:08:22,607 - update - model_grid - WARNING - Replacing grid map: ghs_pop_2015
-2024-11-20 04:08:22,607 - update - model_grid - WARNING - Replacing grid map: gdp_world
-2024-11-20 04:08:22,608 - update - demission - INFO - Model read
-2024-11-20 04:08:22,609 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
-2024-11-20 04:08:22,614 - update - model_api - INFO - setup_emission_raster.emission_fn: glw_cattle
-2024-11-20 04:08:22,614 - update - model_api - INFO - setup_emission_raster.scale_method: average
-2024-11-20 04:08:22,614 - update - model_api - INFO - setup_emission_raster.fillna_method: zero
-2024-11-20 04:08:22,614 - update - model_api - INFO - setup_emission_raster.fillna_value: 0.0
-2024-11-20 04:08:22,614 - update - model_api - INFO - setup_emission_raster.area_division: True
-2024-11-20 04:08:22,614 - update - delwaq - INFO - Preparing &#39;glw_cattle&#39; map.
-2024-11-20 04:08:22,617 - update - rasterdataset - INFO - Reading glw_cattle raster data from /home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar/glw_cattle.tif
-2024-11-20 04:08:22,628 - update - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
-2024-11-20 04:08:22,743 - update - emissions - INFO - Deriving None using average resampling (nodata=-1.7e+308).
-2024-11-20 04:08:22,787 - update - demission - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
-2024-11-20 04:08:22,814 - update - delwaq - INFO - Writing staticmap files.
-2024-11-20 04:08:22,892 - update - model_api - DEBUG - Writing file geoms/monareas.geojson
-2024-11-20 04:08:22,898 - update - model_api - DEBUG - Writing file geoms/basins.geojson
-2024-11-20 04:08:22,900 - update - delwaq - INFO - Writing model config to file.
-2024-11-20 04:08:22,901 - update - delwaq - INFO - Writing hydromap files.
+2025-11-14 03:41:49,125 - update - model_api - DEBUG - Reading model file staticdata.
+2025-11-14 03:41:49,132 - update - model_grid - WARNING - Replacing grid map: river
+2025-11-14 03:41:49,133 - update - model_grid - WARNING - Replacing grid map: slope
+2025-11-14 03:41:49,134 - update - model_grid - WARNING - Replacing grid map: streamorder
+2025-11-14 03:41:49,135 - update - model_grid - WARNING - Replacing grid map: SoilThickness
+2025-11-14 03:41:49,135 - update - model_grid - WARNING - Replacing grid map: porosity
+2025-11-14 03:41:49,136 - update - model_grid - WARNING - Replacing grid map: ptiddown
+2025-11-14 03:41:49,137 - update - model_grid - WARNING - Replacing grid map: monareas
+2025-11-14 03:41:49,138 - update - model_grid - WARNING - Replacing grid map: ghs_pop_2015
+2025-11-14 03:41:49,139 - update - model_grid - WARNING - Replacing grid map: gdp_world
+2025-11-14 03:41:49,139 - update - demission - INFO - Model read
+2025-11-14 03:41:49,140 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromt.log.
+2025-11-14 03:41:49,147 - update - model_api - INFO - setup_emission_raster.emission_fn: glw_cattle
+2025-11-14 03:41:49,147 - update - model_api - INFO - setup_emission_raster.scale_method: average
+2025-11-14 03:41:49,147 - update - model_api - INFO - setup_emission_raster.fillna_method: zero
+2025-11-14 03:41:49,147 - update - model_api - INFO - setup_emission_raster.fillna_value: 0.0
+2025-11-14 03:41:49,147 - update - model_api - INFO - setup_emission_raster.area_division: True
+2025-11-14 03:41:49,147 - update - delwaq - INFO - Preparing &#39;glw_cattle&#39; map.
+2025-11-14 03:41:49,154 - update - rasterdataset - INFO - Reading glw_cattle raster data from /home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar/glw_cattle.tif
+2025-11-14 03:41:49,165 - update - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
+2025-11-14 03:41:49,174 - update - emissions - INFO - Deriving None using average resampling (nodata=-1.7e+308).
+2025-11-14 03:41:49,224 - update - demission - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended
+2025-11-14 03:41:49,252 - update - delwaq - INFO - Writing staticmap files.
+2025-11-14 03:41:49,340 - update - model_api - DEBUG - Writing file geoms/monareas.geojson
+2025-11-14 03:41:49,347 - update - model_api - DEBUG - Writing file geoms/basins.geojson
+2025-11-14 03:41:49,349 - update - delwaq - INFO - Writing model config to file.
+2025-11-14 03:41:49,349 - update - delwaq - INFO - Writing hydromap files.
 nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended/hydromodel/rivarea.tif
-2024-11-20 04:08:23,034 - update - demission - DEBUG - No forcing data found, skip writing.
-
+2025-11-14 03:41:49,458 - update - demission - DEBUG - No forcing data found, skip writing.
 </pre></div></div>
 </div>
 <p>The example above means the following: run <strong>hydromt</strong> with:</p>
@@ -901,13 +888,13 @@ nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_e
 </div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../_sources/_examples/adding_global_emission.ipynb.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/_examples/adding_global_emission.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -922,8 +909,8 @@ nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_e
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -956,7 +943,8 @@ nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_e
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

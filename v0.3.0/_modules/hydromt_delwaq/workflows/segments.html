@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=d8b05058" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -352,9 +352,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -403,14 +408,14 @@
   <h1>Source code for hydromt_delwaq.workflows.segments</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Worflows dealing with pointer and Delwaq segments.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
-<span class="kn">from</span> <span class="nn">hydromt</span> <span class="kn">import</span> <span class="n">flw</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hydromt</span><span class="w"> </span><span class="kn">import</span> <span class="n">flw</span>
 
-<span class="kn">from</span> <span class="nn">.emissions</span> <span class="kn">import</span> <span class="n">gridarea</span><span class="p">,</span> <span class="n">gridlength_gridwidth</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.emissions</span><span class="w"> </span><span class="kn">import</span> <span class="n">gridarea</span><span class="p">,</span> <span class="n">gridlength_gridwidth</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -424,7 +429,7 @@
 
 <div class="viewcode-block" id="hydromaps">
 <a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.segments.hydromaps.html#hydromt_delwaq.workflows.segments.hydromaps">[docs]</a>
-<span class="k">def</span> <span class="nf">hydromaps</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hydromaps</span><span class="p">(</span>
     <span class="n">hydromodel</span><span class="p">,</span>
     <span class="n">mask</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;basins&quot;</span><span class="p">,</span>
 <span class="p">):</span>
@@ -491,7 +496,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">maps_from_hydromodel</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">maps_from_hydromodel</span><span class="p">(</span>
     <span class="n">hydromodel</span><span class="p">,</span>
     <span class="n">maps</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rivmsk&quot;</span><span class="p">,</span> <span class="s2">&quot;lndslp&quot;</span><span class="p">,</span> <span class="s2">&quot;strord&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;SoilThickness&quot;</span><span class="p">,</span> <span class="s2">&quot;thetaS&quot;</span><span class="p">],</span>
     <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
@@ -539,7 +544,7 @@
 
 <div class="viewcode-block" id="geometrymaps">
 <a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.segments.geometrymaps.html#hydromt_delwaq.workflows.segments.geometrymaps">[docs]</a>
-<span class="k">def</span> <span class="nf">geometrymaps</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">geometrymaps</span><span class="p">(</span>
     <span class="n">hydromodel</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return geometry information maps from hydromodel.</span>
@@ -613,7 +618,7 @@
 
 <div class="viewcode-block" id="pointer">
 <a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.segments.pointer.html#hydromt_delwaq.workflows.segments.pointer">[docs]</a>
-<span class="k">def</span> <span class="nf">pointer</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pointer</span><span class="p">(</span>
     <span class="n">ds_hydro</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">build_pointer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">surface_water</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sfw&quot;</span><span class="p">,</span>
@@ -790,8 +795,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -824,7 +829,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

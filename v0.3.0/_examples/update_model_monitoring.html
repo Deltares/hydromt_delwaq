@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,19 +27,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -415,9 +415,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -487,7 +492,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -496,9 +501,9 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for plotting</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">cartopy.io.img_tiles</span> <span class="k">as</span> <span class="nn">cimgt</span>
-<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.io.img_tiles</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cimgt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span>
 <span class="n">proj</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span> <span class="c1"># plot projection</span>
 </pre></div>
 </div>
@@ -508,8 +513,8 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import hydromt</span>
-<span class="kn">import</span> <span class="nn">hydromt</span>
-<span class="kn">from</span> <span class="nn">hydromt_delwaq</span> <span class="kn">import</span> <span class="n">DelwaqModel</span><span class="p">,</span> <span class="n">DemissionModel</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hydromt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hydromt_delwaq</span><span class="w"> </span><span class="kn">import</span> <span class="n">DelwaqModel</span><span class="p">,</span> <span class="n">DemissionModel</span>
 </pre></div>
 </div>
 </div>
@@ -518,7 +523,7 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setup logging</span>
-<span class="kn">from</span>  <span class="nn">hydromt.log</span> <span class="kn">import</span> <span class="n">setuplog</span>
+<span class="kn">from</span><span class="w">  </span><span class="nn">hydromt.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">setuplog</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">setuplog</span><span class="p">(</span><span class="s2">&quot;update_model_monitoring&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -528,7 +533,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2024-11-20 04:09:25,654 - update_model_monitoring - log - INFO - HydroMT version: 0.10.0
+2025-11-14 03:43:17,858 - update_model_monitoring - log - INFO - HydroMT version: 0.10.1
 </pre></div></div>
 </div>
 </section>
@@ -613,7 +618,6 @@ Options:
   -q, --quiet                Decrease verbosity.
   -v, --verbose              Increase verbosity.
   --help                     Show this message and exit.
-
 </pre></div></div>
 </div>
 </section>
@@ -668,55 +672,54 @@ setup_monitoring:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2024-11-20 04:09:29,629 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring/hydromt.log.
-2024-11-20 04:09:29,629 - update - log - INFO - HydroMT version: 0.10.0
-2024-11-20 04:09:29,629 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave (r).
-2024-11-20 04:09:29,629 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring
-2024-11-20 04:09:29,629 - update - main - INFO - User settings:
-2024-11-20 04:09:29,642 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave/hydromt.log.
-2024-11-20 04:09:29,643 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.3.0).
-2024-11-20 04:09:29,643 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave/delwaq.inp
-2024-11-20 04:09:29,643 - update - model_api - DEBUG - Reading model file monareas.
-2024-11-20 04:09:29,648 - update - model_api - DEBUG - Reading model file staticdata.
-2024-11-20 04:09:29,689 - update - model_api - DEBUG - Reading model file basins.
-2024-11-20 04:09:29,692 - update - model_api - DEBUG - Reading model file monpoints.
+2025-11-14 03:43:24,130 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring/hydromt.log.
+2025-11-14 03:43:24,131 - update - log - INFO - HydroMT version: 0.10.1
+2025-11-14 03:43:24,131 - update - main - INFO - Updating delwaq model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave (r).
+2025-11-14 03:43:24,131 - update - main - INFO - Output dir: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring
+2025-11-14 03:43:24,131 - update - main - INFO - User settings:
+2025-11-14 03:43:24,142 - update - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave/hydromt.log.
+2025-11-14 03:43:24,142 - update - model_api - INFO - Initializing delwaq model from hydromt_delwaq (v0.3.0).
+2025-11-14 03:43:24,142 - update - model_api - ERROR - Model config file not found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave/delwaq.inp
+2025-11-14 03:43:24,143 - update - model_api - DEBUG - Reading model file monpoints.
+2025-11-14 03:43:24,148 - update - model_api - DEBUG - Reading model file staticdata.
+2025-11-14 03:43:24,184 - update - model_api - DEBUG - Reading model file monareas.
+2025-11-14 03:43:24,187 - update - model_api - DEBUG - Reading model file basins.
 nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave/hydromodel/rivarea.tif
-2024-11-20 04:09:29,794 - update - model_api - DEBUG - Reading model file staticdata.
-2024-11-20 04:09:29,804 - update - model_grid - WARNING - Replacing grid map: river
-2024-11-20 04:09:29,805 - update - model_grid - WARNING - Replacing grid map: slope
-2024-11-20 04:09:29,806 - update - model_grid - WARNING - Replacing grid map: streamorder
-2024-11-20 04:09:29,806 - update - model_grid - WARNING - Replacing grid map: manning
-2024-11-20 04:09:29,807 - update - model_grid - WARNING - Replacing grid map: SoilThickness
-2024-11-20 04:09:29,808 - update - model_grid - WARNING - Replacing grid map: porosity
-2024-11-20 04:09:29,808 - update - model_grid - WARNING - Replacing grid map: surface
-2024-11-20 04:09:29,809 - update - model_grid - WARNING - Replacing grid map: length
-2024-11-20 04:09:29,810 - update - model_grid - WARNING - Replacing grid map: width
-2024-11-20 04:09:29,810 - update - model_grid - WARNING - Replacing grid map: latitude_grid
-2024-11-20 04:09:29,811 - update - model_grid - WARNING - Replacing grid map: bankfull_volume
-2024-11-20 04:09:29,812 - update - model_grid - WARNING - Replacing grid map: monpoints
-2024-11-20 04:09:29,812 - update - model_grid - WARNING - Replacing grid map: monareas
-2024-11-20 04:09:29,813 - update - delwaq - INFO - Model read
-2024-11-20 04:09:29,814 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring/hydromt.log.
-2024-11-20 04:09:29,819 - update - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
-2024-11-20 04:09:29,819 - update - model_api - INFO - setup_monitoring.mon_areas: subcatch
-2024-11-20 04:09:29,819 - update - delwaq - INFO - Setting monitoring points and areas
-2024-11-20 04:09:29,830 - update - data_catalog - INFO - Reading data catalog artifact_data latest
-2024-11-20 04:09:29,831 - update - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.9/data_catalog.yml
-2024-11-20 04:09:30,430 - update - geodataframe - INFO - Reading  csv data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
-2024-11-20 04:09:30,435 - update - geodataframe - DEBUG - Clip intersects [11.775, 45.808, 12.742, 46.692] (EPSG:4326)
-2024-11-20 04:09:30,444 - update - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
-2024-11-20 04:09:30,445 - update - model_api - WARNING - Replacing geom: monpoints
-2024-11-20 04:09:30,577 - update - model_api - WARNING - Replacing geom: monareas
-2024-11-20 04:09:30,577 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring
-2024-11-20 04:09:30,612 - update - delwaq - INFO - Writing staticmap files.
-2024-11-20 04:09:30,672 - update - model_api - DEBUG - Writing file geoms/monareas.geojson
-2024-11-20 04:09:30,677 - update - model_api - DEBUG - Writing file geoms/basins.geojson
-2024-11-20 04:09:30,680 - update - model_api - DEBUG - Writing file geoms/monpoints.geojson
-2024-11-20 04:09:30,682 - update - delwaq - INFO - Writing model config to file.
-2024-11-20 04:09:30,682 - update - delwaq - INFO - Writing hydromap files.
+2025-11-14 03:43:24,298 - update - model_api - DEBUG - Reading model file staticdata.
+2025-11-14 03:43:24,307 - update - model_grid - WARNING - Replacing grid map: river
+2025-11-14 03:43:24,308 - update - model_grid - WARNING - Replacing grid map: slope
+2025-11-14 03:43:24,309 - update - model_grid - WARNING - Replacing grid map: streamorder
+2025-11-14 03:43:24,310 - update - model_grid - WARNING - Replacing grid map: manning
+2025-11-14 03:43:24,311 - update - model_grid - WARNING - Replacing grid map: SoilThickness
+2025-11-14 03:43:24,311 - update - model_grid - WARNING - Replacing grid map: porosity
+2025-11-14 03:43:24,312 - update - model_grid - WARNING - Replacing grid map: surface
+2025-11-14 03:43:24,313 - update - model_grid - WARNING - Replacing grid map: length
+2025-11-14 03:43:24,314 - update - model_grid - WARNING - Replacing grid map: width
+2025-11-14 03:43:24,314 - update - model_grid - WARNING - Replacing grid map: latitude_grid
+2025-11-14 03:43:24,315 - update - model_grid - WARNING - Replacing grid map: bankfull_volume
+2025-11-14 03:43:24,316 - update - model_grid - WARNING - Replacing grid map: monpoints
+2025-11-14 03:43:24,317 - update - model_grid - WARNING - Replacing grid map: monareas
+2025-11-14 03:43:24,317 - update - delwaq - INFO - Model read
+2025-11-14 03:43:24,318 - update - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring/hydromt.log.
+2025-11-14 03:43:24,324 - update - model_api - INFO - setup_monitoring.mon_points: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
+2025-11-14 03:43:24,325 - update - model_api - INFO - setup_monitoring.mon_areas: subcatch
+2025-11-14 03:43:24,325 - update - delwaq - INFO - Setting monitoring points and areas
+2025-11-14 03:43:24,382 - update - data_catalog - INFO - Reading data catalog artifact_data latest
+2025-11-14 03:43:24,383 - update - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.9/data_catalog.yml
+2025-11-14 03:43:24,977 - update - geodataframe - INFO - Reading  csv data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
+2025-11-14 03:43:24,982 - update - geodataframe - DEBUG - Clip intersects [11.775, 45.808, 12.742, 46.692] (EPSG:4326)
+2025-11-14 03:43:24,991 - update - delwaq - INFO - Gauges locations read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/test_monpoints.csv
+2025-11-14 03:43:24,992 - update - model_api - WARNING - Replacing geom: monpoints
+2025-11-14 03:43:25,018 - update - model_api - WARNING - Replacing geom: monareas
+2025-11-14 03:43:25,018 - update - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring
+2025-11-14 03:43:25,055 - update - delwaq - INFO - Writing staticmap files.
+2025-11-14 03:43:25,130 - update - model_api - DEBUG - Writing file geoms/monpoints.geojson
+2025-11-14 03:43:25,133 - update - model_api - DEBUG - Writing file geoms/monareas.geojson
+2025-11-14 03:43:25,138 - update - model_api - DEBUG - Writing file geoms/basins.geojson
+2025-11-14 03:43:25,140 - update - delwaq - INFO - Writing model config to file.
+2025-11-14 03:43:25,141 - update - delwaq - INFO - Writing hydromap files.
 nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_piave_monitoring/hydromodel/rivarea.tif
-2024-11-20 04:09:30,811 - update - delwaq - DEBUG - No forcing data found, skip writing.
-
+2025-11-14 03:43:25,249 - update - delwaq - DEBUG - No forcing data found, skip writing.
 </pre></div></div>
 </div>
 <p>The example above means the following: run <strong>hydromt</strong> with:</p>
@@ -878,13 +881,13 @@ nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_e
 </div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../_sources/_examples/update_model_monitoring.ipynb.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/_examples/update_model_monitoring.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -899,8 +902,8 @@ nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_e
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -933,7 +936,8 @@ nodata value missing for /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_e
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
