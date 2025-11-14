@@ -51,7 +51,6 @@ doc = [
     "nbsphinx",
     "sphinx",
     "sphinx_design",
-    "pandoc",
     "pydata-sphinx-theme",
     "sphinx_autosummary_accessors",
 ]

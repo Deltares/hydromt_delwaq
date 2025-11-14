@@ -42,11 +42,12 @@ jobs:
           miniforge-version: latest
           activate-environment: hydromt_delwaq
 
+      ## mamba required to install pandoc with nbsphinx (does not work via pip)
       - name: Install plugin
         run: |
          mamba install uv
          uv pip install .[doc,examples]
-         mamba list
+         mamba install pandoc
 
       - name: Build docs
         run: |
