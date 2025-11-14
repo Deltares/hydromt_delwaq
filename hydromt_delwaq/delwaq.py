@@ -67,7 +67,6 @@ class DelwaqModel(GridModel):
         "geoms",
         "config",
         "dynamicdata",
-        "fews",
     ]
 
     def __init__(
@@ -835,6 +834,9 @@ class DelwaqModel(GridModel):
         fname = join(self.root, "staticdata", "staticdata.nc")
         # Update attributes for gdal compliance
         # ds_out = ds_out.raster.gdal_compliant(rename_dims=False)
+        # Not ideal but to avoid hanging issues in r+ mode
+        if self._read and self._write:
+            ds_out.load()
         ds_out.to_netcdf(path=fname)
 
         # Binary format

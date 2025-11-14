@@ -3,8 +3,18 @@ name: Test stable
 on:
   push:
     branches: [ main ]
+    paths:
+      - hydromt_delwaq/**/*
+      - tests/**/*
+      - pyproject.toml
+      - .github/workflows/test_stable.yml
   pull_request:
     branches: [ main ]
+    paths:
+      - hydromt_delwaq/**/*
+      - tests/**/*
+      - pyproject.toml
+      - .github/workflows/test_stable.yml
 
 jobs:
   Test:
@@ -12,34 +22,31 @@ jobs:
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -el {0}
     strategy:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"] #, "ubuntu-latest", "macos-latest", windows-latest]
-        python-version: ["3.10", "3.11"] # fix tests to support older versions
+        python-version: ["3.11"]
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: actions/checkout@v5
+      - name: Setup environment and info
+        uses: conda-incubator/setup-miniconda@v3
         with:
+          miniforge-version: latest
           python-version: ${{ matrix.python-version }}
-          mamba-version: "*"
-          channels: conda-forge,defaults
-          channel-priority: true
-          environment-file: envs/hydromt-delwaq.yml
-          activate-environment: hydromt-delwaq
-
-      - name: Conda info
-        run: |
-         conda info
-         conda list
+          activate-environment: hydromt_delwaq
 
       - name: Install plugin
-        run: flit install --deps all
+        run: |
+         mamba install uv
+         uv pip install .[test,dev]
+         mamba list
 
       - name: Run Tests
-        run: python -m pytest --verbose --cov=hydromt_delwaq --cov-report xml
+        run: |
+         python -m pytest --verbose --cov=hydromt_delwaq --cov-report xml
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v3
