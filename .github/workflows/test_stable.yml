@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -el {0}
     strategy:
       fail-fast: false
       matrix:
@@ -40,14 +40,12 @@ jobs:
 
       - name: Install plugin
         run: |
-         mamba activate hydromt_delwaq
-         mamba install uv
+         conda install uv
          uv pip install .[test, dev]
-         mamba list
+         conda list
 
       - name: Run Tests
         run: |
-         mamba activate hydromt_delwaq
          python -m pytest --verbose --cov=hydromt_delwaq --cov-report xml
 
       - name: Upload code coverage
