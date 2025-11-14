@@ -40,9 +40,9 @@ jobs:
 
       - name: Install plugin
         run: |
-         conda install uv
-         uv pip install .[test, dev]
-         conda list
+         mamba install uv
+         uv pip install .[test,dev]
+         mamba list
 
       - name: Run Tests
         run: |
