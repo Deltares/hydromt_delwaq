@@ -15,29 +15,32 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/theme-deltares.css?v=d8b05058" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -46,6 +49,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.1.dev0" />
   </head>
   
   
@@ -61,19 +65,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -81,7 +74,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -89,8 +81,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -99,7 +91,7 @@
   
     <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -108,6 +100,8 @@
     
       <div class="navbar-item">
 
+  
+    
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -120,7 +114,7 @@
     
     
     <img src="../../_static/hydromt-icon.svg" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="../../_static/hydromt-icon.svg" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="../../_static/hydromt-icon.svg" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">HydroMT DELWAQ</p>
@@ -134,38 +128,38 @@
     <div class="me-auto navbar-header-items__center">
       
         <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../getting_started/intro.html">
     Getting Started
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../user_guide/intro.html">
     User Guide
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../api.html">
     API reference
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../dev/intro.html">
     Developments
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
     HydroMT core
   </a>
@@ -182,19 +176,15 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
-        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+        <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -205,7 +195,7 @@
           
           
           
-          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
         </li>
         <li class="nav-item">
           
@@ -216,7 +206,7 @@
           
           
           
-          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
         </li>
         <li class="nav-item">
           
@@ -227,7 +217,7 @@
           
           
           
-          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
         </li>
 </ul></div>
       
@@ -238,15 +228,11 @@
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -263,7 +249,8 @@
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -275,38 +262,38 @@
           
           
             <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../getting_started/intro.html">
     Getting Started
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../user_guide/intro.html">
     User Guide
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../api.html">
     API reference
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../dev/intro.html">
     Developments
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
     HydroMT core
   </a>
@@ -322,7 +309,7 @@
     
       <div class="sidebar-header-items__end">
         
-          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+          <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -333,7 +320,7 @@
           
           
           
-          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
         </li>
         <li class="nav-item">
           
@@ -344,7 +331,7 @@
           
           
           
-          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
         </li>
         <li class="nav-item">
           
@@ -355,7 +342,7 @@
           
           
           
-          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
         </li>
 </ul></div>
         
@@ -365,9 +352,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -385,8 +377,6 @@
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -398,7 +388,7 @@
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">hydromt_delw...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">hydromt_delwaq.delwaq</span></li>
   </ul>
 </nav>
 </div>
@@ -418,26 +408,26 @@
   <h1>Source code for hydromt_delwaq.delwaq</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Implement delwaq model class.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">struct</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">isfile</span><span class="p">,</span> <span class="n">join</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">isfile</span><span class="p">,</span> <span class="n">join</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pyproj</span>
-<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
-<span class="kn">import</span> <span class="nn">xugrid</span> <span class="k">as</span> <span class="nn">xu</span>
-<span class="kn">from</span> <span class="nn">hydromt</span> <span class="kn">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">workflows</span>
-<span class="kn">from</span> <span class="nn">hydromt.models.model_grid</span> <span class="kn">import</span> <span class="n">GridModel</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyproj</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xugrid</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xu</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hydromt</span><span class="w"> </span><span class="kn">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">workflows</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hydromt.models.model_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">DATADIR</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">dw_WriteSegmentOrExchangeData</span>
-<span class="kn">from</span> <span class="nn">.workflows</span> <span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">emissions</span><span class="p">,</span> <span class="n">forcing</span><span class="p">,</span> <span class="n">segments</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATADIR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">dw_WriteSegmentOrExchangeData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.workflows</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">emissions</span><span class="p">,</span> <span class="n">forcing</span><span class="p">,</span> <span class="n">segments</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DelwaqModel&quot;</span><span class="p">]</span>
 
@@ -454,7 +444,7 @@
 
 <div class="viewcode-block" id="DelwaqModel">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.html#hydromt_delwaq.DelwaqModel">[docs]</a>
-<span class="k">class</span> <span class="nc">DelwaqModel</span><span class="p">(</span><span class="n">GridModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DelwaqModel</span><span class="p">(</span><span class="n">GridModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Delwaq model class.&quot;&quot;&quot;</span>
 
     <span class="n">_NAME</span> <span class="o">=</span> <span class="s2">&quot;delwaq&quot;</span>
@@ -483,16 +473,14 @@
     <span class="p">}</span>
     <span class="n">_FOLDERS</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;hydromodel&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;staticdata&quot;</span><span class="p">,</span>
         <span class="s2">&quot;geoms&quot;</span><span class="p">,</span>
         <span class="s2">&quot;config&quot;</span><span class="p">,</span>
         <span class="s2">&quot;dynamicdata&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;fews&quot;</span><span class="p">,</span>
     <span class="p">]</span>
 
 <div class="viewcode-block" id="DelwaqModel.__init__">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.html#hydromt_delwaq.DelwaqModel.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">root</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span>
@@ -549,7 +537,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.setup_basemaps">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.setup_basemaps.html#hydromt_delwaq.DelwaqModel.setup_basemaps">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_basemaps</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_basemaps</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">region</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
         <span class="n">mask</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;basins&quot;</span><span class="p">,</span>
@@ -680,7 +668,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.setup_monitoring">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.setup_monitoring.html#hydromt_delwaq.DelwaqModel.setup_monitoring">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_monitoring</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_monitoring</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mon_points</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">mon_areas</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -799,7 +787,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.setup_hydrology_forcing">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.setup_hydrology_forcing.html#hydromt_delwaq.DelwaqModel.setup_hydrology_forcing">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_hydrology_forcing</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_hydrology_forcing</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">hydro_forcing_fn</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">starttime</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -867,7 +855,7 @@
 <span class="sd">            List of fluxes/volumes to override for non nodata values rather than sum.</span>
 <span class="sd">            The last one (based on _number) has priority.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">hydro_forcing_fn</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_catalog</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_catalog</span><span class="o">.</span><span class="n">contains_source</span><span class="p">(</span><span class="n">hydro_forcing_fn</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;None or Invalid source </span><span class="si">{</span><span class="n">hydro_forcing_fn</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">,</span>
                 <span class="s2">&quot;skipping setup_hydrology_forcing.&quot;</span><span class="p">,</span>
@@ -916,7 +904,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.setup_sediment_forcing">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.setup_sediment_forcing.html#hydromt_delwaq.DelwaqModel.setup_sediment_forcing">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_sediment_forcing</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_sediment_forcing</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">sediment_fn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">],</span>
         <span class="n">starttime</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -985,7 +973,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.setup_climate_forcing">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.setup_climate_forcing.html#hydromt_delwaq.DelwaqModel.setup_climate_forcing">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_climate_forcing</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_climate_forcing</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">climate_fn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">],</span>
         <span class="n">starttime</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1074,7 +1062,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.setup_emission_raster">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.setup_emission_raster.html#hydromt_delwaq.DelwaqModel.setup_emission_raster">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_emission_raster</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_emission_raster</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">emission_fn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">],</span>
         <span class="n">scale_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span>
@@ -1123,7 +1111,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.setup_emission_vector">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.setup_emission_vector.html#hydromt_delwaq.DelwaqModel.setup_emission_vector">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_emission_vector</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_emission_vector</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">emission_fn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">],</span>
         <span class="n">col2raster</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -1175,10 +1163,10 @@
 
 <div class="viewcode-block" id="DelwaqModel.setup_emission_mapping">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.setup_emission_mapping.html#hydromt_delwaq.DelwaqModel.setup_emission_mapping">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup_emission_mapping</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_emission_mapping</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">region_fn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">],</span>
-        <span class="n">mapping_fn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">mapping_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Derive several emission maps based on administrative boundaries.</span>
@@ -1239,7 +1227,7 @@
     <span class="c1"># I/O</span>
 <div class="viewcode-block" id="DelwaqModel.read">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.read.html#hydromt_delwaq.DelwaqModel.read">[docs]</a>
-    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read the complete model schematization and configuration from file.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">read_config</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">read_geoms</span><span class="p">()</span>
@@ -1253,7 +1241,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.write">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.write.html#hydromt_delwaq.DelwaqModel.write">[docs]</a>
-    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write the complete model schematization and configuration to file.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Write model data to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="c1"># if in r, r+ mode, only write updated components</span>
@@ -1267,39 +1255,80 @@
 
 <div class="viewcode-block" id="DelwaqModel.read_grid">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.read_grid.html#hydromt_delwaq.DelwaqModel.read_grid">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read grid at &lt;root/staticdata&gt; and parse to xarray.&quot;&quot;&quot;</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;staticdata&quot;</span><span class="p">,</span> <span class="s2">&quot;staticdata.nc&quot;</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;staticdata/</span><span class="si">{name}</span><span class="s2">.dat&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read grid at &lt;root/fn&gt; and parse to xarray.</span>
+
+<span class="sd">        For now, this function only allows to read the netcdf version of the grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fn : str, optional</span>
+<span class="sd">            filename relative to model root and should contain a {name} placeholder,</span>
+<span class="sd">            by default &#39;staticdata/{name}.dat&#39;. For the netcdf file, the placeholder</span>
+<span class="sd">            will be replaced by the name staticdata.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;staticdata&quot;</span><span class="p">))</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nc&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DelwaqModel.write_grid">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.write_grid.html#hydromt_delwaq.DelwaqModel.write_grid">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write grid at &lt;root/staticdata&gt; in NetCDF and binary format.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;staticdata/</span><span class="si">{name}</span><span class="s2">.dat&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write grid at &lt;root/fn&gt; in NetCDF and binary format.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fn : str, optional</span>
+<span class="sd">            filename relative to model root and should contain a {name} placeholder,</span>
+<span class="sd">            by default &#39;staticdata/{name}.dat&#39;. For the netcdf file, the placeholder</span>
+<span class="sd">            will be replaced by the name staticdata.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;No grid data found, skip writing.&quot;</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_write_mode</span><span class="p">()</span>
-        <span class="n">ds_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span>
+        <span class="c1"># Create output folder if it does not exist</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="p">))):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="p">)))</span>
 
+        <span class="n">ds_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span>
         <span class="c1"># Filter data with mask</span>
         <span class="k">for</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">data_vars</span><span class="p">:</span>
             <span class="n">ds_out</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">mask</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writing staticmap files.&quot;</span><span class="p">)</span>
         <span class="c1"># Netcdf format</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;staticdata&quot;</span><span class="p">,</span> <span class="s2">&quot;staticdata.nc&quot;</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;staticdata&quot;</span><span class="p">))</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nc&quot;</span>
         <span class="c1"># Update attributes for gdal compliance</span>
         <span class="c1"># ds_out = ds_out.raster.gdal_compliant(rename_dims=False)</span>
+        <span class="c1"># Not ideal but to avoid hanging issues in r+ mode</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">:</span>
+            <span class="n">ds_out</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
         <span class="n">ds_out</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">fname</span><span class="p">)</span>
 
         <span class="c1"># Binary format</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">data_vars</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">dvar</span> <span class="o">!=</span> <span class="s2">&quot;monpoints&quot;</span> <span class="ow">and</span> <span class="n">dvar</span> <span class="o">!=</span> <span class="s2">&quot;monareas&quot;</span><span class="p">:</span>
-                <span class="n">fname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;staticdata&quot;</span><span class="p">,</span> <span class="n">dvar</span> <span class="o">+</span> <span class="s2">&quot;.dat&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dvar</span> <span class="o">==</span> <span class="s2">&quot;monpoints&quot;</span> <span class="ow">or</span> <span class="n">dvar</span> <span class="o">==</span> <span class="s2">&quot;monareas&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># Check if data is 3D</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds_out</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">dim0</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">dim0</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ds_out</span><span class="p">[</span><span class="n">dim0</span><span class="p">])):</span>
+                    <span class="n">dim0_val</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="n">dim0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+                    <span class="n">fname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dvar</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">dim0</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">dim0_val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">({</span><span class="n">dim0</span><span class="p">:</span> <span class="n">dim0_val</span><span class="p">})</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+                    <span class="n">dw_WriteSegmentOrExchangeData</span><span class="p">(</span>
+                        <span class="mi">0</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">WriteAscii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">dvar</span><span class="p">))</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
                 <span class="n">dw_WriteSegmentOrExchangeData</span><span class="p">(</span>
@@ -1318,14 +1347,14 @@
 
 <div class="viewcode-block" id="DelwaqModel.read_geoms">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.read_geoms.html#hydromt_delwaq.DelwaqModel.read_geoms">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_geoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_geoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read and geoms at &lt;root/geoms&gt; and parse to geopandas.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read_geoms</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="s2">&quot;geoms/*.geojson&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DelwaqModel.write_geoms">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.write_geoms.html#hydromt_delwaq.DelwaqModel.write_geoms">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_geoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_geoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write grid at &lt;root/geoms&gt; in model ready format.&quot;&quot;&quot;</span>
         <span class="c1"># to write use self.geoms[var].to_file()</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">write_geoms</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="s2">&quot;geoms/</span><span class="si">{name}</span><span class="s2">.geojson&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span></div>
@@ -1333,7 +1362,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.read_config">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.read_config.html#hydromt_delwaq.DelwaqModel.read_config">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_config</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_config</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">skip</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;B4_pointer&quot;</span><span class="p">,</span>
@@ -1364,7 +1393,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.write_config">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.write_config.html#hydromt_delwaq.DelwaqModel.write_config">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write config files in ASCII format at &lt;root/config&gt;.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_write_mode</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
@@ -1379,7 +1408,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.read_hydromaps">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.read_hydromaps.html#hydromt_delwaq.DelwaqModel.read_hydromaps">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_hydromaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_hydromaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read hydromaps at &lt;root/hydromodel&gt; and parse to xarray.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_read_mode</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_hydromaps</span><span class="p">(</span><span class="n">skip_read</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1409,7 +1438,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.write_hydromaps">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.write_hydromaps.html#hydromt_delwaq.DelwaqModel.write_hydromaps">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_hydromaps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_hydromaps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write hydromaps at &lt;root/hydromodel&gt; in PCRaster maps format.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_write_mode</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hydromaps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1430,12 +1459,12 @@
 
 <div class="viewcode-block" id="DelwaqModel.read_pointer">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.read_pointer.html#hydromt_delwaq.DelwaqModel.read_pointer">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read Delwaq pointer file.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span> <span class="nf">write_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write pointer at &lt;root/dynamicdata&gt; in ASCII and binary format.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_write_mode</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pointer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;pointer&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pointer</span><span class="p">:</span>
@@ -1457,7 +1486,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.read_forcing">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.read_forcing.html#hydromt_delwaq.DelwaqModel.read_forcing">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_forcing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_forcing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read and forcing at &lt;root/?/&gt; and parse to dict of xr.DataArray.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_read_mode</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_forcing</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></div>
@@ -1466,16 +1495,34 @@
 
 <div class="viewcode-block" id="DelwaqModel.write_forcing">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.write_forcing.html#hydromt_delwaq.DelwaqModel.write_forcing">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_forcing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">write_nc</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_forcing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dynamicdata/</span><span class="si">{name}</span><span class="s2">.dat&quot;</span><span class="p">,</span> <span class="n">write_nc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Write grid at &lt;root/staticdata&gt; in binary format.</span>
+<span class="sd">        Write forcing at &lt;root/fn&gt; in binary format.</span>
 
 <span class="sd">        Can also write a NetCDF copy if write_nc is True.</span>
+<span class="sd">        The output files are:</span>
+
+<span class="sd">        * **flow.dat** binary: water fluxes [m3/s]</span>
+<span class="sd">        * **volume.dat** binary: water volumes [m3]</span>
+<span class="sd">        * **sediment.dat** binary: sediment particles from land erosion [g/timestep]</span>
+<span class="sd">        * **climate.dat** binary: climate fuxes for climate_vars</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fn : str, optional</span>
+<span class="sd">            filename relative to model root and should contain a {name} placeholder,</span>
+<span class="sd">            by default &#39;dynamicdata/{name}.dat&#39;</span>
+<span class="sd">        write_nc : bool, optional</span>
+<span class="sd">            If True, write a NetCDF copy of the forcing data, by default False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_write_mode</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forcing</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;No forcing data found, skip writing.&quot;</span><span class="p">)</span>
             <span class="k">return</span>
+
+        <span class="c1"># Create output folder if it does not exist</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="p">))):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="p">)))</span>
 
         <span class="c1"># Go from dictionnary to xr.DataSet</span>
         <span class="n">ds_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
@@ -1483,7 +1530,7 @@
             <span class="n">ds_out</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">da</span>
 
         <span class="c1"># To avoid appending data to existing file, first delete all the .dat files</span>
-        <span class="n">dynDir</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;dynamicdata&quot;</span><span class="p">)</span>
+        <span class="n">dynDir</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dynDir</span><span class="p">):</span>
             <span class="n">filelist</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dynDir</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
@@ -1499,7 +1546,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writing dynamicmap files.&quot;</span><span class="p">)</span>
         <span class="c1"># Netcdf format</span>
         <span class="k">if</span> <span class="n">write_nc</span><span class="p">:</span>
-            <span class="n">fname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;dynamicdata&quot;</span><span class="p">,</span> <span class="s2">&quot;dynamicmaps.nc&quot;</span><span class="p">)</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;dynamicdata&quot;</span><span class="p">))</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nc&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing NetCDF copy of the forcing data to </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
             <span class="n">ds_out</span> <span class="o">=</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">([</span><span class="s2">&quot;mask&quot;</span><span class="p">,</span> <span class="s2">&quot;spatial_ref&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
             <span class="n">ds_out</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">fname</span><span class="p">)</span>
 
@@ -1515,7 +1564,7 @@
             <span class="c1"># if last timestep only write volumes</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds_out</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="c1"># Flow</span>
-                <span class="n">flname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;dynamicdata&quot;</span><span class="p">,</span> <span class="s2">&quot;flow.dat&quot;</span><span class="p">)</span>
+                <span class="n">flname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;flow&quot;</span><span class="p">))</span>
                 <span class="n">flow_vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fluxes</span>
                 <span class="n">flowblock</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="n">flow_vars</span><span class="p">:</span>
@@ -1534,7 +1583,7 @@
                         <span class="n">timestepstamp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">flname</span><span class="p">,</span> <span class="n">flowblock</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">WriteAscii</span><span class="o">=</span><span class="kc">False</span>
                     <span class="p">)</span>
             <span class="c1"># volume</span>
-            <span class="n">voname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;dynamicdata&quot;</span><span class="p">,</span> <span class="s2">&quot;volume.dat&quot;</span><span class="p">)</span>
+            <span class="n">voname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;volume&quot;</span><span class="p">))</span>
             <span class="n">vol_vars</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">surface_water</span><span class="p">]</span>
             <span class="n">volblock</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="n">vol_vars</span><span class="p">:</span>
@@ -1550,7 +1599,7 @@
                 <span class="p">)</span>
             <span class="c1"># sediment</span>
             <span class="k">if</span> <span class="s2">&quot;B7_sediment&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds_out</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">sedname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;dynamicdata&quot;</span><span class="p">,</span> <span class="s2">&quot;sediment.dat&quot;</span><span class="p">)</span>
+                <span class="n">sedname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sediment&quot;</span><span class="p">))</span>
                 <span class="n">sed_vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;B7_sediment.l2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
                 <span class="n">sedblock</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="n">sed_vars</span><span class="p">:</span>
@@ -1566,7 +1615,7 @@
                     <span class="p">)</span>
             <span class="c1"># climate</span>
             <span class="k">if</span> <span class="s2">&quot;B7_climate&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds_out</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">climname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;dynamicdata&quot;</span><span class="p">,</span> <span class="s2">&quot;climate.dat&quot;</span><span class="p">)</span>
+                <span class="n">climname</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;climate&quot;</span><span class="p">))</span>
                 <span class="n">clim_vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="s2">&quot;B7_climate.l2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
                 <span class="n">climblock</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="n">clim_vars</span><span class="p">:</span>
@@ -1582,24 +1631,24 @@
                     <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">read_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read states at &lt;root/?/&gt; and parse to dict of xr.DataArray.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_read_mode</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_states</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="c1"># raise NotImplementedError()</span>
 
-    <span class="k">def</span> <span class="nf">write_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write states at &lt;root/?/&gt; in model ready format.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_write_mode</span><span class="p">()</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">read_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read results at &lt;root/?/&gt; and parse to dict of xr.DataArray.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_read_mode</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_results</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="c1"># raise NotImplementedError()</span>
 
-    <span class="k">def</span> <span class="nf">write_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write results at &lt;root/?/&gt; in model ready format.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_write_mode</span><span class="p">()</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
@@ -1607,7 +1656,7 @@
     <span class="c1">## DELWAQ specific data and methods</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">basins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">basins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Derive basins from geoms or hydromaps.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;basins&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geoms</span><span class="p">:</span>
             <span class="n">gdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s2">&quot;basins&quot;</span><span class="p">]</span>
@@ -1618,13 +1667,13 @@
         <span class="k">return</span> <span class="n">gdf</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">hydromaps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hydromaps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;xarray.dataset representation of all hydrology maps.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hydromaps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_hydromaps</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hydromaps</span>
 
-    <span class="k">def</span> <span class="nf">_initialize_hydromaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skip_read</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_hydromaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skip_read</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize grid object.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hydromaps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_hydromaps</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
@@ -1633,7 +1682,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.set_hydromaps">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.set_hydromaps.html#hydromt_delwaq.DelwaqModel.set_hydromaps">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_hydromaps</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_hydromaps</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1667,7 +1716,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Dictionnary of schematisation attributes of a Delwaq model.</span>
 
@@ -1695,7 +1744,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.set_pointer">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.set_pointer.html#hydromt_delwaq.DelwaqModel.set_pointer">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add model attribute property to pointer.&quot;&quot;&quot;</span>
         <span class="c1"># Check that pointer attr is a four column np.array</span>
         <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;pointer&quot;</span><span class="p">:</span>
@@ -1730,7 +1779,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">nrofseg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nrofseg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fast accessor to nrofseg property of pointer.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;nrofseg&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">:</span>
             <span class="n">nseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">[</span><span class="s2">&quot;nrofseg&quot;</span><span class="p">]</span>
@@ -1742,7 +1791,7 @@
         <span class="k">return</span> <span class="n">nseg</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">nrofexch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nrofexch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fast accessor to nrofexch property of pointer.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;nrofexch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">:</span>
             <span class="n">nexch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">[</span><span class="s2">&quot;nrofexch&quot;</span><span class="p">]</span>
@@ -1760,7 +1809,7 @@
         <span class="k">return</span> <span class="n">nexch</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">surface_water</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">surface_water</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fast accessor to surface_water name property of pointer.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;surface_water&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">:</span>
             <span class="n">sfw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">[</span><span class="s2">&quot;surface_water&quot;</span><span class="p">]</span>
@@ -1776,7 +1825,7 @@
         <span class="k">return</span> <span class="n">sfw</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">fluxes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fluxes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fast accessor to fluxes property of pointer.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;fluxes&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">:</span>
             <span class="n">fl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">[</span><span class="s2">&quot;fluxes&quot;</span><span class="p">]</span>
@@ -1790,7 +1839,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">set_pointer</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="s2">&quot;fluxes&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fl</span>
 
-    <span class="k">def</span> <span class="nf">write_monitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monpoints</span><span class="p">,</span> <span class="n">monareas</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_monitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monpoints</span><span class="p">,</span> <span class="n">monareas</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write monitoring files and config in ASCII format.</span>
 
@@ -1871,7 +1920,7 @@
 
 <div class="viewcode-block" id="DelwaqModel.write_waqgeom">
 <a class="viewcode-back" href="../../_generated/hydromt_delwaq.DelwaqModel.write_waqgeom.html#hydromt_delwaq.DelwaqModel.write_waqgeom">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_waqgeom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_waqgeom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write Delwaq netCDF geometry file (config/B3_waqgeom.nc).&quot;&quot;&quot;</span>
         <span class="c1"># Add waqgeom.nc file to allow Delwaq to save outputs in nc format</span>
         <span class="c1"># TODO: Update for several layers</span>
@@ -1901,7 +1950,7 @@
         <span class="k">if</span> <span class="n">ptid</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">x_dim</span> <span class="o">!=</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
             <span class="n">ptid</span> <span class="o">=</span> <span class="n">ptid</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="n">ptid</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">x_dim</span><span class="p">:</span> <span class="s2">&quot;x&quot;</span><span class="p">})</span>
         <span class="c1"># ptid = ptid.rename({&quot;lat&quot;: &quot;y&quot;, &quot;lon&quot;: &quot;x&quot;})</span>
-        <span class="n">da_ptid</span> <span class="o">=</span> <span class="n">xu</span><span class="o">.</span><span class="n">UgridDataArray</span><span class="o">.</span><span class="n">from_structured</span><span class="p">(</span><span class="n">ptid</span><span class="p">)</span>
+        <span class="n">da_ptid</span> <span class="o">=</span> <span class="n">xu</span><span class="o">.</span><span class="n">UgridDataArray</span><span class="o">.</span><span class="n">from_structured2d</span><span class="p">(</span><span class="n">ptid</span><span class="p">)</span>
         <span class="n">da_ptid</span> <span class="o">=</span> <span class="n">da_ptid</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">da_ptid</span><span class="o">.</span><span class="n">ugrid</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">face_dimension</span><span class="p">)</span>
         <span class="n">da_ptid</span><span class="o">.</span><span class="n">ugrid</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>  <span class="c1"># &quot;EPSG:4326&quot;</span>
         <span class="n">uda_waqgeom</span> <span class="o">=</span> <span class="n">da_ptid</span><span class="o">.</span><span class="n">ugrid</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">(</span>
@@ -1974,8 +2023,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1995,7 +2044,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -2008,7 +2057,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
