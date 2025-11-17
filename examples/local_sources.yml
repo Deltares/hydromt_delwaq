@@ -1,87 +1,87 @@
 wflow_output_em:
-  path: ./wflow_piave/run_default/output.nc
-  crs: 4326
+  data_adapter:
+    rename:
+      q_ssf: q_ss
+      ssf_to_river: exfiltssf
+    unit_mult:
+      exfiltssf: 1.15741e-05
+      q_ss: 1.15741e-05
   data_type: RasterDataset
-  driver: netcdf
-  driver_kwargs:
-    chunks:
-      lat: -1
-      lon: -1
-      time: 1
-    preprocess: harmonise_dims
-  meta:
+  driver:
+    name: raster_xarray
+    options:
+      chunks:
+        lat: -1
+        lon: -1
+        time: 1
+      preprocess: harmonise_dims
+  metadata:
+    attrs:
+      exfiltsatstore:
+        unit: mm
+      exfiltssf:
+        unit: m3/s
+      exfiltustore:
+        unit: mm
+      infilt:
+        unit: mm
+      precip:
+        unit: mm
+      q_land:
+        unit: m3/s
+      q_ss:
+        unit: m3/s
+      runPav:
+        unit: mm
+      runUnp:
+        unit: mm
+      vwcproot:
+        unit: '%'
     category: hydro
-  rename:
-    q_ssf: q_ss
-    ssf_to_river: exfiltssf
-  unit_mult:
-    q_ss: 0.0000115741
-    exfiltssf: 0.0000115741
-  attrs:
-    precip:
-      unit: mm
-    infilt:
-      unit: mm
-    runPav:
-      unit: mm
-    runUnp:
-      unit: mm
-    exfiltustore:
-      unit: mm
-    exfiltsatstore:
-      unit: mm
-    exfiltssf:
-      unit: m3/s
-    vwcproot:
-      unit: "%"
-    q_land:
-      unit: m3/s
-    q_ss:
-      unit: m3/s
-
+    crs: 4326
+  uri: wflow_piave/run_default/output.nc
 wflow_output_wq:
-  path: ./wflow_piave/run_default/output.nc
-  crs: 4326
+  data_adapter:
+    rename:
+      land_to_river: land>sfw
+      #q_lake: sfw>sfw_3
+      q_reservoir: sfw>sfw_2
+      q_river: sfw>sfw_1
+      ssf_to_river: soil>sfw
+      #vol_lake: sfw_3
+      vol_reservoir: sfw_2
+      vol_river: sfw_1
+    unit_mult:
+      #sfw>sfw_2: 1.15741e-05
+      #sfw>sfw_3: 1.15741e-05
+      soil>sfw: 1.15741e-05
   data_type: RasterDataset
-  driver: netcdf
-  driver_kwargs:
-    chunks:
-      lat: -1
-      lon: -1
-      time: 1
-    preprocess: harmonise_dims
-  meta:
+  driver:
+    name: raster_xarray
+    options:
+      chunks:
+        lat: -1
+        lon: -1
+        time: 1
+      preprocess: harmonise_dims
+  metadata:
+    attrs:
+      land>sfw:
+        unit: m3/s
+      sfw>sfw_1:
+        unit: m3/s
+      sfw>sfw_2:
+        unit: m3/s
+      sfw>sfw_3:
+        unit: m3/s
+      sfw_1:
+        unit: m3
+      sfw_2:
+        unit: m3
+      sfw_3:
+        unit: m3
+      soil>sfw:
+        unit: m3/s
     category: hydro
-  rename:
-    q_river: sfw>sfw_1
-    q_reservoir: sfw>sfw_2
-    q_lake: sfw>sfw_3
-    vol_river: sfw_1
-    vol_reservoir: sfw_2
-    vol_lake: sfw_3
-    # vol_floodplain: sfw_4
-    land_to_river: land>sfw
-    ssf_to_river: soil>sfw
-  unit_mult:
-    soil>sfw: 0.0000115741
-    sfw>sfw_2: 0.0000115741
-    sfw>sfw_3: 0.0000115741
-  attrs:
-    sfw_1:
-      unit: m3
-    sfw_2:
-      unit: m3
-    sfw_3:
-      unit: m3
-    # sfw_4:
-    #   unit: m3
-    sfw>sfw_1:
-      unit: m3/s
-    sfw>sfw_2:
-      unit: m3/s
-    sfw>sfw_3:
-      unit: m3/s
-    land>sfw:
-      unit: m3/s
-    soil>sfw:
-      unit: m3/s
+    crs: 4326
+  uri: wflow_piave/run_default/output.nc

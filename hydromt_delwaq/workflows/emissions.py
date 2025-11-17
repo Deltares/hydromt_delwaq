@@ -18,7 +18,7 @@ DTYPES = {"EM_level1": np.int16, "EM_fact_X": np.float32}
 
 
 def gridarea(ds):
-    """Return a DataArray cointaining the area in m2 of the reference grid ds.
+    """Return a DataArray containing the area in m2 of the reference grid ds.
 
     Parameters
     ----------
@@ -31,7 +31,7 @@ def gridarea(ds):
         DataArray containing area in m2 of the reference grid.
 
     """
-    realarea = raster_utils.reggrid_area(
+    realarea = raster_utils._reggrid_area(
         ds.raster.ycoords.values, ds.raster.xcoords.values
     )
     da_out = xr.DataArray(
@@ -82,7 +82,6 @@ def emission_raster(
     fillna_method="nearest",
     fillna_value=0.0,
     area_division=False,
-    logger=logger,
 ):
     """Return emission map.
 
@@ -149,7 +148,6 @@ def emission_vector(
     col_name="",
     method="value",
     mask_name="basmsk",
-    logger=logger,
 ):
     """Return gridded emission data from vector.
 
@@ -235,7 +233,7 @@ def emission_vector(
     return da_out
 
 
-def admin(da, ds_like, source_name, fn_map, logger=logger):
+def admin(da, ds_like, source_name, fn_map):
     """Return administrative boundaries map and related parameter maps.
 
     The parameter maps are prepared based on administrative boundaries and

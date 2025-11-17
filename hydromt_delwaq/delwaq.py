@@ -124,6 +124,7 @@ class DelwaqModel(Model):
         return self.components["config"]
 
     ## SETUP METHODS
+    @hydromt_step
     def setup_basemaps(
         self,
         region: Dict,
@@ -183,14 +184,14 @@ class DelwaqModel(Model):
             By default ['rivmsk', 'lndslp', 'strord', 'N'].
         """
         # Initialise hydromodel from region
-        hydromodel = processes.parse_region_other_model(region)
+        hydromodel = processes.region.parse_region_other_model(region)
 
-        if hydromodel._NAME != "wflow":
+        if hydromodel.name != "wflow_sbm":
             raise NotImplementedError(
-                "Delwaq build function only implemented for wflow base model."
+                "Delwaq build function only implemented for wflow_sbm base model."
             )
         else:
-            self.hydromodel_name = hydromodel._NAME
+            self.hydromodel_name = hydromodel.name
             self.hydromodel_root = hydromodel.root
 
         logger.info("Preparing WQ basemaps from hydromodel.")
@@ -228,13 +229,13 @@ class DelwaqModel(Model):
         ds_stat["mask"] = self.hydromaps["mask"]
         ds_stat = ds_stat.set_coords("mask")
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
-        self.set_grid(ds_stat.rename(rmdict))
+        self.staticdata.set(ds_stat.rename(rmdict))
 
         ### Add geometry ###
         ds_geom = segments.geometrymaps(
             hydromodel,
         )
-        self.set_grid(ds_geom)
+        self.staticdata.set(ds_geom)
 
         ### Config ###
         configs = config.base_config(
@@ -247,10 +248,9 @@ class DelwaqModel(Model):
             fluxes=fluxes,
             volumes=[surface_water],
         )
-        for file in configs:
-            for option in configs[file]:
-                self.config.set(file, option, configs[file][option])
+        self.config.update(data=configs)
 
+    @hydromt_step
     def setup_monitoring(
         self,
         mon_points: str = None,
@@ -283,9 +283,12 @@ class DelwaqModel(Model):
             else:
                 kwargs = {}
                 if isfile(mon_points):
-                    kwargs.update(crs=self.crs)
+                    kwargs["metadata"] = {"crs": self.crs}
                 gdf = self.data_catalog.get_geodataframe(
-                    mon_points, geom=self.basins, assert_gtype="Point", **kwargs
+                    mon_points,
+                    geom=self.basins,
+                    # assert_gtype="Point",
+                    source_kwargs=kwargs,
                 )
                 gdf = gdf.to_crs(self.crs)
                 if gdf.index.size == 0:
@@ -299,14 +302,14 @@ class DelwaqModel(Model):
                     )
             logger.info(f"Gauges locations read from {mon_points}")
             # Add to grid
-            self.set_grid(monpoints.rename("monpoints"))
+            self.staticdata.set(monpoints.rename("monpoints"))
             # Number of monitoring points
             points = monpoints.values.flatten()
             points = points[points != mv]
             nb_points = len(points)
             # Add to geoms if mon_points is not segments
             if mon_points != "segments":
-                self.set_geoms(gdf, name="monpoints")
+                self.geoms.set(gdf, name="monpoints")
         else:
             logger.info("No monitoring points set in the config file, skipping")
             nb_points = 0
@@ -349,13 +352,13 @@ class DelwaqModel(Model):
             # Add to grid
             monareas.attrs.update(_FillValue=mv)
             monareas.attrs["mon_areas"] = mon_areas
-            self.set_grid(monareas, name="monareas")
+            self.staticdata.set(monareas, name="monareas")
 
             # Add to geoms
             gdf_areas = (
                 self.staticdata.data["monareas"].astype(np.int32).raster.vectorize()
             )
-            self.set_geoms(gdf_areas, name="monareas")
+            self.geoms.set(gdf_areas, name="monareas")
         else:
             logger.info("No monitoring areas set in the config file, skipping")
             nb_areas = 0
@@ -367,8 +370,9 @@ class DelwaqModel(Model):
             "l3": f"{nb_points+nb_areas} ; nr of monitoring points/areas",
         }
         for option in lines_ini:
-            self.config.set("B2_nrofmon", option, lines_ini[option])
+            self.config.set(f"B2_nrofmon.{option}", lines_ini[option])
 
+    @hydromt_step
     def setup_hydrology_forcing(
         self,
         hydro_forcing_fn: str | Path | xr.Dataset,
@@ -480,10 +484,9 @@ class DelwaqModel(Model):
             endtime=endtime,
             timestepsecs=timestepsecs,
         )
-        for file in time_config:
-            for option in time_config[file]:
-                self.config.set(file, option, time_config[file][option])
+        self.config.update(data=time_config)
 
+    @hydromt_step
     def setup_sediment_forcing(
         self,
         sediment_fn: str | Path | xr.Dataset,
@@ -551,8 +554,9 @@ class DelwaqModel(Model):
             "l2": " ".join(str(x) for x in sed_vars),
         }
         for option in lines_ini:
-            self.config.set("B7_sediment", option, lines_ini[option])
+            self.config.set(f"B7_sediment.{option}", lines_ini[option])
 
+    @hydromt_step
     def setup_climate_forcing(
         self,
         climate_fn: str | Path | xr.Dataset,
@@ -641,8 +645,9 @@ class DelwaqModel(Model):
             "l2": " ".join(str(x) for x in ds_out.data_vars),
         }
         for option in lines_ini:
-            self.config.set("B7_climate", option, lines_ini[option])
+            self.config.set(f"B7_climate.{option}", lines_ini[option])
 
+    @hydromt_step
     def setup_emission_raster(
         self,
         emission_fn: str | Path | xr.DataArray,
@@ -686,8 +691,9 @@ class DelwaqModel(Model):
             area_division=area_division,
         )
         ds_emi = ds_emi.to_dataset(name=emission_fn)
-        self.set_grid(ds_emi)
+        self.staticdata.set(ds_emi)
 
+    @hydromt_step
     def setup_emission_vector(
         self,
         emission_fn: str | xr.DataArray,
@@ -734,8 +740,9 @@ class DelwaqModel(Model):
                 mask_name="mask",
             )
         ds_emi = ds_emi.to_dataset(name=emission_fn)
-        self.set_grid(ds_emi)
+        self.staticdata.set(ds_emi)
 
+    @hydromt_step
     def setup_emission_mapping(
         self,
         region_fn: str | Path | gpd.GeoDataFrame,
@@ -793,7 +800,7 @@ class DelwaqModel(Model):
             fn_map=mapping_fn,
         )
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars}
-        self.set_grid(ds_admin_maps.rename(rmdict))
+        self.staticdata.set(ds_admin_maps.rename(rmdict))
 
     # I/O
     @hydromt_step
@@ -1068,7 +1075,7 @@ class DelwaqModel(Model):
         elif "basins" in self.hydromaps:
             gdf = self.hydromaps["basins"].raster.vectorize()
             gdf.crs = pyproj.CRS.from_user_input(self.crs)
-            self.set_geoms(gdf, name="basins")
+            self.geoms.set(gdf, name="basins")
         return gdf
 
     @property
@@ -1082,7 +1089,7 @@ class DelwaqModel(Model):
         """Initialize grid object."""
         if self._hydromaps is None:
             self._hydromaps = xr.Dataset()
-            if self._read and not skip_read:
+            if self.root.is_reading_mode() and not skip_read:
                 self.read_hydromaps()
 
     def set_hydromaps(

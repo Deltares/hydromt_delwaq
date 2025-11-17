@@ -10,6 +10,7 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 import xarray as xr
+from hydromt import hydromt_step
 from hydromt.model import processes
 from tqdm import tqdm
 
@@ -85,6 +86,7 @@ class DemissionModel(DelwaqModel):
         # d-emission specific
         self._geometry = None
 
+    @hydromt_step
     def setup_basemaps(
         self,
         region: Dict,
@@ -121,14 +123,14 @@ class DemissionModel(DelwaqModel):
             By default ['rivmsk', 'lndslp', 'strord'].
         """
         # Initialise hydromodel from region
-        hydromodel = processes.parse_region_other_model(region)
+        hydromodel = processes.region.parse_region_other_model(region)
 
-        if hydromodel._NAME != "wflow":
+        if hydromodel.name != "wflow_sbm":
             raise NotImplementedError(
-                "Demission build function only implemented for wflow base model."
+                "Demission build function only implemented for wflow_sbm base model."
             )
         else:
-            self.hydromodel_name = hydromodel._NAME
+            self.hydromodel_name = hydromodel.name
             self.hydromodel_root = hydromodel.root
 
         self.logger.info("Preparing EM basemaps from hydromodel.")
@@ -176,6 +178,7 @@ class DemissionModel(DelwaqModel):
             for option in configs[file]:
                 self.set_config(file, option, configs[file][option])
 
+    @hydromt_step
     def setup_roads(
         self,
         roads_fn: str | Path | gpd.GeoDataFrame,
@@ -265,6 +268,7 @@ class DemissionModel(DelwaqModel):
         )
         self.set_grid(ds_segments)
 
+    @hydromt_step
     def setup_hydrology_forcing(
         self,
         hydro_forcing_fn: str | Path | xr.Dataset,

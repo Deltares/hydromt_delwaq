@@ -109,7 +109,7 @@ class DelwaqStaticdataComponent(GridComponent):
         # Update attributes for gdal compliance
         # ds_out = ds_out.raster.gdal_compliant(rename_dims=False)
         # Not ideal but to avoid hanging issues in r+ mode
-        if self._read and self._write:
+        if self.root.is_reading_mode() and self.root.is_writing_mode():
             ds_out.load()
         ds_out.to_netcdf(path=fname)
 
@@ -157,6 +157,9 @@ class DelwaqStaticdataComponent(GridComponent):
             - monpoints - xr.DataArray of monitoring points location
             - monareas - xr.DataArray of monitoring areas location
         """
+        if not os.path.isdir(join(self.root.path, "config")):
+            os.makedirs(join(self.root.path, "config"))
+
         ptid = self.model.hydromaps["ptid"].values.flatten()
         # Monitoring points
         if monpoints is not None:
@@ -179,18 +182,18 @@ class DelwaqStaticdataComponent(GridComponent):
             # Write to file
             for name in ["stations", "stations-balance"]:
                 fname = join(self.root.path, "config", "B2_" + name + ".inc")
-                exfile = open(fname, "w")
-                print(";Written by hydroMT", file=exfile)
-                if name == "stations":
-                    np.savetxt(exfile, stations, fmt="%.20s")
-                else:
-                    np.savetxt(exfile, stations_balance, fmt="%.20s")
-                exfile.close()
+                with open(fname, "w") as exfile:
+                    print(";Written by hydroMT", file=exfile)
+                    if name == "stations":
+                        np.savetxt(exfile, stations, fmt="%.20s")
+                    else:
+                        np.savetxt(exfile, stations_balance, fmt="%.20s")
         else:
             fname = join(self.root.path, "config", "B2_stations.inc")
-            exfile = open(fname, "w")
-            print(";Written by hydroMT: no monitoring points were set.", file=exfile)
-            exfile.close()
+            with open(fname, "w") as exfile:
+                print(
+                    ";Written by hydroMT: no monitoring points were set.", file=exfile
+                )
 
         # Monitoring areas
         if monareas is not None:

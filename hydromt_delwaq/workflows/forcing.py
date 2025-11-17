@@ -29,7 +29,6 @@ def hydrology_forcing(
     add_volume_offset: bool = True,
     min_volume: float = 0.1,
     override: List = [],
-    logger: logging.Logger = logger,
 ):
     """Calculate hydrology forcing data.
 
@@ -79,8 +78,6 @@ def hydrology_forcing(
     override : list, optional
         List of fluxes to be overriden if several fluxes varibales are found, by default
         [].
-    logger : logging.Logger, optional
-        Logger object, by default logger
 
     Returns
     -------
@@ -237,7 +234,6 @@ def hydrology_forcing_em(
     ds_model: xr.Dataset,
     timestepsecs: int,
     include_transport: bool = True,
-    logger: logging.Logger = logger,
 ) -> xr.Dataset:
     """
     Calculate hydrology forcing data for emission model.
@@ -336,7 +332,6 @@ def sediment_forcing(
     ds: xr.Dataset,
     ds_model: xr.Dataset,
     timestepsecs: int,
-    logger: logging.Logger = logger,
 ) -> xr.Dataset:
     """Calculate sediment forcing data.
 
@@ -352,8 +347,6 @@ def sediment_forcing(
         * Required variables: [mask]
     timestepsecs : int
         Timestep of the simulation in seconds
-    logger : logging.Logger, optional
-        Logger object, by default logger
 
     Returns
     -------
@@ -372,7 +365,6 @@ def sediment_forcing(
             upsampling="bfill",  # we assume right labeled original data
             downsampling="sum",
             conserve_mass=True,
-            logger=logger,
         )
 
     # If needed reproject forcing data to model grid
@@ -470,7 +462,6 @@ def climate_forcing(
                 dem_model=ds_model["elevtn"],
                 dem_forcing=dem_forcing,
                 lapse_correction=temp_correction,
-                logger=logger,
                 freq=freq,
                 reproj_method="nearest_index",
                 lapse_rate=-0.0065,
@@ -485,7 +476,6 @@ def climate_forcing(
                 upsampling="bfill",  # we assume right labeled original data
                 downsampling="mean",
                 conserve_mass=False,
-                logger=logger,
             )
             ds_out[v] = da_out
     # Add basin mask

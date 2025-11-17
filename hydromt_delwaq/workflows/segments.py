@@ -1,7 +1,6 @@
 """Worflows dealing with pointer and Delwaq segments."""
 
 import logging
-from typing import List
 
 import numpy as np
 import xarray as xr
@@ -44,20 +43,20 @@ def hydromaps(
     ds_out : xarray.Dataset
         Dataset containing gridded emission map at model resolution.
     """
-    ds_out = hydromodel.grid[hydromodel._MAPS["flwdir"]].rename("flwdir").to_dataset()
-    ds_out["basins"] = hydromodel.grid[hydromodel._MAPS["basins"]]
-    ds_out["river"] = hydromodel.grid[hydromodel._MAPS["rivmsk"]]
-    ds_out["rivlen"] = hydromodel.grid[hydromodel._MAPS["rivlen"]]
-    ds_out["rivwth"] = hydromodel.grid[hydromodel._MAPS["rivwth"]]
-    ds_out["elevtn"] = hydromodel.grid[hydromodel._MAPS["elevtn"]]
+    hydromodel_grid = hydromodel.components.get(hydromodel._region_component_name).data
+
+    ds_out = hydromodel_grid[hydromodel._MAPS["flwdir"]].rename("flwdir").to_dataset()
+    ds_out["basins"] = hydromodel_grid[hydromodel._MAPS["basins"]]
+    ds_out["river"] = hydromodel_grid[hydromodel._MAPS["rivmsk"]]
+    ds_out["rivlen"] = hydromodel_grid[hydromodel._MAPS["rivlen"]]
+    ds_out["rivwth"] = hydromodel_grid[hydromodel._MAPS["rivwth"]]
+    ds_out["elevtn"] = hydromodel_grid[hydromodel._MAPS["elevtn"]]
 
     # Surface area maps
     ds_out["rivarea"] = ds_out["rivlen"] * ds_out["rivwth"]
     ds_out["rivarea"].raster.set_nodata(ds_out["rivlen"].raster.nodata)
-    if "LakeArea" in hydromodel.grid:
-        ds_out["lakearea"] = hydromodel.grid["LakeArea"]
-    if "ResSimpleArea" in hydromodel.grid:
-        ds_out["resarea"] = hydromodel.grid["ResSimpleArea"]
+    if "reservoir_area" in hydromodel_grid:
+        ds_out["resarea"] = hydromodel_grid["reservoir_area"]
 
     basins_mv = ds_out["basins"].raster.nodata
     ds_out["basmsk"] = xr.Variable(
@@ -87,8 +86,7 @@ def hydromaps(
 
 def maps_from_hydromodel(
     hydromodel,
-    maps=["rivmsk", "lndslp", "strord", "N", "SoilThickness", "thetaS"],
-    logger=logger,
+    maps: list[str] = ["rivmsk", "lndslp", "strord", "N", "SoilThickness", "thetaS"],
 ):
     """Return maps from hydromodel.
 
@@ -105,18 +103,20 @@ def maps_from_hydromodel(
     ds_out : xarray.Dataset
         Dataset containing gridded maps at model resolution.
     """
+    hydromodel_grid = hydromodel.components.get(hydromodel._region_component_name).data
+
     ds_out = xr.Dataset()
     for m in maps:
-        if f"{m}_River" in hydromodel.grid:
-            ds_out[m] = hydromodel.grid[f"{m}_River"].where(
-                hydromodel.grid[hydromodel._MAPS["rivmsk"]],
-                hydromodel.grid[m],
+        if f"{m}_River" in hydromodel_grid:
+            ds_out[m] = hydromodel_grid[f"{m}_River"].where(
+                hydromodel_grid[hydromodel._MAPS["rivmsk"]],
+                hydromodel_grid[m],
             )
         elif m in hydromodel._MAPS:
-            if hydromodel._MAPS[m] in hydromodel.grid:
-                ds_out[m] = hydromodel.grid[hydromodel._MAPS[m]]
-        elif m in hydromodel.grid:
-            ds_out[m] = hydromodel.grid[m]
+            if hydromodel._MAPS[m] in hydromodel_grid:
+                ds_out[m] = hydromodel_grid[hydromodel._MAPS[m]]
+        elif m in hydromodel_grid:
+            ds_out[m] = hydromodel_grid[m]
         else:
             logger.warning(f"Map {m} not found in hydromodel, skipping.")
         # Check if m is 3D and split into several variables
@@ -153,22 +153,24 @@ def geometrymaps(
     ds_out : xarray.Dataset
         Dataset containing gridded geometry map at model resolution.
     """
+    hydromodel_grid = hydromodel.components.get(hydromodel._region_component_name).data
+
     ### Geometry data ###
-    surface = gridarea(hydromodel.grid)
+    surface = gridarea(hydromodel_grid)
     surface.raster.set_nodata(-9999.0)
     surface = surface.rename("surface")
-    length, width = gridlength_gridwidth(hydromodel.grid)
+    length, width = gridlength_gridwidth(hydromodel_grid)
 
-    rivlen = hydromodel.grid[hydromodel._MAPS["rivlen"]]
-    rivwth = hydromodel.grid[hydromodel._MAPS["rivwth"]]
-    rivmsk = hydromodel.grid[hydromodel._MAPS["rivmsk"]]
+    rivlen = hydromodel_grid[hydromodel._MAPS["rivlen"]]
+    rivwth = hydromodel_grid[hydromodel._MAPS["rivwth"]]
+    rivmsk = hydromodel_grid[hydromodel._MAPS["rivmsk"]]
     # surface
     surface = surface.where(rivmsk == False, rivlen * rivwth)
     surface = surface.rename("surface")
     # Add waterbodies to surface
-    for wb in ["LakeArea", "ResSimpleArea"]:
-        if wb in hydromodel.grid:
-            wb_surface = hydromodel.grid[wb]
+    for wb in ["reservoir_area"]:
+        if wb in hydromodel_grid:
+            wb_surface = hydromodel_grid[wb]
             surface = surface.where(wb_surface == wb_surface.raster.nodata, wb_surface)
     # length
     length = rivlen.where(rivmsk, length)
@@ -193,9 +195,9 @@ def geometrymaps(
     ds_out["latitude_grid"].raster.set_nodata(-9999.0)
 
     # Bankfull volume
-    if hydromodel._MAPS["rivdph"] in hydromodel.grid:
+    if hydromodel._MAPS["rivdph"] in hydromodel_grid:
         ds_out["bankfull_volume"] = (
-            rivlen * rivwth * hydromodel.grid[hydromodel._MAPS["rivdph"]]
+            rivlen * rivwth * hydromodel_grid[hydromodel._MAPS["rivdph"]]
         )
         ds_out["bankfull_volume"].raster.set_nodata(ds_out["length"].raster.nodata)
 
@@ -206,9 +208,8 @@ def pointer(
     ds_hydro: xr.Dataset,
     build_pointer: bool = False,
     surface_water: str = "sfw",
-    boundaries: List[str] = ["bd"],
-    fluxes: List[str] = ["sfw>sfw", "bd>sfw"],
-    logger=logger,
+    boundaries: list[str] = ["bd"],
+    fluxes: list[str] = ["sfw>sfw", "bd>sfw"],
 ):
     """Return map with Delwaq segment ID and pointer.
 

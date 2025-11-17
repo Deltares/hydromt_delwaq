@@ -263,7 +263,6 @@ def roads_emissions_country(
     ds_like: xr.Dataset,
     highway_list: List[str],
     non_highway_list: List[str] = None,
-    logger=logger,
 ) -> xr.Dataset:
     """
     Compute roads statistics per country of interest.
@@ -328,7 +327,6 @@ def roads_emissions_country(
             col_name=f"{name}_length_sum",
             method="value",
             mask_name="mask",
-            logger=logger,
         )
         ds_country[f"{name}_length_sum_country"] = da_emi
 
@@ -340,7 +338,6 @@ def roads_emissions_segments(
     ds_like: xr.Dataset,
     highway_list: List[str],
     non_highway_list: List[str] = None,
-    logger=logger,
 ) -> xr.Dataset:
     """
     Compute roads statistics per segment/grid cell.

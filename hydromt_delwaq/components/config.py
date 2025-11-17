@@ -2,6 +2,7 @@
 
 import glob
 import logging
+import os
 from os.path import basename, join, splitext
 from pathlib import Path
 from typing import List
@@ -88,6 +89,10 @@ class DelwaqConfigComponent(ConfigComponent):
             return
 
         logger.info("Writing model config to file.")
+
+        if not os.path.isdir(join(self.root.path, "config")):
+            os.makedirs(join(self.root.path, "config"))
+
         for name, lines in self.data.items():
             fn_out = join(self.root.path, "config", f"{name}.inc")
             Path(fn_out).parent.mkdir(parents=True, exist_ok=True)

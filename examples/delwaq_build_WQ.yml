@@ -2,39 +2,42 @@ global:
   data_libs:
     - local_sources.yml
 
-setup_basemaps:
-  mask: rivers
-  surface_water: sfw
-  boundaries:
-    - land
-    - soil
-    - sett
-  fluxes:
-    - sfw>sfw
-    - land>sfw
-    - soil>sfw
-    - sfw>sett
-  maps:
-    - rivmsk
-    - lndslp
-    - strord
-    - N
-    - SoilThickness
-    - thetaS
+steps:
+  - setup_basemaps:
+      region:
+        wflow_sbm: wflow_piave
+      mask: rivers
+      surface_water: sfw
+      boundaries:
+        - land
+        - soil
+        - sett
+      fluxes:
+        - sfw>sfw
+        - land>sfw
+        - soil>sfw
+        - sfw>sett
+      maps:
+        - rivmsk
+        - lndslp
+        - strord
+        - river_manning_n
+        - soil_thickness
+        - soil_theta_s
 
-setup_monitoring:
-  mon_points: wflow_piave/staticgeoms/gauges.geojson
-  mon_areas: subcatch
+  - setup_monitoring:
+      mon_points: wflow_piave/staticgeoms/outlets.geojson
+      mon_areas: subcatch
 
-setup_hydrology_forcing:
-  hydro_forcing_fn: wflow_output_wq
-  starttime: "2010-02-03 00:00:00"
-  endtime: "2010-02-10 00:00:00"
-  timestepsecs: 86400
-  add_volume_offset: True
-  override:
-    - sfw>sfw
+  # - setup_hydrology_forcing:
+  #     hydro_forcing_fn: wflow_output_wq
+  #     starttime: "2010-02-03 00:00:00"
+  #     endtime: "2010-02-10 00:00:00"
+  #     timestepsecs: 86400
+  #     add_volume_offset: True
+  #     override:
+  #       - sfw>sfw
 
-write:
+  - write:
 
-write_waqgeom:
+  # - write_waqgeom:
