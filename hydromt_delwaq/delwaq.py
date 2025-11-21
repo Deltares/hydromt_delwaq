@@ -1,6 +1,5 @@
 """Implement delwaq model class."""
 
-import glob
 import logging
 import os
 import struct
@@ -13,13 +12,14 @@ import numpy as np
 import pyproj
 import xarray as xr
 import xugrid as xu
-from hydromt import hydromt_step, readers
+from hydromt import hydromt_step
 from hydromt.model import Model, processes
 from hydromt.model.components import GeomsComponent
 from tqdm import tqdm
 
 from hydromt_delwaq.components import (
     DelwaqConfigComponent,
+    DelwaqHydromapsComponent,
     DelwaqStaticdataComponent,
 )
 from hydromt_delwaq.utils import DATADIR, dw_WriteSegmentOrExchangeData
@@ -59,8 +59,6 @@ class DelwaqModel(Model):
         root: str | Path | None = None,
         mode: str = "w",
         config_filename: str | Path | None = None,
-        hydromodel_name: str = "wflow",
-        hydromodel_root: str | Path | None = None,
         data_libs: List[str | Path] | None = None,
     ):
         """Initialize a model.
@@ -74,14 +72,6 @@ class DelwaqModel(Model):
         config_fn : str or Path, optional
             Model simulation configuration file, by default None.
             Note that this is not the HydroMT model setup configuration file!
-        hydromodel_name : str, optional
-            Name of the hydromodel used to build the emission model. Only useful in
-            update mode as this is taken from the ``region`` argument in
-            **setup_basemaps** method. By default "wflow".
-        hydromodel_root : str or Path, optional
-            Root of the hydromodel used to build the emission model. Only useful in
-            update mode as this is taken from the ``region`` argument in
-            **setup_basemaps** method. By default None.
         data_libs : List[str, Path], optional
             List of data catalog configuration files, by default None
         """
@@ -91,6 +81,7 @@ class DelwaqModel(Model):
                 filename=str(config_filename),
             ),
             "staticdata": DelwaqStaticdataComponent(self),
+            "hydromaps": DelwaqHydromapsComponent(self, region_component="staticdata"),
             "geoms": GeomsComponent(
                 self, filename="geoms/{name}.geojson", region_component="staticdata"
             ),
@@ -105,10 +96,6 @@ class DelwaqModel(Model):
         )
 
         # delwaq specific
-        self.hydromodel_name = hydromodel_name
-        self.hydromodel_root = hydromodel_root
-
-        self._hydromaps = None  # extract of hydromodel grid
         self._pointer = (
             None  # dictionary of pointer values and related model attributes
         )
@@ -190,9 +177,6 @@ class DelwaqModel(Model):
             raise NotImplementedError(
                 "Delwaq build function only implemented for wflow_sbm base model."
             )
-        else:
-            self.hydromodel_name = hydromodel.name
-            self.hydromodel_root = hydromodel.root
 
         logger.info("Preparing WQ basemaps from hydromodel.")
 
@@ -201,19 +185,19 @@ class DelwaqModel(Model):
         ds_hydro = segments.hydromaps(hydromodel, mask=mask)
         # Add to hydromaps
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_hydro.data_vars}
-        self.set_hydromaps(ds_hydro.rename(rmdict))
+        self.hydromaps.set(ds_hydro.rename(rmdict))
 
         # Build segment ID and add to hydromaps
         # Prepare delwaq pointer file for WAQ simulation (not needed with EM)
         nrofseg, da_ptid, da_ptiddown, pointer, bd_id, bd_type = segments.pointer(
-            self.hydromaps,
+            self.hydromaps.data,
             build_pointer=True,
             surface_water=surface_water,
             boundaries=boundaries,
             fluxes=fluxes,
         )
-        self.set_hydromaps(da_ptid, name="ptid")
-        self.set_hydromaps(da_ptiddown, name="ptiddown")
+        self.hydromaps.set(da_ptid.rename("ptid"))
+        self.hydromaps.set(da_ptiddown.rename("ptiddown"))
         # Initialise pointer object with schematisation attributes
         self.set_pointer(pointer, name="pointer")
         self.set_pointer(nrofseg, name="nrofseg")
@@ -226,7 +210,7 @@ class DelwaqModel(Model):
             hydromodel,
             maps=maps,
         )
-        ds_stat["mask"] = self.hydromaps["mask"]
+        ds_stat["mask"] = self.hydromaps.data["mask"]
         ds_stat = ds_stat.set_coords("mask")
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
         self.staticdata.set(ds_stat.rename(rmdict))
@@ -279,7 +263,7 @@ class DelwaqModel(Model):
         # Read monitoring points source
         if mon_points is not None:
             if mon_points == "segments":
-                monpoints = self.hydromaps["ptid"]
+                monpoints = self.hydromaps.data["ptid"]
             else:
                 kwargs = {}
                 if isfile(mon_points):
@@ -319,8 +303,8 @@ class DelwaqModel(Model):
         if mon_areas is not None:
             if mon_areas == "subcatch":  # subcatch
                 basins = xr.where(
-                    self.hydromaps["basins"] > 0,
-                    self.hydromaps["basins"],
+                    self.hydromaps.data["basins"] > 0,
+                    self.hydromaps.data["basins"],
                     mv,
                 ).astype(np.int32)
                 # Number or monitoring areas
@@ -331,12 +315,12 @@ class DelwaqModel(Model):
             elif mon_areas == "riverland":  # riverland
                 # seperate areas for land cells (1) and river cells (2)
                 lr_areas = xr.where(
-                    self.hydromaps["river"],
+                    self.hydromaps.data["river"],
                     2,
-                    xr.where(self.hydromaps["basins"], 1, mv),
+                    xr.where(self.hydromaps.data["basins"], 1, mv),
                 ).astype(np.int32)
                 # Apply the current model mask
-                lr_areas = lr_areas.where(self.hydromaps["mask"], mv)
+                lr_areas = lr_areas.where(self.hydromaps.data["mask"], mv)
                 lr_areas.raster.set_nodata(mv)
                 # Number or monitoring areas
                 areas = lr_areas.values.flatten()
@@ -455,7 +439,7 @@ class DelwaqModel(Model):
         # Prepare hydrology forcing
         ds_out = forcing.hydrology_forcing(
             ds=ds,
-            ds_model=self.hydromaps,
+            ds_model=self.hydromaps.data,
             timestepsecs=timestepsecs,
             time_tuple=(starttime, endtime),
             fluxes=self.fluxes,
@@ -533,7 +517,7 @@ class DelwaqModel(Model):
         # Prepare sediment forcing
         ds_out = forcing.sediment_forcing(
             ds=ds,
-            ds_model=self.hydromaps,
+            ds_model=self.hydromaps.data,
             timestepsecs=timestepsecs,
         )
         # Rename xdim and ydim
@@ -619,7 +603,7 @@ class DelwaqModel(Model):
 
         ds_out = forcing.climate_forcing(
             ds=ds,
-            ds_model=self.hydromaps,
+            ds_model=self.hydromaps.data,
             timestepsecs=timestepsecs,
             temp_correction=temp_correction,
             dem_forcing=dem_forcing,
@@ -729,7 +713,7 @@ class DelwaqModel(Model):
                 f"No shapes of {emission_fn} found within region, "
                 "setting to default value."
             )
-            ds_emi = self.hydromaps["basins"].copy() * 0.0
+            ds_emi = self.hydromaps.data["basins"].copy() * 0.0
             ds_emi.attrs.update(_FillValue=0.0)
         else:
             ds_emi = emissions.emission_vector(
@@ -783,7 +767,7 @@ class DelwaqModel(Model):
         gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
         # make sure index_col always has name fid in source dataset (use rename in
         # data_sources.yml or local_sources.yml to rename column used for mapping
-        ds_admin = self.hydromaps.raster.rasterize(
+        ds_admin = self.hydromaps.data.raster.rasterize(
             gdf_org,
             col_name="ID",
             nodata=0,
@@ -808,8 +792,8 @@ class DelwaqModel(Model):
         """Read the complete model schematization and configuration from file."""
         self.config.read()
         self.staticdata.read()
+        self.hydromaps.read()
         self.geoms.read()
-        # self.read_hydromaps()
         # self.read_pointer()
         # self.read_fewsadapter()
         # self.read_forcing()
@@ -825,58 +809,13 @@ class DelwaqModel(Model):
         self.write_data_catalog()
         _ = self.config.data  # try to read default if not yet set
 
-        # self.write_hydromaps()
         # self.write_pointer()
         # self.write_forcing()
 
         self.staticdata.write()
+        self.hydromaps.write()
         self.geoms.write()
         self.config.write()
-
-    def read_hydromaps(self, crs=None, **kwargs):
-        """Read hydromaps at <root/hydromodel> and parse to xarray."""
-        self._assert_read_mode()
-        self._initialize_hydromaps(skip_read=True)
-        if "chunks" not in kwargs:
-            kwargs.update(chunks={"y": -1, "x": -1})
-        fns = glob.glob(join(self.root.path, "hydromodel", "*.tif"))
-        if len(fns) > 0:
-            ds_hydromaps = readers.open_mfraster(fns, **kwargs)
-        # Load grid data in r+ mode to allow overwritting netcdf files
-        if self._read and self._write:
-            ds_hydromaps.load()
-        if ds_hydromaps.raster.crs is None and crs is not None:
-            ds_hydromaps.raster.set_crs(crs)
-        ds_hydromaps.coords["mask"] = ds_hydromaps["modelmap"].astype(bool)
-        # When reading tif files, default lat/lon names are y/x
-        # Rename to name used in grid for consistency
-        if ds_hydromaps.raster.x_dim != self.staticdata.data.raster.x_dim:
-            ds_hydromaps = ds_hydromaps.rename(
-                {ds_hydromaps.raster.x_dim: self.staticdata.data.raster.x_dim}
-            )
-        if ds_hydromaps.raster.y_dim != self.staticdata.data.raster.y_dim:
-            ds_hydromaps = ds_hydromaps.rename(
-                {ds_hydromaps.raster.y_dim: self.staticdata.data.raster.y_dim}
-            )
-        self.set_hydromaps(ds_hydromaps)
-
-    def write_hydromaps(self):
-        """Write hydromaps at <root/hydromodel> in PCRaster maps format."""
-        self._assert_write_mode()
-        if len(self.hydromaps) == 0:
-            logger.debug("No grid data found, skip writing.")
-            return
-
-        ds_out = self.hydromaps
-        logger.info("Writing hydromap files.")
-        # Convert bool dtype before writting
-        for var in ds_out.raster.vars:
-            if ds_out[var].dtype == "bool":
-                ds_out[var] = ds_out[var].astype(np.int32)
-        ds_out.raster.to_mapstack(
-            root=join(self.root.path, "hydromodel"),
-            mask=True,
-        )
 
     def read_pointer(self):
         """Read Delwaq pointer file."""
@@ -1043,28 +982,6 @@ class DelwaqModel(Model):
                         timestepstamp[i], climname, climblock, 1, WriteAscii=False
                     )
 
-    def read_states(self):
-        """Read states at <root/?/> and parse to dict of xr.DataArray."""
-        self._assert_read_mode()
-        self._states = dict()
-        # raise NotImplementedError()
-
-    def write_states(self):
-        """Write states at <root/?/> in model ready format."""
-        self._assert_write_mode()
-        raise NotImplementedError()
-
-    def read_results(self):
-        """Read results at <root/?/> and parse to dict of xr.DataArray."""
-        self._assert_read_mode()
-        self._results = dict()
-        # raise NotImplementedError()
-
-    def write_results(self):
-        """Write results at <root/?/> in model ready format."""
-        self._assert_write_mode()
-        raise NotImplementedError()
-
     ## DELWAQ specific data and methods
 
     @property
@@ -1072,57 +989,11 @@ class DelwaqModel(Model):
         """Derive basins from geoms or hydromaps."""
         if "basins" in self.geoms.data:
             gdf = self.geoms.data["basins"]
-        elif "basins" in self.hydromaps:
-            gdf = self.hydromaps["basins"].raster.vectorize()
+        elif "basins" in self.hydromaps.data:
+            gdf = self.hydromaps.data["basins"].raster.vectorize()
             gdf.crs = pyproj.CRS.from_user_input(self.crs)
             self.geoms.set(gdf, name="basins")
         return gdf
-
-    @property
-    def hydromaps(self):
-        """xarray.dataset representation of all hydrology maps."""
-        if self._hydromaps is None:
-            self._initialize_hydromaps()
-        return self._hydromaps
-
-    def _initialize_hydromaps(self, skip_read=False) -> None:
-        """Initialize grid object."""
-        if self._hydromaps is None:
-            self._hydromaps = xr.Dataset()
-            if self.root.is_reading_mode() and not skip_read:
-                self.read_hydromaps()
-
-    def set_hydromaps(
-        self,
-        data: xr.DataArray | xr.Dataset | np.ndarray,
-        name: str | None = None,
-    ):
-        """Add data to hydromaps re-using the set_grid method."""
-        self._initialize_hydromaps()
-        name_required = isinstance(data, np.ndarray) or (
-            isinstance(data, xr.DataArray) and data.name is None
-        )
-        if name is None and name_required:
-            raise ValueError(f"Unable to set {type(data).__name__} data without a name")
-        if isinstance(data, np.ndarray):
-            if data.shape != self.hydromaps.raster.shape:
-                raise ValueError("Shape of data and hydromaps do not match")
-            data = xr.DataArray(dims=self.hydromaps.raster.dims, data=data, name=name)
-        if isinstance(data, xr.DataArray):
-            if name is not None:  # rename
-                data.name = name
-            data = data.to_dataset()
-        elif not isinstance(data, xr.Dataset):
-            raise ValueError(f"cannot set data of type {type(data).__name__}")
-        # force read in r+ mode
-        if len(self._hydromaps) == 0:  # empty hydromaps
-            self._hydromaps = data
-        else:
-            for dvar in data.data_vars:
-                if dvar in self.hydromaps:
-                    if self._read:
-                        logger.warning(f"Replacing hydromap: {dvar}")
-                self._hydromaps[dvar] = data[dvar]
 
     @property
     def pointer(self):
@@ -1246,7 +1117,7 @@ class DelwaqModel(Model):
         # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
         # TODO: Update for several layers
         logger.info("Writting waqgeom.nc file")
-        ptid = self.hydromaps["ptid"].copy()
+        ptid = self.hydromaps.data["ptid"].copy()
         # For now only 1 comp is supported
         ptid = ptid.squeeze(drop=True)
         if len(ptid.dims) != 2:
@@ -1260,8 +1131,8 @@ class DelwaqModel(Model):
         # Number of segments in horizontal dimension
         int(np.max(np_ptid)) + 1  # because of the zero based
         # Get LDD map
-        np_ldd = self.hydromaps["ldd"].squeeze(drop=True).values
-        np_ldd[np_ldd == self.hydromaps["ldd"].raster.nodata] = 0
+        np_ldd = self.hydromaps.data["ldd"].squeeze(drop=True).values
+        np_ldd[np_ldd == self.hydromaps.data["ldd"].raster.nodata] = 0
 
         # print("Input DataArray: ")
         # print(ptid.dims, ptid)

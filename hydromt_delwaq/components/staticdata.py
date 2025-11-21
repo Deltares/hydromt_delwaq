@@ -59,7 +59,7 @@ class DelwaqStaticdataComponent(GridComponent):
         """
         Read staticdata at <root/fn> and parse to xarray.
 
-        For now, this function only allows to read the netcdf version of the grid.
+        For now, this function only allows to read the netcdf copy of the grid.
 
         Parameters
         ----------
@@ -160,7 +160,7 @@ class DelwaqStaticdataComponent(GridComponent):
         if not os.path.isdir(join(self.root.path, "config")):
             os.makedirs(join(self.root.path, "config"))
 
-        ptid = self.model.hydromaps["ptid"].values.flatten()
+        ptid = self.model.hydromaps.data["ptid"].values.flatten()
         # Monitoring points
         if monpoints is not None:
             mv = monpoints.raster.nodata

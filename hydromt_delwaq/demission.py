@@ -44,10 +44,7 @@ class DemissionModel(DelwaqModel):
         root: str | Path | None = None,
         mode: str = "w",
         config_fn: str | Path | None = None,
-        hydromodel_name: str = "wflow",
-        hydromodel_root: str | Path | None = None,
         data_libs: List[str | Path] | None = None,
-        logger=logger,
     ):
         """Initialize a model.
 
@@ -60,27 +57,14 @@ class DemissionModel(DelwaqModel):
         config_fn : str or Path, optional
             Model simulation configuration file, by default None.
             Note that this is not the HydroMT model setup configuration file!
-        hydromodel_name : str, optional
-            Name of the hydromodel used to build the emission model. Only useful in
-            update mode as this is taken from the ``region`` argument in
-            **setup_basemaps** method. By default "wflow".
-        hydromodel_root : str or Path, optional
-            Root of the hydromodel used to build the emission model. Only useful in
-            update mode as this is taken from the ``region`` argument in
-            **setup_basemaps** method. By default None.
         data_libs : List[str, Path], optional
             List of data catalog configuration files, by default None
-        logger:
-            The logger to be used.
         """
         super().__init__(
             root=root,
             mode=mode,
             config_fn=config_fn,
-            hydromodel_name=hydromodel_name,
-            hydromodel_root=hydromodel_root,
             data_libs=data_libs,
-            logger=logger,
         )
 
         # d-emission specific
@@ -129,36 +113,33 @@ class DemissionModel(DelwaqModel):
             raise NotImplementedError(
                 "Demission build function only implemented for wflow_sbm base model."
             )
-        else:
-            self.hydromodel_name = hydromodel.name
-            self.hydromodel_root = hydromodel.root
 
-        self.logger.info("Preparing EM basemaps from hydromodel.")
+        logger.info("Preparing EM basemaps from hydromodel.")
 
         ### Select and build hydromaps from model ###
         # Initialise hydromaps
         ds_hydro = segments.hydromaps(hydromodel)
         # Add to hydromaps
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_hydro.data_vars}
-        self.set_hydromaps(ds_hydro.rename(rmdict))
+        self.hydromaps.set(ds_hydro.rename(rmdict))
 
         # Build segment ID and segment ID down and add to hydromaps
         nrofseg, da_ptid, da_ptiddown = segments.pointer(
-            self.hydromaps, build_pointer=False
+            self.hydromaps.data, build_pointer=False
         )
-        self.set_hydromaps(da_ptid, name="ptid")
-        self.set_hydromaps(da_ptiddown, name="ptiddown")
+        self.hydromaps.set(da_ptid, name="ptid")
+        self.hydromaps.set(da_ptiddown, name="ptiddown")
 
         ### Initialise grid with segment ID down, streamorder, river and slope ###
         ds_stat = segments.maps_from_hydromodel(
-            hydromodel, maps=maps, logger=self.logger
+            hydromodel,
+            maps=maps,
         )
-        ds_stat["ptiddown"] = self.hydromaps["ptiddown"].squeeze(drop=True)
+        ds_stat["ptiddown"] = self.hydromaps.data["ptiddown"].squeeze(drop=True)
 
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
-        self.set_grid(ds_stat.rename(rmdict))
-        self.grid.coords["mask"] = self.hydromaps["mask"]
-
+        self.staticdata.set(ds_stat.rename(rmdict))
+        self.staticdata.data.coords["mask"] = self.hydromaps.data["mask"]
         ### Geometry data ###
         geometry_data = geometry.compute_geometry(
             ds=hydromodel.grid, mask=self.grid["mask"]
@@ -174,9 +155,7 @@ class DemissionModel(DelwaqModel):
             layer_name="EM",
             add_surface=True,
         )
-        for file in configs:
-            for option in configs[file]:
-                self.set_config(file, option, configs[file][option])
+        self.config.update(data=configs)
 
     @hydromt_step
     def setup_roads(
@@ -244,29 +223,27 @@ class DemissionModel(DelwaqModel):
             ds_country = roads.roads_emissions_country(
                 gdf_roads=gdf_roads,
                 gdf_country=gdf_country,
-                ds_like=self.grid,
+                ds_like=self.staticdata.data,
                 highway_list=highway_list,
                 non_highway_list=non_highway_list,
-                logger=self.logger,
             )
             # Add to grid
-            self.set_grid(ds_country)
+            self.staticdata.set(ds_country)
 
         ### Road statistics per segment ###
         # Filter road gdf with model mask instead of whole country
-        mask = self.grid["mask"].astype("int32").raster.vectorize()
+        mask = self.staticdata.data["mask"].astype("int32").raster.vectorize()
         gdf_roads = self.data_catalog.get_geodataframe(
             roads_fn, dst_crs=self.crs, geom=mask, variables=["road_type"]
         )
         # Compute segment statistics
         ds_segments = roads.roads_emissions_segments(
             gdf_roads=gdf_roads,
-            ds_like=self.grid,
+            ds_like=self.staticdata.data,
             highway_list=highway_list,
             non_highway_list=non_highway_list,
-            logger=self.logger,
         )
-        self.set_grid(ds_segments)
+        self.staticdata.set(ds_segments)
 
     @hydromt_step
     def setup_hydrology_forcing(
@@ -324,9 +301,7 @@ class DemissionModel(DelwaqModel):
             If True, includes additional fluxes for land and subsurface transport
             [precip, runPav, runUnp, infilt, exfilt, vwcproot, q_land, q_ss].
         """
-        self.logger.info(
-            f"Setting dynamic data from hydrology source {hydro_forcing_fn}."
-        )
+        logger.info(f"Setting dynamic data from hydrology source {hydro_forcing_fn}.")
         # read dynamic data
         # Normally region extent is by default exactly the same as hydromodel
         ds_in = self.data_catalog.get_rasterdataset(
@@ -341,16 +316,15 @@ class DemissionModel(DelwaqModel):
         # Compute hydrology forcing
         ds = forcing.hydrology_forcing_em(
             ds=ds_in,
-            ds_model=self.hydromaps,
+            ds_model=self.hydromaps.data,
             timestepsecs=timestepsecs,
             include_transport=include_transport,
-            logger=self.logger,
         )
         # Rename xdim and ydim
-        if ds.raster.x_dim != self.grid.raster.x_dim:
-            ds = ds.rename({ds.raster.x_dim: self.grid.raster.x_dim})
-        if ds.raster.y_dim != self.grid.raster.y_dim:
-            ds = ds.rename({ds.raster.y_dim: self.grid.raster.y_dim})
+        if ds.raster.x_dim != self.staticdata.data.raster.x_dim:
+            ds = ds.rename({ds.raster.x_dim: self.staticdata.data.raster.x_dim})
+        if ds.raster.y_dim != self.staticdata.data.raster.y_dim:
+            ds = ds.rename({ds.raster.y_dim: self.staticdata.data.raster.y_dim})
 
         # Add to forcing
         self.set_forcing(ds)
@@ -362,9 +336,7 @@ class DemissionModel(DelwaqModel):
             timestepsecs=timestepsecs,
             sysclock_format="days",
         )
-        for file in time_config:
-            for option in time_config[file]:
-                self.set_config(file, option, time_config[file][option])
+        self.config.update(data=time_config)
 
         # Add hydrology variables info to config
         if include_transport:
@@ -379,28 +351,28 @@ class DemissionModel(DelwaqModel):
             "l2": l2,
         }
         for option in lines_ini:
-            self.set_config("B7_hydrology", option, lines_ini[option])
+            self.config.set(f"B7_hydrology.{option}", lines_ini[option])
 
     # I/O
     def read(self):
         """Read the complete model schematization and configuration from file."""
-        self.read_config()
-        self.read_geoms()
-        self.read_hydromaps()
+        self.config.read()
+        self.geoms.read()
+        self.hydromaps.read()
         # self.read_pointer()
-        self.read_grid()
+        self.staticdata.read()
         # self.read_fewsadapter()
         # self.read_forcing()
-        self.logger.info("Model read")
+        logger.info("Model read")
 
     def write(self):
         """Write the complete model schematization and configuration to file."""
-        self.logger.info(f"Write model data to {self.root}")
+        logger.info(f"Write model data to {self.root}")
         # if in r, r+ mode, only write updated components
-        self.write_grid()
-        self.write_geoms()
-        self.write_config()
-        self.write_hydromaps()
+        self.staticdata.write()
+        self.geoms.write()
+        self.config.write()
+        self.hydromaps.write()
         self.write_geometry()
         self.write_forcing()
 
@@ -444,7 +416,7 @@ class DemissionModel(DelwaqModel):
         """Write geometry at <root/staticdata> in ASCII and binary format."""
         self._assert_write_mode()
         if self._geometry is not None:
-            self.logger.info("Writting geometry file in root/staticdata")
+            logger.info("Writting geometry file in root/staticdata")
             fname = join(self.root, "config", "B7_geometry")
 
             # Write ASCII file
@@ -492,7 +464,7 @@ class DemissionModel(DelwaqModel):
         """
         self._assert_write_mode()
         if len(self.forcing) == 0:
-            self.logger.debug("No forcing data found, skip writing.")
+            logger.debug("No forcing data found, skip writing.")
             return
 
         # Create output folder if it does not exist
@@ -518,12 +490,12 @@ class DemissionModel(DelwaqModel):
             ds_out[dvar] = xr.where(ds_out["mask"], ds_out[dvar], -9999.0)
             ds_out[dvar].attrs.update(_FillValue=-9999.0)
 
-        self.logger.info("Writing dynamicmap files.")
+        logger.info("Writing dynamicmap files.")
         # Netcdf format
         if write_nc:
             fname = join(self.root, fn.format(name="dynamicdata"))
             fname = os.path.splitext(fname)[0] + ".nc"
-            self.logger.info(f"Writing NetCDF copy of the forcing data to {fname}.")
+            logger.info(f"Writing NetCDF copy of the forcing data to {fname}.")
             ds_out = ds_out.drop_vars(["mask", "spatial_ref"], errors="ignore")
             ds_out.to_netcdf(path=fname)
 
@@ -550,15 +522,15 @@ class DemissionModel(DelwaqModel):
                     data = data[data != nodata]
                     datablock = np.append(datablock, data)
                 else:
-                    self.logger.info(f"Variable {dvar} not found in forcing data.")
+                    logger.info(f"Variable {dvar} not found in forcing data.")
             if len(datablock) > 0:
                 dw_WriteSegmentOrExchangeData(
                     timestepstamp[i], fname, datablock, 1, WriteAscii=False
                 )
             else:
-                self.logger.info("No hydrology data found.")
+                logger.info("No hydrology data found.")
             # sediment
-            if "B7_sediment" in self.config:
+            if "B7_sediment" in self.config.data:
                 sedname = join(self.root, fn.format(name="sediment"))
                 sed_vars = self.get_config("B7_sediment.l2").split(" ")
                 sedblock = []
@@ -574,7 +546,7 @@ class DemissionModel(DelwaqModel):
                         timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
                     )
             # climate
-            if "B7_climate" in self.config:
+            if "B7_climate" in self.config.data:
                 climname = join(self.root, fn.format(name="climate"))
                 clim_vars = self.get_config("B7_climate.l2").split(" ")
                 climblock = []
