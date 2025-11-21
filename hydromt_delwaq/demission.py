@@ -2,7 +2,7 @@
 
 import logging
 import os
-from os.path import dirname, join
+from os.path import dirname, isfile, join
 from pathlib import Path
 from typing import Dict, List
 
@@ -11,26 +11,36 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 from hydromt import hydromt_step
-from hydromt.model import processes
+from hydromt.model import Model, processes
+from hydromt.model.components import GeomsComponent
 from tqdm import tqdm
 
-from hydromt_delwaq.delwaq import DelwaqModel
+from hydromt_delwaq.components import (
+    DelwaqConfigComponent,
+    DelwaqHydromapsComponent,
+    DelwaqStaticdataComponent,
+)
 from hydromt_delwaq.utils import dw_WriteSegmentOrExchangeData
-from hydromt_delwaq.workflows import config, forcing, geometry, roads, segments
+from hydromt_delwaq.workflows import (
+    config,
+    forcing,
+    geometry,
+    monitoring,
+    roads,
+    segments,
+)
 
 __all__ = ["DemissionModel"]
 __hydromt_eps__ = ["DemissionModel"]  # core entrypoints
 logger = logging.getLogger(__name__)
 
 
-class DemissionModel(DelwaqModel):
+class DemissionModel(Model):
     """Demission model class."""
 
     name: str = "demission"
-    _CONF = "demission.inp"
 
     _MAPS = {
-        "basmsk": "modelmap",
         "flwdir": "ldd",
         "lndslp": "slope",
         "N": "manning",
@@ -38,12 +48,19 @@ class DemissionModel(DelwaqModel):
         "strord": "streamorder",
         "thetaS": "porosity",
     }
+    _FORCING = {
+        "temp": "tempair",
+        "temp_dew": "temp_dew",
+        "ssr": "rad",
+        "wind": "vwind",
+        "tcc": "cloudfrac",
+    }
 
     def __init__(
         self,
         root: str | Path | None = None,
         mode: str = "w",
-        config_fn: str | Path | None = None,
+        config_filename: str | Path | None = None,
         data_libs: List[str | Path] | None = None,
     ):
         """Initialize a model.
@@ -54,21 +71,60 @@ class DemissionModel(DelwaqModel):
             Model root, by default None
         mode : {'r','r+','w', 'w+'}, optional
             read/append/write mode, by default "w"
-        config_fn : str or Path, optional
+        config_filename : str or Path, optional
             Model simulation configuration file, by default None.
             Note that this is not the HydroMT model setup configuration file!
         data_libs : List[str, Path], optional
             List of data catalog configuration files, by default None
         """
+        if config_filename is None:
+            config_filename = "emission.inp"
+
+        components = {
+            "config": DelwaqConfigComponent(
+                self,
+                filename=str(config_filename),
+            ),
+            "staticdata": DelwaqStaticdataComponent(self),
+            "hydromaps": DelwaqHydromapsComponent(self, region_component="staticdata"),
+            "geoms": GeomsComponent(
+                self, filename="geoms/{name}.geojson", region_component="staticdata"
+            ),
+        }
+
         super().__init__(
-            root=root,
+            root,
+            components=components,
             mode=mode,
-            config_fn=config_fn,
+            region_component="staticdata",
             data_libs=data_libs,
         )
 
         # d-emission specific
+        self.timestepsecs = 86400
         self._geometry = None
+
+    ## Properties
+    # Components
+    @property
+    def config(self) -> DelwaqConfigComponent:
+        """Return the config component."""
+        return self.components["config"]
+
+    @property
+    def staticdata(self) -> DelwaqStaticdataComponent:
+        """Return the staticdata component."""
+        return self.components["staticdata"]
+
+    @property
+    def hydromaps(self) -> DelwaqHydromapsComponent:
+        """Return the hydromaps component."""
+        return self.components["hydromaps"]
+
+    @property
+    def geoms(self) -> GeomsComponent:
+        """Return the geoms component."""
+        return self.components["geoms"]
 
     @hydromt_step
     def setup_basemaps(
@@ -140,9 +196,14 @@ class DemissionModel(DelwaqModel):
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
         self.staticdata.set(ds_stat.rename(rmdict))
         self.staticdata.data.coords["mask"] = self.hydromaps.data["mask"]
+
         ### Geometry data ###
+        hydromodel_grid = hydromodel.components.get(
+            hydromodel._region_component_name
+        ).data
+
         geometry_data = geometry.compute_geometry(
-            ds=hydromodel.grid, mask=self.grid["mask"]
+            ds=hydromodel_grid, mask=self.staticdata.data["mask"]
         )
         self._geometry = pd.DataFrame(
             geometry_data, columns=(["TotArea", "fPaved", "fUnpaved", "fOpenWater"])
@@ -156,6 +217,93 @@ class DemissionModel(DelwaqModel):
             add_surface=True,
         )
         self.config.update(data=configs)
+
+    @hydromt_step
+    def setup_monitoring(
+        self,
+        mon_points: str | Path = None,
+        mon_areas: str = None,
+    ):
+        """Prepare Delwaq monitoring points and areas options.
+
+        Adds model layers:
+
+        * **monitoring_points** map: monitoring points segments
+        * **monitoring_areas** map: monitoring areas ID
+        * **B2_nrofmon** config: number of monitoring points and areas
+
+        Parameters
+        ----------
+        mon_points : {'segments', 'data_source', 'path to station location'}
+            Either source from DataCatalog, path to a station location dataset
+            or if segments, all segments are monitored.
+        mon_areas : str {'subcatch', 'riverland'}
+            Either subcatch from hydromodel or 'riverland' to split river and land
+            cells.
+        """
+        logger.info("Setting monitoring points and areas")
+
+        # Read monitoring points source
+        if mon_points is not None:
+            logger.info(f"Reading monitoring points from {mon_points}")
+            if mon_points == "segments":
+                nb_points, monpoints = monitoring.monitoring_points_from_dataarray(
+                    self.hydromaps.data["ptid"]
+                )
+                gdf = None
+            else:
+                kwargs = {}
+                if isfile(mon_points):
+                    kwargs["metadata"] = {"crs": self.crs}
+                gdf = self.data_catalog.get_geodataframe(
+                    mon_points,
+                    geom=self.basins,
+                    # assert_gtype="Point",
+                    source_kwargs=kwargs,
+                )
+                (
+                    nb_points,
+                    monpoints,
+                    gdf,
+                ) = monitoring.monitoring_points_from_geodataframe(
+                    gdf,
+                    ds_like=self.hydromaps.data,
+                )
+
+            # Add to grid
+            self.staticdata.set(monpoints.rename("monpoints"))
+            # Add to geoms if mon_points is not segments
+            if gdf is not None:
+                self.geoms.set(gdf, name="monpoints")
+        else:
+            logger.info("No monitoring points set in the config file, skipping")
+            nb_points = 0
+
+        # Monitoring areas domain
+        if mon_areas is not None:
+            nb_areas, monareas = monitoring.monitoring_areas(
+                mon_areas,
+                ds=self.hydromaps.data,
+            )
+            self.staticdata.set(monareas, name="monareas")
+
+            # Add to geoms
+            gdf_areas = (
+                self.staticdata.data["monareas"].astype(np.int32).raster.vectorize()
+            )
+            self.geoms.set(gdf_areas, name="monareas")
+        else:
+            logger.info("No monitoring areas set in the config file, skipping")
+            nb_areas = 0
+
+        # Config
+        lines_ini = {
+            "l1": f";{nb_points} monitoring points",
+            "l2": f";{nb_areas} monitoring areas",
+            "l3": f"{nb_points+nb_areas} ; nr of monitoring points/areas",
+        }
+        for option in lines_ini:
+            self.config.set(f"B2_nrofmon.{option}", lines_ini[option])
 
     @hydromt_step
     def setup_roads(
@@ -360,7 +508,6 @@ class DemissionModel(DelwaqModel):
         self.geoms.read()
         self.hydromaps.read()
         self.staticdata.read()
-        # self.read_fewsadapter()
         # self.read_forcing()
         logger.info("Model read")
 

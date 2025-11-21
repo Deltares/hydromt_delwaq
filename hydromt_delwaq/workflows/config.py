@@ -1,4 +1,4 @@
-"""Prepare demission and delwaq config dictionnary."""
+"""Prepare demission and delwaq config dictionary."""
 
 import logging
 from datetime import datetime
@@ -23,7 +23,7 @@ def base_config(
     volumes: List[str] = None,
 ) -> Dict:
     """
-    Prepare base config dictionnary.
+    Prepare base config dictionary.
 
     Files concerned:
     - B3_nrofseg: Number of segments.
@@ -57,7 +57,7 @@ def base_config(
     Returns
     -------
     config : Dict
-        Base Config dictionnary.
+        Base Config dictionary.
     """
     config = dict()
 
@@ -124,7 +124,7 @@ def time_config(
     sysclock_format: str = "seconds",
 ) -> Dict:
     """
-    Prepare time config dictionnary.
+    Prepare time config dictionary.
 
     Files concerned:
     - B1_timestamp
@@ -147,7 +147,7 @@ def time_config(
     Returns
     -------
     config : Dict
-        Time Config dictionnary.
+        Time Config dictionary.
     """
     config = dict()
 

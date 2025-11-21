@@ -22,7 +22,7 @@ from hydromt_delwaq.components import (
     DelwaqStaticdataComponent,
 )
 from hydromt_delwaq.utils import DATADIR
-from hydromt_delwaq.workflows import config, emissions, forcing, segments
+from hydromt_delwaq.workflows import config, emissions, forcing, monitoring, segments
 
 __all__ = ["DelwaqModel"]
 __hydromt_eps__ = ["DelwaqModel"]  # core entrypoints
@@ -35,7 +35,6 @@ class DelwaqModel(Model):
     name: str = "delwaq"
 
     _MAPS = {
-        # "mask": "modelmap",
         "flwdir": "ldd",
         "lndslp": "slope",
         "N": "manning",
@@ -125,6 +124,11 @@ class DelwaqModel(Model):
     def pointer(self) -> DelwaqPointerComponent:
         """Return the pointer component."""
         return self.components["pointer"]
+
+    @property
+    def forcing(self) -> DelwaqForcingComponent:
+        """Return the forcing component."""
+        return self.components["forcing"]
 
     ## SETUP METHODS
     @hydromt_step
@@ -252,7 +256,7 @@ class DelwaqModel(Model):
     @hydromt_step
     def setup_monitoring(
         self,
-        mon_points: str = None,
+        mon_points: str | Path = None,
         mon_areas: str = None,
     ):
         """Prepare Delwaq monitoring points and areas options.
@@ -273,12 +277,15 @@ class DelwaqModel(Model):
             cells.
         """
         logger.info("Setting monitoring points and areas")
-        monpoints = None
-        mv = -999
+
         # Read monitoring points source
         if mon_points is not None:
+            logger.info(f"Reading monitoring points from {mon_points}")
             if mon_points == "segments":
-                monpoints = self.hydromaps.data["ptid"]
+                nb_points, monpoints = monitoring.monitoring_points_from_dataarray(
+                    self.hydromaps.data["ptid"]
+                )
+                gdf = None
             else:
                 kwargs = {}
                 if isfile(mon_points):
@@ -289,68 +296,30 @@ class DelwaqModel(Model):
                     # assert_gtype="Point",
                     source_kwargs=kwargs,
                 )
-                gdf = gdf.to_crs(self.crs)
-                if gdf.index.size == 0:
-                    logger.warning(
-                        f"No {mon_points} gauge locations found within domain"
-                    )
-                else:
-                    gdf.index.name = "index"
-                    monpoints = self.staticdata.data.raster.rasterize(
-                        gdf, col_name="index", nodata=mv
-                    )
-            logger.info(f"Gauges locations read from {mon_points}")
+                (
+                    nb_points,
+                    monpoints,
+                    gdf,
+                ) = monitoring.monitoring_points_from_geodataframe(
+                    gdf,
+                    ds_like=self.hydromaps.data,
+                )
+
             # Add to grid
             self.staticdata.set(monpoints.rename("monpoints"))
-            # Number of monitoring points
-            points = monpoints.values.flatten()
-            points = points[points != mv]
-            nb_points = len(points)
             # Add to geoms if mon_points is not segments
-            if mon_points != "segments":
+            if gdf is not None:
                 self.geoms.set(gdf, name="monpoints")
         else:
             logger.info("No monitoring points set in the config file, skipping")
             nb_points = 0
 
         # Monitoring areas domain
-        monareas = None
         if mon_areas is not None:
-            if mon_areas == "subcatch":  # subcatch
-                basins = xr.where(
-                    self.hydromaps.data["basins"] > 0,
-                    self.hydromaps.data["basins"],
-                    mv,
-                ).astype(np.int32)
-                # Number or monitoring areas
-                areas = basins.values.flatten()
-                areas = areas[areas != mv]
-                nb_areas = len(np.unique(areas))
-                monareas = basins
-            elif mon_areas == "riverland":  # riverland
-                # seperate areas for land cells (1) and river cells (2)
-                lr_areas = xr.where(
-                    self.hydromaps.data["river"],
-                    2,
-                    xr.where(self.hydromaps.data["basins"], 1, mv),
-                ).astype(np.int32)
-                # Apply the current model mask
-                lr_areas = lr_areas.where(self.hydromaps.data["mask"], mv)
-                lr_areas.raster.set_nodata(mv)
-                # Number or monitoring areas
-                areas = lr_areas.values.flatten()
-                areas = areas[areas != mv]
-                nb_areas = len(np.unique(areas))
-                monareas = lr_areas
-            else:
-                raise ValueError(
-                    f"Unknown monitoring area type {mon_areas}. "
-                    "Valid options are 'subcatch' or 'riverland'."
-                )
-
-            # Add to grid
-            monareas.attrs.update(_FillValue=mv)
-            monareas.attrs["mon_areas"] = mon_areas
+            nb_areas, monareas = monitoring.monitoring_areas(
+                mon_areas,
+                ds=self.hydromaps.data,
+            )
             self.staticdata.set(monareas, name="monareas")
 
             # Add to geoms

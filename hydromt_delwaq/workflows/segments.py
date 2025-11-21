@@ -1,4 +1,4 @@
-"""Worflows dealing with pointer and Delwaq segments."""
+"""Workflows dealing with pointer and Delwaq segments."""
 
 import logging
 
