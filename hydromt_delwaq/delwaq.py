@@ -2,7 +2,6 @@
 
 import logging
 import os
-import struct
 from os.path import dirname, isfile, join
 from pathlib import Path
 from typing import Dict, List
@@ -20,6 +19,7 @@ from tqdm import tqdm
 from hydromt_delwaq.components import (
     DelwaqConfigComponent,
     DelwaqHydromapsComponent,
+    DelwaqPointerComponent,
     DelwaqStaticdataComponent,
 )
 from hydromt_delwaq.utils import DATADIR, dw_WriteSegmentOrExchangeData
@@ -81,6 +81,7 @@ class DelwaqModel(Model):
                 filename=str(config_filename),
             ),
             "staticdata": DelwaqStaticdataComponent(self),
+            "pointer": DelwaqPointerComponent(self),
             "hydromaps": DelwaqHydromapsComponent(self, region_component="staticdata"),
             "geoms": GeomsComponent(
                 self, filename="geoms/{name}.geojson", region_component="staticdata"
@@ -96,9 +97,6 @@ class DelwaqModel(Model):
         )
 
         # delwaq specific
-        self._pointer = (
-            None  # dictionary of pointer values and related model attributes
-        )
         self._fewsadapter = None
 
         self.timestepsecs = 86400
@@ -109,6 +107,26 @@ class DelwaqModel(Model):
     def config(self) -> DelwaqConfigComponent:
         """Return the config component."""
         return self.components["config"]
+
+    @property
+    def staticdata(self) -> DelwaqStaticdataComponent:
+        """Return the staticdata component."""
+        return self.components["staticdata"]
+
+    @property
+    def hydromaps(self) -> DelwaqHydromapsComponent:
+        """Return the hydromaps component."""
+        return self.components["hydromaps"]
+
+    @property
+    def geoms(self) -> GeomsComponent:
+        """Return the geoms component."""
+        return self.components["geoms"]
+
+    @property
+    def pointer(self) -> DelwaqPointerComponent:
+        """Return the pointer component."""
+        return self.components["pointer"]
 
     ## SETUP METHODS
     @hydromt_step
@@ -199,12 +217,11 @@ class DelwaqModel(Model):
         self.hydromaps.set(da_ptid.rename("ptid"))
         self.hydromaps.set(da_ptiddown.rename("ptiddown"))
         # Initialise pointer object with schematisation attributes
-        self.set_pointer(pointer, name="pointer")
-        self.set_pointer(nrofseg, name="nrofseg")
-        self.set_pointer(surface_water, name="surface_water")
-        self.set_pointer(bd_type, name="boundaries")
-        self.set_pointer(fluxes, name="fluxes")
-
+        self.pointer.set("pointer", value=pointer)
+        self.pointer.set("nrofseg", value=nrofseg)
+        self.pointer.set("surface_water", value=surface_water)
+        self.pointer.set("boundaries", value=bd_type)
+        self.pointer.set("fluxes", value=fluxes)
         ### Initialise grid river and slope ###
         ds_stat = segments.maps_from_hydromodel(
             hydromodel,
@@ -794,7 +811,7 @@ class DelwaqModel(Model):
         self.staticdata.read()
         self.hydromaps.read()
         self.geoms.read()
-        # self.read_pointer()
+        self.pointer.read()
         # self.read_fewsadapter()
         # self.read_forcing()
 
@@ -809,37 +826,13 @@ class DelwaqModel(Model):
         self.write_data_catalog()
         _ = self.config.data  # try to read default if not yet set
 
-        # self.write_pointer()
         # self.write_forcing()
 
         self.staticdata.write()
         self.hydromaps.write()
         self.geoms.write()
+        self.pointer.write()
         self.config.write()
-
-    def read_pointer(self):
-        """Read Delwaq pointer file."""
-        raise NotImplementedError()
-
-    def write_pointer(self):
-        """Write pointer at <root/dynamicdata> in ASCII and binary format."""
-        self._assert_write_mode()
-        if self._pointer is not None and "pointer" in self._pointer:
-            pointer = self.pointer["pointer"]
-            logger.info("Writting pointer file in root/config")
-            fname = join(self.root.path, "config", "B4_pointer")
-            # Write ASCII file
-            exfile = open((fname + ".inc"), "w")
-            print(";Pointer for WAQ simulation in Surface Water", file=exfile)
-            print(";nr of pointers is: ", str(pointer.shape[0]), file=exfile)
-            np.savetxt(exfile, pointer, fmt="%10.0f")
-            exfile.close()
-
-            # Write binary file
-            f = open((fname + ".poi"), "wb")
-            for i in range(pointer.shape[0]):
-                f.write(struct.pack("4i", *np.int_(pointer[i, :])))
-            f.close()
 
     def read_forcing(self):
         """Read and forcing at <root/?/> and parse to dict of xr.DataArray."""
@@ -952,7 +945,7 @@ class DelwaqModel(Model):
             # sediment
             if "B7_sediment" in self.config and i != len(ds_out.time.values) - 1:
                 sedname = join(self.root.path, fn.format(name="sediment"))
-                sed_vars = self.get_config("B7_sediment.l2").split(" ")
+                sed_vars = self.config.get_value("B7_sediment.l2").split(" ")
                 sedblock = []
                 for dvar in sed_vars:
                     # sed maybe not updated or might be present for EM
@@ -968,7 +961,7 @@ class DelwaqModel(Model):
             # climate
             if "B7_climate" in self.config and i != len(ds_out.time.values) - 1:
                 climname = join(self.root.path, fn.format(name="climate"))
-                clim_vars = self.get_config("B7_climate.l2").split(" ")
+                clim_vars = self.config.get_value("B7_climate.l2").split(" ")
                 climblock = []
                 for dvar in clim_vars:
                     # clim maybe not updated or might be present for EM
@@ -996,120 +989,64 @@ class DelwaqModel(Model):
         return gdf
 
     @property
-    def pointer(self):
-        """
-        Dictionnary of schematisation attributes of a Delwaq model.
-
-        Contains
-        --------
-        pointer: np.array
-            Model pointer defining exchanges between segments
-        surface_water: list of str
-            Name of the surface water layer
-        boundaries: list of str
-            List of model boundaries names
-        fluxes: list of str
-            List of model fluxes names
-        nrofseg: int
-            number of segments
-        nrofexch: int
-            number of exchanges
-        """
-        if not self._pointer:
-            # not implemented yet, fix later
-            self._pointer = dict()
-            # if self._read:
-            #    self.read_pointer
-        return self._pointer
-
-    def set_pointer(self, attr, name):
-        """Add model attribute property to pointer."""
-        # Check that pointer attr is a four column np.array
-        if name == "pointer":
-            if not isinstance(attr, np.ndarray) and attr.shape[1] == 4:
-                logger.warning(
-                    "pointer values in self.pointer should be a"
-                    "np.ndarray with four columns."
-                )
-                return
-        elif np.isin(name, ["boundaries", "fluxes"]):
-            if not isinstance(attr, list):
-                logger.warning(
-                    f"{name} object in self.pointer should be a list of names."
-                )
-                return
-        elif np.isin(name, ["surface_water"]):
-            if not isinstance(attr, str):
-                logger.warning(f"{name} object in self.pointer should be a string.")
-                return
-        elif np.isin(name, ["nrofseg", "nrofexch"]):
-            if not isinstance(attr, int):
-                logger.warning(f"{name} object in self.pointer should be an integer.")
-                return
-        if self._pointer is None:
-            self._pointer = {name: attr}
-        else:
-            self._pointer[name] = attr
-
-    @property
     def nrofseg(self):
         """Fast accessor to nrofseg property of pointer."""
-        if "nrofseg" in self.pointer:
-            nseg = self.pointer["nrofseg"]
+        if "nrofseg" in self.pointer.data:
+            nseg = self.pointer.data["nrofseg"]
         else:
             # from config
-            nseg = self.get_config("B3_nrofseg.l1", fallback="0 ; nr of segments")
+            nseg = self.config.get_value("B3_nrofseg.l1", fallback="0 ; nr of segments")
             nseg = int(nseg.split(";")[0])
-            self.set_pointer(nseg, "nrofseg")
+            self.pointer.set("nrofseg", value=nseg)
         return nseg
 
     @property
     def nrofexch(self):
         """Fast accessor to nrofexch property of pointer."""
-        if "nrofexch" in self.pointer:
-            nexch = self.pointer["nrofexch"]
-        elif "pointer" in self.pointer:
-            nexch = self.pointer["pointer"].shape[0]
-            self.set_pointer(nexch, "nrofexch")
+        if "nrofexch" in self.pointer.data:
+            nexch = self.pointer.data["nrofexch"]
+        elif "pointer" in self.pointer.data:
+            nexch = self.pointer.data["pointer"].shape[0]
+            self.pointer.set("nrofexch", value=nexch)
         else:
             # from config
-            nexch = self.get_config(
+            nexch = self.config.get_value(
                 "B4_nrofexch.l1",
                 fallback="0 0 0 ; x, y, z direction",
             )
             nexch = int(nexch.split(" ")[0])
-            self.set_pointer(nexch, "nrofexch")
+            self.pointer.set("nrofexch", value=nexch)
         return nexch
 
     @property
     def surface_water(self):
         """Fast accessor to surface_water name property of pointer."""
-        if "surface_water" in self.pointer:
+        if "surface_water" in self.pointer.data:
             sfw = self.pointer["surface_water"]
         else:
             # from config
             nl = 7
-            sfw = self.get_config(
+            sfw = self.config.get_value(
                 f"B3_attributes.l{nl}",
                 fallback="     1*01 ; sfw",
             )
             sfw = sfw.split(";")[1][1:]
-            self.set_pointer(sfw, "surface_water")
+            self.pointer.set("surface_water", value=sfw)
         return sfw
 
     @property
     def fluxes(self):
         """Fast accessor to fluxes property of pointer."""
-        if "fluxes" in self.pointer:
+        if "fluxes" in self.pointer.data:
             fl = self.pointer["fluxes"]
         else:
             # from config
-            fl = self.get_config(
+            fl = self.config.get_value(
                 "B7_flow.l2",
                 fallback="sfw>sfw inw>sfw",
             )
             fl = fl.split(" ")
-            self.set_pointer(fl, "fluxes")
+            self.pointer.set("fluxes", value=fl)
         return fl
 
     def write_waqgeom(self):

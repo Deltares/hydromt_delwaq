@@ -359,7 +359,6 @@ class DemissionModel(DelwaqModel):
         self.config.read()
         self.geoms.read()
         self.hydromaps.read()
-        # self.read_pointer()
         self.staticdata.read()
         # self.read_fewsadapter()
         # self.read_forcing()
@@ -532,7 +531,7 @@ class DemissionModel(DelwaqModel):
             # sediment
             if "B7_sediment" in self.config.data:
                 sedname = join(self.root, fn.format(name="sediment"))
-                sed_vars = self.get_config("B7_sediment.l2").split(" ")
+                sed_vars = self.config.get_value("B7_sediment.l2").split(" ")
                 sedblock = []
                 for dvar in sed_vars:
                     # sed maybe not updated or might be present for WQ
@@ -548,7 +547,7 @@ class DemissionModel(DelwaqModel):
             # climate
             if "B7_climate" in self.config.data:
                 climname = join(self.root, fn.format(name="climate"))
-                clim_vars = self.get_config("B7_climate.l2").split(" ")
+                clim_vars = self.config.get_value("B7_climate.l2").split(" ")
                 climblock = []
                 for dvar in clim_vars:
                     # clim maybe not updated or might be present for WQ
@@ -565,33 +564,33 @@ class DemissionModel(DelwaqModel):
     @property
     def nrofseg(self):
         """Fast accessor to nrofseg property of pointer."""
-        if "nrofseg" in self.pointer:
-            nseg = self.pointer["nrofseg"]
+        if "nrofseg" in self.pointer.data:
+            nseg = self.pointer.data["nrofseg"]
         else:
             # from config
-            nseg = self.get_config("B3_nrofseg.l1", fallback="0 ; nr of segments")
+            nseg = self.config.get_value("B3_nrofseg.l1", fallback="0 ; nr of segments")
             nseg = int(nseg.split(";")[0])
-            self.set_pointer(nseg, "nrofseg")
+            self.pointer.set("nrofseg", value=nseg)
         return nseg
 
     @property
     def nrofexch(self):
         """Fast accessor to nrofexch property of pointer."""
-        if "nrofexch" in self.pointer:
-            nexch = self.pointer["nrofexch"]
+        if "nrofexch" in self.pointer.data:
+            nexch = self.pointer.data["nrofexch"]
         else:
             nexch = self.nrofseg * 5
-            self.set_pointer(nexch, "nrofexch")
+            self.pointer.set("nrofexch", value=nexch)
         return nexch
 
     @property
     def fluxes(self):
         """Fast accessor to fluxes property of pointer."""
-        if "fluxes" in self.pointer:
-            fl = self.pointer["fluxes"]
+        if "fluxes" in self.pointer.data:
+            fl = self.pointer.data["fluxes"]
         else:
             # from config
-            fl = self.get_config(
+            fl = self.config.get_value(
                 "B7_hydrology.l2",
                 fallback=(
                     "Rainfall RunoffPav RunoffUnp Infiltr "
@@ -599,5 +598,5 @@ class DemissionModel(DelwaqModel):
                 ),
             )
             fl = fl.split(" ")
-            self.set_pointer(fl, "fluxes")
+            self.pointer.set("fluxes", value=fl)
         return fl
