@@ -1,8 +1,7 @@
 """Implement delwaq model class."""
 
 import logging
-import os
-from os.path import dirname, isfile, join
+from os.path import isfile, join
 from pathlib import Path
 from typing import Dict, List
 
@@ -14,15 +13,15 @@ import xugrid as xu
 from hydromt import hydromt_step
 from hydromt.model import Model, processes
 from hydromt.model.components import GeomsComponent
-from tqdm import tqdm
 
 from hydromt_delwaq.components import (
     DelwaqConfigComponent,
+    DelwaqForcingComponent,
     DelwaqHydromapsComponent,
     DelwaqPointerComponent,
     DelwaqStaticdataComponent,
 )
-from hydromt_delwaq.utils import DATADIR, dw_WriteSegmentOrExchangeData
+from hydromt_delwaq.utils import DATADIR
 from hydromt_delwaq.workflows import config, emissions, forcing, segments
 
 __all__ = ["DelwaqModel"]
@@ -83,6 +82,7 @@ class DelwaqModel(Model):
             "staticdata": DelwaqStaticdataComponent(self),
             "pointer": DelwaqPointerComponent(self),
             "hydromaps": DelwaqHydromapsComponent(self, region_component="staticdata"),
+            "forcing": DelwaqForcingComponent(self, region_component="staticdata"),
             "geoms": GeomsComponent(
                 self, filename="geoms/{name}.geojson", region_component="staticdata"
             ),
@@ -97,8 +97,6 @@ class DelwaqModel(Model):
         )
 
         # delwaq specific
-        self._fewsadapter = None
-
         self.timestepsecs = 86400
 
     ## Properties
@@ -474,7 +472,7 @@ class DelwaqModel(Model):
             ds_out = ds_out.rename(
                 {ds_out.raster.y_dim: self.staticdata.data.raster.y_dim}
             )
-        self.set_forcing(ds_out)
+        self.forcing.set(ds_out)
 
         # Update model timestepsecs attribute
         self.timestepsecs = timestepsecs
@@ -547,7 +545,7 @@ class DelwaqModel(Model):
                 {ds_out.raster.y_dim: self.staticdata.data.raster.y_dim}
             )
         # Add to forcing
-        self.set_forcing(ds_out)
+        self.forcing.set(ds_out)
 
         # Update config
         lines_ini = {
@@ -638,7 +636,7 @@ class DelwaqModel(Model):
             ds_out = ds_out.rename(
                 {ds_out.raster.y_dim: self.staticdata.data.raster.y_dim}
             )
-        self.set_forcing(ds_out)
+        self.forcing.set(ds_out)
 
         # Update config
         lines_ini = {
@@ -812,8 +810,7 @@ class DelwaqModel(Model):
         self.hydromaps.read()
         self.geoms.read()
         self.pointer.read()
-        # self.read_fewsadapter()
-        # self.read_forcing()
+        # self.forcing.read()
 
     @hydromt_step
     def write(self):
@@ -826,154 +823,12 @@ class DelwaqModel(Model):
         self.write_data_catalog()
         _ = self.config.data  # try to read default if not yet set
 
-        # self.write_forcing()
-
         self.staticdata.write()
         self.hydromaps.write()
         self.geoms.write()
         self.pointer.write()
+        self.forcing.write()
         self.config.write()
-
-    def read_forcing(self):
-        """Read and forcing at <root/?/> and parse to dict of xr.DataArray."""
-        self._assert_read_mode()
-        self._forcing = dict()
-        # raise NotImplementedError()
-
-    def write_forcing(self, fn: str = "dynamicdata/{name}.dat", write_nc: bool = False):
-        """
-        Write forcing at <root/fn> in binary format.
-
-        Can also write a NetCDF copy if write_nc is True.
-        The output files are:
-
-        * **flow.dat** binary: water fluxes [m3/s]
-        * **volume.dat** binary: water volumes [m3]
-        * **sediment.dat** binary: sediment particles from land erosion [g/timestep]
-        * **climate.dat** binary: climate fuxes for climate_vars
-
-        Parameters
-        ----------
-        fn : str, optional
-            filename relative to model root and should contain a {name} placeholder,
-            by default 'dynamicdata/{name}.dat'
-        write_nc : bool, optional
-            If True, write a NetCDF copy of the forcing data, by default False.
-        """
-        self._assert_write_mode()
-        if len(self.forcing) == 0:
-            logger.debug("No forcing data found, skip writing.")
-            return
-
-        # Create output folder if it does not exist
-        if not os.path.exists(dirname(join(self.root.path, fn))):
-            os.makedirs(dirname(join(self.root.path, fn)))
-
-        # Go from dictionnary to xr.DataSet
-        ds_out = xr.Dataset()
-        for name, da in self.forcing.items():
-            ds_out[name] = da
-
-        # To avoid appending data to existing file, first delete all the .dat files
-        dynDir = dirname(join(self.root.path, fn))
-        if os.path.exists(dynDir):
-            filelist = os.listdir(dynDir)
-            for f in filelist:
-                os.remove(os.path.join(dynDir, f))
-
-        # Filter data with mask
-        for dvar in ds_out.data_vars:
-            # nodata = ds_out[dvar].raster.nodata
-            # Change the novalue outside of mask for julia compatibilty
-            ds_out[dvar] = ds_out[dvar].where(ds_out["mask"], -9999.0)
-            ds_out[dvar].attrs.update(_FillValue=-9999.0)
-
-        logger.info("Writing dynamicmap files.")
-        # Netcdf format
-        if write_nc:
-            fname = join(self.root.path, fn.format(name="dynamicdata"))
-            fname = os.path.splitext(fname)[0] + ".nc"
-            logger.info(f"Writing NetCDF copy of the forcing data to {fname}.")
-            ds_out = ds_out.drop_vars(["mask", "spatial_ref"], errors="ignore")
-            ds_out.to_netcdf(path=fname)
-
-        # Binary format
-        # timesteps = np.arange(0, len(ds_out.time.values))
-        timestepstamp = np.arange(
-            0, (len(ds_out.time.values) + 1) * int(self.timestepsecs), self.timestepsecs
-        )
-
-        for i in tqdm(
-            np.arange(0, len(ds_out.time.values)), desc="Writing dynamic data"
-        ):
-            # if last timestep only write volumes
-            if i != len(ds_out.time.values) - 1:
-                # Flow
-                flname = join(self.root.path, fn.format(name="flow"))
-                flow_vars = self.fluxes
-                flowblock = []
-                for dvar in flow_vars:
-                    # Maybe only clim or sed were updated
-                    if dvar in ds_out.data_vars:
-                        nodata = ds_out[dvar].raster.nodata
-                        data = ds_out[dvar].isel(time=i).values.flatten()
-                        data = data[data != nodata]
-                        flowblock = np.append(flowblock, data)
-                    else:
-                        logger.info(f"Variable {dvar} not found in forcing data.")
-                # Maybe do a check on len of flowback
-                # based on number of variables,segments,timesteps
-                if len(flowblock) > 0:
-                    dw_WriteSegmentOrExchangeData(
-                        timestepstamp[i], flname, flowblock, 1, WriteAscii=False
-                    )
-            # volume
-            voname = join(self.root.path, fn.format(name="volume"))
-            vol_vars = [self.surface_water]
-            volblock = []
-            for dvar in vol_vars:
-                # Maybe only clim or sed were updated
-                if dvar in ds_out.data_vars:
-                    nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
-                    data = data[data != nodata]
-                    volblock = np.append(volblock, data)
-            if len(volblock) > 0:
-                dw_WriteSegmentOrExchangeData(
-                    timestepstamp[i], voname, volblock, 1, WriteAscii=False
-                )
-            # sediment
-            if "B7_sediment" in self.config and i != len(ds_out.time.values) - 1:
-                sedname = join(self.root.path, fn.format(name="sediment"))
-                sed_vars = self.config.get_value("B7_sediment.l2").split(" ")
-                sedblock = []
-                for dvar in sed_vars:
-                    # sed maybe not updated or might be present for EM
-                    if dvar in ds_out.data_vars:
-                        nodata = ds_out[dvar].raster.nodata
-                        data = ds_out[dvar].isel(time=i).values.flatten()
-                        data = data[data != nodata]
-                        sedblock = np.append(sedblock, data)
-                if len(sedblock) > 0:
-                    dw_WriteSegmentOrExchangeData(
-                        timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
-                    )
-            # climate
-            if "B7_climate" in self.config and i != len(ds_out.time.values) - 1:
-                climname = join(self.root.path, fn.format(name="climate"))
-                clim_vars = self.config.get_value("B7_climate.l2").split(" ")
-                climblock = []
-                for dvar in clim_vars:
-                    # clim maybe not updated or might be present for EM
-                    if dvar in ds_out.data_vars:
-                        nodata = ds_out[dvar].raster.nodata
-                        data = ds_out[dvar].isel(time=i).values.flatten()
-                        data = data[data != nodata]
-                        climblock = np.append(climblock, data)
-                if len(climblock) > 0:
-                    dw_WriteSegmentOrExchangeData(
-                        timestepstamp[i], climname, climblock, 1, WriteAscii=False
-                    )
 
     ## DELWAQ specific data and methods
 
@@ -1022,7 +877,7 @@ class DelwaqModel(Model):
     def surface_water(self):
         """Fast accessor to surface_water name property of pointer."""
         if "surface_water" in self.pointer.data:
-            sfw = self.pointer["surface_water"]
+            sfw = self.pointer.data["surface_water"]
         else:
             # from config
             nl = 7
@@ -1038,7 +893,7 @@ class DelwaqModel(Model):
     def fluxes(self):
         """Fast accessor to fluxes property of pointer."""
         if "fluxes" in self.pointer.data:
-            fl = self.pointer["fluxes"]
+            fl = self.pointer.data["fluxes"]
         else:
             # from config
             fl = self.config.get_value(
@@ -1049,6 +904,7 @@ class DelwaqModel(Model):
             self.pointer.set("fluxes", value=fl)
         return fl
 
+    @hydromt_step
     def write_waqgeom(self):
         """Write Delwaq netCDF geometry file (config/B3_waqgeom.nc)."""
         # Add waqgeom.nc file to allow Delwaq to save outputs in nc format

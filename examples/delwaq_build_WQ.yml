@@ -29,15 +29,15 @@ steps:
       mon_points: wflow_piave/staticgeoms/outlets.geojson
       mon_areas: subcatch
 
-  # - setup_hydrology_forcing:
-  #     hydro_forcing_fn: wflow_output_wq
-  #     starttime: "2010-02-03 00:00:00"
-  #     endtime: "2010-02-10 00:00:00"
-  #     timestepsecs: 86400
-  #     add_volume_offset: True
-  #     override:
-  #       - sfw>sfw
+  - setup_hydrology_forcing:
+      hydro_forcing_fn: wflow_output_wq
+      starttime: "2010-02-03 00:00:00"
+      endtime: "2010-02-10 00:00:00"
+      timestepsecs: 86400
+      add_volume_offset: True
+      override:
+        - sfw>sfw
 
   - write:
 
-  # - write_waqgeom:
+  - write_waqgeom:

@@ -111,7 +111,7 @@ def hydrology_forcing(
         ds.raster.y_dim: ds[ds.raster.y_dim],
         ds.raster.x_dim: ds[ds.raster.x_dim],
     }
-    ds_out = hydromt.raster.full(
+    ds_out = hydromt.gis.raster_utils.full(
         coords=coords,
         nodata=-999.0,
         dtype="float32",

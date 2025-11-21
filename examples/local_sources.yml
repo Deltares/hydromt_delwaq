@@ -72,14 +72,14 @@ wflow_output_wq:
         unit: m3/s
       sfw>sfw_2:
         unit: m3/s
-      sfw>sfw_3:
-        unit: m3/s
+      #sfw>sfw_3:
+        #unit: m3/s
       sfw_1:
         unit: m3
       sfw_2:
         unit: m3
-      sfw_3:
-        unit: m3
+      #sfw_3:
+        #unit: m3
       soil>sfw:
         unit: m3/s
     category: hydro
