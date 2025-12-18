@@ -167,6 +167,7 @@ def emission_vector(
     da_out : xarray.Dataarray
         Dataarray containing gridded emission map at model resolution.
     """
+    gdf = gdf.to_crs(ds_like.raster.crs)
     if method == "value":
         da_out = ds_like.raster.rasterize(
             gdf,

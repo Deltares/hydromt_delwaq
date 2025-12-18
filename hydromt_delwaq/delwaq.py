@@ -5,11 +5,9 @@ from os.path import isfile, join
 from pathlib import Path
 from typing import Dict, List
 
-import geopandas as gpd
 import numpy as np
 import pyproj
 import xarray as xr
-import xugrid as xu
 from hydromt import hydromt_step
 from hydromt.model import Model, processes
 from hydromt.model.components import GeomsComponent
@@ -21,8 +19,8 @@ from hydromt_delwaq.components import (
     DelwaqPointerComponent,
     DelwaqStaticdataComponent,
 )
-from hydromt_delwaq.utils import DATADIR
-from hydromt_delwaq.workflows import config, emissions, forcing, monitoring, segments
+from hydromt_delwaq.utils import write_waqgeomfile
+from hydromt_delwaq.workflows import config, forcing, monitoring, segments
 
 __all__ = ["DelwaqModel"]
 __hydromt_eps__ = ["DelwaqModel"]  # core entrypoints
@@ -37,10 +35,10 @@ class DelwaqModel(Model):
     _MAPS = {
         "flwdir": "ldd",
         "lndslp": "slope",
-        "N": "manning",
+        "river_manning_n": "manning",
         "rivmsk": "river",
         "strord": "streamorder",
-        "thetaS": "porosity",
+        "soil_theta_s": "porosity",
         "reslocs": "reservoirs",
         "lakelocs": "lakes",
     }
@@ -615,161 +613,6 @@ class DelwaqModel(Model):
         for option in lines_ini:
             self.config.set(f"B7_climate.{option}", lines_ini[option])
 
-    @hydromt_step
-    def setup_emission_raster(
-        self,
-        emission_fn: str | Path | xr.DataArray,
-        scale_method: str = "average",
-        fillna_method: str = "zero",
-        fillna_value: int = 0.0,
-        area_division: bool = False,
-    ):
-        """Prepare one or several emission map from raster data.
-
-        Adds model layer:
-
-        * **emission_fn** map: emission data map
-
-        Parameters
-        ----------
-        emission_fn : {'GHS-POP_2015'...}
-            Name of raster emission map source.
-        scale_method : str {'nearest', 'average', 'mode'}
-            Method for resampling
-        fillna_method : str {'nearest', 'zero', 'value'}
-            Method to fill NaN values. Either nearest neighbour, zeros or user defined
-            value.
-        fillna_value : float
-            If fillna_method is set to 'value', NaNs in the emission maps will be
-            replaced by this value.
-        area_division : boolean
-            If needed do the resampling in cap/m2 (True) instead of cap (False)
-        """
-        logger.info(f"Preparing '{emission_fn}' map.")
-        # process raster emission maps
-        da = self.data_catalog.get_rasterdataset(
-            emission_fn, geom=self.region, buffer=2
-        )
-        ds_emi = emissions.emission_raster(
-            da=da,
-            ds_like=self.staticdata.data,
-            method=scale_method,
-            fillna_method=fillna_method,
-            fillna_value=fillna_value,
-            area_division=area_division,
-        )
-        ds_emi = ds_emi.to_dataset(name=emission_fn)
-        self.staticdata.set(ds_emi)
-
-    @hydromt_step
-    def setup_emission_vector(
-        self,
-        emission_fn: str | xr.DataArray,
-        col2raster: str = "",
-        rasterize_method: str = "value",
-    ):
-        """Prepare emission map from vector data.
-
-        Adds model layer:
-
-        * **emission_fn** map: emission data map
-
-        Parameters
-        ----------
-        emission_fn : {'GDP_world'...}
-            Name of raster emission map source.
-        col2raster : str
-            Name of the column from the vector file to rasterize.
-            Can be left empty if the selected method is set to "fraction".
-        rasterize_method : str
-            Method to rasterize the vector data. Either {"value", "fraction", "area"}.
-            If "value", the value from the col2raster is used directly in the raster.
-            If "fraction", the fraction of the grid cell covered by the vector file is
-            returned.
-            If "area", the area of the grid cell covered by the vector file is returned.
-        """
-        logger.info(f"Preparing '{emission_fn}' map.")
-        gdf_org = self.data_catalog.get_geodataframe(
-            emission_fn, geom=self.basins, dst_crs=self.crs
-        )
-        if gdf_org.empty:
-            logger.warning(
-                f"No shapes of {emission_fn} found within region, "
-                "setting to default value."
-            )
-            ds_emi = self.hydromaps.data["basins"].copy() * 0.0
-            ds_emi.attrs.update(_FillValue=0.0)
-        else:
-            ds_emi = emissions.emission_vector(
-                gdf=gdf_org,
-                ds_like=self.staticdata.data,
-                col_name=col2raster,
-                method=rasterize_method,
-                mask_name="mask",
-            )
-        ds_emi = ds_emi.to_dataset(name=emission_fn)
-        self.staticdata.set(ds_emi)
-
-    @hydromt_step
-    def setup_emission_mapping(
-        self,
-        region_fn: str | Path | gpd.GeoDataFrame,
-        mapping_fn: str | Path | None = None,
-    ):
-        """
-        Derive several emission maps based on administrative boundaries.
-
-        For several emission types administrative classes ('fid' column) are
-        remapped to model parameter values based on lookup tables. The data is
-        remapped at its original resolution and then resampled to the model
-        resolution based using the average value, unless noted differently.
-
-        Adds model layers:
-
-        * **region_fn** map: emission data with classification from source_name [-]
-        * **emission factor X** map: emission data from mapping file to classification
-
-        Parameters
-        ----------
-        region_fn : {["gadm_level1", "gadm_level2", "gadm_level3"]}
-            Name or list of names of data source in data_sources.yml file.
-
-            * Required variables: ['ID']
-        mapping_fn : str, optional
-            Path to the emission mapping file corresponding to region_fn.
-        """
-        logger.info(f"Preparing region_fn related parameter maps for {region_fn}.")
-        if mapping_fn is None:
-            logger.warning("Using default mapping file.")
-            mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
-        # process emission factor maps
-        gdf_org = self.data_catalog.get_geodataframe(
-            region_fn, geom=self.basins, dst_crs=self.crs
-        )
-        # Rasterize the GeoDataFrame to get the areas mask of
-        # administrative boundaries with their ids
-        gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
-        # make sure index_col always has name fid in source dataset (use rename in
-        # data_sources.yml or local_sources.yml to rename column used for mapping
-        ds_admin = self.hydromaps.data.raster.rasterize(
-            gdf_org,
-            col_name="ID",
-            nodata=0,
-            all_touched=True,
-            dtype=None,
-            sindex=False,
-        )
-
-        # add admin_bound map
-        ds_admin_maps = emissions.admin(
-            da=ds_admin,
-            ds_like=self.staticdata.data,
-            source_name=region_fn,
-            fn_map=mapping_fn,
-        )
-        rmdict = {k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars}
-        self.staticdata.set(ds_admin_maps.rename(rmdict))
-
     # I/O
     @hydromt_step
     def read(self):
@@ -799,7 +642,14 @@ class DelwaqModel(Model):
         self.forcing.write()
         self.config.write()
 
-    ## DELWAQ specific data and methods
+    @hydromt_step
+    def write_waqgeom(self):
+        """Write Delwaq netCDF geometry file (config/B3_waqgeom.nc)."""
+        # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
+        fname = join(self.root.path, "config", "B3_waqgeom.nc")
+        write_waqgeomfile(self.hydromaps.data, fname)
+
+    ## DELWAQ specific properties
 
     @property
     def basins(self):
@@ -872,77 +722,3 @@ class DelwaqModel(Model):
             fl = fl.split(" ")
             self.pointer.set("fluxes", value=fl)
         return fl
-
-    @hydromt_step
-    def write_waqgeom(self):
-        """Write Delwaq netCDF geometry file (config/B3_waqgeom.nc)."""
-        # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
-        # TODO: Update for several layers
-        logger.info("Writting waqgeom.nc file")
-        ptid = self.hydromaps.data["ptid"].copy()
-        # For now only 1 comp is supported
-        ptid = ptid.squeeze(drop=True)
-        if len(ptid.dims) != 2:
-            raise ValueError("Only 2D (1 comp) supported for waqgeom.nc")
-        ptid_mv = ptid.raster.nodata
-        # PCR cell id's start at 1, we need it zero based, and NaN set to -1
-        ptid = xr.where(ptid == ptid_mv, -1, ptid - 1)
-        np_ptid = ptid.values
-        # Wflow map dimensions
-        m, n = np_ptid.shape
-        # Number of segments in horizontal dimension
-        int(np.max(np_ptid)) + 1  # because of the zero based
-        # Get LDD map
-        np_ldd = self.hydromaps.data["ldd"].squeeze(drop=True).values
-        np_ldd[np_ldd == self.hydromaps.data["ldd"].raster.nodata] = 0
-
-        # print("Input DataArray: ")
-        # print(ptid.dims, ptid)
-        ptid = xr.where(ptid == -1, np.nan, ptid)
-        if ptid.raster.y_dim != "y":
-            ptid = ptid.rename({ptid.raster.y_dim: "y"})
-        if ptid.raster.x_dim != "x":
-            ptid = ptid.rename({ptid.raster.x_dim: "x"})
-        # ptid = ptid.rename({"lat": "y", "lon": "x"})
-        da_ptid = xu.UgridDataArray.from_structured2d(ptid)
-        da_ptid = da_ptid.dropna(dim=da_ptid.ugrid.grid.face_dimension)
-        da_ptid.ugrid.set_crs(crs=self.crs)  # "EPSG:4326"
-        uda_waqgeom = da_ptid.ugrid.to_dataset(
-            optional_attributes=True
-        )  # .to_netcdf("updated_ugrid.nc")
-        uda_waqgeom.coords["projected_coordinate_system"] = -2147483647
-
-        epsg_nb = int(self.crs.to_epsg())
-        uda_waqgeom["projected_coordinate_system"].attrs.update(
-            dict(
-                epsg=epsg_nb,
-                grid_mapping_name="Unknown projected",
-                longitude_of_prime_meridian=0.0,
-                inverse_flattening=298.257223563,
-                epsg_code=f"{self.crs}",
-                value="value is equal to EPSG code",
-            )
-        )
-
-        grid = da_ptid.ugrid.grid
-
-        bounds = grid.face_node_coordinates
-        x_bounds = bounds[..., 0]
-        y_bounds = bounds[..., 1]
-
-        name_x = "mesh2d_face_x_bnd"
-        name_y = "mesh2d_face_y_bnd"
-        uda_waqgeom["mesh2d_face_x"].attrs["bounds"] = name_x
-        uda_waqgeom["mesh2d_face_y"].attrs["bounds"] = name_y
-        uda_waqgeom["mesh2d_face_x"].attrs["units"] = "degrees_east"
-        uda_waqgeom["mesh2d_face_y"].attrs["units"] = "degrees_north"
-        uda_waqgeom[name_x] = xr.DataArray(
-            x_bounds, dims=(grid.face_dimension, "mesh2d_nMax_face_nodes")
-        )
-        uda_waqgeom[name_y] = xr.DataArray(
-            y_bounds, dims=(grid.face_dimension, "mesh2d_nMax_face_nodes")
-        )
-
-        # Write the waqgeom.nc file
-        fname = join(self.root.path, "config", "B3_waqgeom.nc")
-        uda_waqgeom.to_netcdf(path=fname, mode="w")

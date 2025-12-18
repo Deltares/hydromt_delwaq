@@ -11,7 +11,7 @@ from hydromt import hydromt_step
 from hydromt.model import Model
 from hydromt.model.components import ConfigComponent
 
-__all__ = ["DelwaqConfigComponent"]
+__all__ = ["DelwaqConfigComponent", "DemissionConfigComponent"]
 
 logger = logging.getLogger(f"hydromt.{__name__}")
 
@@ -100,3 +100,28 @@ class DelwaqConfigComponent(ConfigComponent):
             with open(fn_out, "w") as exfile:
                 for _, line in lines.items():
                     print(line, file=exfile)
+
+
+class DemissionConfigComponent(DelwaqConfigComponent):
+    """Manage the D-EMmission configuration input file for model simulations/settings.
+
+    ``DemissionConfigComponent`` data is stored in a dictionary. The component
+    is used to prepare and update model simulations/settings of the D-Emission model.
+    """
+
+    ## I/O methods
+    @hydromt_step
+    def read(
+        self,
+        filename: str = None,
+        skip: List[str] = [
+            "B7_geometry",
+            "B2_stations",
+            "B2_stations-balance",
+            "B2_monareas",
+        ],
+    ):
+        """Read config files in ASCII format at <root/config>."""
+        # Because of template config can be read also in write mode.
+        # Use function from hydromt core to read the main config file
+        super().read(filename=filename, skip=skip)

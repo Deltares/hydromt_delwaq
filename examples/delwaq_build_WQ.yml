@@ -1,7 +1,3 @@
-global:
-  data_libs:
-    - local_sources.yml
-
 steps:
   - setup_basemaps:
       region:

@@ -62,7 +62,7 @@ class DelwaqPointerComponent(ModelComponent):
         return self._data
 
     def _initialize(self, skip_read=False) -> None:
-        """Initialize the model config."""
+        """Initialize the model pointer."""
         if self._data is None:
             self._data = {}
             if self.root.is_reading_mode() and not skip_read:

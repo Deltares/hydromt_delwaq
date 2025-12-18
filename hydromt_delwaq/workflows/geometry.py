@@ -24,10 +24,10 @@ def compute_geometry(
     ds : xr.Dataset
         Dataset containing the geometry data.
 
-        * Required variables: fraction of paved area "PathFrac", fraction of open water
-            "WaterFrac"
+        * Required variables: fraction of paved area "soil_compacted_fraction", fraction
+        of open water "land_water_fraction"
     mask : xr.DataArray
-        Mask to select the gactive cells (segments) in ds.
+        Mask to select the active cells (segments) in ds.
 
     Returns
     -------
@@ -38,8 +38,8 @@ def compute_geometry(
     surface.raster.set_nodata(np.nan)
     geom = surface.rename("surface").to_dataset()
     # For EM type build a pointer like object and add to self.geometry
-    geom["fPaved"] = ds["PathFrac"]
-    geom["fOpenWater"] = ds["WaterFrac"]
+    geom["fPaved"] = ds["soil_compacted_fraction"]
+    geom["fOpenWater"] = ds["land_water_fraction"]
     geom["fUnpaved"] = (
         (geom["fPaved"] * 0.0 + 1.0) - geom["fPaved"] - geom["fOpenWater"]
     )

@@ -5,7 +5,7 @@ from os.path import abspath, dirname, join
 
 import numpy as np
 import pytest
-from hydromt.cli.cli_utils import parse_config
+from hydromt.readers import read_workflow_yaml
 
 from hydromt_delwaq.delwaq import DelwaqModel
 from hydromt_delwaq.demission import DemissionModel
@@ -30,19 +30,6 @@ _models = {
 
 
 @pytest.mark.parametrize("model", list(_models.keys()))
-def test_model_class(model):
-    _model = _models[model]
-    # read model in examples folder
-    root = join(EXAMPLEDIR, _model["example"])
-    mod = DelwaqModel(root=root, mode="r")
-    mod.read()
-    # run test_model_api() method
-    non_compliant_list = mod._test_model_api()
-    assert len(non_compliant_list) == 0
-    # pass
-
-
-@pytest.mark.parametrize("model", list(_models.keys()))
 def test_model_build(tmpdir, model):
     # test build method
     # compare results with model from examples folder
@@ -52,28 +39,19 @@ def test_model_build(tmpdir, model):
     root = str(tmpdir.join(model))
     # Config
     config = join(EXAMPLEDIR, _model["ini"])
-    opt = parse_config(config)
-    if "global" in opt:
-        kwargs = opt.pop("global")
-        if "data_libs" in kwargs:
-            cats = kwargs["data_libs"]
-            cats.extend(["artifact_data"])
-            kwargs["data_libs"] = cats
-    else:
-        kwargs = {"data_libs": ["artifact_data"]}
-    # Region
-    wflow_path = join(EXAMPLEDIR, "wflow_piave")
-    # Transform the path to be processed by CLI runner and json.load
-    wflow_path = str(wflow_path).replace("\\", "/")
-    region = {"wflow": wflow_path}
+    _, _, steps = read_workflow_yaml(config)
+
+    if model == "EM":
+        model_init = {"data_libs": ["artifact_data"]}
+    elif model == "WQ":
+        model_init = {
+            "data_libs": ["artifact_data", join(EXAMPLEDIR, "local_sources.yml")]
+        }
 
     # Build model
     model_type = _model["model_type"]
-    mod1 = model_type(root=root, mode="w", **kwargs)
-    mod1.build(region=region, opt=opt)
-    # Check if model is api compliant
-    non_compliant_list = mod1._test_model_api()
-    assert len(non_compliant_list) == 0
+    mod1 = model_type(root=root, mode="w", **model_init)
+    mod1.build(steps=steps)
 
     # Compare with model from examples folder
     root0 = join(EXAMPLEDIR, _model["example"])
@@ -83,25 +61,25 @@ def test_model_build(tmpdir, model):
     mod1.read()
     # check maps
     invalid_maps = []
-    if len(mod0.grid) > 0:
-        maps = mod0.grid.raster.vars
+    if len(mod0.staticdata.data) > 0:
+        maps = mod0.staticdata.data.raster.vars
         assert mod0.crs == mod1.crs, "map crs mismatch"
         for name in maps:
-            map0 = mod0.grid[name].fillna(0)
-            if name not in mod1.grid:
+            map0 = mod0.staticdata.data[name].fillna(0)
+            if name not in mod1.staticdata.data:
                 invalid_maps.append(f"{name} missing")
             else:
-                map1 = mod1.grid[name].fillna(0)
+                map1 = mod1.staticdata.data[name].fillna(0)
                 if not np.allclose(map0, map1):
                     invalid_maps.append(f"{name} changed")
     invalid_map_str = ", ".join(invalid_maps)
     assert len(invalid_maps) == 0, f"invalid maps: {invalid_map_str}"
     # check geoms
-    if mod0._geoms:
-        for name in mod0.geoms:
-            geom0 = mod0.geoms[name]
-            assert name in mod1.geoms, f"geom {name} missing"
-            geom1 = mod1.geoms[name]
+    if mod0.geoms.data:
+        for name in mod0.geoms.data:
+            geom0 = mod0.geoms.data[name]
+            assert name in mod1.geoms.data, f"geom {name} missing"
+            geom1 = mod1.geoms.data[name]
             assert geom0.index.size == geom1.index.size, f"geom index {name}"
             assert np.all(geom0.index == geom1.index), f"geom index {name}"
             assert geom0.columns.size == geom1.columns.size, f"geom columns {name}"
@@ -119,22 +97,20 @@ def test_model_update(tmpdir, model):
     _model = _models[model]
     root = str(tmpdir.join(model + "_update"))
     config = join(TESTDATADIR, _model["ini_update"])
-    opt = parse_config(config)
-    opt = parse_config(config)
-    if "global" in opt:
-        kwargs = opt.pop("global")
-        if "data_libs" in kwargs:
-            cats = kwargs["data_libs"]
+    _, model_init, steps = read_workflow_yaml(config)
+    if len(model_init) > 0:
+        if "data_libs" in model_init:
+            cats = model_init["data_libs"]
             cats.extend(["artifact_data"])
-            kwargs["data_libs"] = cats
+            model_init["data_libs"] = cats
     else:
-        kwargs = {"data_libs": ["artifact_data"]}
+        model_init = {"data_libs": ["artifact_data"]}
     delwaq_path = join(EXAMPLEDIR, _model["example"])
     # Transform the path to be processed by CLI runner and json.load
     delwaq_path = str(delwaq_path).replace("\\", "/")
     # Update model
-    mod1 = _model["model_type"](root=delwaq_path, mode="r", **kwargs)
-    mod1.update(model_out=root, opt=opt)
+    mod1 = _model["model_type"](root=delwaq_path, mode="r", **model_init)
+    mod1.update(model_out=root, steps=steps)
     # Check if model is api compliant
     non_compliant_list = mod1._test_model_api()
     assert len(non_compliant_list) == 0
