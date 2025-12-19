@@ -39,21 +39,17 @@ wflow_output_em:
         unit: '%'
     category: hydro
     crs: 4326
-  uri: wflow_piave_v1/run_default/output.nc
+  uri: wflow_piave/run_default/output.nc
 wflow_output_wq:
   data_adapter:
     rename:
       land_to_river: land>sfw
-      #q_lake: sfw>sfw_3
       q_reservoir: sfw>sfw_2
       q_river: sfw>sfw_1
       ssf_to_river: soil>sfw
-      #vol_lake: sfw_3
       vol_reservoir: sfw_2
       vol_river: sfw_1
     unit_mult:
-      #sfw>sfw_2: 1.15741e-05
-      #sfw>sfw_3: 1.15741e-05
       soil>sfw: 1.15741e-05
   data_type: RasterDataset
   driver:
@@ -72,16 +68,12 @@ wflow_output_wq:
         unit: m3/s
       sfw>sfw_2:
         unit: m3/s
-      #sfw>sfw_3:
-        #unit: m3/s
       sfw_1:
         unit: m3
       sfw_2:
         unit: m3
-      #sfw_3:
-        #unit: m3
       soil>sfw:
         unit: m3/s
     category: hydro
     crs: 4326
-  uri: wflow_piave_v1/run_default/output.nc
+  uri: wflow_piave/run_default/output.nc

@@ -56,6 +56,7 @@ reservoir_area__count = "reservoir_area_id"
 reservoir_location__count = "reservoir_outlet_id"
 reservoir_lower_location__count = "reservoir_lower_id"
 outlets = "outlets"
+gauges_grdc = "gauges_grdc"
 
 [input.static]
 land_surface__slope = "land_slope"
@@ -177,3 +178,13 @@ path = "output.csv"
 header = "river_q"
 map = "outlets"
 parameter = "river_water__volume_flow_rate"
+
+[[output.csv.column]]
+header = "river_q"
+map = "gauges_grdc"
+parameter = "river_water__volume_flow_rate"
+
+[[output.csv.column]]
+header = "precip"
+map = "gauges_grdc"
+parameter = "atmosphere_water__precipitation_volume_flux"

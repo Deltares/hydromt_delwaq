@@ -180,8 +180,16 @@ class DelwaqPointerComponent(ModelComponent):
         if not isinstance(other, self.__class__):
             errors["__class__"] = f"other does not inherit from {self.__class__}."
 
-        # for once python does the recursion for us
-        if not self.data == other.data:
-            errors["config"] = "Configs are not equal"
+        # Test separately the pointer array and the other properties
+        self_data = self.data.copy()
+        other_data = other.data.copy()
+
+        self_pointer = self_data.pop("pointer", None)
+        other_pointer = other_data.pop("pointer", None)
+
+        if not self_data == other_data:
+            errors["pointer"] = "Pointers are not equal"
+        if not np.array_equal(self_pointer, other_pointer):
+            errors["pointer_data"] = "Pointer data arrays are not equal."
 
         return len(errors) == 0, errors

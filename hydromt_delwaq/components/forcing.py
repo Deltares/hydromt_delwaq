@@ -3,9 +3,10 @@
 import logging
 import os
 from os.path import dirname, join
+from pathlib import Path
 
 import numpy as np
-from hydromt import hydromt_step
+from hydromt import hydromt_step, writers
 from hydromt.model import Model
 from hydromt.model.components import GridComponent, ModelComponent
 from hydromt_wflow.components.utils import test_equal_grid_data
@@ -190,8 +191,18 @@ class DelwaqForcingComponent(GridComponent):
         fname = join(self.root.path, filename.format(name="dynamicdata"))
         fname = os.path.splitext(fname)[0] + ".nc"
         logger.info(f"Writing NetCDF copy of the forcing data to {fname}.")
-        ds_out = ds_out.drop_vars(["mask", "spatial_ref"], errors="ignore")
-        ds_out.to_netcdf(path=fname)
+        ds_out = ds_out.drop_vars(["mask"], errors="ignore")
+        # Use core function to write to netcdf and handles
+        close_handle = writers.write_nc(
+            ds_out,
+            file_path=Path(fname),
+            gdal_compliant=True,
+            rename_dims=False,
+            force_overwrite=self.root.mode.is_override_mode(),
+            force_sn=False,
+        )
+        if close_handle is not None:
+            self._deferred_file_close_handles.append(close_handle)
 
     def _write_flow_forcing(self, ds_out, filename, timestamp, timestepstamp):
         """Write flow forcing data to binary file."""
@@ -295,7 +306,8 @@ class DelwaqForcingComponent(GridComponent):
             )
         else:
             _, data_errors = test_equal_grid_data(self.data, other.data)
-            errors.update(data_errors)
+            if len(data_errors) > 0:
+                errors.update({"forcing": data_errors})
 
         return len(errors) == 0, errors
 

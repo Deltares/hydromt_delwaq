@@ -130,8 +130,9 @@ class DelwaqHydromapsComponent(GridComponent):
         if not isinstance(other, self.__class__):
             errors["__class__"] = f"other does not inherit from {self.__class__}."
 
-        # Check dimensions
+        # Check data
         _, data_errors = test_equal_grid_data(self.data, other.data)
-        errors.update(data_errors)
+        if len(data_errors) > 0:
+            errors.update({"hydromaps": data_errors})
 
         return len(errors) == 0, errors

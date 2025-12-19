@@ -3,9 +3,10 @@
 import logging
 import os
 from os.path import dirname, join, splitext
+from pathlib import Path
 
 import numpy as np
-from hydromt import hydromt_step
+from hydromt import hydromt_step, writers
 from hydromt.model import Model
 from hydromt.model.components import GridComponent, ModelComponent
 from hydromt_wflow.components.utils import test_equal_grid_data
@@ -103,16 +104,21 @@ class DelwaqStaticdataComponent(GridComponent):
         for dvar in ds_out.data_vars:
             ds_out[dvar] = ds_out[dvar].raster.mask(mask=ds_out["mask"])
 
-        logger.info("Writing staticmap files.")
+        logger.info("Writing staticdata files.")
         # Netcdf format
         fname = join(self.root.path, filename.format(name="staticdata"))
         fname = splitext(fname)[0] + ".nc"
-        # Update attributes for gdal compliance
-        # ds_out = ds_out.raster.gdal_compliant(rename_dims=False)
-        # Not ideal but to avoid hanging issues in r+ mode
-        if self.root.is_reading_mode() and self.root.is_writing_mode():
-            ds_out.load()
-        ds_out.to_netcdf(path=fname)
+        # Use core function to write to netcdf and handles
+        close_handle = writers.write_nc(
+            ds_out,
+            file_path=Path(fname),
+            gdal_compliant=True,
+            rename_dims=False,
+            force_overwrite=self.root.mode.is_override_mode(),
+            force_sn=False,
+        )
+        if close_handle is not None:
+            self._deferred_file_close_handles.append(close_handle)
 
         # Binary format
         mask = ds_out["mask"].values.flatten()
@@ -254,6 +260,7 @@ class DelwaqStaticdataComponent(GridComponent):
 
         # Check data
         _, data_errors = test_equal_grid_data(self.data, other.data)
-        errors.update(data_errors)
+        if len(data_errors) > 0:
+            errors.update({"staticdata": data_errors})
 
         return len(errors) == 0, errors

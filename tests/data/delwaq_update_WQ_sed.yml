@@ -20,3 +20,8 @@ steps:
         - IM1
         - IM2
         - IM3
+
+  - write:
+
+  - forcing.write:
+      write_nc: true

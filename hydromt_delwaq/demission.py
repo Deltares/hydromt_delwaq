@@ -46,10 +46,8 @@ class DemissionModel(Model):
         "flwdir": "ldd",
         "lndslp": "slope",
         "rivmsk": "river",
-        # "strord": "streamorder",
-        # "soil_theta_s": "porosity",
-        "wflow_streamorder": "streamorder",
-        "thetaS": "porosity",
+        "strord": "streamorder",
+        "soil_theta_s": "porosity",
     }
     _FORCING = {
         "temp": "tempair",
@@ -770,6 +768,7 @@ class DemissionModel(Model):
             self.config.set(f"B7_climate.{option}", lines_ini[option])
 
     # I/O
+    @hydromt_step
     def read(self):
         """Read the complete model schematization and configuration from file."""
         self.config.read()
@@ -779,10 +778,12 @@ class DemissionModel(Model):
         self.geometry.read()
         self.forcing.read()
 
+    @hydromt_step
     def write(self):
         """Write the complete model schematization and configuration to file."""
         logger.info(f"Write model data to {self.root}")
-        # if in r, r+ mode, only write updated components
+        self.write_data_catalog()
+        _ = self.config.data  # try to read default if not yet set
         self.staticdata.write()
         self.geoms.write()
         self.config.write()

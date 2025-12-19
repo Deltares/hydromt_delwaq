@@ -1,0 +1,36 @@
+steps:
+  - setup_basemaps:
+      region:
+        wflow_sbm: wflow_piave
+      maps:
+        - rivmsk
+        - lndslp
+        - strord
+        - soil_thickness
+        - soil_theta_s
+
+  - setup_monitoring:
+      mon_areas: riverland
+
+  - setup_emission_raster:
+      emission_fn: ghs_pop_2015
+      scale_method: average
+      fillna_method: zero
+      area_division: True
+
+  - setup_emission_vector:
+      emission_fn: gdp_world
+      col2raster: gdp
+      rasterize_method: value
+
+  - setup_hydrology_forcing:
+      hydro_forcing_fn: wflow_output_em
+      starttime: "2010-02-03 00:00:00"
+      endtime: "2010-02-10 00:00:00"
+      timestepsecs: 86400
+      include_transport: True
+
+  - write:
+
+  - forcing.write:
+      write_nc: true

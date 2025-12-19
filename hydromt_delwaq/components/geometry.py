@@ -133,7 +133,7 @@ class DemissionGeometryComponent(ModelComponent):
     def write(self):
         """Write geometry at <root/config> in ASCII and binary format."""
         self.root._assert_write_mode()
-        if not self.data.empty:
+        if self.data.empty:
             logger.info("No geometry data found, skip writing.")
             return
 
@@ -145,12 +145,12 @@ class DemissionGeometryComponent(ModelComponent):
         print(";Geometry of the EM compartment", file=exfile)
         print("PARAMETERS TotArea fPaved fUnpaved fOpenWater ALL", file=exfile)
         print("DATA", file=exfile)
-        np.savetxt(exfile, self._geometry.values, fmt="%10.4f")
+        np.savetxt(exfile, self.data.values, fmt="%10.4f")
         exfile.close()
 
         # Write binary file
         # Flatten the geometry data and repeat them for each compartment
-        geometry_data = np.tile(self._geometry.values.flatten(), 1)
+        geometry_data = np.tile(self.data.values.flatten(), 1)
         artow = np.array(geometry_data, dtype=np.float32).copy()
         # Define dummy time
         timear = np.array(0, dtype=np.int32)

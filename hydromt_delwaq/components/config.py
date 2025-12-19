@@ -9,7 +9,7 @@ from typing import List
 
 from hydromt import hydromt_step
 from hydromt.model import Model
-from hydromt.model.components import ConfigComponent
+from hydromt.model.components import ConfigComponent, ModelComponent
 
 __all__ = ["DelwaqConfigComponent", "DemissionConfigComponent"]
 
@@ -100,6 +100,41 @@ class DelwaqConfigComponent(ConfigComponent):
             with open(fn_out, "w") as exfile:
                 for _, line in lines.items():
                     print(line, file=exfile)
+
+    def test_equal(self, other: ModelComponent) -> tuple[bool, dict[str, str]]:
+        """Test if two pointer components are equal.
+
+        Parameters
+        ----------
+        other : ModelComponent
+            The component to compare against.
+
+        Returns
+        -------
+        tuple[bool, dict[str, str]]
+            True if the components are equal, and a dict with the associated errors per
+            property checked.
+        """
+        errors: dict[str, str] = {}
+        if not isinstance(other, self.__class__):
+            errors["__class__"] = f"other does not inherit from {self.__class__}."
+
+        # for once python does the recursion for us
+        for name in other.data.keys():
+            if name not in self.data:
+                errors[name] = "Config file missing in self."
+        for name in self.data.keys():
+            if name not in other.data:
+                errors[name] = "Config file not found in other."
+            elif self.data[name] != other.data[name]:
+                errors[name] = "Config file data not equal."
+
+        if len(errors) == 0:
+            errors = {}
+        else:
+            errors = {"config": errors}
+
+        return len(errors) == 0, errors
 
 
 class DemissionConfigComponent(DelwaqConfigComponent):

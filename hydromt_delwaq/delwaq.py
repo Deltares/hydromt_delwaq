@@ -35,13 +35,11 @@ class DelwaqModel(Model):
     _MAPS = {
         "flwdir": "ldd",
         "lndslp": "slope",
-        # "river_manning_n": "manning",
+        "river_manning_n": "manning",
         "N_River": "manning",
         "rivmsk": "river",
-        # "strord": "streamorder",
-        # "soil_theta_s": "porosity",
-        "wflow_streamorder": "streamorder",
-        "thetaS": "porosity",
+        "strord": "streamorder",
+        "soil_theta_s": "porosity",
         "reslocs": "reservoirs",
         "lakelocs": "lakes",
     }
