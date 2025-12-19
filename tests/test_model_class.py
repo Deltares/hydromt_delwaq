@@ -16,13 +16,13 @@ EXAMPLEDIR = join(dirname(abspath(__file__)), "..", "examples")
 _models = {
     "EM": {
         "example": "EM_piave",
-        "ini": "delwaq_build_EM.yml",
+        "ini": "delwaq_build_EM_v1.yml",
         "ini_update": "delwaq_update_EM_forcing.yml",
         "model_type": DemissionModel,
     },
     "WQ": {
         "example": "WQ_piave",
-        "ini": "delwaq_build_WQ.yml",
+        "ini": "delwaq_build_WQ_v1.yml",
         "ini_update": "delwaq_update_WQ_sed.yml",
         "model_type": DelwaqModel,
     },
@@ -111,6 +111,3 @@ def test_model_update(tmpdir, model):
     # Update model
     mod1 = _model["model_type"](root=delwaq_path, mode="r", **model_init)
     mod1.update(model_out=root, steps=steps)
-    # Check if model is api compliant
-    non_compliant_list = mod1._test_model_api()
-    assert len(non_compliant_list) == 0

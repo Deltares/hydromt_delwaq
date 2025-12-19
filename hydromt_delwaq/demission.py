@@ -46,8 +46,10 @@ class DemissionModel(Model):
         "flwdir": "ldd",
         "lndslp": "slope",
         "rivmsk": "river",
-        "strord": "streamorder",
-        "soil_theta_s": "porosity",
+        # "strord": "streamorder",
+        # "soil_theta_s": "porosity",
+        "wflow_streamorder": "streamorder",
+        "thetaS": "porosity",
     }
     _FORCING = {
         "temp": "tempair",
@@ -217,7 +219,10 @@ class DemissionModel(Model):
         ).data
 
         geometry_data = geometry.compute_geometry(
-            ds=hydromodel_grid, mask=self.staticdata.data["mask"]
+            ds=hydromodel_grid,
+            mask=self.staticdata.data["mask"],
+            fpaved_name=hydromodel._MAPS["soil_compacted_fraction"],
+            fopenwater_name=hydromodel._MAPS["land_water_fraction"],
         )
         self.geometry.set(
             pd.DataFrame(
@@ -627,7 +632,7 @@ class DemissionModel(Model):
         ds_in = self.data_catalog.get_rasterdataset(
             hydro_forcing_fn,
             geom=self.region,
-            time_tuple=(starttime, endtime),
+            time_range=(starttime, endtime),
         )
 
         # Update model timestepsecs attribute
@@ -647,7 +652,7 @@ class DemissionModel(Model):
             ds = ds.rename({ds.raster.y_dim: self.staticdata.data.raster.y_dim})
 
         # Add to forcing
-        self.set_forcing(ds)
+        self.forcing.set(ds)
 
         # Add timers info to config
         time_config = config.time_config(
@@ -722,7 +727,7 @@ class DemissionModel(Model):
             geom=self.region,
             buffer=2,
             variables=climate_vars,
-            time_tuple=(starttime, endtime),
+            time_range=(starttime, endtime),
             single_var_as_array=False,
         )
         dem_forcing = None
@@ -772,7 +777,7 @@ class DemissionModel(Model):
         self.hydromaps.read()
         self.staticdata.read()
         self.geometry.read()
-        # self.forcing.read()
+        self.forcing.read()
 
     def write(self):
         """Write the complete model schematization and configuration to file."""

@@ -39,7 +39,7 @@ wflow_output_em:
         unit: '%'
     category: hydro
     crs: 4326
-  uri: wflow_piave/run_default/output.nc
+  uri: wflow_piave_v1/run_default/output.nc
 wflow_output_wq:
   data_adapter:
     rename:
@@ -84,4 +84,4 @@ wflow_output_wq:
         unit: m3/s
     category: hydro
     crs: 4326
-  uri: wflow_piave/run_default/output.nc
+  uri: wflow_piave_v1/run_default/output.nc

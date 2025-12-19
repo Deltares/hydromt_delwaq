@@ -7,7 +7,8 @@ from os.path import dirname, join, splitext
 import numpy as np
 from hydromt import hydromt_step
 from hydromt.model import Model
-from hydromt.model.components import GridComponent
+from hydromt.model.components import GridComponent, ModelComponent
+from hydromt_wflow.components.utils import test_equal_grid_data
 
 from hydromt_delwaq.utils import dw_WriteSegmentOrExchangeData
 
@@ -230,3 +231,29 @@ class DelwaqStaticdataComponent(GridComponent):
             exfile = open(fname, "w")
             print(";Written by hydroMT: no monitoring areas were set.", file=exfile)
             exfile.close()
+
+    def test_equal(self, other: ModelComponent) -> tuple[bool, dict[str, str]]:
+        """Test if two staticdata components are equal.
+
+        Checks the model component type as well as the data variables and their values.
+
+        Parameters
+        ----------
+        other : ModelComponent
+            The component to compare against.
+
+        Returns
+        -------
+        tuple[bool, Dict[str, str]]
+            True if the components are equal, and a dict with the associated errors per
+            property checked.
+        """
+        errors: dict[str, str] = {}
+        if not isinstance(other, self.__class__):
+            errors["__class__"] = f"other does not inherit from {self.__class__}."
+
+        # Check data
+        _, data_errors = test_equal_grid_data(self.data, other.data)
+        errors.update(data_errors)
+
+        return len(errors) == 0, errors

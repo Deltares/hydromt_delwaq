@@ -22,7 +22,7 @@ __all__ = [
 def hydrology_forcing(
     ds: xr.Dataset,
     ds_model: xr.Dataset,
-    time_tuple: tuple,
+    time_range: tuple,
     timestepsecs: int,
     fluxes: List,
     surface_water: str = "sfw",
@@ -63,7 +63,7 @@ def hydrology_forcing(
 
         * Optional variables for unit conversion: [rivarea, lakearea, resarea]
 
-    time_tuple : tuple
+    time_range : tuple
         Tuple containing the start and end time of the simulation
     timestepsecs : int
         Timestep of the simulation in seconds
@@ -103,7 +103,7 @@ def hydrology_forcing(
     # Copy of ds to be filled
     dsvar = [v for v in ds.data_vars if v.startswith(fluxes[0])][0]
     # Delwaq needs one more timestep for the volume
-    starttime, endtime = pd.to_datetime(time_tuple)
+    starttime, endtime = pd.to_datetime(time_range)
     endtime = endtime + pd.to_timedelta(timestepsecs, unit="s")
     ds_out_times = pd.date_range(starttime, endtime, freq=f"{timestepsecs}s")
     coords = {
@@ -161,7 +161,7 @@ def hydrology_forcing(
                 ds[flux] = ds[fl_vars[0]]
                 for fl in fl_vars[1:]:
                     ds[flux] = ds[flux].where(ds[fl].isnull(), ds[fl])
-        ds_out[flux] = ds[flux].sel(time=slice(*time_tuple))
+        ds_out[flux] = ds[flux].sel(time=slice(*time_range))
         ds_out[flux].attrs.update(attrs)
         ds_out[flux].attrs.update(unit="m3/s")
 
@@ -359,7 +359,7 @@ def sediment_forcing(
     # Resample in time if needed
     ds_out = xr.Dataset()
     for var in ds.data_vars:
-        ds_out[var] = hydromt.workflows.forcing.resample_time(
+        ds_out[var] = hydromt.model.processes.meteo.resample_time(
             ds[var],
             freq,
             upsampling="bfill",  # we assume right labeled original data
@@ -438,7 +438,7 @@ def climate_forcing(
 
     # Start with wind
     if "wind10_u" in climate_vars and "wind10_v" in climate_vars:
-        ds_out["wind"] = hydromt.workflows.forcing.wind(
+        ds_out["wind"] = hydromt.model.processes.meteo.wind(
             ds_model,
             wind_u=ds["wind10_u"],
             wind_v=ds["wind10_v"],
@@ -447,7 +447,7 @@ def climate_forcing(
         climate_vars.remove("wind10_u")
         climate_vars.remove("wind10_v")
     elif "wind" in climate_vars:
-        ds_out["wind"] = hydromt.workflows.forcing.wind(
+        ds_out["wind"] = hydromt.model.processes.meteo.wind(
             ds_model,
             wind=ds_out["wind"],
             altitude_correction=False,
@@ -457,7 +457,7 @@ def climate_forcing(
     temp_vars = [v for v in climate_vars if v.startswith("temp")]
     for v in climate_vars:
         if v in temp_vars:
-            temp_v = hydromt.workflows.forcing.temp(
+            temp_v = hydromt.model.processes.meteo.temp(
                 ds[v],
                 dem_model=ds_model["elevtn"],
                 dem_forcing=dem_forcing,
@@ -470,7 +470,7 @@ def climate_forcing(
             ds_out[v] = temp_v
         else:
             da_out = ds[v].raster.reproject_like(ds_model, method="nearest_index")
-            da_out = hydromt.workflows.forcing.resample_time(
+            da_out = hydromt.model.processes.meteo.resample_time(
                 da_out,
                 freq,
                 upsampling="bfill",  # we assume right labeled original data

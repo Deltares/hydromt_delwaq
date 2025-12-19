@@ -35,10 +35,13 @@ class DelwaqModel(Model):
     _MAPS = {
         "flwdir": "ldd",
         "lndslp": "slope",
-        "river_manning_n": "manning",
+        # "river_manning_n": "manning",
+        "N_River": "manning",
         "rivmsk": "river",
-        "strord": "streamorder",
-        "soil_theta_s": "porosity",
+        # "strord": "streamorder",
+        # "soil_theta_s": "porosity",
+        "wflow_streamorder": "streamorder",
+        "thetaS": "porosity",
         "reslocs": "reservoirs",
         "lakelocs": "lakes",
     }
@@ -339,6 +342,72 @@ class DelwaqModel(Model):
             self.config.set(f"B2_nrofmon.{option}", lines_ini[option])
 
     @hydromt_step
+    def setup_staticdata_from_rasterdataset(
+        self,
+        raster_data: str | Path | xr.DataArray | xr.Dataset,
+        variables: list[str] | None = None,
+        fill_method: str | None = None,
+        reproject_method: list[str] | str | None = "nearest",
+        mask_name: str | None = "mask",
+        rename: dict[str, str] | None = None,
+    ):
+        """
+        Add data variable(s) from ``raster_data`` to grid component.
+
+        If raster is a dataset, all variables will be added unless ``variables`` list
+        is specified.
+
+        Adds model layers:
+
+        * **raster.name** grid: data from raster_data
+
+        Parameters
+        ----------
+        raster_data: str, Path, xr.DataArray, xr.Dataset
+            Data catalog key, path to raster file or raster xarray data object.
+            If a path to a raster file is provided it will be added
+            to the data_catalog with its name based on the file basename without
+            extension.
+        variables: list, optional
+            List of variables to add to grid from raster_data. By default all.
+        fill_method : str, optional
+            If specified, fills nodata values using fill_nodata method.
+            Available methods are {'linear', 'nearest', 'cubic', 'rio_idw'}.
+        reproject_method: list, str, optional
+            See rasterio.warp.reproject for existing methods, by default 'nearest'.
+            Can provide a list corresponding to ``variables``.
+        mask_name: str, optional
+            Name of mask in self.grid to use for masking raster_data. By default 'mask'.
+            Use None to disable masking.
+        rename: dict, optional
+            Dictionary to rename variable names in raster_data before adding to grid
+            {'name_in_raster_data': 'name_in_grid'}. By default empty.
+        """
+        rename = rename or {}
+        logger.info(f"Preparing grid data from raster source {raster_data}")
+        # Read raster data and select variables
+        ds = self.data_catalog.get_rasterdataset(
+            raster_data,
+            geom=self.region,
+            buffer=2,
+            variables=variables,
+            single_var_as_array=False,
+        )
+        assert ds is not None
+        # Data resampling
+        ds_out = processes.grid.grid_from_rasterdataset(
+            grid_like=self.staticdata.data,
+            ds=ds,
+            variables=variables,
+            fill_method=fill_method,
+            reproject_method=reproject_method,
+            mask_name=mask_name,
+            rename=rename,
+        )
+        # Add to grid
+        self.staticdata.set(ds_out)
+
+    @hydromt_step
     def setup_hydrology_forcing(
         self,
         hydro_forcing_fn: str | Path | xr.Dataset,
@@ -423,7 +492,7 @@ class DelwaqModel(Model):
             ds=ds,
             ds_model=self.hydromaps.data,
             timestepsecs=timestepsecs,
-            time_tuple=(starttime, endtime),
+            time_range=(starttime, endtime),
             fluxes=self.fluxes,
             surface_water=self.surface_water,
             add_volume_offset=add_volume_offset,
@@ -493,7 +562,7 @@ class DelwaqModel(Model):
         ds = self.data_catalog.get_rasterdataset(
             sediment_fn,
             geom=self.region,
-            time_tuple=(starttime, endtime),
+            time_range=(starttime, endtime),
             variables=sed_vars,
         )
         # Prepare sediment forcing
@@ -571,7 +640,7 @@ class DelwaqModel(Model):
             geom=self.region,
             buffer=2,
             variables=climate_vars,
-            time_tuple=(starttime, endtime),
+            time_range=(starttime, endtime),
             single_var_as_array=False,
         )
         dem_forcing = None
@@ -622,7 +691,7 @@ class DelwaqModel(Model):
         self.hydromaps.read()
         self.geoms.read()
         self.pointer.read()
-        # self.forcing.read()
+        self.forcing.read()
 
     @hydromt_step
     def write(self):

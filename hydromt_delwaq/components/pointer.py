@@ -161,3 +161,27 @@ class DelwaqPointerComponent(ModelComponent):
         for i in range(pointer.shape[0]):
             f.write(struct.pack("4i", *np.int_(pointer[i, :])))
         f.close()
+
+    def test_equal(self, other: ModelComponent) -> tuple[bool, dict[str, str]]:
+        """Test if two pointer components are equal.
+
+        Parameters
+        ----------
+        other : ModelComponent
+            The component to compare against.
+
+        Returns
+        -------
+        tuple[bool, dict[str, str]]
+            True if the components are equal, and a dict with the associated errors per
+            property checked.
+        """
+        errors: dict[str, str] = {}
+        if not isinstance(other, self.__class__):
+            errors["__class__"] = f"other does not inherit from {self.__class__}."
+
+        # for once python does the recursion for us
+        if not self.data == other.data:
+            errors["config"] = "Configs are not equal"
+
+        return len(errors) == 0, errors

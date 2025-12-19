@@ -7,7 +7,8 @@ from os.path import join
 import numpy as np
 from hydromt import hydromt_step, readers
 from hydromt.model import Model
-from hydromt.model.components import GridComponent
+from hydromt.model.components import GridComponent, ModelComponent
+from hydromt_wflow.components.utils import test_equal_grid_data
 
 __all__ = ["DelwaqHydromapsComponent"]
 
@@ -108,3 +109,29 @@ class DelwaqHydromapsComponent(GridComponent):
             root=join(self.root.path, "hydromodel"),
             mask=True,
         )
+
+    def test_equal(self, other: ModelComponent) -> tuple[bool, dict[str, str]]:
+        """Test if two hydromaps components are equal.
+
+        Checks the model component type as well as the data variables and their values.
+
+        Parameters
+        ----------
+        other : ModelComponent
+            The component to compare against.
+
+        Returns
+        -------
+        tuple[bool, Dict[str, str]]
+            True if the components are equal, and a dict with the associated errors per
+            property checked.
+        """
+        errors: dict[str, str] = {}
+        if not isinstance(other, self.__class__):
+            errors["__class__"] = f"other does not inherit from {self.__class__}."
+
+        # Check dimensions
+        _, data_errors = test_equal_grid_data(self.data, other.data)
+        errors.update(data_errors)
+
+        return len(errors) == 0, errors

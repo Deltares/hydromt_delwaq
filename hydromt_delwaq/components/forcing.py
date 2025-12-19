@@ -7,7 +7,8 @@ from os.path import dirname, join
 import numpy as np
 from hydromt import hydromt_step
 from hydromt.model import Model
-from hydromt.model.components import GridComponent
+from hydromt.model.components import GridComponent, ModelComponent
+from hydromt_wflow.components.utils import test_equal_grid_data
 from tqdm import tqdm
 
 from hydromt_delwaq.utils import dw_WriteSegmentOrExchangeData
@@ -54,12 +55,37 @@ class DelwaqForcingComponent(GridComponent):
             region_filename=None,
         )
 
-    def read_forcing(self):
-        """Read and forcing at <root/dynamicdata/> and parse to xr.Dataset."""
+    @hydromt_step
+    def read(
+        self,
+        filename: str = "dynamicdata/{name}.dat",
+    ):
+        """
+        Read netcdf copy of the forcing if exists at <root/filename>.
+
+        Parameters
+        ----------
+        filename : str, optional
+            filename relative to model root and should contain a {name} placeholder,
+            by default 'dynamicdata/{name}.dat'
+        """
         self.root._assert_read_mode()
         self._initialize_grid(skip_read=True)
 
-        # raise NotImplementedError()
+        # Try reading the netcdf copy
+        fname = filename.format(name="dynamicdata")
+        fname = os.path.splitext(fname)[0] + ".nc"
+
+        if os.path.exists(join(self.root.path, fname)):
+            super().read(
+                filename=fname,
+                mask_and_scale=False,
+            )
+        else:
+            logger.info(
+                f"NetCDF copy of the forcing file {fname} not found in model root, "
+                "skip reading."
+            )
 
     @hydromt_step
     def write(
@@ -241,8 +267,40 @@ class DelwaqForcingComponent(GridComponent):
                 timestepstamp, climname, climblock, 1, WriteAscii=False
             )
 
+    def test_equal(self, other: ModelComponent) -> tuple[bool, dict[str, str]]:
+        """Test if two forcing components are equal.
 
-class DemissionForcingComponent(GridComponent):
+        Checks the model component type as well as the data variables and their values.
+
+        Parameters
+        ----------
+        other : ModelComponent
+            The component to compare against.
+
+        Returns
+        -------
+        tuple[bool, Dict[str, str]]
+            True if the components are equal, and a dict with the associated errors per
+            property checked.
+        """
+        errors: dict[str, str] = {}
+        if not isinstance(other, self.__class__):
+            errors["__class__"] = f"other does not inherit from {self.__class__}."
+
+        # Check data
+        # As we can only read netcdf copy, only compare if both have data
+        if len(self.data) == 0 or len(other.data) == 0:
+            logger.warning(
+                "One of the forcing components has no data, skipping data comparison."
+            )
+        else:
+            _, data_errors = test_equal_grid_data(self.data, other.data)
+            errors.update(data_errors)
+
+        return len(errors) == 0, errors
+
+
+class DemissionForcingComponent(DelwaqForcingComponent):
     """Demission forcing component.
 
     Class used for setting, creating, writing, and reading the Demission forcing.

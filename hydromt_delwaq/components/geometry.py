@@ -164,3 +164,27 @@ class DemissionGeometryComponent(ModelComponent):
         fpa = open(fname + "-parameters.inc", "w")
         print("PARAMETERS TotArea fPaved fUnpaved fOpenWater", file=fpa)
         fpa.close()
+
+    def test_equal(self, other: ModelComponent) -> tuple[bool, dict[str, str]]:
+        """Test if two geometry components are equal.
+
+        Parameters
+        ----------
+        other : ModelComponent
+            The component to compare against.
+
+        Returns
+        -------
+        tuple[bool, dict[str, str]]
+            True if the components are equal, and a dict with the associated errors per
+            property checked.
+        """
+        errors: dict[str, str] = {}
+        if not isinstance(other, self.__class__):
+            errors["__class__"] = f"other does not inherit from {self.__class__}."
+
+        # compare dataframes
+        if not self.data.equals(other.data):
+            errors["data"] = "Geometry data is not equal."
+
+        return len(errors) == 0, errors
