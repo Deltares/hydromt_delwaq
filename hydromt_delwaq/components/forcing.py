@@ -191,7 +191,6 @@ class DelwaqForcingComponent(GridComponent):
         fname = join(self.root.path, filename.format(name="dynamicdata"))
         fname = os.path.splitext(fname)[0] + ".nc"
         logger.info(f"Writing NetCDF copy of the forcing data to {fname}.")
-        ds_out = ds_out.drop_vars(["mask"], errors="ignore")
         # Use core function to write to netcdf and handles
         close_handle = writers.write_nc(
             ds_out,

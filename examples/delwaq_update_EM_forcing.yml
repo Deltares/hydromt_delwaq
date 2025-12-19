@@ -6,8 +6,8 @@ steps:
       timestepsecs: 86400
       include_transport: True
 
-  - write_config:
+  - config.write:
 
-  - write_forcing:
+  - forcing.write:
 
   - write_waqgeom:

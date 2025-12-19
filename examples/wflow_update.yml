@@ -1,27 +1,27 @@
 steps:
   - setup_config:
       data:
-        time.starttime: 2010-02-02T00:00:00
-        time.endtime: 2010-02-10T00:00:00
+        time.starttime: "2010-02-02T00:00:00"
+        time.endtime: "2010-02-10T00:00:00"
         time.timestepsecs: 86400
         # Variables to save for a coupling between wflow and demission + delwaq
-        output.atmosphere_water__precipitation_volume_flux: "precip"
-        output.land_surface__evapotranspiration_volume_flux: "infilt"
-        output.compacted_soil_surface_water__excess_volume_flux: "runUnp"
-        output.non_compacted_soil_surface_water__excess_volume_flux: "runPav"
-        output.soil_surface_water_unsaturated_zone__exfiltration_volume_flux: "exfiltustore"
-        output.land.soil.variables.exfiltsatwater: "exfiltsatstore"
-        output.soil_water_root_zone__volume_percentage: "vwcproot"
-        output.river_water__volume_flow_rate: "q_river"
-        output.river_water__volume: "vol_river"
-        output.land_surface_water__volume_flow_rate: "q_land"
-        output.land_surface_water__to_river_volume_flow_rate: "land_to_river"
-        output.lateral.subsurface.ssf: "q_ssf"
-        output.subsurface_water__to_river_volume_flow_rate: "ssf_to_river"
+        output.netcdf_grid.variables.atmosphere_water__precipitation_volume_flux: "precip"
+        output.netcdf_grid.variables.land_surface__evapotranspiration_volume_flux: "infilt"
+        output.netcdf_grid.variables.compacted_soil_surface_water__excess_volume_flux: "runUnp"
+        output.netcdf_grid.variables.non_compacted_soil_surface_water__excess_volume_flux: "runPav"
+        output.netcdf_grid.variables.soil_surface_water_unsaturated_zone__exfiltration_volume_flux: "exfiltustore"
+        output.netcdf_grid.variables.land.soil.variables.exfiltsatwater: "exfiltsatstore"
+        output.netcdf_grid.variables.soil_water_root_zone__volume_percentage: "vwcproot"
+        output.netcdf_grid.variables.river_water__volume_flow_rate: "q_river"
+        output.netcdf_grid.variables.river_water__volume: "vol_river"
+        output.netcdf_grid.variables.land_surface_water__volume_flow_rate: "q_land"
+        output.netcdf_grid.variables.land_surface_water__to_river_volume_flow_rate: "land_to_river"
+        output.netcdf_grid.variables.lateral.subsurface.ssf: "q_ssf"
+        output.netcdf_grid.variables.subsurface_water__to_river_volume_flow_rate: "ssf_to_river"
         # Only add if reservoirs in the model
-        output.reservoir_water__volume: "vol_reservoir"
-        output.reservoir_water__outgoing_volume_flow_rate: "q_reservoir"
+        output.netcdf_grid.variables.reservoir_water__volume: "vol_reservoir"
+        output.netcdf_grid.variables.reservoir_water__outgoing_volume_flow_rate: "q_reservoir"
         # Only add if 1d floodplain in the model
-        # output.floodplain_water__volume: "vol_floodplain"
+        # output.netcdf_grid.variables.floodplain_water__volume: "vol_floodplain"
 
-  - write_config:
+  - config.write:

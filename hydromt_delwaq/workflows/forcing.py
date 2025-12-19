@@ -223,7 +223,6 @@ def hydrology_forcing(
         dims=ds_out.raster.dims,
         coords=ds_out.raster.coords,
         data=ds_model["mask"].values,
-        attrs=dict(_FillValue=ds_model["mask"].raster.nodata),
     )
 
     return ds_out
@@ -321,8 +320,7 @@ def hydrology_forcing_em(
     ds.coords["mask"] = xr.DataArray(
         dims=ds.raster.dims,
         coords=ds.raster.coords,
-        data=ds_model["modelmap"].values,
-        attrs=dict(_FillValue=ds_model["mask"].raster.nodata),
+        data=ds_model["mask"].values,
     )
 
     return ds
@@ -379,7 +377,6 @@ def sediment_forcing(
         dims=ds_out.raster.dims,
         coords=ds_out.raster.coords,
         data=ds_model["mask"].values,
-        attrs=dict(_FillValue=ds_model["mask"].raster.nodata),
     )
     # Add _FillValue to the data attributes
     for dvar in ds_out.data_vars.keys():
@@ -483,7 +480,6 @@ def climate_forcing(
         dims=ds_out.raster.dims,
         coords=ds_out.raster.coords,
         data=ds_model["mask"].values,
-        attrs=dict(_FillValue=ds_model["mask"].raster.nodata),
     )
     # Add _FillValue to the data attributes
     for dvar in ds_out.data_vars.keys():
