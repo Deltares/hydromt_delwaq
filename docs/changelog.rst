@@ -8,6 +8,34 @@ The format is based on `Keep a Changelog`_, and this project adheres to
 
 Unreleased
 ==========
+Update for HydroMT v1.3.0 and HydroMT-Wflow v1.0.0 compatibility. The main changes is that
+the ``DelwaqModel`` and ``DEmissionModel`` are now separated and have a component structure.
+HydroMT data catalog format and workflow YAML were also  updated. The codes was also adapted
+to support Wflow.jl models v1.0.0.
+
+Added
+-----
+- ``DelwaqConfigComponent`` and ``DEmissionConfigComponent`` to handle the configuration files.
+- ``DelwaqStaticdataComponent`` to handle gridded static data.
+- ``DelwaqHydromapsComponent`` to handle hydromaps from hydromodel needed for processing by HydroMT.
+- ``DelwaqPointerComponent`` to handle pointer properties of the delwaq model.
+- ``DEmissionGeometryComponent`` to handle geometry properties of the demission model.
+- ``DelwaqForcingComponent`` and ``DEmissionForcingComponent`` to handle hydrological, sediment and climate forcing data.
+- Readers for ``pointer``, ``forcing`` (netcdf copy) and ``geometry`` components.
+
+Changed
+-------
+- ``DelwaqModel`` and ``DEmissionModel`` are now separated classes with a component structure.
+- ``grid`` is now ``staticdata``.
+- All ``setup_emission_*`` methods are now in the ``DEmissionModel`` class.
+- ``setup_sediment_forcing`` is now in the ``DelwaqModel`` class only.
+
+Fixed
+-----
+- Integration tests for all components (not just geoms and staticdata).
+
+Unreleased
+==========
 
 Added
 -----

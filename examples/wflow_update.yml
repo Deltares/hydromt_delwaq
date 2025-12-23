@@ -16,7 +16,7 @@ steps:
         output.netcdf_grid.variables.river_water__volume: "vol_river"
         output.netcdf_grid.variables.land_surface_water__volume_flow_rate: "q_land"
         output.netcdf_grid.variables.land_surface_water__to_river_volume_flow_rate: "land_to_river"
-        output.netcdf_grid.variables.lateral.subsurface.ssf: "q_ssf"
+        output.netcdf_grid.variables.subsurface_water__volume_flow_rate: "q_ssf"
         output.netcdf_grid.variables.subsurface_water__to_river_volume_flow_rate: "ssf_to_river"
         # Only add if reservoirs in the model
         output.netcdf_grid.variables.reservoir_water__volume: "vol_reservoir"

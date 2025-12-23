@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = [
     "hydromaps",
+    "maps_from_hydromodel",
     "geometrymaps",
     "pointer",
 ]
@@ -86,7 +87,7 @@ def hydromaps(
 
 def maps_from_hydromodel(
     hydromodel,
-    maps: list[str] = ["rivmsk", "lndslp", "strord", "N", "SoilThickness", "thetaS"],
+    maps: list[str] = ["rivmsk", "lndslp", "strord"],
 ):
     """Return maps from hydromodel.
 
@@ -96,7 +97,7 @@ def maps_from_hydromodel(
         HydroMT Model class containing the hydromodel to get geometry data from from.
     maps: list of str
         List of variables from hydromodel to extract and extend.
-        By default ['rivmsk', 'lndslp', 'strord', 'N', 'SoilThickness', 'thetaS'].
+        By default ['rivmsk', 'lndslp', 'strord'].
 
     Returns
     -------
@@ -107,12 +108,7 @@ def maps_from_hydromodel(
 
     ds_out = xr.Dataset()
     for m in maps:
-        if f"{m}_River" in hydromodel_grid:
-            ds_out[m] = hydromodel_grid[f"{m}_River"].where(
-                hydromodel_grid[hydromodel._MAPS["rivmsk"]],
-                hydromodel_grid[m],
-            )
-        elif m in hydromodel._MAPS:
+        if m in hydromodel._MAPS:
             if hydromodel._MAPS[m] in hydromodel_grid:
                 ds_out[m] = hydromodel_grid[hydromodel._MAPS[m]]
         elif m in hydromodel_grid:

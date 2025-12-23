@@ -3,7 +3,7 @@
 import logging
 from os.path import isfile, join
 from pathlib import Path
-from typing import Dict, List
+from typing import Any
 
 import numpy as np
 import pyproj
@@ -56,7 +56,7 @@ class DelwaqModel(Model):
         root: str | Path | None = None,
         mode: str = "w",
         config_filename: str | Path | None = None,
-        data_libs: List[str | Path] | None = None,
+        data_libs: list[str | Path] | None = None,
     ):
         """Initialize a model.
 
@@ -131,14 +131,42 @@ class DelwaqModel(Model):
 
     ## SETUP METHODS
     @hydromt_step
+    def setup_config(self, data: dict[str, Any]):
+        """Set the config dictionary at key(s) with values.
+
+        Parameters
+        ----------
+        data : dict[str, Any]
+            A dictionary with the values to be set. keys can be dotted like in
+            :py:meth:`~hydromt_wflow.components.config.WflowConfigComponent.set`
+
+        Examples
+        --------
+        Setting data as a nested dictionary::
+
+
+            >> self.setup_config({'a': 1, 'b': {'c': {'d': 2}}})
+            >> self.config.data
+            {'a': 1, 'b': {'c': {'d': 2}}}
+
+        Setting data using dotted notation::
+
+            >> self.setup_config({'a.d.f.g': 1, 'b': {'c': {'d': 2}}})
+            >> self.config.data
+            {'a': {'d':{'f':{'g': 1}}}, 'b': {'c': {'d': 2}}}
+
+        """
+        self.config.update(data)
+
+    @hydromt_step
     def setup_basemaps(
         self,
-        region: Dict,
+        region: dict,
         mask: str = "basins",
         surface_water: str = "sfw",
-        boundaries: List[str] = ["bd"],
-        fluxes: List[str] = ["sfw>sfw", "bd>sfw"],
-        maps: List[str] = ["rivmsk", "lndslp", "strord", "N"],
+        boundaries: list[str] = ["bd"],
+        fluxes: list[str] = ["sfw>sfw", "bd>sfw"],
+        maps: list[str] = ["rivmsk", "lndslp", "strord"],
     ):
         """
         Prepare delwaq schematization using the hydromodel region and resolution.
@@ -187,7 +215,7 @@ class DelwaqModel(Model):
             setup_hydrology_forcing.
         maps: list of str
             List of variables from hydromodel to add to grid.
-            By default ['rivmsk', 'lndslp', 'strord', 'N'].
+            By default ['rivmsk', 'lndslp', 'strord'].
         """
         # Initialise hydromodel from region
         hydromodel = processes.region.parse_region_other_model(region)
@@ -414,7 +442,7 @@ class DelwaqModel(Model):
         timestepsecs: int = 86400,
         add_volume_offset: bool = True,
         min_volume: float = 0.1,
-        override: List = [],
+        override: list = [],
     ):
         """Prepare Delwaq hydrological fluxes.
 
@@ -526,7 +554,7 @@ class DelwaqModel(Model):
         starttime: str,
         endtime: str,
         timestepsecs: int = 86400,
-        particle_class: List[str] = ["IM1", "IM2", "IM3", "IM4", "IM5"],
+        particle_class: list[str] = ["IM1", "IM2", "IM3", "IM4", "IM5"],
     ):
         """Prepare Delwaq sediment fluxes.
 

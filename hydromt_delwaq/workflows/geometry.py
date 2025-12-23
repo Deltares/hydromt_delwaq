@@ -27,7 +27,8 @@ def compute_geometry(
         Dataset containing the geometry data.
 
         * Required variables: fraction of paved area "soil_compacted_fraction", fraction
-        of open water "land_water_fraction"
+          of open water "land_water_fraction"
+
     mask : xr.DataArray
         Mask to select the active cells (segments) in ds.
     fpaved_name : str

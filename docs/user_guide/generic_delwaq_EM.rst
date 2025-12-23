@@ -1,7 +1,7 @@
 .. _generic_delwaq_EM:
 
-Working with the D-Emissions model
-----------------------------------
+Working with D-Emissions models
+-------------------------------
 The first step in solving or mitigating many water quality and health problems, is to get a quantitative overview of the emissions of substances causing such problems.
 `D-Emissions <www.deltares.nl/en/software/module/D-Emissions/>`_ provides a perfect tool to assess the quantity and spatial distribution of the emitted substances in the catchment.
 Because it simulates the true cause-effect chain, it provides predictive power and allows for “what if” scenarios driven by policy projections and implemented measures.

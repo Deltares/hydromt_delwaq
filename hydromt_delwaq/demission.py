@@ -3,7 +3,7 @@
 import logging
 from os.path import isfile, join
 from pathlib import Path
-from typing import Dict, List
+from typing import Any
 
 import geopandas as gpd
 import numpy as np
@@ -62,7 +62,7 @@ class DemissionModel(Model):
         root: str | Path | None = None,
         mode: str = "w",
         config_filename: str | Path | None = None,
-        data_libs: List[str | Path] | None = None,
+        data_libs: list[str | Path] | None = None,
     ):
         """Initialize a model.
 
@@ -141,10 +141,38 @@ class DemissionModel(Model):
         return self.components["forcing"]
 
     @hydromt_step
+    def setup_config(self, data: dict[str, Any]):
+        """Set the config dictionary at key(s) with values.
+
+        Parameters
+        ----------
+        data : dict[str, Any]
+            A dictionary with the values to be set. keys can be dotted like in
+            :py:meth:`~hydromt_wflow.components.config.WflowConfigComponent.set`
+
+        Examples
+        --------
+        Setting data as a nested dictionary::
+
+
+            >> self.setup_config({'a': 1, 'b': {'c': {'d': 2}}})
+            >> self.config.data
+            {'a': 1, 'b': {'c': {'d': 2}}}
+
+        Setting data using dotted notation::
+
+            >> self.setup_config({'a.d.f.g': 1, 'b': {'c': {'d': 2}}})
+            >> self.config.data
+            {'a': {'d':{'f':{'g': 1}}}, 'b': {'c': {'d': 2}}}
+
+        """
+        self.config.update(data)
+
+    @hydromt_step
     def setup_basemaps(
         self,
-        region: Dict,
-        maps: List[str] = ["rivmsk", "lndslp", "strord"],
+        region: dict,
+        maps: list[str] = ["rivmsk", "lndslp", "strord"],
     ):
         """
         Prepare demission schematization using the hydromodel region and resolution.
@@ -484,9 +512,9 @@ class DemissionModel(Model):
     def setup_roads(
         self,
         roads_fn: str | Path | gpd.GeoDataFrame,
-        highway_list: str | List[str],
-        country_list: str | List[str],
-        non_highway_list: str | List[str] | None = None,
+        highway_list: str | list[str],
+        country_list: str | list[str],
+        non_highway_list: str | list[str] | None = None,
         country_fn: str | Path | gpd.GeoDataFrame | None = None,
     ):
         """Prepare roads statistics needed for emission modelling.
