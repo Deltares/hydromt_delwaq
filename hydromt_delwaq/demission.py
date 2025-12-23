@@ -531,16 +531,14 @@ class DemissionModel(Model):
         if country_fn is not None:
             if not isinstance(country_list, list):
                 country_list = [country_list]
-            gdf_country = self.data_catalog.get_geodataframe(
-                country_fn, dst_crs=self.crs
-            )
+            gdf_country = self.data_catalog.get_geodataframe(country_fn)
             gdf_country = gdf_country.astype({"country_code": "str"})
             gdf_country = gdf_country.iloc[
                 np.isin(gdf_country["country_code"], country_list)
             ]
             # Read the roads data and mask with country geom
             gdf_roads = self.data_catalog.get_geodataframe(
-                roads_fn, dst_crs=self.crs, geom=gdf_country, variables=["road_type"]
+                roads_fn, geom=gdf_country, variables=["road_type"]
             )
             # Compute country statistics
             ds_country = roads.roads_emissions_country(
@@ -557,7 +555,7 @@ class DemissionModel(Model):
         # Filter road gdf with model mask instead of whole country
         mask = self.staticdata.data["mask"].astype("int32").raster.vectorize()
         gdf_roads = self.data_catalog.get_geodataframe(
-            roads_fn, dst_crs=self.crs, geom=mask, variables=["road_type"]
+            roads_fn, geom=mask, variables=["road_type"]
         )
         # Compute segment statistics
         ds_segments = roads.roads_emissions_segments(

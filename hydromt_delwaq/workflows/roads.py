@@ -83,7 +83,7 @@ def zonal_stats(
 
     # Spatial join of gdf and zones
     if method == "sjoin":
-        gdf = gpd.sjoin(gdf, zones, how="inner", op="within")
+        gdf = gpd.sjoin(gdf, zones, how="inner", predicate="within")
     # Overlay with the zones
     elif method == "overlay":
         gdf = (
@@ -294,6 +294,9 @@ def roads_emissions_country(
         * ``hwy_length_sum_country``: highway road length per country of interest.
         * ``nnhwy_length_sum_country``: non-highway road length per country of interest.
     """
+    # To ds_like crs
+    gdf_roads = gdf_roads.to_crs(ds_like.raster.crs)
+    gdf_country = gdf_country.to_crs(ds_like.raster.crs)
     # Common preprocessing of arguments with segments
     feature_filter = _preprocess_roads_emissions(
         gdf_roads=gdf_roads,
@@ -368,6 +371,8 @@ def roads_emissions_segments(
         * ``nnhwy_length``: non-highway road length per segment/grid cell.
 
     """
+    # To ds_like crs
+    gdf_roads = gdf_roads.to_crs(ds_like.raster.crs)
     # Common preprocessing of arguments with country
     feature_filter = _preprocess_roads_emissions(
         gdf_roads=gdf_roads,

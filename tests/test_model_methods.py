@@ -69,3 +69,27 @@ def test_setup_3dgrid(tmpdir, example_delwaq_model):
     assert isfile(
         join(tmpdir, "staticdata_CC", "temp_INM_INM-CM5-0_ssp585_far_month_1.dat")
     )
+
+
+def test_setup_roads(example_demission_model):
+    # Initialize model and read results
+    mod = example_demission_model
+
+    # Tests on setup_roads
+    mod.setup_roads(
+        roads_fn="grip_roads",
+        highway_list=["1"],
+        country_list=["380"],
+        country_fn="wb_countries",
+    )
+
+    # Check maps and values
+    ds = mod.staticdata.data
+    assert "hwy_length_sum_country" in ds
+    assert "nnhwy_length_sum_country" in ds
+    assert "hwy_length" in ds
+    assert "nnhwy_length" in ds
+
+    assert len(np.unique(ds["hwy_length_sum_country"].values)) == 2
+    assert np.isclose(ds["hwy_length_sum_country"].values.max(), 1247.7513, atol=1e-4)
+    assert np.isclose(ds["hwy_length"].values.max(), 7.6356, atol=1e-4)
