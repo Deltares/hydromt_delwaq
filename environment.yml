@@ -5,7 +5,7 @@ channels:
 
 dependencies:
   - cartopy # to run examples
-  - hydromt_delwaq>=0.3.0
+  - hydromt_delwaq>=0.4.0
   - jupyterlab # to run examples
   - matplotlib # to run examples
   - notebook # to run examples
