@@ -74,7 +74,7 @@ In order to prepare hydrological fluxes for DELWAQ from Wflow, Wflow should be r
 - non_compacted_soil_surface_water__excess_volume_flux (infiltration excess runoff on paved areas)
 - compacted_soil_surface_water__excess_volume_flux (infiltration excess runoff on unpaved areas)
 - soil_surface_water_unsaturated_zone__exfiltration_volume_flux (exfiltration from unsaturated zone)
-- land.soil.variables.exfiltsatwater (exfiltration from saturated zone)
+- soil_surface_water_saturated_zone__exfiltration_volume_flux (exfiltration from saturated zone)
 - land_surface_water__volume_flow_rate (overland flow)
 - subsurface_water__volume_flow_rate (subsurface flow)
 - soil_water_root_zone__volume_percentage (moisture in the root zone)

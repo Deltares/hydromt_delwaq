@@ -10,7 +10,7 @@ steps:
         output.netcdf_grid.variables.compacted_soil_surface_water__excess_volume_flux: "runUnp"
         output.netcdf_grid.variables.non_compacted_soil_surface_water__excess_volume_flux: "runPav"
         output.netcdf_grid.variables.soil_surface_water_unsaturated_zone__exfiltration_volume_flux: "exfiltustore"
-        output.netcdf_grid.variables.land.soil.variables.exfiltsatwater: "exfiltsatstore"
+        output.netcdf_grid.variables.soil_surface_water_saturated_zone__exfiltration_volume_flux: "exfiltsatstore"
         output.netcdf_grid.variables.soil_water_root_zone__volume_percentage: "vwcproot"
         output.netcdf_grid.variables.river_water__volume_flow_rate: "q_river"
         output.netcdf_grid.variables.river_water__volume: "vol_river"
