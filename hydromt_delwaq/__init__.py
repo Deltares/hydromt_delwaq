@@ -1,6 +1,8 @@
 """hydroMT plugin for DELWAQ models."""
 
-__version__ = "0.3.1.dev0"
+from os.path import abspath, dirname, join
+
+__version__ = "0.3.2.dev0"
 
 # Set environment variables (this will be temporary)
 # to use shapely 2.0 in favor of pygeos (if installed)

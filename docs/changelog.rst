@@ -34,16 +34,14 @@ Fixed
 -----
 - Integration tests for all components (not just geoms and staticdata).
 
-Unreleased
-==========
+v0.3.1 (16 January 2026)
+========================
+Minor fixes and improvements.
 
 Added
 -----
 - Support for 3D data (example for cyclic data) in ``grid``.
 - Flexible names for ``grid`` and ``forcing`` filenames in read/write methods.
-
-Changed
--------
 
 Fixed
 -----
