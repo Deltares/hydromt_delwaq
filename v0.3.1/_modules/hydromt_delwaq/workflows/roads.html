@@ -1,0 +1,893 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hydromt_delwaq.workflows.roads &#8212; HydroMT delwaq  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=d8b05058" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/hydromt_delwaq/workflows/roads';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.1" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../../../_static/hydromt-icon.svg" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/hydromt-icon.svg" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">HydroMT DELWAQ</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">hydromt_delwaq.workflows.roads</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for hydromt_delwaq.workflows.roads</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Workflow for roads data.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.emissions</span><span class="w"> </span><span class="kn">import</span> <span class="n">emission_vector</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;zonal_stats&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;zonal_stats_grid&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;roads_emissions_country&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;roads_emissions_segments&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">zonal_stats</span><span class="p">(</span>
+    <span class="n">gdf</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+    <span class="n">zones</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+    <span class="n">variables</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="n">stats</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;overlay&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate zonal statisctics of vector samples aggregated for geometries.</span>
+
+<span class="sd">    Adds new columns variables to the zones GeoDataFrame:</span>
+<span class="sd">        - New columns: {variable}_{stat} (for variable in variables and stat in stats).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gdf : geopandas.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame containing roads shape.</span>
+<span class="sd">    zones : geopandas.GeoDataFrame</span>
+<span class="sd">        Zones to compute the roads statistics.</span>
+<span class="sd">    variables: list of str, optional.</span>
+<span class="sd">        List of variables to derive statistics from.</span>
+<span class="sd">        Either columns names from gdf (dtype must be either float or integer) or</span>
+<span class="sd">        geometric properties such as [&#39;length&#39;, &#39;area&#39;].</span>
+<span class="sd">        If geometric properties of the gdf are not available, they are computed on</span>
+<span class="sd">        the spot.</span>
+<span class="sd">    stats: list of str, callable</span>
+<span class="sd">        Statistics to compute from raster values, options include</span>
+<span class="sd">        {&#39;count&#39;, &#39;min&#39;, &#39;max&#39;, &#39;sum&#39;, &#39;mean&#39;, &#39;std&#39;, &#39;median&#39;, &#39;q##&#39;}.</span>
+<span class="sd">        Multiple percentiles can be calculated using comma-seperated values,</span>
+<span class="sd">        e.g.: &#39;q10,50,90&#39;</span>
+<span class="sd">        Statistics ignore the nodata value and are applied along the x and y dimension.</span>
+<span class="sd">        By default [&#39;mean&#39;].</span>
+<span class="sd">    method: str, optional</span>
+<span class="sd">        Method for the spatial interpolation of gdf and zones. Either &#39;sjoin&#39; for</span>
+<span class="sd">        spatial join for gdf within zones, or &#39;overlay&#39; for a union overlay of gdf with</span>
+<span class="sd">        zones (default).</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    zones : geopandas.GeoDataFrame</span>
+<span class="sd">        Zones with the computed zonal statistics.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># statistics</span>
+    <span class="n">_ST</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">stats</span><span class="p">):</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([</span><span class="n">stats</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">stats</span><span class="p">):</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([</span><span class="n">variables</span><span class="p">])</span>
+
+    <span class="c1"># zones and gdf should have the same crs</span>
+    <span class="k">if</span> <span class="n">gdf</span><span class="o">.</span><span class="n">crs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">zones</span><span class="o">.</span><span class="n">crs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">gdf</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">zones</span><span class="o">.</span><span class="n">crs</span><span class="p">:</span>
+        <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">zones</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+
+    <span class="c1"># create a cell_id column for grouping</span>
+    <span class="n">zones</span><span class="p">[</span><span class="s2">&quot;zone_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Spatial join of gdf and zones</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;sjoin&quot;</span><span class="p">:</span>
+        <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">zones</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;within&quot;</span><span class="p">)</span>
+    <span class="c1"># Overlay with the zones</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;overlay&quot;</span><span class="p">:</span>
+        <span class="n">gdf</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gpd</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">zones</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;union&quot;</span><span class="p">,</span> <span class="n">keep_geom_type</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">explode</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Method </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> not valid, choose either &#39;sjoin&#39; or &#39;overlay&#39;.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Loop over variables</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s2">&quot;length&quot;</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s2">&quot;area&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gdf</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">is_geographic</span><span class="p">:</span>
+                <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">3857</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s2">&quot;length&quot;</span><span class="p">:</span>
+                <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">length</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">area</span>
+            <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">zones</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gdf</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Variable </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> not found in gdf.&quot;</span><span class="p">)</span>
+        <span class="c1"># Keep zone_id and variables columns only</span>
+        <span class="n">gdf_sub</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[[</span><span class="s2">&quot;zone_id&quot;</span><span class="p">,</span> <span class="n">var</span><span class="p">]]</span>
+
+        <span class="c1"># Compute stats</span>
+        <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">_ST</span><span class="p">:</span>
+                <span class="c1"># Group by using stats</span>
+                <span class="n">subset</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">gdf_sub</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;zone_id&quot;</span><span class="p">]),</span> <span class="n">stat</span><span class="p">)()</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">stat</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">):</span>
+                <span class="n">qs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">stat</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)])</span>
+                <span class="n">subset</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">gdf_sub</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;zone_id&quot;</span><span class="p">]),</span> <span class="n">stat</span><span class="p">)(</span><span class="n">qs</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stat </span><span class="si">{</span><span class="n">stat</span><span class="si">}</span><span class="s2"> not valid.&quot;</span><span class="p">)</span>
+            <span class="c1"># Rename subset columns</span>
+            <span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">stat</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+            <span class="c1"># Add stat to zones</span>
+            <span class="n">zones</span> <span class="o">=</span> <span class="n">zones</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">subset</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;zone_id&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">zones</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;zone_id&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">zonal_stats_grid</span><span class="p">(</span>
+    <span class="n">gdf</span><span class="p">,</span>
+    <span class="n">ds_like</span><span class="p">,</span>
+    <span class="n">variables</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">stats</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+    <span class="n">mask_name</span><span class="o">=</span><span class="s2">&quot;mask&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;overlay&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate zonal statisctics of vector samples aggregated per raster cell.</span>
+
+<span class="sd">    Returns a xr.Dataset with gridded road information :</span>
+<span class="sd">        - Variables: {name_}{variable}_{stat} (name is taken from feature_filter,</span>
+<span class="sd">        variable from variables and stat from stats).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gdf : geopandas.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame containing roads shape.</span>
+<span class="sd">    ds_like : xr.DataArray or xr.Dataset</span>
+<span class="sd">        Dataset at model resolution.</span>
+<span class="sd">    variables: list of str, optional.</span>
+<span class="sd">        List of variables to derive statistics from.</span>
+<span class="sd">        Either columns names from gdf (dtype must be either float or integer) or</span>
+<span class="sd">        geometric properties such as [&#39;length&#39;, &#39;area&#39;].</span>
+<span class="sd">        If geometric properties of the gdf are not available, they are computed on</span>
+<span class="sd">        the spot.</span>
+<span class="sd">    stats: list of str, callable</span>
+<span class="sd">        Statistics to compute from raster values, options include</span>
+<span class="sd">        {&#39;count&#39;, &#39;min&#39;, &#39;max&#39;, &#39;sum&#39;, &#39;mean&#39;, &#39;std&#39;, &#39;median&#39;, &#39;q##&#39;}.</span>
+<span class="sd">         Multiple percentiles can be calculated using comma-seperated values,</span>
+<span class="sd">         e.g.: &#39;q10,50,90&#39;</span>
+<span class="sd">         Statistics ignore the nodata value and are applied along the x and y dimension.</span>
+<span class="sd">         By default [&#39;mean&#39;].</span>
+<span class="sd">    mask_name : str</span>
+<span class="sd">        Name of a basin mask array in ds_like.</span>
+<span class="sd">    method: str, optional</span>
+<span class="sd">        Method for the spatial interpolation of gdf and zones. Either &#39;sjoin&#39; for</span>
+<span class="sd">        spatial join for gdf within zones, or &#39;overlay&#39; for a union overlay of gdf with</span>
+<span class="sd">        zones (default).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ds_out : xarray.DataSet</span>
+<span class="sd">        Dataset contains gridded zonal statistics at model resolution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Create model grid</span>
+    <span class="n">msktn</span> <span class="o">=</span> <span class="n">ds_like</span><span class="p">[</span><span class="n">mask_name</span><span class="p">]</span>
+    <span class="n">idx_valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">msktn</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">!=</span> <span class="n">msktn</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">gdf_grid</span> <span class="o">=</span> <span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">vector_grid</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_valid</span><span class="p">]</span>
+
+    <span class="n">gdf_stats</span> <span class="o">=</span> <span class="n">zonal_stats</span><span class="p">(</span>
+        <span class="n">gdf</span><span class="o">=</span><span class="n">gdf</span><span class="p">,</span>
+        <span class="n">zones</span><span class="o">=</span><span class="n">gdf_grid</span><span class="p">,</span>
+        <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span>
+        <span class="n">stats</span><span class="o">=</span><span class="n">stats</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+            <span class="n">da_out</span> <span class="o">=</span> <span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">rasterize</span><span class="p">(</span>
+                <span class="n">gdf_stats</span><span class="p">,</span>
+                <span class="n">col_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">stat</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">all_touched</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">sindex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">ds_out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ds_out</span> <span class="o">=</span> <span class="n">da_out</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dvar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">stat</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">ds_out</span><span class="p">[</span><span class="n">dvar</span><span class="p">]</span> <span class="o">=</span> <span class="n">da_out</span>
+
+    <span class="k">return</span> <span class="n">ds_out</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_preprocess_roads_emissions</span><span class="p">(</span>
+    <span class="n">gdf_roads</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+    <span class="n">highway_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">non_highway_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Preprocess arguments for roads_emissions_country and roads_emissions_segments.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gdf_roads : geopandas.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame containing roads shape.</span>
+
+<span class="sd">        * Required columns: ``road_type``.</span>
+<span class="sd">    highway_list : list of str</span>
+<span class="sd">        List of highway road types.</span>
+<span class="sd">    non_highway_list : list of str, optional</span>
+<span class="sd">        List of non-highway road types. If None, all road types not in highway_list</span>
+<span class="sd">        are considered as non-highway.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    feature_filter : dict</span>
+<span class="sd">        Dictionary with keys &#39;hwy&#39; and &#39;nnhwy&#39; for highway and non-highway roads</span>
+<span class="sd">        respectively. Each key contains a dictionary with the column name and the</span>
+<span class="sd">        list of road types.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert string to lists</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">highway_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">highway_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">highway_list</span><span class="p">]</span>
+
+    <span class="c1"># Make sure road type is str format</span>
+    <span class="n">gdf_roads</span><span class="p">[</span><span class="s2">&quot;road_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_roads</span><span class="p">[</span><span class="s2">&quot;road_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="c1"># Get non_highway_list</span>
+    <span class="k">if</span> <span class="n">non_highway_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">road_types</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">gdf_roads</span><span class="p">[</span><span class="s2">&quot;road_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">non_highway_list</span> <span class="o">=</span> <span class="n">road_types</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">road_types</span><span class="p">,</span> <span class="n">highway_list</span><span class="p">)]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">non_highway_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">non_highway_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">non_highway_list</span><span class="p">]</span>
+
+    <span class="c1"># Feature filter for highway and non-highway</span>
+    <span class="n">feature_filter</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;hwy&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;road_type&quot;</span><span class="p">:</span> <span class="n">highway_list</span><span class="p">},</span>
+        <span class="s2">&quot;nnhwy&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;road_type&quot;</span><span class="p">:</span> <span class="n">non_highway_list</span><span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">feature_filter</span>
+
+
+<div class="viewcode-block" id="roads_emissions_country">
+<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.roads.roads_emissions_country.html#hydromt_delwaq.workflows.roads.roads_emissions_country">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">roads_emissions_country</span><span class="p">(</span>
+    <span class="n">gdf_roads</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+    <span class="n">gdf_country</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+    <span class="n">ds_like</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">highway_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">non_highway_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute roads statistics per country of interest.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gdf_roads : geopandas.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame containing roads shape.</span>
+
+<span class="sd">        * Required columns: ``road_type``.</span>
+<span class="sd">    gdf_country : geopandas.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame containing country shape.</span>
+<span class="sd">    ds_like : xarray.Dataset</span>
+<span class="sd">        Dataset at model resolution.</span>
+
+<span class="sd">        * Required variables: ``mask``.</span>
+<span class="sd">    highway_list : list of str</span>
+<span class="sd">        List of highway road types.</span>
+<span class="sd">    non_highway_list : list of str, optional</span>
+<span class="sd">        List of non-highway road types. If None, all road types not in highway_list</span>
+<span class="sd">        are considered as non-highway.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ds_country : xarray.Dataset</span>
+<span class="sd">        Dataset contains roads statistics per country of interest.</span>
+<span class="sd">        Contains the following variables:</span>
+
+<span class="sd">        * ``hwy_length_sum_country``: highway road length per country of interest.</span>
+<span class="sd">        * ``nnhwy_length_sum_country``: non-highway road length per country of interest.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Common preprocessing of arguments with segments</span>
+    <span class="n">feature_filter</span> <span class="o">=</span> <span class="n">_preprocess_roads_emissions</span><span class="p">(</span>
+        <span class="n">gdf_roads</span><span class="o">=</span><span class="n">gdf_roads</span><span class="p">,</span>
+        <span class="n">highway_list</span><span class="o">=</span><span class="n">highway_list</span><span class="p">,</span>
+        <span class="n">non_highway_list</span><span class="o">=</span><span class="n">non_highway_list</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Loop over feature_filter</span>
+    <span class="n">ds_country</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">colfilter</span> <span class="ow">in</span> <span class="n">feature_filter</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computing </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> roads statistics per country of interest&quot;</span><span class="p">)</span>
+        <span class="c1"># Filter gdf</span>
+        <span class="n">colname</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">colfilter</span><span class="o">.</span><span class="n">keys</span><span class="p">()][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">subset_roads</span> <span class="o">=</span> <span class="n">gdf_roads</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">gdf_roads</span><span class="p">[</span><span class="n">colname</span><span class="p">],</span> <span class="n">colfilter</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">colname</span><span class="p">))</span>
+        <span class="p">]</span>
+        <span class="n">gdf_country</span> <span class="o">=</span> <span class="n">zonal_stats</span><span class="p">(</span>
+            <span class="n">gdf</span><span class="o">=</span><span class="n">subset_roads</span><span class="p">,</span>
+            <span class="n">zones</span><span class="o">=</span><span class="n">gdf_country</span><span class="p">,</span>
+            <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;length&quot;</span><span class="p">],</span>
+            <span class="n">stats</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">],</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sjoin&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">gdf_country</span> <span class="o">=</span> <span class="n">gdf_country</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;length_sum&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length_sum&quot;</span><span class="p">})</span>
+        <span class="c1"># Convert from m to km</span>
+        <span class="n">gdf_country</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length_sum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_country</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length_sum&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span>
+
+        <span class="c1"># Rasterize statistics</span>
+        <span class="n">da_emi</span> <span class="o">=</span> <span class="n">emission_vector</span><span class="p">(</span>
+            <span class="n">gdf</span><span class="o">=</span><span class="n">gdf_country</span><span class="p">,</span>
+            <span class="n">ds_like</span><span class="o">=</span><span class="n">ds_like</span><span class="p">,</span>
+            <span class="n">col_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length_sum&quot;</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
+            <span class="n">mask_name</span><span class="o">=</span><span class="s2">&quot;mask&quot;</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ds_country</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length_sum_country&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">da_emi</span>
+
+    <span class="k">return</span> <span class="n">ds_country</span></div>
+
+
+
+<div class="viewcode-block" id="roads_emissions_segments">
+<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.roads.roads_emissions_segments.html#hydromt_delwaq.workflows.roads.roads_emissions_segments">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">roads_emissions_segments</span><span class="p">(</span>
+    <span class="n">gdf_roads</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+    <span class="n">ds_like</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">highway_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">non_highway_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute roads statistics per segment/grid cell.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gdf_roads : geopandas.GeoDataFrame</span>
+<span class="sd">        GeoDataFrame containing roads shape.</span>
+
+<span class="sd">        * Required columns: ``road_type``.</span>
+<span class="sd">    ds_like : xarray.Dataset</span>
+<span class="sd">        Dataset at model resolution.</span>
+
+<span class="sd">        * Required variables: ``mask``.</span>
+<span class="sd">    highway_list : list of str</span>
+<span class="sd">        List of highway road types.</span>
+<span class="sd">    non_highway_list : list of str, optional</span>
+<span class="sd">        List of non-highway road types. If None, all road types not in highway_list</span>
+<span class="sd">        are considered as non-highway.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ds_segments : xarray.Dataset</span>
+<span class="sd">        Dataset contains roads statistics per segment/grid cell.</span>
+<span class="sd">        Contains the following variables:</span>
+
+<span class="sd">        * ``hwy_length``: highway road length per segment/grid cell.</span>
+<span class="sd">        * ``nnhwy_length``: non-highway road length per segment/grid cell.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Common preprocessing of arguments with country</span>
+    <span class="n">feature_filter</span> <span class="o">=</span> <span class="n">_preprocess_roads_emissions</span><span class="p">(</span>
+        <span class="n">gdf_roads</span><span class="o">=</span><span class="n">gdf_roads</span><span class="p">,</span>
+        <span class="n">highway_list</span><span class="o">=</span><span class="n">highway_list</span><span class="p">,</span>
+        <span class="n">non_highway_list</span><span class="o">=</span><span class="n">non_highway_list</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Loop over feature_filter</span>
+    <span class="n">ds_segments</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">colfilter</span> <span class="ow">in</span> <span class="n">feature_filter</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computing </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> roads statistics per segment&quot;</span><span class="p">)</span>
+        <span class="c1"># Filter gdf</span>
+        <span class="n">colname</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">colfilter</span><span class="o">.</span><span class="n">keys</span><span class="p">()][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">subset_roads</span> <span class="o">=</span> <span class="n">gdf_roads</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">gdf_roads</span><span class="p">[</span><span class="n">colname</span><span class="p">],</span> <span class="n">colfilter</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">colname</span><span class="p">))</span>
+        <span class="p">]</span>
+        <span class="n">ds_roads</span> <span class="o">=</span> <span class="n">zonal_stats_grid</span><span class="p">(</span>
+            <span class="n">gdf</span><span class="o">=</span><span class="n">subset_roads</span><span class="p">,</span>
+            <span class="n">ds_like</span><span class="o">=</span><span class="n">ds_like</span><span class="p">,</span>
+            <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;length&quot;</span><span class="p">],</span>
+            <span class="n">stats</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">],</span>
+            <span class="n">mask_name</span><span class="o">=</span><span class="s2">&quot;mask&quot;</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;overlay&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Convert from m to km and rename</span>
+        <span class="n">ds_roads</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_roads</span><span class="p">[</span><span class="s2">&quot;length_sum&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span>
+        <span class="n">ds_roads</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_FillValue</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Add to ds_segments</span>
+        <span class="n">ds_segments</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_roads</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">ds_segments</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Deltares.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

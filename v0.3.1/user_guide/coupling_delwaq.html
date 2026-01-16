@@ -1,0 +1,764 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Explaining the D-Emission - D-Water Quality coupling &#8212; HydroMT delwaq  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/coupling_delwaq';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API reference" href="../api.html" />
+    <link rel="prev" title="Explaining the Wflow - DELWAQ coupling" href="coupling_wflow.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.1" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/hydromt-icon.svg" class="logo__image only-light" alt=""/>
+    <img src="../_static/hydromt-icon.svg" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">HydroMT DELWAQ</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="intro.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="intro.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="generic_delwaq_EM.html">Working with the D-Emissions model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="EM_model.html">D-Emission model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_EM_substances.html">Selection of substance(s) and sources</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="build_config_EM.html">Building a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/build_EM_model.html">Example: Build D-Emission model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="update_config_EM.html">Updating a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/adding_global_emission.html">Example: Add (global) emission data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/adding_local_emission.html">Example: Add (local) emission data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/update_model_forcing.html">Example: Update forcing data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="generic_delwaq_EM_prepare.html">Editing the EM run information</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="EM_functional_description.html">Further reading: Detailed functional description</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_EM_run.html">Running D-Emissions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generic_delwaq_WQ.html">Working with the D-Water Quality model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="WQ_model.html">D-Water Quality model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_substances.html">Selection of substance(s) and processes</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="build_config_WQ.html">Building a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/build_WQ_model.html">Example: Build D-Water Quality model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="update_config_WQ.html">Updating a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_examples/update_model_monitoring.html">Example: Update monitoring data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_prepare.html">Editing the WQ run information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_run.html">Running D-Water Quality</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="process_analyze.html">Postprocessing and visualization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/plot_delwaq.html">Example: Plot DELWAQ grid</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="coupling_main.html">Reading more about coupling the individual modules</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="coupling_wflow.html">Explaining the Wflow - DELWAQ coupling</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Explaining the D-Emission - D-Water Quality coupling</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="intro.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="coupling_main.html" class="nav-link">Reading more about coupling the individual modules</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Explaining the D-Emission - D-Water Quality coupling</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="explaining-the-d-emission-d-water-quality-coupling">
+<span id="coupling-delwaq"></span><h1>Explaining the D-Emission - D-Water Quality coupling<a class="headerlink" href="#explaining-the-d-emission-d-water-quality-coupling" title="Link to this heading">#</a></h1>
+<p>HydroMT can help you prepare models for DELWAQ and uses a generic single substance version of D-Emission that can be coupled with D-Water Quality.
+The single substance D-Emissions model writes its emission data into two files, always called:</p>
+<ul class="simple">
+<li><p>outdata_em.bin</p></li>
+<li><p>outdata_em.txt</p></li>
+</ul>
+<p>In this advanced topic, we detailed what are the steps to best make use of HydroMT for this specific version of DELWAQ.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Instead of using a multiple substance version of D-Emissions that can deal more than one substance (within one model setup), a new more generic version dealing with a single substance has been introduced. This was done for two reasons:</p>
+<ol class="arabic simple">
+<li><p>It dramatically reduces the complexity of the code</p></li>
+<li><p>It significantly reduces the runtime per substance</p></li>
+</ol>
+<p>Moreover, the new D-Emissions version no longer allows/requires editing of the Processes Library Tables (proces.asc) by (expert) users, which proved too error prone in practice. As a consequence of the above, the combined use of D-Emissions and D-Water Quality now requires (in case of a multiple substance water quality simulation) the connection of multiple emission output files generated by individual D-Emissions runs (for each of the substances) to a single D-Water Quality simulation.</p>
+</div>
+<section id="link-with-the-outputs-from-d-emissions">
+<span id="coupling-delwaq-single"></span><h2>Link with the outputs from D-Emissions<a class="headerlink" href="#link-with-the-outputs-from-d-emissions" title="Link to this heading">#</a></h2>
+<p>In the D-Water Quality connection with (the single-substance version of) D-Emissions, there are two ways to provide the outputs of the D-Emissions run to the WQ model for a tracer <strong>TRA</strong>:</p>
+<ul class="simple">
+<li><p>Copy the outputs of the D-Emissions model run <em>outdata_em.bin</em> and <em>outdata_em.txt</em> and paste them in the WQ model directory. Rename them following the tracer
+convention: <em>TRA_em.bin</em> and <em>TRA_em.txt</em>.</p></li>
+</ul>
+<p>OR</p>
+<ul class="simple">
+<li><p>Use a file named <em>TRA_em.def</em>, placed in the WQ model directory, that contains the (relative) paths to the D-Emissions results.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">outdata_em</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">outdata_em</span><span class="o">.</span><span class="n">bin</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The DELWAQ software is not case sensitive. Filenames can therefore either be TRA_em.def or tra_em.def etc.</p>
+</div>
+</section>
+<section id="linking-multiple-d-emissions-models-with-d-water-quality">
+<span id="coupling-delwaq-multiple"></span><h2>Linking multiple D-Emissions models with D-Water Quality<a class="headerlink" href="#linking-multiple-d-emissions-models-with-d-water-quality" title="Link to this heading">#</a></h2>
+<p>In the case that multiple D-Emissions model runs are carried out, e.g. for total nitrogen (TN) and total phosphorus (TP), it is up to the user to manage these files and avoid that the results for TP overwrite those for TN. This can easily be done in a batch script using the following commandlines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">copy</span> <span class="n">outdata_em</span><span class="o">.</span><span class="n">txt</span> <span class="o">%</span><span class="mi">1</span><span class="n">_em</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">copy</span> <span class="n">outdata_em</span><span class="o">.</span><span class="n">bin</span> <span class="o">%</span><span class="mi">1</span><span class="n">_em</span><span class="o">.</span><span class="n">bin</span>
+<span class="n">erase</span> <span class="n">outdata_em</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">erase</span> <span class="n">outdata_em</span><span class="o">.</span><span class="n">bin</span>
+
+<span class="c1">#where %1 matches the run-id equal to the input filename, %1.inp</span>
+</pre></div>
+</div>
+<p>D-Water Quality is equipped with a series of processes able to read these files and translate them into the appropriate state variables (e.g. NH4, NO3, PON1 etc. for TN; AAP,
+PO4, POP1 for TP). This allows D-Water Quality to simulate their fate in the surface water using standard processes from the library.</p>
+<p>This series of processes is called EM_xxx and is currently still embedded in an open processes library dll. This implies that they need to be manually merged into the D-Water Quality
+proc_def file. After correct functioning has been demonstrated, integration with the standard open source version of D-Water Quality is foreseen.</p>
+<p>Every individual EM_xxx process extracts by default its EM data from the following files, assumed to be present in the working directory:</p>
+<ul class="simple">
+<li><p>xxx_em.bin</p></li>
+<li><p>xxx_em.txt</p></li>
+</ul>
+<p>Alternatively, these filenames can be read from a file assumed to be present in the working directory:</p>
+<ul class="simple">
+<li><p>xxx_em.def</p></li>
+</ul>
+<p>The functionality to distribute the emission data over several state variables (also known as “USEFOR” functionality) is included in the EM_xxx process. Input can be provided by the
+user in the regular way.</p>
+<p>In order to connect a D-Water Quality simulation to one or more D-Emissions runs, the following steps need to be taken.</p>
+<p>Let XXX be the variable for which D-Emissions has calculated emissions. The user must:</p>
+<ul class="simple">
+<li><p>Ascertain that xxx_em.bin and xxx_em.txt (D-Emissions output files) are present in the run directory</p></li>
+<li><p><strong>OR</strong> Ascertain that xxx_em.def, a file holding references to xxx_em.bin and xxx_em.txt, is present in the run directory</p></li>
+<li><p>Activate the relevant process in block 7 of the input file:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CONSTANTS</span> <span class="n">Active_EM_xxx</span> <span class="n">DATA</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Optionally, include the relevant input items for this process.</p></li>
+</ul>
+<p>The table below lists the currently available options for xxx, and the equivalent definitions.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>xxx</p></th>
+<th class="head"><p>EM files</p></th>
+<th class="head"><p>WQ process</p></th>
+<th class="head"><p>Input to WQ process</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BOD</p></td>
+<td><p>BOD_em.bin and BOD_em.txt OR
+BOD_em.def</p></td>
+<td><p>EM_BOD</p></td>
+<td><p>n.a. (all emissions to CBODu)</p></td>
+</tr>
+<tr class="row-odd"><td><p>TNI</p></td>
+<td><p>TNI_em.bin and TNI_em.txt OR
+TNI_em.def</p></td>
+<td><p>EM_TNI</p></td>
+<td><p>TNItoNH4, TNItoNO3, TNItoPON1,
+TNItoPON2, TNItoDON</p></td>
+</tr>
+<tr class="row-even"><td><p>TPH</p></td>
+<td><p>TPH_em.bin and TPH_em.txt OR
+TPH_em.def</p></td>
+<td><p>EM_TPH</p></td>
+<td><p>TPHtoPO4, TPHtoAAP, TPHtoPOP1,
+TPHtoPOP2, TPHtoDOP</p></td>
+</tr>
+<tr class="row-odd"><td><p>TSS</p></td>
+<td><p>TSS_em.bin and TSS_em.txt OR
+TSS_em.def</p></td>
+<td><p>EM_TSS</p></td>
+<td><p>TSStoIM1, TSStoIM2,
+TSStoIM3</p></td>
+</tr>
+<tr class="row-even"><td><p>COL</p></td>
+<td><p>COL_em.bin and COL_em.txt OR
+COL_em.def</p></td>
+<td><p>EM_COL</p></td>
+<td><p>COLtoEColi, COLtoFColi,
+COLtoTColi</p></td>
+</tr>
+<tr class="row-odd"><td><p>TRA</p></td>
+<td><p>TRA_em.bin and TRA_em.txt OR
+TRA_em.def</p></td>
+<td><p>EM_TRA</p></td>
+<td><p>n.a. (all emissions to cTR1)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>So, for illustration, to set up a model for nitrogen and phosphorus, the user has to provide:</p>
+<ul class="simple">
+<li><p>Input files TNI_em.bin and TNI_em.txt plus TPH_em.bin and TPH_em.txt.</p></li>
+<li><p>Alternatively, TNI_em.def and TPH_em.def, holding references to the above files.</p></li>
+<li><p>Activation of the relevant process in block 7 of the input file:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CONSTANTS</span> <span class="n">Active_EM_TNI</span> <span class="n">DATA</span> <span class="mi">1</span>
+<span class="n">CONSTANTS</span> <span class="n">Active_EM_TPH</span> <span class="n">DATA</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Definition of the “USEFOR” constants to subdivide total N and P over state variables, also in block 7 of the input file:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CONSTANTS</span> <span class="n">TNItoNH4</span> <span class="n">DATA</span> <span class="mf">0.2</span>
+<span class="n">CONSTANTS</span> <span class="n">TNItoNO3</span> <span class="n">DATA</span> <span class="mf">0.4</span>
+<span class="n">CONSTANTS</span> <span class="n">TNItoPON1</span> <span class="n">DATA</span> <span class="mf">0.4</span>
+
+<span class="n">CONSTANTS</span> <span class="n">TPHtoPO4</span> <span class="n">DATA</span> <span class="mf">0.5</span>
+<span class="n">CONSTANTS</span> <span class="n">TPHtoAAP</span> <span class="n">DATA</span> <span class="mf">0.4</span>
+<span class="n">CONSTANTS</span> <span class="n">TPHtoPOP1</span> <span class="n">DATA</span> <span class="mf">0.1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As a simplification, in this tutorial we will model our emitted domestic Nitrogen as a tracer <strong>TRA</strong> to avoid complexity of nutrients modelling and their processes.</p>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="coupling_wflow.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Explaining the Wflow - DELWAQ coupling</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#link-with-the-outputs-from-d-emissions">Link with the outputs from D-Emissions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linking-multiple-d-emissions-models-with-d-water-quality">Linking multiple D-Emissions models with D-Water Quality</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/user_guide/coupling_delwaq.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user_guide/coupling_delwaq.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Deltares.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

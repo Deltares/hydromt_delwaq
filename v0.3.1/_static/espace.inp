@@ -1,0 +1,190 @@
+999 80 ';'
+;DELWAQ_VERSION_4.910                        		; Delwaq version number
+;PRINT_OUTPUT_OPTION_2                       		; Debug level
+
+; TEMPLATE FILE FOR EMISSION DISAGGREGATION
+; First input block
+'Demo Emission Model linked to WFLOW for TN'
+' '
+' '
+INCLUDE 'config\B1_timestamp.inc'
+
+ 6    0
+
+;Nr      Name
+1       Sew      ;
+2       Pav      ;
+3       Unp      ;
+4       Stw
+5       Sfw
+6       Soi
+#1;
+
+;###############################################################################
+; Second input block
+  1 'DDHHMMSS' 'DDHHMMSS'  ; system clock
+;INCLUDE 'config\B2_sysclock.inc'
+
+     1.03                      ; integration option
+   BAL_NOLUMPPROCESSES
+   BAL_NOLUMPLOADS
+   BAL_NOLUMPTRANSPORT
+   BAL_NOSUPPRESSSPACE
+   BAL_NOSUPPRESSTIME
+
+INCLUDE 'config\B2_timers.inc'
+
+ 1                                                 	; Monitoring areas in this file
+
+INCLUDE 'config\B2_nrofmon.inc'
+INCLUDE 'config\B2_monareas.inc'
+INCLUDE 'config\B2_stations.inc'
+
+ 2                                                 	; No monitoring cross areas
+
+INCLUDE 'config\B2_outputtimes.inc'
+
+#2;
+;###############################################################################
+; Third input block
+
+INCLUDE 'config\B3_nrofseg.inc'
+
+
+      2                     ; grid layout not used
+
+;      0                     ; constant property arrays
+;      0                     ; time varying property arrays
+INCLUDE 'config\B3_attributes.inc'
+
+
+
+      1                     ; volumes in this file
+      2                     ; constant with defaults
+      1.0                   ; scale factor
+      1.0                   ; default volume
+      0                     ; overrides
+
+#3;
+;###############################################################################
+; Fourth input block
+;
+1 0 0 ; nr of exchanges
+      0                     ; # of dispersion arrays
+      0                     ; # of velocity arrays
+      1                     ; first form is used for input
+      1                     ; exchange pointers in this file
+0 0 0 0
+
+
+      1                     ; dispersions in this file
+     1.0      1.0     1.0   ; scale factors in 3 directions
+     0.0      0.0     0.0   ; values in 3 directions
+      1                     ; areas in this file
+      2                     ; constant, defaults
+     1.0      1.0           ; scale and value
+      0
+
+      1                     ; flows in this file
+      2                     ; constant, defaults
+     1.0      0.0           ; scale and value
+      0
+
+      0                     ; constant length
+     1.0                    ; scale factor
+     1.0      1.0     1.0   ; values in 3 directions
+
+#4;
+;###############################################################################
+; Fifth input block, water quality calculation
+;INCLUDE 'config\B5_boundlist.inc'
+
+#5;
+;###############################################################################
+; Sixth input block, Dry Waste Loads block
+; Number of loads (dummy value)
+0							; Number of loads
+
+#6;
+;###############################################################################
+; Seventh input block
+
+
+CONSTANTS  'Nothreads'       DATA  0                  ; Multicore
+CONSTANTS Only_Active        DATA  1
+CONSTANTS Active_EM_GSS      DATA  1
+
+; geometry
+
+INCLUDE 'config\B7_geometry-parameters.inc'
+ALL BINARY_FILE 'config\B7_geometry.bin'
+
+; hydrology
+
+INCLUDE 'config\B7_hydrology.inc'
+ALL BINARY_FILE 'dynamicdata\hydrology.bin'
+
+; infrastructure
+
+CONSTANTS  SewLeakage      DATA 0.0         ; sewer leakage                                          (%)
+
+; source atmospheric deposition
+
+CONSTANTS  EF_DDp        DATA 0.0          ; dry deposition rate                                    (g/m2/d)
+CONSTANTS  EF_WDp        DATA 0.0          ; wet deposition rate                                    (g/m3)
+
+; source SEWAGE (Type B01)
+
+PARAMETERS EV_B01        ALL BINARY_FILE 'staticdata\ghs_pop_2015.dat' ; locator/EV variable type B    (cap)
+CONSTANTS  EF_B01           DATA 2.2          ; emission factor                                        (Kg/d/cap)
+; the below comes from a supportive project specific process
+CONSTANTS  B01toSew         DATA 1.0          ; released fraction receptor                             (-)
+CONSTANTS  B01toPav         DATA 0.0          ; released fraction receptor                             (-)
+CONSTANTS  B01toUnp         DATA 0.0          ; released fraction receptor                             (-)
+CONSTANTS  B01toSoi         DATA 0.0          ; released fraction receptor                             (-)
+CONSTANTS  B01toStw         DATA 0.0          ; released fraction receptor                             (-)
+CONSTANTS  B01toSfw         DATA 0.0          ; released fraction receptor                             (-)
+
+; source Types NOT USED
+
+CONSTANTS  EV_A01        DATA 0.
+CONSTANTS  EV_B02        DATA 0.
+CONSTANTS  EV_B03        DATA 0.
+
+; fate & transport
+
+CONSTANTS  DecPav        DATA 0.0          ; decay rate paved                                       (/d)
+CONSTANTS  DecUnp        DATA 0.0          ; decay rate unpaved                                     (/d)
+CONSTANTS  KdUnpa        DATA 0.5          ; fraction of bound vs unbound                           (-)
+
+; preprocessing
+
+PARAMETERS Streamordr ALL BINARY_FILE 'staticdata\streamorder.dat'
+
+#7
+;###############################################################################
+; Eighth input block
+
+INITIALS  Sew Pav Unp Stw Sfw Soi
+DEFAULTS  6*0.0
+
+
+#8
+;###############################################################################
+; Ninth input block
+ 1                                           		; Conditions follow in this file
+ 1                                           		; Monitor-file
+ 0                                           		; Grid-file
+ 1                                                      ; His
+ 1                                                      ; Map
+
+ ; Binary/Nefis and History/Map
+ 1                                           		; switch on  binary History file
+ 1                                           		; switch on  binary Map     file
+ 0                                           		; switch off Nefis  History file
+ 0                                           		; switch off Nefis  Map     file
+#9
+;###############################################################################
+; Tenth input block
+
+#10

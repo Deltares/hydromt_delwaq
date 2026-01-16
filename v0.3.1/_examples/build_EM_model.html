@@ -1,0 +1,1026 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Build an emission model &#8212; HydroMT delwaq  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_examples/build_EM_model';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Updating a model" href="../user_guide/update_config_EM.html" />
+    <link rel="prev" title="Building a model" href="../user_guide/build_config_EM.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.1" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/hydromt-icon.svg" class="logo__image only-light" alt=""/>
+    <img src="../_static/hydromt-icon.svg" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">HydroMT DELWAQ</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../user_guide/generic_delwaq_EM.html">Working with the D-Emissions model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/EM_model.html">D-Emission model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_EM_substances.html">Selection of substance(s) and sources</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../user_guide/build_config_EM.html">Building a model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Example: Build D-Emission model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/update_config_EM.html">Updating a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="adding_global_emission.html">Example: Add (global) emission data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adding_local_emission.html">Example: Add (local) emission data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="update_model_forcing.html">Example: Update forcing data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/generic_delwaq_EM_prepare.html">Editing the EM run information</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/EM_functional_description.html">Further reading: Detailed functional description</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_EM_run.html">Running D-Emissions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/generic_delwaq_WQ.html">Working with the D-Water Quality model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/WQ_model.html">D-Water Quality model components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_WQ_substances.html">Selection of substance(s) and processes</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/build_config_WQ.html">Building a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="build_WQ_model.html">Example: Build D-Water Quality model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/update_config_WQ.html">Updating a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="update_model_monitoring.html">Example: Update monitoring data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_WQ_prepare.html">Editing the WQ run information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/generic_delwaq_WQ_run.html">Running D-Water Quality</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/process_analyze.html">Postprocessing and visualization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="plot_delwaq.html">Example: Plot DELWAQ grid</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/coupling_main.html">Reading more about coupling the individual modules</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/coupling_wflow.html">Explaining the Wflow - DELWAQ coupling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/coupling_delwaq.html">Explaining the D-Emission - D-Water Quality coupling</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide/intro.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../user_guide/generic_delwaq_EM.html" class="nav-link">Working with the D-Emissions model</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../user_guide/build_config_EM.html" class="nav-link">Building a model</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Build an emission model</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<div>
+    For an interactive online version click here:
+    <a href="https://mybinder.org/v2/gh/Deltares/hydromt_delwaq/main?urlpath=lab/tree/examples/build_EM_model.ipynb" target="_blank" rel="noopener noreferrer"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg"></a>
+</div></div>
+<section id="Build-an-emission-model">
+<h1>Build an emission model<a class="headerlink" href="#Build-an-emission-model" title="Link to this heading">#</a></h1>
+<p>This notebook demonstrates how to prepare <strong>DELWAQ D-Emissions</strong> model from scratch using the command line interace (CLI).</p>
+<p>All lines in this notebook which start with <code class="docutils literal notranslate"><span class="pre">!</span></code> are executed from the command line. Within the notebook environment the logging messages are shown after completion. You can also copy these lines and paste these in your shell to get more direct feedback.</p>
+<section id="HydroMT-CLI-build-interface">
+<h2>HydroMT CLI build interface<a class="headerlink" href="#HydroMT-CLI-build-interface" title="Link to this heading">#</a></h2>
+<p>In HydroMT, you can interact with <strong>DELWAQ</strong> models either to be used by <strong>D-Emissions (demission)</strong> or <strong>D-Water Quality (delwaq)</strong>.</p>
+<p>Lets first check if the delwaq and demission models are recognized by hydromt</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># this should return &quot;delwaq, demission, wflow, wflow_sediment&quot;</span>
+<span class="o">!</span>hydromt<span class="w"> </span>--models
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+model plugins:
+ - delwaq (hydromt_delwaq 0.3.1)
+ - demission (hydromt_delwaq 0.3.1)
+ - wflow (hydromt_wflow 0.8.0)
+ - wflow_sediment (hydromt_wflow 0.8.0)
+generic models (hydromt 0.10.1):
+ - grid_model
+ - vector_model
+ - mesh_model
+ - network_model
+
+</pre></div></div>
+</div>
+<p>Using the <strong>hydromt build</strong> API we can setup a complete model from scratch. Let’s get an overview of all the available options:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>hydromt<span class="w"> </span>build<span class="w"> </span>--help
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Usage: hydromt build [OPTIONS] MODEL MODEL_ROOT
+
+  Build models from scratch.
+
+  Example usage: --------------
+
+  To build a wflow model for a subbasin using a point coordinates snapped to
+  cells with upstream area &gt;= 50 km2 hydromt build wflow /path/to/model_root
+  -i /path/to/wflow_config.yml  -r &#34;{&#39;subbasin&#39;: [-7.24, 62.09], &#39;uparea&#39;:
+  50}&#34; -d deltares_data -d /path/to/data_catalog.yml -v
+
+  To build a sfincs model based on a bbox hydromt build sfincs
+  /path/to/model_root  -i /path/to/sfincs_config.yml  -r &#34;{&#39;bbox&#39;:
+  [4.6891,52.9750,4.9576,53.1994]}&#34;  -d /path/to/data_catalog.yml -v
+
+Options:
+  --opt TEXT               Method specific keyword arguments, see the method
+                           documentation of the specific model for more
+                           information about the arguments.
+  -i, --config PATH        Path to hydroMT configuration file, for the model
+                           specific implementation.
+  -r, --region TEXT        Set the region for which to build the model, e.g.
+                           {&#39;subbasin&#39;: [-7.24, 62.09]}
+  -d, --data TEXT          Path to local yaml data catalog file OR name of
+                           predefined data catalog.
+  --dd, --deltares-data    Flag: Shortcut to add the &#34;deltares_data&#34; catalog
+  --fo, --force-overwrite  Flag: If provided overwrite existing model files
+  --cache                  Flag: If provided cache tiled rasterdatasets
+  -v, --verbose            Increase verbosity.
+  -q, --quiet              Decrease verbosity.
+  --help                   Show this message and exit.
+</pre></div></div>
+</div>
+</section>
+<section id="Setup-demission-model-base-layers">
+<h2>Setup demission model base layers<a class="headerlink" href="#Setup-demission-model-base-layers" title="Link to this heading">#</a></h2>
+<p>DELWAQ models are quite specific in the sense that they are usually added on top of an already existing hydrologic / hydraulic or hydrodynamic model. In HydroMT, for now, DELWAQ models (demission for D-Emissions and delwaq for D-Water Quality) can only be built on top of <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/">Wflow</a> hydrologic models. You can find more information on this coupling in
+<a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/advanced/coupling_wflow.html">docs(coupling_wflow)</a>.</p>
+<p>Here is how you can build a D-Emissions model:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
+<span class="o">!</span>hydromt<span class="w"> </span>build<span class="w"> </span>demission<span class="w"> </span><span class="s2">&quot;./EM_test_base&quot;</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;{&#39;wflow&#39;: &#39;wflow_piave&#39;}&quot;</span><span class="w"> </span>--fo<span class="w"> </span>-vvv
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2026-01-16 05:55:30,098 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base/hydromt.log.
+2026-01-16 05:55:30,098 - build - log - INFO - HydroMT version: 0.10.1
+2026-01-16 05:55:30,098 - build - main - INFO - Building instance of demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base.
+2026-01-16 05:55:30,098 - build - main - INFO - User settings:
+2026-01-16 05:55:30,177 - build - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.1).
+2026-01-16 05:55:30,177 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2026-01-16 05:55:30,177 - build - model_api - INFO - setup_basemaps.maps: [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;]
+2026-01-16 05:55:30,238 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2026-01-16 05:55:30,238 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.8.0).
+2026-01-16 05:55:30,238 - build - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
+2026-01-16 05:55:30,251 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7fc9cd97b3d0&gt;}
+2026-01-16 05:55:30,251 - build - demission - INFO - Preparing EM basemaps from hydromodel.
+2026-01-16 05:55:30,253 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2026-01-16 05:55:30,253 - build - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2026-01-16 05:55:31,097 - build - model_api - ERROR - Default config file not found at /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_delwaq/data/demission/demission.inp
+2026-01-16 05:55:31,097 - build - demission - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base
+2026-01-16 05:55:31,102 - build - delwaq - INFO - Writing staticmap files.
+2026-01-16 05:55:31,109 - build - model_api - DEBUG - No geoms data found, skip writing.
+2026-01-16 05:55:31,109 - build - delwaq - INFO - Writing model config to file.
+2026-01-16 05:55:31,109 - build - delwaq - INFO - Writing hydromap files.
+2026-01-16 05:55:31,166 - build - demission - INFO - Writting geometry file in root/staticdata
+2026-01-16 05:55:31,169 - build - demission - DEBUG - No forcing data found, skip writing.
+</pre></div></div>
+</div>
+<p>The example above means the following: run <strong>hydromt build</strong> with:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">demission</span></code> : i.e. build a demission model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">./EM_test_base</span></code> : output model folder</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">or</span> <span class="pre">--region</span> <span class="pre">&quot;{'wflow':</span> <span class="pre">'wflow_piave'}&quot;</span></code> : derive the model from the existing wflow model located in wflow_piave folder. All <em>REGION</em> options are described in the <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/cli.html#region-options">docs</a>. For DELWAQ, the only possible options is from an existing wflow model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-vv</span></code> : give some extra verbosity (2 * v) to display feedback on screen. Now debug messages are provided.</p></li>
+</ul>
+<p>NOTE: As we did not specify a model configuration, only the base maps (grid, segment IDs) have been setup using default parameters. To build a complete model we need the use a configuration file (yml).</p>
+</section>
+<section id="Model-setup-configuration">
+<h2>Model setup configuration<a class="headerlink" href="#Model-setup-configuration" title="Link to this heading">#</a></h2>
+<p>The configuration file (yml) contains the model setup configuration and determines which components are build and in which order and optionally sets non-default arguments for each component. This configuration is passed to hydromt using <code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path_to_configuration_file&gt;</span></code>. We have prepared several example files which are available in the model repository <a class="reference external" href="https://github.com/Deltares/hydromt_delwaq/tree/main/examples">examples folder</a> and from the
+<a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/build_configuration.html">docs(build_configuration)</a>.</p>
+<p>Each header as shown between <code class="docutils literal notranslate"><span class="pre">[...]</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">[setup_basemaps]</span></code>) corresponds to a model component. All model components are explained in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/components.html">docs(model_components)</a>.</p>
+<p><strong>Almost each DELWAQ model is unique</strong> depending on which substances and sources are included but also what kind of emission data is available. For these reasons, there is no default build configuration file for a demission/delwaq model and still some manual steps are required to build and run a D-Emissions model with HydroMT. You can learn more about these steps in the
+<a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/advanced/generic_delwaq.html#emissions-modelling-with-d-emission">docs(hydromt_D-Emissions)</a>.</p>
+<p>We will load an example demission build configuration file for inspection:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fn_ini</span> <span class="o">=</span> <span class="s1">&#39;delwaq_build_EM.yml&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn_ini</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+setup_basemaps:
+  maps:
+    - rivmsk
+    - lndslp
+    - strord
+    - SoilThickness
+    - thetaS
+
+setup_monitoring:
+  mon_areas: riverland
+
+setup_emission_raster:
+  emission_fn: ghs_pop_2015
+  scale_method: average
+  fillna_method: zero
+  area_division: True
+
+setup_emission_vector:
+  emission_fn: gdp_world
+  col2raster: gdp
+  rasterize_method: value
+
+</pre></div></div>
+</div>
+<p>Some explanations for the sections the ini file above:</p>
+<ul class="simple">
+<li><p><strong>setup_basemaps</strong>: prepares the first delwaq model layers (grid, segment ID) and for EM also the geometry.</p></li>
+<li><p><strong>setup_monitoring</strong>: prepares no monitoring points and monitoring areas by compartments (emissions only here).</p></li>
+<li><p><strong>setup_emission_raster</strong>: prepares emissions grid from a raster file. You can repeat this section several times for several rasters. Here we will prepare population data from the global <em>ghs_pop_2015</em> dataset.</p></li>
+<li><p><strong>setup_emission_vector</strong>: prepares emissions grid from a vector file. You can repeat this section several times for several rasters. Here we will prepare GDP data from the global <em>gdp_world</em> data.</p></li>
+</ul>
+<p>For more information on all the options used (resampling method, NaN values handling…), please check the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/components.html">docs(model_components)</a></p>
+</section>
+<section id="Data-for-model-setup">
+<h2>Data for model setup<a class="headerlink" href="#Data-for-model-setup" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">&lt;...&gt;_fn</span></code> arguments correspond to a data source from the <code class="docutils literal notranslate"><span class="pre">DataCatalog</span></code> which is based on a yml-file with references to the data paths/urls and how the data should be read. This file can be provided to hydromt using <code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">&lt;path_to_yml_file&gt;</span></code>.</p>
+<p>By default some example data for the Piave basin will be downloaded to <code class="docutils literal notranslate"><span class="pre">~/.hydromt_data/</span></code> which is also used for this example. An overview of the available example data is provided <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data.html#available-global-datasets">here</a> This example data is a based on the data which are available from the Deltares p-drive. If you have acces to this drive, a pre-configured catalog file can be loaded using <code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">deltares_data</span></code>.</p>
+<p>More background how to write a data catalog yml file can be found in the <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data.html">hydromt core docs</a></p>
+</section>
+<section id="Setup-complete-D-Emissions-model">
+<h2>Setup complete D-Emissions model<a class="headerlink" href="#Setup-complete-D-Emissions-model" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOTE: copy this line (without !) to your shell for more direct feedback</span>
+<span class="o">!</span>hydromt<span class="w"> </span>build<span class="w"> </span>demission<span class="w"> </span><span class="s2">&quot;./EM_test_full&quot;</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;{&#39;wflow&#39;: &#39;wflow_piave&#39;}&quot;</span><span class="w"> </span>-i<span class="w"> </span>delwaq_build_EM.yml<span class="w"> </span>-d<span class="w"> </span>artifact_data<span class="w"> </span>--fo<span class="w"> </span>-vv
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2026-01-16 05:55:33,474 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromt.log.
+2026-01-16 05:55:33,474 - build - log - INFO - HydroMT version: 0.10.1
+2026-01-16 05:55:33,474 - build - main - INFO - Building instance of demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full.
+2026-01-16 05:55:33,474 - build - main - INFO - User settings:
+2026-01-16 05:55:33,578 - build - data_catalog - INFO - Reading data catalog artifact_data latest
+2026-01-16 05:55:33,578 - build - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.9/data_catalog.yml
+2026-01-16 05:55:34,171 - build - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.1).
+2026-01-16 05:55:34,171 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2026-01-16 05:55:34,171 - build - model_api - INFO - setup_basemaps.maps: [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;, &#39;SoilThickness&#39;, &#39;thetaS&#39;]
+2026-01-16 05:55:34,179 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2026-01-16 05:55:34,179 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.8.0).
+2026-01-16 05:55:34,179 - build - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
+2026-01-16 05:55:34,192 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f2670b1eed0&gt;}
+2026-01-16 05:55:34,192 - build - demission - INFO - Preparing EM basemaps from hydromodel.
+2026-01-16 05:55:34,194 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2026-01-16 05:55:34,194 - build - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2026-01-16 05:55:35,047 - build - model_api - ERROR - Default config file not found at /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_delwaq/data/demission/demission.inp
+2026-01-16 05:55:35,047 - build - model_api - INFO - setup_monitoring.mon_points: None
+2026-01-16 05:55:35,047 - build - model_api - INFO - setup_monitoring.mon_areas: riverland
+2026-01-16 05:55:35,047 - build - delwaq - INFO - Setting monitoring points and areas
+2026-01-16 05:55:35,047 - build - delwaq - INFO - No monitoring points set in the config file, skipping
+2026-01-16 05:55:35,058 - build - model_api - INFO - setup_emission_raster.emission_fn: ghs_pop_2015
+2026-01-16 05:55:35,058 - build - model_api - INFO - setup_emission_raster.scale_method: average
+2026-01-16 05:55:35,058 - build - model_api - INFO - setup_emission_raster.fillna_method: zero
+2026-01-16 05:55:35,058 - build - model_api - INFO - setup_emission_raster.fillna_value: 0.0
+2026-01-16 05:55:35,058 - build - model_api - INFO - setup_emission_raster.area_division: True
+2026-01-16 05:55:35,058 - build - delwaq - INFO - Preparing &#39;ghs_pop_2015&#39; map.
+2026-01-16 05:55:35,062 - build - rasterdataset - INFO - Reading ghs_pop_2015 raster data from /home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar/ghs_pop_2015.tif
+2026-01-16 05:55:35,087 - build - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
+2026-01-16 05:55:35,104 - build - emissions - INFO - Deriving None using average resampling (nodata=-200.0).
+2026-01-16 05:55:35,150 - build - model_api - INFO - setup_emission_vector.emission_fn: gdp_world
+2026-01-16 05:55:35,150 - build - model_api - INFO - setup_emission_vector.col2raster: gdp
+2026-01-16 05:55:35,150 - build - model_api - INFO - setup_emission_vector.rasterize_method: value
+2026-01-16 05:55:35,150 - build - delwaq - INFO - Preparing &#39;gdp_world&#39; map.
+2026-01-16 05:55:35,155 - build - geodataframe - INFO - Reading gdp_world vector data from /home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar/gdp_world.gpkg
+2026-01-16 05:55:35,196 - build - geodataframe - DEBUG - Clip intersects [11.775, 45.808, 12.742, 46.692] (EPSG:4326)
+2026-01-16 05:55:35,278 - build - demission - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full
+2026-01-16 05:55:35,290 - build - delwaq - INFO - Writing staticmap files.
+2026-01-16 05:55:35,347 - build - model_api - DEBUG - Writing file geoms/monareas.geojson
+2026-01-16 05:55:35,352 - build - model_api - DEBUG - Writing file geoms/basins.geojson
+2026-01-16 05:55:35,353 - build - delwaq - INFO - Writing model config to file.
+2026-01-16 05:55:35,354 - build - delwaq - INFO - Writing hydromap files.
+2026-01-16 05:55:35,402 - build - demission - INFO - Writting geometry file in root/staticdata
+2026-01-16 05:55:35,405 - build - demission - DEBUG - No forcing data found, skip writing.
+</pre></div></div>
+</div>
+<p>With this example we build a complete demission model including emission data. Compared to the previous <strong>hydromt build</strong> we have added:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">delwaq_build_EM.yml</span></code> : setup configuration file including all components to build and their arguments.</p></li>
+</ul>
+<p>Next we check which files and folders have been created:</p>
+<ul class="simple">
+<li><p><strong>config</strong>: basic configuration setups for the Delwaq input file .inp. Names of the ASCII files start with the corresponding block in the .inp file.</p></li>
+<li><p><strong>dynamicdata</strong>: Delwaq time-dependant data (hydrological fluxes) in binary format.</p></li>
+<li><p><strong>fews</strong>: additional files for connection with Delft-FEWS (not implemented yet)</p></li>
+<li><p><strong>hydromodel</strong>: data extracted to connect the hydrological model (wflow) and Delwaq (tif format). These files are not mandatory for DELWAQ but produced extra from HydroMT.</p></li>
+<li><p><strong>staticdata</strong>: static (spatial but non time-dependant) data for Delwaq (typically emission data) in binary format. A copy of the data in NetCDF format is also available for easier visualization.</p></li>
+<li><p><strong>geoms</strong>: related geometry files (geojson format). These files are not mandatory for DELWAQ but produced extra from HydroMT.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">root</span> <span class="o">=</span> <span class="s1">&#39;EM_test_full&#39;</span>
+<span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.xml&#39;</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; - </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+EM_test_full
+ - hydromt.log
+EM_test_full/staticdata
+ - ghs_pop_2015.dat
+ - slope.dat
+ - river.dat
+ - streamorder.dat
+ - ptiddown.dat
+ - porosity.dat
+ - SoilThickness.dat
+ - staticdata.nc
+ - gdp_world.dat
+EM_test_full/fews
+EM_test_full/hydromodel
+ - river.tif
+ - modelmap.tif
+ - ptiddown.tif
+ - elevtn.tif
+ - ptid.tif
+ - rivarea.tif
+ - basins.tif
+ - resarea.tif
+ - rivwth.tif
+ - ldd.tif
+ - rivlen.tif
+ - lakearea.tif
+EM_test_full/config
+ - B7_geometry.inc
+ - B4_nrofexch.inc
+ - B2_stations.inc
+ - B7_geometry.bin
+ - B5_boundlist.inc
+ - B2_nrofmon.inc
+ - B7_geometry-parameters.inc
+ - B3_nrofseg.inc
+ - B3_attributes.inc
+ - B2_monareas.inc
+ - B7_surf.inc
+EM_test_full/dynamicdata
+EM_test_full/geoms
+ - monareas.geojson
+ - basins.geojson
+</pre></div></div>
+</div>
+<p>You can see that the dynamicdata folder (hydrological input) does not contain any file yet. We will add them in the <strong>update forcing</strong> example notebook.</p>
+</section>
+<section id="Visualize-and/or-inspect-model-schematization">
+<h2>Visualize and/or inspect model schematization<a class="headerlink" href="#Visualize-and/or-inspect-model-schematization" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The <strong>delwaq plot</strong> example notebook contains scripts to visualize your model (staticdata, dynamicdata, hydromodel and geoms).</p></li>
+</ul>
+<p>In the meantime, feel free to have a look at some configuration files that were prepared by HydroMT. You can change the file name from the example code below.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./EM_test_full&#39;</span>
+<span class="n">fn_config</span> <span class="o">=</span> <span class="s1">&#39;config/B3_nrofseg.inc&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="n">fn_config</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1653 ; nr of segments
+
+</pre></div></div>
+</div>
+<p>In the config folder, you can also see three geometry files:</p>
+<ul class="simple">
+<li><p>B7_geometry-parameters.inc (Headers for the binary version)</p></li>
+<li><p>B7_geometry.bin (Binary version)</p></li>
+<li><p>B7_geometry.inc (ASCII version)</p></li>
+</ul>
+<p>These files are specific for the D-Emissions plugin and specifies geometry properties of the D-Emissions segments. These properties are:</p>
+<ul class="simple">
+<li><p>Segment area (m2)</p></li>
+<li><p>Fraction of the segment area that is paved</p></li>
+<li><p>Fraction of the segment area that is unpaved</p></li>
+<li><p>Fraction of the segment area that is open water</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;./EM_test_full&#39;</span>
+<span class="n">fn_config</span> <span class="o">=</span> <span class="s1">&#39;config/B7_geometry-parameters.inc&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="n">fn_config</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+PARAMETERS TotArea fPaved fUnpaved fOpenWater
+
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../user_guide/build_config_EM.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Building a model</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../user_guide/update_config_EM.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Updating a model</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#HydroMT-CLI-build-interface">HydroMT CLI build interface</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Setup-demission-model-base-layers">Setup demission model base layers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Model-setup-configuration">Model setup configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Data-for-model-setup">Data for model setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Setup-complete-D-Emissions-model">Setup complete D-Emissions model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Visualize-and/or-inspect-model-schematization">Visualize and/or inspect model schematization</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/_examples/build_EM_model.ipynb">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/_examples/build_EM_model.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Deltares.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
