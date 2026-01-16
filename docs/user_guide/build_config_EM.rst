@@ -9,9 +9,9 @@ data libraries are set, you can build a model by using:
 .. code-block:: console
 
     activate hydromt-delwaq
-    hydromt build demission path/to/built_model "{'wflow': path/to/wflow_model}" -i delmission_build.yml -d data_sources.yml -vv
+    hydromt build demission path/to/built_model -i delmission_build.yml -d data_sources.yml -vv
 
-The recommended `region options <https://deltares.github.io/hydromt/latest/user_guide/cli.html#region-options>`_
+The recommended `region options <https://deltares.github.io/hydromt/latest/user_guide/models/model_region.html>`_
 for a proper implementation of this model are:
 
 - model
@@ -49,12 +49,7 @@ are three ways for the user to select which data libraries to use:
 - Another options for Deltares users is to select the deltares-data library (requires access to the Deltares
   P-drive). In the command lines examples below, this is done by adding **--deltares-data**
   to the build / update command line.
-- Finally, the user can prepare its own yaml libary (or libraries) (see
-  `HydroMT documentation <https://deltares.github.io/hydromt/latest/user_guide/data.html>`_ to check the guidelines).
+- Finally, the user can prepare its own data catalog (or libraries) (see
+  `HydroMT documentation <https://deltares.github.io/hydromt/latest/user_guide/data_catalog/data_prepare_cat.html>`_ to check the guidelines).
   These user libraries can be added either in the command line using the **-d** option and path/to/yaml or in the **ini file**
   with the **data_libs** option in the [global] sections.
-
-  .. toctree::
-     :hidden:
-
-     Example: Build D-Emission model <../_examples/build_EM_model.ipynb>

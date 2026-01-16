@@ -1,1 +1,1 @@
-  1 'DDHHMMSS' 'DDHHMMSS'  ; system clock
+ 1 'DDHHMMSS' 'DDHHMMSS'  ; system clock

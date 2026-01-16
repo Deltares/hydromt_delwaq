@@ -74,18 +74,18 @@ docs/_examples
 docs/_generated
 docs/_examples
 docs/clean.py
+docs/api/_generated
+docs/api/advanced/_generated
 
 # PyBuilder
 target/
 
 # Jupyter Notebook /  examples
 .ipynb_checkpoints
-examples/EM_test_base
-examples/EM_test_full
+examples/EM_test
 examples/EM_piave_extended
 examples/EM_piave_extended_local
-examples/WQ_test_base
-examples/WQ_test_full
+examples/WQ_test
 examples/WQ_piave_monitoring
 examples/delwaq_update_monitoring.yml
 examples/delwaq_update_emission_cattle.yml

@@ -25,6 +25,8 @@ from distutils.dir_util import copy_tree
 
 os.environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
 
+# -- Path setup --------------------------------------------------------------
+
 here = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(here, "..")))
 
@@ -130,9 +132,9 @@ autoclass_content = "both"
 html_static_path = ["_static"]
 html_css_files = ["theme-deltares.css"]
 html_theme_options = {
-    "show_nav_level": 2,
+    "show_nav_level": 1,
     "navbar_align": "content",
-    "use_edit_page_button": True,
+    # "use_edit_page_button": True,
     "icon_links": [
         {
             "name": "GitHub",
@@ -159,10 +161,11 @@ html_theme_options = {
             "url": "https://deltares.github.io/hydromt/latest/index.html",
         },
     ],
-    "logo": {
-        "text": "HydroMT DELWAQ",
-    },
+    "logo": {"text": "HydroMT DELWAQ"},
     "navbar_end": ["navbar-icon-links"],  # remove dark mode switch
+    "secondary_sidebar_items": [
+        "page-toc",
+    ],
 }
 
 html_context = {

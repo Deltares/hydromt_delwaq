@@ -3,7 +3,7 @@
 Developments
 ============
 
-These pages provide guidelines on how to contribute to HydroMT-delwaq. Furthermore it informs you on planned developments and new features.
+These pages provide guidelines on how to contribute to HydroMT-DELWAQ. Furthermore it informs you on planned developments and new features.
 
 
 .. toctree::
@@ -13,6 +13,6 @@ These pages provide guidelines on how to contribute to HydroMT-delwaq. Furthermo
 
    ../changelog.rst
    roadmap.rst
-   Developer's guide <https://deltares.github.io/hydromt/latest/dev/contributing>
+   Developer's guide <https://deltares.github.io/hydromt/latest/dev/core_dev/index.html>
    dev_install.rst
    team.rst

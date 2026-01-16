@@ -22,14 +22,13 @@ __all__ = [
 def hydrology_forcing(
     ds: xr.Dataset,
     ds_model: xr.Dataset,
-    time_tuple: tuple,
+    time_range: tuple,
     timestepsecs: int,
     fluxes: List,
     surface_water: str = "sfw",
     add_volume_offset: bool = True,
     min_volume: float = 0.1,
     override: List = [],
-    logger: logging.Logger = logger,
 ):
     """Calculate hydrology forcing data.
 
@@ -64,7 +63,7 @@ def hydrology_forcing(
 
         * Optional variables for unit conversion: [rivarea, lakearea, resarea]
 
-    time_tuple : tuple
+    time_range : tuple
         Tuple containing the start and end time of the simulation
     timestepsecs : int
         Timestep of the simulation in seconds
@@ -79,8 +78,6 @@ def hydrology_forcing(
     override : list, optional
         List of fluxes to be overriden if several fluxes varibales are found, by default
         [].
-    logger : logging.Logger, optional
-        Logger object, by default logger
 
     Returns
     -------
@@ -106,7 +103,7 @@ def hydrology_forcing(
     # Copy of ds to be filled
     dsvar = [v for v in ds.data_vars if v.startswith(fluxes[0])][0]
     # Delwaq needs one more timestep for the volume
-    starttime, endtime = pd.to_datetime(time_tuple)
+    starttime, endtime = pd.to_datetime(time_range)
     endtime = endtime + pd.to_timedelta(timestepsecs, unit="s")
     ds_out_times = pd.date_range(starttime, endtime, freq=f"{timestepsecs}s")
     coords = {
@@ -114,7 +111,7 @@ def hydrology_forcing(
         ds.raster.y_dim: ds[ds.raster.y_dim],
         ds.raster.x_dim: ds[ds.raster.x_dim],
     }
-    ds_out = hydromt.raster.full(
+    ds_out = hydromt.gis.raster_utils.full(
         coords=coords,
         nodata=-999.0,
         dtype="float32",
@@ -164,7 +161,7 @@ def hydrology_forcing(
                 ds[flux] = ds[fl_vars[0]]
                 for fl in fl_vars[1:]:
                     ds[flux] = ds[flux].where(ds[fl].isnull(), ds[fl])
-        ds_out[flux] = ds[flux].sel(time=slice(*time_tuple))
+        ds_out[flux] = ds[flux].sel(time=slice(*time_range))
         ds_out[flux].attrs.update(attrs)
         ds_out[flux].attrs.update(unit="m3/s")
 
@@ -226,7 +223,6 @@ def hydrology_forcing(
         dims=ds_out.raster.dims,
         coords=ds_out.raster.coords,
         data=ds_model["mask"].values,
-        attrs=dict(_FillValue=ds_model["mask"].raster.nodata),
     )
 
     return ds_out
@@ -237,7 +233,6 @@ def hydrology_forcing_em(
     ds_model: xr.Dataset,
     timestepsecs: int,
     include_transport: bool = True,
-    logger: logging.Logger = logger,
 ) -> xr.Dataset:
     """
     Calculate hydrology forcing data for emission model.
@@ -325,8 +320,7 @@ def hydrology_forcing_em(
     ds.coords["mask"] = xr.DataArray(
         dims=ds.raster.dims,
         coords=ds.raster.coords,
-        data=ds_model["modelmap"].values,
-        attrs=dict(_FillValue=ds_model["mask"].raster.nodata),
+        data=ds_model["mask"].values,
     )
 
     return ds
@@ -336,7 +330,6 @@ def sediment_forcing(
     ds: xr.Dataset,
     ds_model: xr.Dataset,
     timestepsecs: int,
-    logger: logging.Logger = logger,
 ) -> xr.Dataset:
     """Calculate sediment forcing data.
 
@@ -352,8 +345,6 @@ def sediment_forcing(
         * Required variables: [mask]
     timestepsecs : int
         Timestep of the simulation in seconds
-    logger : logging.Logger, optional
-        Logger object, by default logger
 
     Returns
     -------
@@ -366,13 +357,12 @@ def sediment_forcing(
     # Resample in time if needed
     ds_out = xr.Dataset()
     for var in ds.data_vars:
-        ds_out[var] = hydromt.workflows.forcing.resample_time(
+        ds_out[var] = hydromt.model.processes.meteo.resample_time(
             ds[var],
             freq,
             upsampling="bfill",  # we assume right labeled original data
             downsampling="sum",
             conserve_mass=True,
-            logger=logger,
         )
 
     # If needed reproject forcing data to model grid
@@ -387,7 +377,6 @@ def sediment_forcing(
         dims=ds_out.raster.dims,
         coords=ds_out.raster.coords,
         data=ds_model["mask"].values,
-        attrs=dict(_FillValue=ds_model["mask"].raster.nodata),
     )
     # Add _FillValue to the data attributes
     for dvar in ds_out.data_vars.keys():
@@ -446,7 +435,7 @@ def climate_forcing(
 
     # Start with wind
     if "wind10_u" in climate_vars and "wind10_v" in climate_vars:
-        ds_out["wind"] = hydromt.workflows.forcing.wind(
+        ds_out["wind"] = hydromt.model.processes.meteo.wind(
             ds_model,
             wind_u=ds["wind10_u"],
             wind_v=ds["wind10_v"],
@@ -455,7 +444,7 @@ def climate_forcing(
         climate_vars.remove("wind10_u")
         climate_vars.remove("wind10_v")
     elif "wind" in climate_vars:
-        ds_out["wind"] = hydromt.workflows.forcing.wind(
+        ds_out["wind"] = hydromt.model.processes.meteo.wind(
             ds_model,
             wind=ds_out["wind"],
             altitude_correction=False,
@@ -465,12 +454,11 @@ def climate_forcing(
     temp_vars = [v for v in climate_vars if v.startswith("temp")]
     for v in climate_vars:
         if v in temp_vars:
-            temp_v = hydromt.workflows.forcing.temp(
+            temp_v = hydromt.model.processes.meteo.temp(
                 ds[v],
                 dem_model=ds_model["elevtn"],
                 dem_forcing=dem_forcing,
                 lapse_correction=temp_correction,
-                logger=logger,
                 freq=freq,
                 reproj_method="nearest_index",
                 lapse_rate=-0.0065,
@@ -479,13 +467,12 @@ def climate_forcing(
             ds_out[v] = temp_v
         else:
             da_out = ds[v].raster.reproject_like(ds_model, method="nearest_index")
-            da_out = hydromt.workflows.forcing.resample_time(
+            da_out = hydromt.model.processes.meteo.resample_time(
                 da_out,
                 freq,
                 upsampling="bfill",  # we assume right labeled original data
                 downsampling="mean",
                 conserve_mass=False,
-                logger=logger,
             )
             ds_out[v] = da_out
     # Add basin mask
@@ -493,7 +480,6 @@ def climate_forcing(
         dims=ds_out.raster.dims,
         coords=ds_out.raster.coords,
         data=ds_model["mask"].values,
-        attrs=dict(_FillValue=ds_model["mask"].raster.nodata),
     )
     # Add _FillValue to the data attributes
     for dvar in ds_out.data_vars.keys():
