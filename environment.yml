@@ -9,4 +9,3 @@ dependencies:
   - jupyterlab # to run examples
   - matplotlib # to run examples
   - notebook # to run examples
-  - python<=3.11

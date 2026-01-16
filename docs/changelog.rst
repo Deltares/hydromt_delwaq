@@ -6,16 +6,14 @@ All notable changes to this project will be documented in this page.
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
-Unreleased
-==========
+v0.3.1 (16 January 2026)
+========================
+Minor fixes and improvements.
 
 Added
 -----
 - Support for 3D data (example for cyclic data) in ``grid``.
 - Flexible names for ``grid`` and ``forcing`` filenames in read/write methods.
-
-Changed
--------
 
 Fixed
 -----
