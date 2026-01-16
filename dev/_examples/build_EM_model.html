@@ -55,7 +55,7 @@
     <link rel="prev" title="Building a model" href="../user_guide/build_config_EM.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.3.1.dev0" />
+  <meta name="docsearch:version" content="0.3.2.dev0" />
   </head>
   
   
@@ -503,10 +503,10 @@
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 model plugins:
- - delwaq (hydromt_delwaq 0.3.1.dev0)
- - demission (hydromt_delwaq 0.3.1.dev0)
  - wflow (hydromt_wflow 0.8.0)
  - wflow_sediment (hydromt_wflow 0.8.0)
+ - delwaq (hydromt_delwaq 0.3.2.dev0)
+ - demission (hydromt_delwaq 0.3.2.dev0)
 generic models (hydromt 0.10.1):
  - grid_model
  - vector_model
@@ -582,28 +582,28 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2025-11-14 04:28:27,424 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base/hydromt.log.
-2025-11-14 04:28:27,424 - build - log - INFO - HydroMT version: 0.10.1
-2025-11-14 04:28:27,425 - build - main - INFO - Building instance of demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base.
-2025-11-14 04:28:27,425 - build - main - INFO - User settings:
-2025-11-14 04:28:27,436 - build - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.1.dev0).
-2025-11-14 04:28:27,436 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2025-11-14 04:28:27,436 - build - model_api - INFO - setup_basemaps.maps: [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;]
-2025-11-14 04:28:27,497 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2025-11-14 04:28:27,497 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.8.0).
-2025-11-14 04:28:27,497 - build - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
-2025-11-14 04:28:27,509 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f8bc06d4e50&gt;}
-2025-11-14 04:28:27,509 - build - demission - INFO - Preparing EM basemaps from hydromodel.
-2025-11-14 04:28:27,511 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2025-11-14 04:28:27,511 - build - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2025-11-14 04:28:28,390 - build - model_api - ERROR - Default config file not found at /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_delwaq/data/demission/demission.inp
-2025-11-14 04:28:28,390 - build - demission - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base
-2025-11-14 04:28:28,395 - build - delwaq - INFO - Writing staticmap files.
-2025-11-14 04:28:28,402 - build - model_api - DEBUG - No geoms data found, skip writing.
-2025-11-14 04:28:28,402 - build - delwaq - INFO - Writing model config to file.
-2025-11-14 04:28:28,402 - build - delwaq - INFO - Writing hydromap files.
-2025-11-14 04:28:28,459 - build - demission - INFO - Writting geometry file in root/staticdata
-2025-11-14 04:28:28,462 - build - demission - DEBUG - No forcing data found, skip writing.
+2026-01-16 06:20:52,473 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base/hydromt.log.
+2026-01-16 06:20:52,473 - build - log - INFO - HydroMT version: 0.10.1
+2026-01-16 06:20:52,473 - build - main - INFO - Building instance of demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base.
+2026-01-16 06:20:52,473 - build - main - INFO - User settings:
+2026-01-16 06:20:52,545 - build - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.2.dev0).
+2026-01-16 06:20:52,545 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2026-01-16 06:20:52,546 - build - model_api - INFO - setup_basemaps.maps: [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;]
+2026-01-16 06:20:52,606 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2026-01-16 06:20:52,607 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.8.0).
+2026-01-16 06:20:52,607 - build - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
+2026-01-16 06:20:52,620 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7fe7c9e60050&gt;}
+2026-01-16 06:20:52,620 - build - demission - INFO - Preparing EM basemaps from hydromodel.
+2026-01-16 06:20:52,621 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2026-01-16 06:20:52,622 - build - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2026-01-16 06:20:53,470 - build - model_api - ERROR - Default config file not found at /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_delwaq/data/demission/demission.inp
+2026-01-16 06:20:53,471 - build - demission - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_base
+2026-01-16 06:20:53,475 - build - delwaq - INFO - Writing staticmap files.
+2026-01-16 06:20:53,482 - build - model_api - DEBUG - No geoms data found, skip writing.
+2026-01-16 06:20:53,482 - build - delwaq - INFO - Writing model config to file.
+2026-01-16 06:20:53,482 - build - delwaq - INFO - Writing hydromap files.
+2026-01-16 06:20:53,537 - build - demission - INFO - Writting geometry file in root/staticdata
+2026-01-16 06:20:53,541 - build - demission - DEBUG - No forcing data found, skip writing.
 </pre></div></div>
 </div>
 <p>The example above means the following: run <strong>hydromt build</strong> with:</p>
@@ -694,50 +694,50 @@ setup_emission_vector:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2025-11-14 04:28:32,084 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromt.log.
-2025-11-14 04:28:32,084 - build - log - INFO - HydroMT version: 0.10.1
-2025-11-14 04:28:32,084 - build - main - INFO - Building instance of demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full.
-2025-11-14 04:28:32,084 - build - main - INFO - User settings:
-2025-11-14 04:28:32,121 - build - data_catalog - INFO - Reading data catalog artifact_data latest
-2025-11-14 04:28:32,121 - build - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.9/data_catalog.yml
-2025-11-14 04:28:32,715 - build - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.1.dev0).
-2025-11-14 04:28:32,715 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
-2025-11-14 04:28:32,715 - build - model_api - INFO - setup_basemaps.maps: [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;, &#39;SoilThickness&#39;, &#39;thetaS&#39;]
-2025-11-14 04:28:32,723 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
-2025-11-14 04:28:32,723 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.8.0).
-2025-11-14 04:28:32,723 - build - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
-2025-11-14 04:28:32,736 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7fc52f4f44d0&gt;}
-2025-11-14 04:28:32,736 - build - demission - INFO - Preparing EM basemaps from hydromodel.
-2025-11-14 04:28:32,737 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
-2025-11-14 04:28:32,738 - build - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
-2025-11-14 04:28:33,628 - build - model_api - ERROR - Default config file not found at /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_delwaq/data/demission/demission.inp
-2025-11-14 04:28:33,628 - build - model_api - INFO - setup_monitoring.mon_points: None
-2025-11-14 04:28:33,628 - build - model_api - INFO - setup_monitoring.mon_areas: riverland
-2025-11-14 04:28:33,628 - build - delwaq - INFO - Setting monitoring points and areas
-2025-11-14 04:28:33,628 - build - delwaq - INFO - No monitoring points set in the config file, skipping
-2025-11-14 04:28:33,639 - build - model_api - INFO - setup_emission_raster.emission_fn: ghs_pop_2015
-2025-11-14 04:28:33,639 - build - model_api - INFO - setup_emission_raster.scale_method: average
-2025-11-14 04:28:33,639 - build - model_api - INFO - setup_emission_raster.fillna_method: zero
-2025-11-14 04:28:33,640 - build - model_api - INFO - setup_emission_raster.fillna_value: 0.0
-2025-11-14 04:28:33,640 - build - model_api - INFO - setup_emission_raster.area_division: True
-2025-11-14 04:28:33,640 - build - delwaq - INFO - Preparing &#39;ghs_pop_2015&#39; map.
-2025-11-14 04:28:33,644 - build - rasterdataset - INFO - Reading ghs_pop_2015 raster data from /home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar/ghs_pop_2015.tif
-2025-11-14 04:28:33,671 - build - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
-2025-11-14 04:28:33,690 - build - emissions - INFO - Deriving None using average resampling (nodata=-200.0).
-2025-11-14 04:28:33,740 - build - model_api - INFO - setup_emission_vector.emission_fn: gdp_world
-2025-11-14 04:28:33,740 - build - model_api - INFO - setup_emission_vector.col2raster: gdp
-2025-11-14 04:28:33,740 - build - model_api - INFO - setup_emission_vector.rasterize_method: value
-2025-11-14 04:28:33,740 - build - delwaq - INFO - Preparing &#39;gdp_world&#39; map.
-2025-11-14 04:28:33,745 - build - geodataframe - INFO - Reading gdp_world vector data from /home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar/gdp_world.gpkg
-2025-11-14 04:28:33,774 - build - geodataframe - DEBUG - Clip intersects [11.775, 45.808, 12.742, 46.692] (EPSG:4326)
-2025-11-14 04:28:33,859 - build - demission - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full
-2025-11-14 04:28:33,871 - build - delwaq - INFO - Writing staticmap files.
-2025-11-14 04:28:33,923 - build - model_api - DEBUG - Writing file geoms/monareas.geojson
-2025-11-14 04:28:33,929 - build - model_api - DEBUG - Writing file geoms/basins.geojson
-2025-11-14 04:28:33,932 - build - delwaq - INFO - Writing model config to file.
-2025-11-14 04:28:33,932 - build - delwaq - INFO - Writing hydromap files.
-2025-11-14 04:28:33,984 - build - demission - INFO - Writting geometry file in root/staticdata
-2025-11-14 04:28:33,987 - build - demission - DEBUG - No forcing data found, skip writing.
+2026-01-16 06:20:55,804 - build - log - DEBUG - Writing log messages to new file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full/hydromt.log.
+2026-01-16 06:20:55,804 - build - log - INFO - HydroMT version: 0.10.1
+2026-01-16 06:20:55,804 - build - main - INFO - Building instance of demission model at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full.
+2026-01-16 06:20:55,804 - build - main - INFO - User settings:
+2026-01-16 06:20:55,898 - build - data_catalog - INFO - Reading data catalog artifact_data latest
+2026-01-16 06:20:55,898 - build - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt_data/artifact_data/v0.0.9/data_catalog.yml
+2026-01-16 06:20:56,489 - build - model_api - INFO - Initializing demission model from hydromt_delwaq (v0.3.2.dev0).
+2026-01-16 06:20:56,489 - build - model_api - INFO - setup_basemaps.region: {&#39;wflow&#39;: &#39;wflow_piave&#39;}
+2026-01-16 06:20:56,489 - build - model_api - INFO - setup_basemaps.maps: [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;, &#39;SoilThickness&#39;, &#39;thetaS&#39;]
+2026-01-16 06:20:56,497 - build - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/hydromt.log.
+2026-01-16 06:20:56,497 - build - model_api - INFO - Initializing wflow model from hydromt_wflow (v0.8.0).
+2026-01-16 06:20:56,498 - build - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
+2026-01-16 06:20:56,510 - build - basin_mask - DEBUG - Parsed region (kind=model): {&#39;mod&#39;: &lt;hydromt_wflow.wflow.WflowModel object at 0x7f372a13a2d0&gt;}
+2026-01-16 06:20:56,510 - build - demission - INFO - Preparing EM basemaps from hydromodel.
+2026-01-16 06:20:56,512 - build - model_api - DEBUG - Model config read from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml
+2026-01-16 06:20:56,512 - build - wflow - INFO - Read grid from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticmaps.nc
+2026-01-16 06:20:57,385 - build - model_api - ERROR - Default config file not found at /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_delwaq/data/demission/demission.inp
+2026-01-16 06:20:57,386 - build - model_api - INFO - setup_monitoring.mon_points: None
+2026-01-16 06:20:57,386 - build - model_api - INFO - setup_monitoring.mon_areas: riverland
+2026-01-16 06:20:57,386 - build - delwaq - INFO - Setting monitoring points and areas
+2026-01-16 06:20:57,386 - build - delwaq - INFO - No monitoring points set in the config file, skipping
+2026-01-16 06:20:57,396 - build - model_api - INFO - setup_emission_raster.emission_fn: ghs_pop_2015
+2026-01-16 06:20:57,397 - build - model_api - INFO - setup_emission_raster.scale_method: average
+2026-01-16 06:20:57,397 - build - model_api - INFO - setup_emission_raster.fillna_method: zero
+2026-01-16 06:20:57,397 - build - model_api - INFO - setup_emission_raster.fillna_value: 0.0
+2026-01-16 06:20:57,397 - build - model_api - INFO - setup_emission_raster.area_division: True
+2026-01-16 06:20:57,397 - build - delwaq - INFO - Preparing &#39;ghs_pop_2015&#39; map.
+2026-01-16 06:20:57,401 - build - rasterdataset - INFO - Reading ghs_pop_2015 raster data from /home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar/ghs_pop_2015.tif
+2026-01-16 06:20:57,425 - build - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
+2026-01-16 06:20:57,443 - build - emissions - INFO - Deriving None using average resampling (nodata=-200.0).
+2026-01-16 06:20:57,489 - build - model_api - INFO - setup_emission_vector.emission_fn: gdp_world
+2026-01-16 06:20:57,489 - build - model_api - INFO - setup_emission_vector.col2raster: gdp
+2026-01-16 06:20:57,489 - build - model_api - INFO - setup_emission_vector.rasterize_method: value
+2026-01-16 06:20:57,489 - build - delwaq - INFO - Preparing &#39;gdp_world&#39; map.
+2026-01-16 06:20:57,494 - build - geodataframe - INFO - Reading gdp_world vector data from /home/runner/.hydromt_data/artifact_data/v0.0.9/data.tar/gdp_world.gpkg
+2026-01-16 06:20:57,527 - build - geodataframe - DEBUG - Clip intersects [11.775, 45.808, 12.742, 46.692] (EPSG:4326)
+2026-01-16 06:20:57,608 - build - demission - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test_full
+2026-01-16 06:20:57,620 - build - delwaq - INFO - Writing staticmap files.
+2026-01-16 06:20:57,677 - build - model_api - DEBUG - Writing file geoms/monareas.geojson
+2026-01-16 06:20:57,682 - build - model_api - DEBUG - Writing file geoms/basins.geojson
+2026-01-16 06:20:57,684 - build - delwaq - INFO - Writing model config to file.
+2026-01-16 06:20:57,685 - build - delwaq - INFO - Writing hydromap files.
+2026-01-16 06:20:57,732 - build - demission - INFO - Writting geometry file in root/staticdata
+2026-01-16 06:20:57,735 - build - demission - DEBUG - No forcing data found, skip writing.
 </pre></div></div>
 </div>
 <p>With this example we build a complete demission model including emission data. Compared to the previous <strong>hydromt build</strong> we have added:</p>
@@ -1000,7 +1000,7 @@ PARAMETERS TotArea fPaved fUnpaved fOpenWater
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>
