@@ -27,3 +27,4 @@ In this section, we will detail the full steps to prepare and run D-Emissions mo
    update_config_EM.rst
    generic_delwaq_EM_prepare.rst
    generic_delwaq_EM_run.rst
+   Further reading: Detailed functional description <EM_functional_description.rst>
