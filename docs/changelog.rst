@@ -6,11 +6,11 @@ All notable changes to this project will be documented in this page.
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
-Unreleased
-==========
-Update for HydroMT v1.3.0 and HydroMT-Wflow v1.0.0 compatibility. The main changes is that
+v0.4.0 (19 January 2026)
+========================
+Update for HydroMT v1.3.0 and HydroMT-Wflow v1.0.0 compatibility. The main change is that
 the ``DelwaqModel`` and ``DEmissionModel`` are now separated and have a component structure.
-HydroMT data catalog format and workflow YAML were also  updated. The codes was also adapted
+HydroMT data catalog format and workflow YAML were also  updated. The code was also adapted
 to support Wflow.jl models v1.0.0.
 
 Added
@@ -27,7 +27,7 @@ Changed
 -------
 - ``DelwaqModel`` and ``DEmissionModel`` are now separated classes with a component structure.
 - ``grid`` is now ``staticdata``.
-- All ``setup_emission_*`` methods are now in the ``DEmissionModel`` class.
+- All ``setup_emission_*`` methods are now in the ``DEmissionModel`` class only.
 - ``setup_sediment_forcing`` is now in the ``DelwaqModel`` class only.
 
 Fixed
