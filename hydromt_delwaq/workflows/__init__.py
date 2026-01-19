@@ -5,5 +5,6 @@ from .config import *
 from .emissions import *
 from .forcing import *
 from .geometry import *
+from .monitoring import *
 from .roads import *
 from .segments import *

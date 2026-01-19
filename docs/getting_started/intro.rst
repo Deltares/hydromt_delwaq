@@ -11,7 +11,7 @@ Getting Started
         :link: installation_guide
         :link-type: ref
 
-        :octicon:`gear;10em`
+        :octicon:`gear;5em;sd-text-icon blue-icon`
         +++
         Installation guide
 
@@ -20,7 +20,7 @@ Getting Started
         :link: intro_user_guide
         :link-type: ref
 
-        :octicon:`book;10em`
+        :octicon:`book;5em;sd-text-icon blue-icon`
         +++
         User guide
 
@@ -29,7 +29,7 @@ Getting Started
         :link: api_reference
         :link-type: ref
 
-        :octicon:`list-unordered;10em`
+        :octicon:`list-unordered;5em;sd-text-icon blue-icon`
         +++
         API reference
 
@@ -38,18 +38,9 @@ Getting Started
         :link: examples
         :link-type: ref
 
-        :octicon:`graph;10em`
+        :octicon:`graph;5em;sd-text-icon blue-icon`
         +++
         Examples
-
-    .. grid-item-card::
-        :text-align: center
-        :link: user_stories
-        :link-type: ref
-
-        :octicon:`file-media;10em`
-        +++
-        User stories
 
 .. toctree::
    :caption: Table of Contents
@@ -58,4 +49,3 @@ Getting Started
 
    installation.rst
    examples_index.rst
-   user_stories.rst

@@ -1,12 +1,13 @@
-setup_hydrology_forcing:
-  hydro_forcing_fn: wflow_output_em
-  starttime: "2010-02-04 00:00:00"
-  endtime: "2010-02-10 00:00:00"
-  timestepsecs: 86400
-  include_transport: True
+steps:
+  - setup_hydrology_forcing:
+      hydro_forcing_fn: wflow_output_em
+      starttime: "2010-02-04 00:00:00"
+      endtime: "2010-02-10 00:00:00"
+      timestepsecs: 86400
+      include_transport: True
 
-write_config:
+  - config.write:
 
-write_forcing:
+  - forcing.write:
 
-write_waqgeom:
+  - write_waqgeom:

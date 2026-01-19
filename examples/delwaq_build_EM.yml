@@ -1,21 +1,24 @@
-setup_basemaps:
-  maps:
-    - rivmsk
-    - lndslp
-    - strord
-    - SoilThickness
-    - thetaS
+steps:
+  - setup_basemaps:
+      region:
+        wflow_sbm: wflow_piave
+      maps:
+        - rivmsk
+        - lndslp
+        - strord
+        - soil_thickness
+        - soil_theta_s
 
-setup_monitoring:
-  mon_areas: riverland
+  - setup_monitoring:
+      mon_areas: riverland
 
-setup_emission_raster:
-  emission_fn: ghs_pop_2015
-  scale_method: average
-  fillna_method: zero
-  area_division: True
+  - setup_emission_raster:
+      emission_fn: ghs_pop_2015
+      scale_method: average
+      fillna_method: zero
+      area_division: True
 
-setup_emission_vector:
-  emission_fn: gdp_world
-  col2raster: gdp
-  rasterize_method: value
+  - setup_emission_vector:
+      emission_fn: gdp_world
+      col2raster: gdp
+      rasterize_method: value

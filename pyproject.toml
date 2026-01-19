@@ -9,8 +9,8 @@ authors = [
     {name = "Sibren Loos", email = "sibren.loos@deltares.nl"},
 ]
 dependencies = [
-    "hydromt >=0.9.1,<0.11",
-    "hydromt_wflow >=0.5.0,<0.9",
+    "hydromt>=1.3.0",
+    "hydromt_wflow>=1.0.1",
     "geopandas >=0.10",
     "numpy",
     "pandas",
@@ -20,7 +20,7 @@ dependencies = [
     "shapely",
     "tqdm",
     "xarray",
-    "xugrid >=0.14.3",
+    "xugrid>=0.14.3",
 ]
 requires-python = ">=3.10"
 readme = "README.rst"
@@ -68,8 +68,8 @@ Documentation = "https://deltares.github.io/hydromt_delwaq/latest/"
 Source = "https://github.com/Deltares/hydromt_delwaq"
 
 [project.entry-points."hydromt.models"]
-delwaq = "hydromt_delwaq.delwaq:DelwaqModel"
-demission = "hydromt_delwaq.demission:DemissionModel"
+delwaq = "hydromt_delwaq.delwaq"
+demission = "hydromt_delwaq.demission"
 
 [tool.black]
 line-length = 88

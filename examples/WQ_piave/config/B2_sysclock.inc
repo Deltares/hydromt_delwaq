@@ -1,1 +1,1 @@
-  86400 'DDHHMMSS' 'DDHHMMSS'  ; system clock
+   86400 'DDHHMMSS' 'DDHHMMSS'  ; system clock

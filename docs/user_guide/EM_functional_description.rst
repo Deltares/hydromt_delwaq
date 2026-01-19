@@ -4,6 +4,18 @@
 Detailed functional description
 ===============================
 
+An emission model (EM) has as its main objective:
+
+*to quantify “emissions”: fluxes of selected substances towards a water system of which the water quality is simulated by a water quality model*
+
+To perform this task, the emission model covers a collection of "compartments": parts of the environment and/or the “techno-sphere” (the man-made environment)
+that are not included in the water quality model.
+
+It is noted that D-Emissions can be used in two modes:
+
+1.	Only emissions to surface waters are calculated and the pathways from the soil system to the surface waters are represented inside D-Emissions.
+2.	Both emissions to surface waters and to soils are calculated and the pathways from the soil system to the surface waters are represented outside D-Emissions.
+
 .. _EM_GSS:
 
 Generic Single Substance Emission Model (EM_GSS)
@@ -12,7 +24,8 @@ Generic Single Substance Emission Model (EM_GSS)
 Introduction
 ------------
 
-This process quantifies releases to various compartments and routes them to the final recipients: surface waters and soils. It is applied for a single substance.
+This process quantifies releases to various compartments and routes them to the final recipients: surface waters (modes 1 and 2) and soils (mode 2).
+It is applied for a single substance.
 
 Releases are defined for:
 
@@ -21,10 +34,10 @@ Releases are defined for:
 •	A variable number of “type B” sources.
 
 
-The quantification of the releases of polutants associated to the various sources proceeds by the emission factor method. A variable collection of sources can be considered. Releases (:math:`L`) of a pollutant “p” for a certain socio-economic activity “a” are calculated by multiplying an activity rate (:math:`AR_a`) by an emission factor for this activity and a certain pollutant (:math:`EF_{p,a}`):
+The quantification of the releases of pollutants associated to the various sources proceeds by the emission factor method. A variable collection of sources can be considered. Releases (:math:`L`) of a pollutant “p” for a certain socio-economic activity “a” are calculated by multiplying an activity rate (:math:`AR_a`) by an emission factor for this activity and a certain pollutant (:math:`EF_{p,a}`):
 
 .. math::
-    :label: Eq_release_polutant
+    :label: Eq_release_pollutant
 
     L_{p,a} = AR_a * EF_{p,a}
 
@@ -35,6 +48,8 @@ B.	The activity rate is already a spatially distributed variable and can be dire
 
 The quantified releases are allocated to various initial receptors and routed towards the final receiving compartments: the soil system or the surface waters. Initial receptors can be: (1) the surface waters (directly), (2) the soil system (directly), (3) impermeable surfaces, (4) permeable surfaces, (5) the sewage collection system (combined or separated) and (6) the separate rainwater collection system.
 
+**Pathways: stormwater and wastewater**
+
 The emissions related to stormwater and wastewater are simulated as follows:
 
 •	The allocation of the wastewater releases from households to initial receptors should take into account the share of unconnected households and the share of households using septic tanks or other “individual or appropriate systems” (IAS, as defined under the Urban Wastewater Treatment Directive).
@@ -42,6 +57,13 @@ The emissions related to stormwater and wastewater are simulated as follows:
 •	Separate collection systems discharge to surface waters, while a retention term can be defined that is partly allocated to soils (re-use or distribution of sludge).
 •	Combined collection systems discharge via a WWTP, where the treatment level can be variable.
 •	Combined collection systems feature overflow events (CSOs), during which the treatment is bypassed; CSOs are a fixed fraction or occur if a daily rainfall threshold is exceeded.
+
+**Pathways: permeable surfaces**
+
+As discussed above, all pathways related to the soil system are either simulated within D-Emissions (mode 1) or simulated inside the fate and transport model (mode 2).
+In all cases, the emission model has a "permeable surfaces" compartment. The underlying "soil" compartment is only used in mode 1, while in mode 2 the soil system is
+left to the fate and transport model. A relevant consideration is that the permeable surfaces compartment in EM can be configured to have a short "residence time".
+It responds rapidly to hydrological events.
 
 Implementation
 --------------
@@ -67,7 +89,8 @@ The EM is currently configured for 6 compartments.
    * - ``Sfw``
      - Final recipient surface water, all matter that ends up here is “emissions to surface waters”
    * - ``Soi``
-     - Final recipient soil system, all matter that ends up here is “emissions to soils”
+     - Mode 1: storage, decay and drainage to surface waters.
+       Mode 2: Final recipient soil system, all matter that ends up here is “emissions to soils”
 
 
 In the EM software, these compartments are mathematically represented by substances. The mass of the simulated substances is expressed in grams. Transports from one compartment to another (in g s-1) are mathematically represented by “process fluxes” (transformations of one substance into another substance). This comes back in the mass balance output.
@@ -239,11 +262,11 @@ where
 :math:`F_{loss}`          flux lost by decay (g/d)
 :math:`L`                 releases to unpaved surfaces (g/d)
 :math:`\Delta t`          time step in calculation (d)
-:math:`F_{part}`          particulate flux available for transport (-)
-:math:`F_{dis}`        	  dissolved flux available for transport (-)
-:math:`F_{erosion}`       erosion flux by surface runoff (-)
-:math:`F_{runoff}`        runoff flux (-)
-:math:`F_{infilt}`        infiltration flux (-)
+:math:`F_{part}`          particulate flux available for transport (g/d)
+:math:`F_{dis}`        	  dissolved flux available for transport (g/d)
+:math:`F_{erosion}`       erosion flux by surface runoff (g/d)
+:math:`F_{runoff}`        runoff flux (g/d)
+:math:`F_{infilt}`        infiltration flux (g/d)
 ======================    ================================================
 
 The washed off and eroded fractions are routed to the *Sfw* compartment.
@@ -276,174 +299,285 @@ The substances remaining in *Stw* can partly be retained.
 The fate of the substances in the influent is fixed by the parameters specifying the fractions that end up in effluent (*Eff_RS*) and in sludge (*Sld_RS*) respectively.
 These two parameters implicitly determine the retention (*1 - Eff_RS-Sld_RS*).
 
+Soil system
+^^^^^^^^^^^
+
+The soil system receives substances by direct release, by burial (bound fraction) and by infiltration (unbound fraction) both from unpaved surfaces.
+In mode 2, this net result is passed to the fate and transport model as emissions to soils.
+
+In mode 1, a simple soil mass balance is available. While in the soil system, a decay rate can be specified. The residence time in the soil system is
+determined by a user defined soil thickness and soil porosity, in combination with the infiltration rate. The outflow from the soil is passed to the
+surface water, via an extra store to attenuate the highly fluctuating infiltration flow into a baseflow-like signal. This store needs to be defined
+as an additional state variable in the input file. In this extra store there is no decay, just transport.
+
+In formulas:
+
+.. math::
+    :label: Eq_Unpaved11
+
+    F_{loss} = k_{soil}M
+.. math::
+    :label: Eq_Unpaved12
+
+    k_{outflow} = \frac{INF}{SoilThick * SoilPor * 1000} * \left( 1 - kd_{unpaved} \right)
+.. math::
+    :label: Eq_Unpaved13
+
+    F_{outflow1} = k_{outflow}M
+.. math::
+    :label: Eq_Unpaved14
+
+    F_{outflow2} = k_{soilstore}S
+
+where
+
+======================    ================================================
+:math:`INF`        	      actual infiltration intensity (mm/d)
+:math:`kd_{unpaved}`      partition fraction (-)
+:math:`k_{soil}`          decay rate (1/d)
+:math:`k_{soilstore}`     attenuation time constant in soilstore (1/d)
+:math:`SoilThick`         thickness of soil compartment (m)
+:math:`SoilPor`           porosity of soil compartment (-)
+:math:`M`                 mass available in soil compartment (g)
+:math:`S`                 mass available in soil store (g)
+:math:`F_{loss}`          flux lost by decay (g/d)
+:math:`k_{outflow}`       time constant for outflow from soil comp. (1/d)
+:math:`F_{outflow1}`      outflow flux to soilstore (g/d)
+:math:`F_{outflow2}`      attenuated outflow flux to surface water (g/d)
+======================    ================================================
 
 Input
 -----
 
 .. list-table::
-   :widths: 10, 25, 10, 10
+   :widths: 10, 25, 10, 10, 10
    :header-rows: 1
 
    * - Name in model
      - Definition
      - Unit
      - Spatial function?
+     - Time dependent?
    * - ``fComSew``
      - fraction of combined sewers
      - (-)
+     - yes
      - yes
    * - ``SewLeakage``
      - sewer leakage / CSO definition
      - (-) or mm/day
      - yes
+     - yes
    * - ``LocWWTP``
      - whereto for mixed sewers
      - (-)
      - yes
+     - no
    * - ``RecWWTP``
      - receivers of mixed sewers
      - (-)
      - yes
+     - no
    * - ``LocSTW``
      - whereto for rain sewers
      - (-)
      - yes
+     - no
    * - ``RecSTW``
      - receivers of rain sewers
      - (-)
      - yes
+     - no
    * - ``kBurial``
      - burial rate of unpaved pool
      - (-)
      - no
+     - no
    * - ``DecPav``
      - decay rate paved (substance dependent)
      - (/d)
-     - no
+     - yes
+     - yes
    * - ``DecUnp``
      - decay rate unpaved  (substance dependent)
      - (/d)
-     - no
+     - yes
+     - yes
    * - ``KdUnpa``
      - fraction of bound vs unbound (substance dependent)
      - (-)
+     - no
+     - no
+   * - ``SoilThick``
+     - thickness of soil compartment, a value > 1000 (default) forces mode 2 (write emissions to soil)
+     - (m)
+     - yes
+     - yes
+   * - ``SoilPor``
+     - soil porosity
+     - (-)
+     - yes
+     - yes
+   * - ``DecSoi``
+     - degradation rate in soil
+     - (/d)
+     - yes
+     - yes
+   * - ``Soilstore``
+     - soilstore mass (needs to be a state variable)
+     - (g)
+     - yes
+     - yes
+   * - ``kSoilstore``
+     - time constant for soilstore
+     - (/d)
+     - no
      - no
    * - ``EF_DDp``
      - dry deposition rate (substance dependent)
      - (g/m2/d)
      - yes
+     - yes
    * - ``EF_WDp``
      - wet deposition rate (substance dependent)
      - (g/m3)
+     - yes
      - yes
    * - ``Eff_WWTP``
      - fraction of substance in WWTP influent that reaches the effluent (substance dependent)
      - (-)
      - yes
+     - yes
    * - ``Sld_WWTP``
      - fraction of substance in WWTP influent that reaches the sludge (substance dependent)
      - (-)
+     - yes
      - yes
    * - ``Eff_RS``
      - Fraction to effluent of rain sewers influent (substance dependent)
      - (-)
      - yes
+     - yes
    * - ``Sld_RS``
      - Fraction to sludge of rain sewers influent (substance dependent)
      - (-)
+     - yes
      - yes
    * - ``FrSewered``
      - fraction wastewater and stormwater intercepted by sewer systems
      - (-)
      - yes
+     - yes
    * - ``WWtoSew``
      - fraction of wastewater allocated to mixed sewers
      - (-)
      - yes
+     - no
    * - ``WWtoSfw``
      - fraction of wastewater allocated to surface waters
      - (-)
      - yes
+     - no
    * - ``WWtoSoi``
      - fraction of wastewater allocated to soils
      - (-)
      - yes
+     - no
    * - ``EV_A01``
      - emission variable of source A01
      - ( X )
      - no
+     - yes
    * - ``LOC_A01``
      - locator variable of source A01
      - ( Y )
      - yes
+     - no
    * - ``EF_A01``
      - emission factor of source A01 (substance dependent)
      - (kg/d/X)
      - yes
+     - no
    * - ``A01toWW``
      - released fraction to wastewater of source A01
      - (-)
      - yes
+     - no
    * - ``A01toSew``
      - released fraction to mixed sewers of source A01
      - (-)
      - yes
+     - no
    * - ``A01toPav``
      - released fraction to paved areas of source A01
      - (-)
      - yes
+     - no
    * - ``A01toUnp``
      - released fraction to unpaved areas of source A01
      - (-)
      - yes
+     - no
    * - ``A01toStw``
      - released fraction to separated sewers of source A01
      - (-)
      - yes
+     - no
    * - ``A01toSfw``
      - released fraction to surface waters of source A01
      - (-)
      - yes
+     - no
    * - ``A01toSoi``
      - released fraction to soils of source A01
      - (-)
      - yes
+     - no
    * - ``EV_B01``
      - locator/EV variable of source B01
      - ( X )
      - yes
+     - no
    * - ``EF_B01``
      - emission factor of source B01 (substance dependent)
      - (kg/d/X)
+     - yes
      - yes
    * - ``B01toWW``
      - released fraction to wastewater of source B01
      - (-)
      - yes
+     - no
    * - ``B01toSew``
      - released fraction to mixed sewers of source B01
      - (-)
      - yes
+     - no
    * - ``B01toPav``
      - released fraction to paved areas of source B01
      - (-)
      - yes
+     - no
    * - ``B01toUnp``
      - released fraction to unpaved areas of source B01
      - (-)
      - yes
+     - no
    * - ``B01toStw``
      - released fraction to separated sewers of source B01
      - (-)
      - yes
+     - no
    * - ``B01toSfw``
      - released fraction to surface waters of source B01
      - (-)
      - yes
+     - no
    * - ``B01toSoi``
      - released fraction to soils of source B01
      - (-)
      - yes
+     - no
 
 .. Note::
     •	Where “Spatial function?” is indicated as “yes”, the user has the option to specify the related input as a function of space. Where this is indicated as “no”, any defined spatial variability is **neglected** (the value for the first cell will be applied model-wide).

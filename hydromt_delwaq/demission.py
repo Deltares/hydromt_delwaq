@@ -1,71 +1,68 @@
 """Implement demission model class."""
 
 import logging
-import os
-from os.path import dirname, join
+from os.path import isfile, join
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Any
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
+import pyproj
 import xarray as xr
-from hydromt import workflows
-from tqdm import tqdm
+from hydromt import hydromt_step
+from hydromt.model import Model, processes
+from hydromt.model.components import GeomsComponent
 
-from . import DATADIR
-from .delwaq import DelwaqModel
-from .utils import dw_WriteSegmentOrExchangeData
-from .workflows import config, forcing, geometry, roads, segments
+from hydromt_delwaq.components import (
+    DelwaqHydromapsComponent,
+    DelwaqStaticdataComponent,
+    DemissionConfigComponent,
+    DemissionForcingComponent,
+    DemissionGeometryComponent,
+)
+from hydromt_delwaq.utils import DATADIR, write_waqgeomfile
+from hydromt_delwaq.workflows import (
+    config,
+    emissions,
+    forcing,
+    geometry,
+    monitoring,
+    roads,
+    segments,
+)
 
 __all__ = ["DemissionModel"]
-
+__hydromt_eps__ = ["DemissionModel"]  # core entrypoints
 logger = logging.getLogger(__name__)
 
-# specify pcraster map types for non scalar (float) data types
-PCR_VS_MAP = {
-    "modelmap": "bool",
-    "basins": "nominal",
-    "ldd": "ldd",
-    "ptid": "ordinal",
-}
 
-
-class DemissionModel(DelwaqModel):
+class DemissionModel(Model):
     """Demission model class."""
 
-    _NAME = "demission"
-    _CONF = "demission.inp"
-    _DATADIR = DATADIR
-    _CF = dict()  # configreader kwargs
-    _GEOMS = {}
+    name: str = "demission"
+
     _MAPS = {
-        "basmsk": "modelmap",
         "flwdir": "ldd",
         "lndslp": "slope",
-        "N": "manning",
         "rivmsk": "river",
         "strord": "streamorder",
-        "thetaS": "porosity",
+        "soil_theta_s": "porosity",
     }
-    _FOLDERS = [
-        "hydromodel",
-        "staticdata",
-        "geoms",
-        "config",
-        "dynamicdata",
-        "fews",
-    ]
+    _FORCING = {
+        "temp": "tempair",
+        "temp_dew": "temp_dew",
+        "ssr": "rad",
+        "wind": "vwind",
+        "tcc": "cloudfrac",
+    }
 
     def __init__(
         self,
-        root: Union[str, Path] = None,
+        root: str | Path | None = None,
         mode: str = "w",
-        config_fn: Union[str, Path] = None,
-        hydromodel_name: str = "wflow",
-        hydromodel_root: Union[str, Path] = None,
-        data_libs: List[Union[str, Path]] = None,
-        logger=logger,
+        config_filename: str | Path | None = None,
+        data_libs: list[str | Path] | None = None,
     ):
         """Initialize a model.
 
@@ -75,39 +72,107 @@ class DemissionModel(DelwaqModel):
             Model root, by default None
         mode : {'r','r+','w', 'w+'}, optional
             read/append/write mode, by default "w"
-        config_fn : str or Path, optional
+        config_filename : str or Path, optional
             Model simulation configuration file, by default None.
             Note that this is not the HydroMT model setup configuration file!
-        hydromodel_name : str, optional
-            Name of the hydromodel used to build the emission model. Only useful in
-            update mode as this is taken from the ``region`` argument in
-            **setup_basemaps** method. By default "wflow".
-        hydromodel_root : str or Path, optional
-            Root of the hydromodel used to build the emission model. Only useful in
-            update mode as this is taken from the ``region`` argument in
-            **setup_basemaps** method. By default None.
         data_libs : List[str, Path], optional
             List of data catalog configuration files, by default None
-        logger:
-            The logger to be used.
         """
+        if config_filename is None:
+            config_filename = "emission.inp"
+
+        components = {
+            "config": DemissionConfigComponent(
+                self,
+                filename=str(config_filename),
+            ),
+            "staticdata": DelwaqStaticdataComponent(self),
+            "hydromaps": DelwaqHydromapsComponent(self, region_component="staticdata"),
+            "geoms": GeomsComponent(
+                self, filename="geoms/{name}.geojson", region_component="staticdata"
+            ),
+            "geometry": DemissionGeometryComponent(
+                self, filename="config/B7_geometry.inc"
+            ),
+            "forcing": DemissionForcingComponent(self, region_component="staticdata"),
+        }
+
         super().__init__(
-            root=root,
+            root,
+            components=components,
             mode=mode,
-            config_fn=config_fn,
-            hydromodel_name=hydromodel_name,
-            hydromodel_root=hydromodel_root,
+            region_component="staticdata",
             data_libs=data_libs,
-            logger=logger,
         )
 
         # d-emission specific
-        self._geometry = None
+        self.timestepsecs = 86400
 
+    ## Properties
+    # Components
+    @property
+    def config(self) -> DemissionConfigComponent:
+        """Return the config component."""
+        return self.components["config"]
+
+    @property
+    def staticdata(self) -> DelwaqStaticdataComponent:
+        """Return the staticdata component."""
+        return self.components["staticdata"]
+
+    @property
+    def hydromaps(self) -> DelwaqHydromapsComponent:
+        """Return the hydromaps component."""
+        return self.components["hydromaps"]
+
+    @property
+    def geoms(self) -> GeomsComponent:
+        """Return the geoms component."""
+        return self.components["geoms"]
+
+    @property
+    def geometry(self) -> DemissionGeometryComponent:
+        """Return the geometry component."""
+        return self.components["geometry"]
+
+    @property
+    def forcing(self) -> DemissionForcingComponent:
+        """Return the forcing component."""
+        return self.components["forcing"]
+
+    @hydromt_step
+    def setup_config(self, data: dict[str, Any]):
+        """Set the config dictionary at key(s) with values.
+
+        Parameters
+        ----------
+        data : dict[str, Any]
+            A dictionary with the values to be set. keys can be dotted like in
+            :py:meth:`~hydromt_wflow.components.config.WflowConfigComponent.set`
+
+        Examples
+        --------
+        Setting data as a nested dictionary::
+
+
+            >> self.setup_config({'a': 1, 'b': {'c': {'d': 2}}})
+            >> self.config.data
+            {'a': 1, 'b': {'c': {'d': 2}}}
+
+        Setting data using dotted notation::
+
+            >> self.setup_config({'a.d.f.g': 1, 'b': {'c': {'d': 2}}})
+            >> self.config.data
+            {'a': {'d':{'f':{'g': 1}}}, 'b': {'c': {'d': 2}}}
+
+        """
+        self.config.update(data)
+
+    @hydromt_step
     def setup_basemaps(
         self,
-        region: Dict,
-        maps: List[str] = ["rivmsk", "lndslp", "strord"],
+        region: dict,
+        maps: list[str] = ["rivmsk", "lndslp", "strord"],
     ):
         """
         Prepare demission schematization using the hydromodel region and resolution.
@@ -140,50 +205,55 @@ class DemissionModel(DelwaqModel):
             By default ['rivmsk', 'lndslp', 'strord'].
         """
         # Initialise hydromodel from region
-        kind, region = workflows.parse_region(region, logger=self.logger)
-        if kind != "model":
-            raise ValueError("Delwaq model can only be built from 'model' region.")
-        hydromodel = region["mod"]
-        if hydromodel._NAME != "wflow":
-            raise NotImplementedError(
-                "Demission build function only implemented for wflow base model."
-            )
-        else:
-            self.hydromodel_name = hydromodel._NAME
-            self.hydromodel_root = hydromodel.root
+        hydromodel = processes.region.parse_region_other_model(region)
 
-        self.logger.info("Preparing EM basemaps from hydromodel.")
+        if hydromodel.name != "wflow_sbm":
+            raise NotImplementedError(
+                "Demission build function only implemented for wflow_sbm base model."
+            )
+
+        logger.info("Preparing EM basemaps from hydromodel.")
 
         ### Select and build hydromaps from model ###
         # Initialise hydromaps
         ds_hydro = segments.hydromaps(hydromodel)
         # Add to hydromaps
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_hydro.data_vars}
-        self.set_hydromaps(ds_hydro.rename(rmdict))
+        self.hydromaps.set(ds_hydro.rename(rmdict))
 
         # Build segment ID and segment ID down and add to hydromaps
         nrofseg, da_ptid, da_ptiddown = segments.pointer(
-            self.hydromaps, build_pointer=False
+            self.hydromaps.data, build_pointer=False
         )
-        self.set_hydromaps(da_ptid, name="ptid")
-        self.set_hydromaps(da_ptiddown, name="ptiddown")
+        self.hydromaps.set(da_ptid, name="ptid")
+        self.hydromaps.set(da_ptiddown, name="ptiddown")
 
         ### Initialise grid with segment ID down, streamorder, river and slope ###
         ds_stat = segments.maps_from_hydromodel(
-            hydromodel, maps=maps, logger=self.logger
+            hydromodel,
+            maps=maps,
         )
-        ds_stat["ptiddown"] = self.hydromaps["ptiddown"].squeeze(drop=True)
+        ds_stat["ptiddown"] = self.hydromaps.data["ptiddown"].squeeze(drop=True)
 
         rmdict = {k: v for k, v in self._MAPS.items() if k in ds_stat.data_vars}
-        self.set_grid(ds_stat.rename(rmdict))
-        self.grid.coords["mask"] = self.hydromaps["mask"]
+        self.staticdata.set(ds_stat.rename(rmdict))
+        self.staticdata.data.coords["mask"] = self.hydromaps.data["mask"]
 
         ### Geometry data ###
+        hydromodel_grid = hydromodel.components.get(
+            hydromodel._region_component_name
+        ).data
+
         geometry_data = geometry.compute_geometry(
-            ds=hydromodel.grid, mask=self.grid["mask"]
+            ds=hydromodel_grid,
+            mask=self.staticdata.data["mask"],
+            fpaved_name=hydromodel._MAPS["soil_compacted_fraction"],
+            fopenwater_name=hydromodel._MAPS["land_water_fraction"],
         )
-        self._geometry = pd.DataFrame(
-            geometry_data, columns=(["TotArea", "fPaved", "fUnpaved", "fOpenWater"])
+        self.geometry.set(
+            pd.DataFrame(
+                geometry_data, columns=(["TotArea", "fPaved", "fUnpaved", "fOpenWater"])
+            )
         )
 
         ### Config ###
@@ -193,17 +263,259 @@ class DemissionModel(DelwaqModel):
             layer_name="EM",
             add_surface=True,
         )
-        for file in configs:
-            for option in configs[file]:
-                self.set_config(file, option, configs[file][option])
+        self.config.update(data=configs)
 
+    @hydromt_step
+    def setup_monitoring(
+        self,
+        mon_points: str | Path = None,
+        mon_areas: str = None,
+    ):
+        """Prepare Delwaq monitoring points and areas options.
+
+        Adds model layers:
+
+        * **monitoring_points** map: monitoring points segments
+        * **monitoring_areas** map: monitoring areas ID
+        * **B2_nrofmon** config: number of monitoring points and areas
+
+        Parameters
+        ----------
+        mon_points : {'segments', 'data_source', 'path to station location'}
+            Either source from DataCatalog, path to a station location dataset
+            or if segments, all segments are monitored.
+        mon_areas : str {'subcatch', 'riverland'}
+            Either subcatch from hydromodel or 'riverland' to split river and land
+            cells.
+        """
+        logger.info("Setting monitoring points and areas")
+
+        # Read monitoring points source
+        if mon_points is not None:
+            logger.info(f"Reading monitoring points from {mon_points}")
+            if mon_points == "segments":
+                nb_points, monpoints = monitoring.monitoring_points_from_dataarray(
+                    self.hydromaps.data["ptid"]
+                )
+                gdf = None
+            else:
+                kwargs = {}
+                if isfile(mon_points):
+                    kwargs["metadata"] = {"crs": self.crs}
+                gdf = self.data_catalog.get_geodataframe(
+                    mon_points,
+                    geom=self.basins,
+                    # assert_gtype="Point",
+                    source_kwargs=kwargs,
+                )
+                (
+                    nb_points,
+                    monpoints,
+                    gdf,
+                ) = monitoring.monitoring_points_from_geodataframe(
+                    gdf,
+                    ds_like=self.hydromaps.data,
+                )
+
+            # Add to grid
+            self.staticdata.set(monpoints.rename("monpoints"))
+            # Add to geoms if mon_points is not segments
+            if gdf is not None:
+                self.geoms.set(gdf, name="monpoints")
+        else:
+            logger.info("No monitoring points set in the config file, skipping")
+            nb_points = 0
+
+        # Monitoring areas domain
+        if mon_areas is not None:
+            nb_areas, monareas = monitoring.monitoring_areas(
+                mon_areas,
+                ds=self.hydromaps.data,
+            )
+            self.staticdata.set(monareas, name="monareas")
+
+            # Add to geoms
+            gdf_areas = (
+                self.staticdata.data["monareas"].astype(np.int32).raster.vectorize()
+            )
+            self.geoms.set(gdf_areas, name="monareas")
+        else:
+            logger.info("No monitoring areas set in the config file, skipping")
+            nb_areas = 0
+
+        # Config
+        lines_ini = {
+            "l1": f";{nb_points} monitoring points",
+            "l2": f";{nb_areas} monitoring areas",
+            "l3": f"{nb_points+nb_areas} ; nr of monitoring points/areas",
+        }
+        for option in lines_ini:
+            self.config.set(f"B2_nrofmon.{option}", lines_ini[option])
+
+    @hydromt_step
+    def setup_emission_raster(
+        self,
+        emission_fn: str | Path | xr.DataArray,
+        scale_method: str = "average",
+        fillna_method: str = "zero",
+        fillna_value: int = 0.0,
+        area_division: bool = False,
+    ):
+        """Prepare one or several emission map from raster data.
+
+        Adds model layer:
+
+        * **emission_fn** map: emission data map
+
+        Parameters
+        ----------
+        emission_fn : {'GHS-POP_2015'...}
+            Name of raster emission map source.
+        scale_method : str {'nearest', 'average', 'mode'}
+            Method for resampling
+        fillna_method : str {'nearest', 'zero', 'value'}
+            Method to fill NaN values. Either nearest neighbour, zeros or user defined
+            value.
+        fillna_value : float
+            If fillna_method is set to 'value', NaNs in the emission maps will be
+            replaced by this value.
+        area_division : boolean
+            If needed do the resampling in cap/m2 (True) instead of cap (False)
+        """
+        logger.info(f"Preparing '{emission_fn}' map.")
+        # process raster emission maps
+        da = self.data_catalog.get_rasterdataset(
+            emission_fn, geom=self.region, buffer=2
+        )
+        ds_emi = emissions.emission_raster(
+            da=da,
+            ds_like=self.staticdata.data,
+            method=scale_method,
+            fillna_method=fillna_method,
+            fillna_value=fillna_value,
+            area_division=area_division,
+        )
+        ds_emi = ds_emi.to_dataset(name=emission_fn)
+        self.staticdata.set(ds_emi)
+
+    @hydromt_step
+    def setup_emission_vector(
+        self,
+        emission_fn: str | xr.DataArray,
+        col2raster: str = "",
+        rasterize_method: str = "value",
+    ):
+        """Prepare emission map from vector data.
+
+        Adds model layer:
+
+        * **emission_fn** map: emission data map
+
+        Parameters
+        ----------
+        emission_fn : {'GDP_world'...}
+            Name of raster emission map source.
+        col2raster : str
+            Name of the column from the vector file to rasterize.
+            Can be left empty if the selected method is set to "fraction".
+        rasterize_method : str
+            Method to rasterize the vector data. Either {"value", "fraction", "area"}.
+            If "value", the value from the col2raster is used directly in the raster.
+            If "fraction", the fraction of the grid cell covered by the vector file is
+            returned.
+            If "area", the area of the grid cell covered by the vector file is returned.
+        """
+        logger.info(f"Preparing '{emission_fn}' map.")
+        gdf_org = self.data_catalog.get_geodataframe(
+            emission_fn,
+            geom=self.basins,
+        )
+        if gdf_org.empty:
+            logger.warning(
+                f"No shapes of {emission_fn} found within region, "
+                "setting to default value."
+            )
+            ds_emi = self.hydromaps.data["basins"].copy() * 0.0
+            ds_emi.attrs.update(_FillValue=0.0)
+        else:
+            ds_emi = emissions.emission_vector(
+                gdf=gdf_org,
+                ds_like=self.staticdata.data,
+                col_name=col2raster,
+                method=rasterize_method,
+                mask_name="mask",
+            )
+        ds_emi = ds_emi.to_dataset(name=emission_fn)
+        self.staticdata.set(ds_emi)
+
+    @hydromt_step
+    def setup_emission_mapping(
+        self,
+        region_fn: str | Path | gpd.GeoDataFrame,
+        mapping_fn: str | Path | None = None,
+    ):
+        """
+        Derive several emission maps based on administrative boundaries.
+
+        For several emission types administrative classes ('fid' column) are
+        remapped to model parameter values based on lookup tables. The data is
+        remapped at its original resolution and then resampled to the model
+        resolution based using the average value, unless noted differently.
+
+        Adds model layers:
+
+        * **region_fn** map: emission data with classification from source_name [-]
+        * **emission factor X** map: emission data from mapping file to classification
+
+        Parameters
+        ----------
+        region_fn : {["gadm_level1", "gadm_level2", "gadm_level3"]}
+            Name or list of names of data source in data_sources.yml file.
+
+            * Required variables: ['ID']
+        mapping_fn : str, optional
+            Path to the emission mapping file corresponding to region_fn.
+        """
+        logger.info(f"Preparing region_fn related parameter maps for {region_fn}.")
+        if mapping_fn is None:
+            logger.warning("Using default mapping file.")
+            mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
+        # process emission factor maps
+        gdf_org = self.data_catalog.get_geodataframe(
+            region_fn, geom=self.basins, dst_crs=self.crs
+        )
+        # Rasterize the GeoDataFrame to get the areas mask of
+        # administrative boundaries with their ids
+        gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
+        # make sure index_col always has name fid in source dataset (use rename in
+        # data_sources.yml or local_sources.yml to rename column used for mapping
+        ds_admin = self.hydromaps.data.raster.rasterize(
+            gdf_org,
+            col_name="ID",
+            nodata=0,
+            all_touched=True,
+            dtype=None,
+            sindex=False,
+        )
+
+        # add admin_bound map
+        ds_admin_maps = emissions.admin(
+            da=ds_admin,
+            ds_like=self.staticdata.data,
+            source_name=region_fn,
+            fn_map=mapping_fn,
+        )
+        rmdict = {k: v for k, v in self._MAPS.items() if k in ds_admin_maps.data_vars}
+        self.staticdata.set(ds_admin_maps.rename(rmdict))
+
+    @hydromt_step
     def setup_roads(
         self,
-        roads_fn: Union[str, gpd.GeoDataFrame],
-        highway_list: Union[str, List[str]],
-        country_list: Union[str, List[str]],
-        non_highway_list: Union[str, List[str]] = None,
-        country_fn: Union[str, gpd.GeoDataFrame] = None,
+        roads_fn: str | Path | gpd.GeoDataFrame,
+        highway_list: str | list[str],
+        country_list: str | list[str],
+        non_highway_list: str | list[str] | None = None,
+        country_fn: str | Path | gpd.GeoDataFrame | None = None,
     ):
         """Prepare roads statistics needed for emission modelling.
 
@@ -247,48 +559,45 @@ class DemissionModel(DelwaqModel):
         if country_fn is not None:
             if not isinstance(country_list, list):
                 country_list = [country_list]
-            gdf_country = self.data_catalog.get_geodataframe(
-                country_fn, dst_crs=self.crs
-            )
+            gdf_country = self.data_catalog.get_geodataframe(country_fn)
             gdf_country = gdf_country.astype({"country_code": "str"})
             gdf_country = gdf_country.iloc[
                 np.isin(gdf_country["country_code"], country_list)
             ]
             # Read the roads data and mask with country geom
             gdf_roads = self.data_catalog.get_geodataframe(
-                roads_fn, dst_crs=self.crs, geom=gdf_country, variables=["road_type"]
+                roads_fn, geom=gdf_country, variables=["road_type"]
             )
             # Compute country statistics
             ds_country = roads.roads_emissions_country(
                 gdf_roads=gdf_roads,
                 gdf_country=gdf_country,
-                ds_like=self.grid,
+                ds_like=self.staticdata.data,
                 highway_list=highway_list,
                 non_highway_list=non_highway_list,
-                logger=self.logger,
             )
             # Add to grid
-            self.set_grid(ds_country)
+            self.staticdata.set(ds_country)
 
         ### Road statistics per segment ###
         # Filter road gdf with model mask instead of whole country
-        mask = self.grid["mask"].astype("int32").raster.vectorize()
+        mask = self.staticdata.data["mask"].astype("int32").raster.vectorize()
         gdf_roads = self.data_catalog.get_geodataframe(
-            roads_fn, dst_crs=self.crs, geom=mask, variables=["road_type"]
+            roads_fn, geom=mask, variables=["road_type"]
         )
         # Compute segment statistics
         ds_segments = roads.roads_emissions_segments(
             gdf_roads=gdf_roads,
-            ds_like=self.grid,
+            ds_like=self.staticdata.data,
             highway_list=highway_list,
             non_highway_list=non_highway_list,
-            logger=self.logger,
         )
-        self.set_grid(ds_segments)
+        self.staticdata.set(ds_segments)
 
+    @hydromt_step
     def setup_hydrology_forcing(
         self,
-        hydro_forcing_fn: Union[str, xr.Dataset],
+        hydro_forcing_fn: str | Path | xr.Dataset,
         starttime: str,
         endtime: str,
         timestepsecs: int,
@@ -341,15 +650,13 @@ class DemissionModel(DelwaqModel):
             If True, includes additional fluxes for land and subsurface transport
             [precip, runPav, runUnp, infilt, exfilt, vwcproot, q_land, q_ss].
         """
-        self.logger.info(
-            f"Setting dynamic data from hydrology source {hydro_forcing_fn}."
-        )
+        logger.info(f"Setting dynamic data from hydrology source {hydro_forcing_fn}.")
         # read dynamic data
         # Normally region extent is by default exactly the same as hydromodel
         ds_in = self.data_catalog.get_rasterdataset(
             hydro_forcing_fn,
             geom=self.region,
-            time_tuple=(starttime, endtime),
+            time_range=(starttime, endtime),
         )
 
         # Update model timestepsecs attribute
@@ -358,19 +665,18 @@ class DemissionModel(DelwaqModel):
         # Compute hydrology forcing
         ds = forcing.hydrology_forcing_em(
             ds=ds_in,
-            ds_model=self.hydromaps,
+            ds_model=self.hydromaps.data,
             timestepsecs=timestepsecs,
             include_transport=include_transport,
-            logger=self.logger,
         )
         # Rename xdim and ydim
-        if ds.raster.x_dim != self.grid.raster.x_dim:
-            ds = ds.rename({ds.raster.x_dim: self.grid.raster.x_dim})
-        if ds.raster.y_dim != self.grid.raster.y_dim:
-            ds = ds.rename({ds.raster.y_dim: self.grid.raster.y_dim})
+        if ds.raster.x_dim != self.staticdata.data.raster.x_dim:
+            ds = ds.rename({ds.raster.x_dim: self.staticdata.data.raster.x_dim})
+        if ds.raster.y_dim != self.staticdata.data.raster.y_dim:
+            ds = ds.rename({ds.raster.y_dim: self.staticdata.data.raster.y_dim})
 
         # Add to forcing
-        self.set_forcing(ds)
+        self.forcing.set(ds)
 
         # Add timers info to config
         time_config = config.time_config(
@@ -379,9 +685,7 @@ class DemissionModel(DelwaqModel):
             timestepsecs=timestepsecs,
             sysclock_format="days",
         )
-        for file in time_config:
-            for option in time_config[file]:
-                self.set_config(file, option, time_config[file][option])
+        self.config.update(data=time_config)
 
         # Add hydrology variables info to config
         if include_transport:
@@ -396,253 +700,166 @@ class DemissionModel(DelwaqModel):
             "l2": l2,
         }
         for option in lines_ini:
-            self.set_config("B7_hydrology", option, lines_ini[option])
+            self.config.set(f"B7_hydrology.{option}", lines_ini[option])
 
-    # I/O
-    def read(self):
-        """Read the complete model schematization and configuration from file."""
-        self.read_config()
-        self.read_geoms()
-        self.read_hydromaps()
-        # self.read_pointer()
-        self.read_grid()
-        # self.read_fewsadapter()
-        # self.read_forcing()
-        self.logger.info("Model read")
-
-    def write(self):
-        """Write the complete model schematization and configuration to file."""
-        self.logger.info(f"Write model data to {self.root}")
-        # if in r, r+ mode, only write updated components
-        self.write_grid()
-        self.write_geoms()
-        self.write_config()
-        self.write_hydromaps()
-        self.write_geometry()
-        self.write_forcing()
-
-    def read_config(
+    @hydromt_step
+    def setup_climate_forcing(
         self,
-        skip: List[str] = [
-            "B7_geometry",
-            "B2_stations",
-            "B2_stations-balance",
-            "B2_monareas",
-        ],
+        climate_fn: str | Path | xr.Dataset,
+        starttime: str,
+        endtime: str,
+        timestepsecs: int,
+        climate_vars: list = ["temp", "temp_dew", "ssr", "wind10_u", "wind10_v", "tcc"],
+        temp_correction: bool = False,
+        dem_forcing_fn: str = None,
     ):
-        """Read config files in ASCII format at <root/config>."""
-        # Skip geometry file (should be read with read_geometry())
-        # Skip monitoring files (should be read with read_monitoring())
-        super().read_config(skip=skip)
+        """Prepare Delwaq climate fluxes.
 
-    @property
-    def geometry(self):
-        """
-        Pandas DataFrame containing the geometry of the EM compartment.
+        Adds model layers:
 
-        Columns of the DataFrame are:
-        * TotArea: area of the segment
-        * fPaved: fraction of the segment that is paved
-        * fUnpaved: fraction of the segment that is unpaved
-        * fOpenWater: fraction of the segment that is open water
-        """
-        # if not self._geometry:
-        #     # not implemented yet, fix later
-        #     self._geometry = pd.DataFrame()
-        #     if self._read:
-        #         self.read_geometry()
-        return self._geometry
-
-    def read_geometry(self):
-        """Read Delwaq EM geometry file."""
-        raise NotImplementedError()
-
-    def write_geometry(self):
-        """Write geometry at <root/staticdata> in ASCII and binary format."""
-        self._assert_write_mode()
-        if self._geometry is not None:
-            self.logger.info("Writting geometry file in root/staticdata")
-            fname = join(self.root, "config", "B7_geometry")
-
-            # Write ASCII file
-            exfile = open(fname + ".inc", "w")
-            print(";Geometry of the EM compartment", file=exfile)
-            print("PARAMETERS TotArea fPaved fUnpaved fOpenWater ALL", file=exfile)
-            print("DATA", file=exfile)
-            np.savetxt(exfile, self._geometry.values, fmt="%10.4f")
-            exfile.close()
-
-            # Write binary file
-            # Flatten the geometry data and repeat them for each compartment
-            geometry_data = np.tile(self._geometry.values.flatten(), 1)
-            artow = np.array(geometry_data, dtype=np.float32).copy()
-            # Define dummy time
-            timear = np.array(0, dtype=np.int32)
-            # Open and write the data
-            fp = open(fname + ".bin", "wb")
-            tstr = timear.tobytes() + artow.tobytes()
-            fp.write(tstr)
-            fp.close()
-
-            # Write corresponding def file of the geometry
-            fpa = open(fname + "-parameters.inc", "w")
-            print("PARAMETERS TotArea fPaved fUnpaved fOpenWater", file=fpa)
-            fpa.close()
-
-    def write_forcing(self, fn: str = "dynamicdata/{name}.dat", write_nc: bool = False):
-        """Write forcing at <root/fn> in binary format.
-
-        Can also write a netcdf copy if ``write_nc`` is True.
-        The output files are:
-
-        * **hydrology.bin** binary file containing the hydrology data.
-        * **sediment.dat** binary file containing the sediment data.
-        * **climate.dat** binary file containing the climate data.
+        * **climate** dynmap: climate fuxes for climate_vars
+        * **B7_climate** config: names of climate fluxes included in climate.bin
 
         Parameters
         ----------
-        fn : str, optional
-            filename relative to model root and should contain a {name} placeholder,
-            by default 'dynamicdata/{name}.dat'
-        write_nc : bool, optional
-            If True, write a NetCDF copy of the forcing data, by default False.
+        climate_fn : str
+            Climate data
+
+            * Required variables: variables listed in climate_vars
+        startime : str
+            Timestamp of the start of Delwaq simulation. Format: YYYY-mm-dd HH:MM:SS
+        timestepsecs: int
+            Delwaq model timestep in seconds.
+        endtime : str
+            Timestamp of the end of Delwaq simulation.Format: YYYY-mm-dd HH:MM:SS
+        climate_vars : str list, optional
+            List of climate_vars to consider. By default ["temp", "temp_dew", "ssr",
+            "wind_u", "wind_v", "tcc"]
+        temp_correction : bool, optional
+            If True temperature are corrected using elevation lapse rate,
+            by default False.
+        dem_forcing_fn : str, default None
+            Elevation data source with coverage of entire meteorological forcing domain.
+            If temp_correction is True and dem_forcing_fn is provided this is used in
+            combination with elevation at model resolution to correct the temperature.
         """
-        self._assert_write_mode()
-        if len(self.forcing) == 0:
-            self.logger.debug("No forcing data found, skip writing.")
-            return
+        logger.info(f"Setting dynamic data from climate source {climate_fn}.")
 
-        # Create output folder if it does not exist
-        if not os.path.exists(dirname(join(self.root, fn))):
-            os.makedirs(dirname(join(self.root, fn)))
-
-        # Go from dictionnary to xr.DataSet
-        ds_out = xr.Dataset()
-        for name, da in self.forcing.items():
-            ds_out[name] = da
-
-        # To avoid appending data to existing file, first delete all the .dat files
-        dynDir = dirname(join(self.root, fn))
-        if os.path.exists(dynDir):
-            filelist = os.listdir(dynDir)
-            for f in filelist:
-                os.remove(os.path.join(dynDir, f))
-
-        # Filter data with mask
-        for dvar in ds_out.data_vars:
-            # nodata = ds_out[dvar].raster.nodata
-            # Change the novalue outside of mask for julia compatibilty
-            ds_out[dvar] = xr.where(ds_out["mask"], ds_out[dvar], -9999.0)
-            ds_out[dvar].attrs.update(_FillValue=-9999.0)
-
-        self.logger.info("Writing dynamicmap files.")
-        # Netcdf format
-        if write_nc:
-            fname = join(self.root, fn.format(name="dynamicdata"))
-            fname = os.path.splitext(fname)[0] + ".nc"
-            self.logger.info(f"Writing NetCDF copy of the forcing data to {fname}.")
-            ds_out = ds_out.drop_vars(["mask", "spatial_ref"], errors="ignore")
-            ds_out.to_netcdf(path=fname)
-
-        # Binary format
-        timesteps = np.arange(0, len(ds_out.time.values))
-        timestepstamp = np.arange(
-            0, (len(ds_out.time.values) + 1) * int(self.timestepsecs), self.timestepsecs
+        # read dynamic data
+        ds = self.data_catalog.get_rasterdataset(
+            climate_fn,
+            geom=self.region,
+            buffer=2,
+            variables=climate_vars,
+            time_range=(starttime, endtime),
+            single_var_as_array=False,
         )
-        for i in tqdm(timesteps, desc="Writing dynamic data"):
-            # hydrology
-            fname = join(self.root, fn.format(name="hydrology"))
-            fname = os.path.splitext(fname)[0] + ".bin"
-            datablock = []
-            dvars = ["precip", "runPav", "runUnp", "infilt"]
-            if "totflw" in ds_out.data_vars:
-                dvars.extend(["totflw"])
-            else:
-                dvars.extend(["exfilt", "vwcproot", "q_land", "q_ss"])
-            for dvar in dvars:
-                # Maybe only clim or sed were updated
-                if dvar in ds_out.data_vars:
-                    nodata = ds_out[dvar].raster.nodata
-                    data = ds_out[dvar].isel(time=i).values.flatten()
-                    data = data[data != nodata]
-                    datablock = np.append(datablock, data)
-                else:
-                    self.logger.info(f"Variable {dvar} not found in forcing data.")
-            if len(datablock) > 0:
-                dw_WriteSegmentOrExchangeData(
-                    timestepstamp[i], fname, datablock, 1, WriteAscii=False
-                )
-            else:
-                self.logger.info("No hydrology data found.")
-            # sediment
-            if "B7_sediment" in self.config:
-                sedname = join(self.root, fn.format(name="sediment"))
-                sed_vars = self.get_config("B7_sediment.l2").split(" ")
-                sedblock = []
-                for dvar in sed_vars:
-                    # sed maybe not updated or might be present for WQ
-                    if dvar in ds_out.data_vars:
-                        nodata = ds_out[dvar].raster.nodata
-                        data = ds_out[dvar].isel(time=i).values.flatten()
-                        data = data[data != nodata]
-                        sedblock = np.append(sedblock, data)
-                if len(sedblock) > 0:
-                    dw_WriteSegmentOrExchangeData(
-                        timestepstamp[i], sedname, sedblock, 1, WriteAscii=False
-                    )
-            # climate
-            if "B7_climate" in self.config:
-                climname = join(self.root, fn.format(name="climate"))
-                clim_vars = self.get_config("B7_climate.l2").split(" ")
-                climblock = []
-                for dvar in clim_vars:
-                    # clim maybe not updated or might be present for WQ
-                    if dvar in ds_out.data_vars:
-                        nodata = ds_out[dvar].raster.nodata
-                        data = ds_out[dvar].isel(time=i).values.flatten()
-                        data = data[data != nodata]
-                        climblock = np.append(climblock, data)
-                if len(climblock) > 0:
-                    dw_WriteSegmentOrExchangeData(
-                        timestepstamp[i], climname, climblock, 1, WriteAscii=False
-                    )
+        dem_forcing = None
+        if dem_forcing_fn is not None:
+            dem_forcing = self.data_catalog.get_rasterdataset(
+                dem_forcing_fn,
+                geom=ds.raster.box,  # clip dem with forcing bbox for full coverage
+                buffer=2,
+                variables=["elevtn"],
+            ).squeeze()
+
+        ds_out = forcing.climate_forcing(
+            ds=ds,
+            ds_model=self.hydromaps.data,
+            timestepsecs=timestepsecs,
+            temp_correction=temp_correction,
+            dem_forcing=dem_forcing,
+        )
+
+        # Rename and add to forcing
+        rmdict = {k: v for k, v in self._FORCING.items() if k in ds_out.data_vars}
+        ds_out = ds_out.rename(rmdict)
+        # Rename xdim and ydim
+        if ds_out.raster.x_dim != self.staticdata.data.raster.x_dim:
+            ds_out = ds_out.rename(
+                {ds_out.raster.x_dim: self.staticdata.data.raster.x_dim}
+            )
+        if ds_out.raster.y_dim != self.staticdata.data.raster.y_dim:
+            ds_out = ds_out.rename(
+                {ds_out.raster.y_dim: self.staticdata.data.raster.y_dim}
+            )
+        self.forcing.set(ds_out)
+
+        # Update config
+        lines_ini = {
+            "l1": "SEG_FUNCTIONS",
+            "l2": " ".join(str(x) for x in ds_out.data_vars),
+        }
+        for option in lines_ini:
+            self.config.set(f"B7_climate.{option}", lines_ini[option])
+
+    # I/O
+    @hydromt_step
+    def read(self):
+        """Read the complete model schematization and configuration from file."""
+        self.config.read()
+        self.geoms.read()
+        self.hydromaps.read()
+        self.staticdata.read()
+        self.geometry.read()
+        self.forcing.read()
+
+    @hydromt_step
+    def write(self):
+        """Write the complete model schematization and configuration to file."""
+        logger.info(f"Write model data to {self.root}")
+        self.write_data_catalog()
+        _ = self.config.data  # try to read default if not yet set
+        self.staticdata.write()
+        self.geoms.write()
+        self.config.write()
+        self.hydromaps.write()
+        self.geometry.write()
+        self.forcing.write()
+
+    @hydromt_step
+    def write_waqgeom(self):
+        """Write Delwaq netCDF geometry file (config/B3_waqgeom.nc)."""
+        # Add waqgeom.nc file to allow Delwaq to save outputs in nc format
+        fname = join(self.root.path, "config", "B3_waqgeom.nc")
+        write_waqgeomfile(self.hydromaps.data, fname)
+
+    ## D-Emission specific properties
+
+    @property
+    def basins(self):
+        """Derive basins from geoms or hydromaps."""
+        if "basins" in self.geoms.data:
+            gdf = self.geoms.data["basins"]
+        elif "basins" in self.hydromaps.data:
+            gdf = self.hydromaps.data["basins"].raster.vectorize()
+            gdf.crs = pyproj.CRS.from_user_input(self.crs)
+            self.geoms.set(gdf, name="basins")
+        return gdf
 
     @property
     def nrofseg(self):
-        """Fast accessor to nrofseg property of pointer."""
-        if "nrofseg" in self.pointer:
-            nseg = self.pointer["nrofseg"]
-        else:
-            # from config
-            nseg = self.get_config("B3_nrofseg.l1", fallback="0 ; nr of segments")
-            nseg = int(nseg.split(";")[0])
-            self.set_pointer(nseg, "nrofseg")
+        """Number of segments."""
+        # from config
+        nseg = self.config.get_value("B3_nrofseg.l1", fallback="0 ; nr of segments")
+        nseg = int(nseg.split(";")[0])
         return nseg
 
     @property
     def nrofexch(self):
-        """Fast accessor to nrofexch property of pointer."""
-        if "nrofexch" in self.pointer:
-            nexch = self.pointer["nrofexch"]
-        else:
-            nexch = self.nrofseg * 5
-            self.set_pointer(nexch, "nrofexch")
+        """Number of exchanges."""
+        nexch = self.nrofseg * 5
         return nexch
 
     @property
     def fluxes(self):
-        """Fast accessor to fluxes property of pointer."""
-        if "fluxes" in self.pointer:
-            fl = self.pointer["fluxes"]
-        else:
-            # from config
-            fl = self.get_config(
-                "B7_hydrology.l2",
-                fallback=(
-                    "Rainfall RunoffPav RunoffUnp Infiltr "
-                    + "Exfiltr Overland Subsurface"
-                ),
-            )
-            fl = fl.split(" ")
-            self.set_pointer(fl, "fluxes")
+        """List of fluxes."""
+        # from config
+        fl = self.config.get_value(
+            "B7_hydrology.l2",
+            fallback=(
+                "Rainfall RunoffPav RunoffUnp Infiltr " + "Exfiltr Overland Subsurface"
+            ),
+        )
+        fl = fl.split(" ")
         return fl
