@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=d8b05058" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -146,8 +146,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API
   </a>
 </li>
 
@@ -280,8 +280,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API
   </a>
 </li>
 
@@ -428,18 +428,17 @@
 
 
 <div class="viewcode-block" id="hydrology_forcing">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.forcing.hydrology_forcing.html#hydromt_delwaq.workflows.forcing.hydrology_forcing">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.forcing.hydrology_forcing.html#hydromt_delwaq.workflows.forcing.hydrology_forcing">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">hydrology_forcing</span><span class="p">(</span>
     <span class="n">ds</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">ds_model</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
-    <span class="n">time_tuple</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">time_range</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
     <span class="n">timestepsecs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">fluxes</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
     <span class="n">surface_water</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sfw&quot;</span><span class="p">,</span>
     <span class="n">add_volume_offset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">min_volume</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
     <span class="n">override</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[],</span>
-    <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">logger</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate hydrology forcing data.</span>
 
@@ -474,7 +473,7 @@
 
 <span class="sd">        * Optional variables for unit conversion: [rivarea, lakearea, resarea]</span>
 
-<span class="sd">    time_tuple : tuple</span>
+<span class="sd">    time_range : tuple</span>
 <span class="sd">        Tuple containing the start and end time of the simulation</span>
 <span class="sd">    timestepsecs : int</span>
 <span class="sd">        Timestep of the simulation in seconds</span>
@@ -489,8 +488,6 @@
 <span class="sd">    override : list, optional</span>
 <span class="sd">        List of fluxes to be overriden if several fluxes varibales are found, by default</span>
 <span class="sd">        [].</span>
-<span class="sd">    logger : logging.Logger, optional</span>
-<span class="sd">        Logger object, by default logger</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -516,7 +513,7 @@
     <span class="c1"># Copy of ds to be filled</span>
     <span class="n">dsvar</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">fluxes</span><span class="p">[</span><span class="mi">0</span><span class="p">])][</span><span class="mi">0</span><span class="p">]</span>
     <span class="c1"># Delwaq needs one more timestep for the volume</span>
-    <span class="n">starttime</span><span class="p">,</span> <span class="n">endtime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">time_tuple</span><span class="p">)</span>
+    <span class="n">starttime</span><span class="p">,</span> <span class="n">endtime</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">time_range</span><span class="p">)</span>
     <span class="n">endtime</span> <span class="o">=</span> <span class="n">endtime</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_timedelta</span><span class="p">(</span><span class="n">timestepsecs</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
     <span class="n">ds_out_times</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">starttime</span><span class="p">,</span> <span class="n">endtime</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestepsecs</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
     <span class="n">coords</span> <span class="o">=</span> <span class="p">{</span>
@@ -524,7 +521,7 @@
         <span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">y_dim</span><span class="p">:</span> <span class="n">ds</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">y_dim</span><span class="p">],</span>
         <span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">x_dim</span><span class="p">:</span> <span class="n">ds</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">x_dim</span><span class="p">],</span>
     <span class="p">}</span>
-    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">gis</span><span class="o">.</span><span class="n">raster_utils</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
         <span class="n">coords</span><span class="o">=</span><span class="n">coords</span><span class="p">,</span>
         <span class="n">nodata</span><span class="o">=-</span><span class="mf">999.0</span><span class="p">,</span>
         <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
@@ -574,7 +571,7 @@
                 <span class="n">ds</span><span class="p">[</span><span class="n">flux</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">fl_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
                 <span class="k">for</span> <span class="n">fl</span> <span class="ow">in</span> <span class="n">fl_vars</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
                     <span class="n">ds</span><span class="p">[</span><span class="n">flux</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">flux</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">fl</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">(),</span> <span class="n">ds</span><span class="p">[</span><span class="n">fl</span><span class="p">])</span>
-        <span class="n">ds_out</span><span class="p">[</span><span class="n">flux</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">flux</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">time_tuple</span><span class="p">))</span>
+        <span class="n">ds_out</span><span class="p">[</span><span class="n">flux</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">flux</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">time_range</span><span class="p">))</span>
         <span class="n">ds_out</span><span class="p">[</span><span class="n">flux</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
         <span class="n">ds_out</span><span class="p">[</span><span class="n">flux</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="s2">&quot;m3/s&quot;</span><span class="p">)</span>
 
@@ -636,7 +633,6 @@
         <span class="n">dims</span><span class="o">=</span><span class="n">ds_out</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
         <span class="n">coords</span><span class="o">=</span><span class="n">ds_out</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span>
         <span class="n">data</span><span class="o">=</span><span class="n">ds_model</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-        <span class="n">attrs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">_FillValue</span><span class="o">=</span><span class="n">ds_model</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">),</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">ds_out</span></div>
@@ -644,13 +640,12 @@
 
 
 <div class="viewcode-block" id="hydrology_forcing_em">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.forcing.hydrology_forcing_em.html#hydromt_delwaq.workflows.forcing.hydrology_forcing_em">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.forcing.hydrology_forcing_em.html#hydromt_delwaq.workflows.forcing.hydrology_forcing_em">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">hydrology_forcing_em</span><span class="p">(</span>
     <span class="n">ds</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">ds_model</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">timestepsecs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">include_transport</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">logger</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate hydrology forcing data for emission model.</span>
@@ -738,8 +733,7 @@
     <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
         <span class="n">dims</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
         <span class="n">coords</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">ds_model</span><span class="p">[</span><span class="s2">&quot;modelmap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-        <span class="n">attrs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">_FillValue</span><span class="o">=</span><span class="n">ds_model</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">),</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">ds_model</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">ds</span></div>
@@ -747,12 +741,11 @@
 
 
 <div class="viewcode-block" id="sediment_forcing">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.forcing.sediment_forcing.html#hydromt_delwaq.workflows.forcing.sediment_forcing">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.forcing.sediment_forcing.html#hydromt_delwaq.workflows.forcing.sediment_forcing">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">sediment_forcing</span><span class="p">(</span>
     <span class="n">ds</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">ds_model</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">timestepsecs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">logger</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate sediment forcing data.</span>
 
@@ -768,8 +761,6 @@
 <span class="sd">        * Required variables: [mask]</span>
 <span class="sd">    timestepsecs : int</span>
 <span class="sd">        Timestep of the simulation in seconds</span>
-<span class="sd">    logger : logging.Logger, optional</span>
-<span class="sd">        Logger object, by default logger</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -782,13 +773,12 @@
     <span class="c1"># Resample in time if needed</span>
     <span class="n">ds_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">:</span>
-        <span class="n">ds_out</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">workflows</span><span class="o">.</span><span class="n">forcing</span><span class="o">.</span><span class="n">resample_time</span><span class="p">(</span>
+        <span class="n">ds_out</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">meteo</span><span class="o">.</span><span class="n">resample_time</span><span class="p">(</span>
             <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">],</span>
             <span class="n">freq</span><span class="p">,</span>
             <span class="n">upsampling</span><span class="o">=</span><span class="s2">&quot;bfill&quot;</span><span class="p">,</span>  <span class="c1"># we assume right labeled original data</span>
             <span class="n">downsampling</span><span class="o">=</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span>
             <span class="n">conserve_mass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># If needed reproject forcing data to model grid</span>
@@ -803,7 +793,6 @@
         <span class="n">dims</span><span class="o">=</span><span class="n">ds_out</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
         <span class="n">coords</span><span class="o">=</span><span class="n">ds_out</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span>
         <span class="n">data</span><span class="o">=</span><span class="n">ds_model</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-        <span class="n">attrs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">_FillValue</span><span class="o">=</span><span class="n">ds_model</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="c1"># Add _FillValue to the data attributes</span>
     <span class="k">for</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">data_vars</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -822,7 +811,7 @@
 
 
 <div class="viewcode-block" id="climate_forcing">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.forcing.climate_forcing.html#hydromt_delwaq.workflows.forcing.climate_forcing">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.forcing.climate_forcing.html#hydromt_delwaq.workflows.forcing.climate_forcing">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">climate_forcing</span><span class="p">(</span>
     <span class="n">ds</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">ds_model</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
@@ -865,7 +854,7 @@
 
     <span class="c1"># Start with wind</span>
     <span class="k">if</span> <span class="s2">&quot;wind10_u&quot;</span> <span class="ow">in</span> <span class="n">climate_vars</span> <span class="ow">and</span> <span class="s2">&quot;wind10_v&quot;</span> <span class="ow">in</span> <span class="n">climate_vars</span><span class="p">:</span>
-        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;wind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">workflows</span><span class="o">.</span><span class="n">forcing</span><span class="o">.</span><span class="n">wind</span><span class="p">(</span>
+        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;wind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">meteo</span><span class="o">.</span><span class="n">wind</span><span class="p">(</span>
             <span class="n">ds_model</span><span class="p">,</span>
             <span class="n">wind_u</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;wind10_u&quot;</span><span class="p">],</span>
             <span class="n">wind_v</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;wind10_v&quot;</span><span class="p">],</span>
@@ -874,7 +863,7 @@
         <span class="n">climate_vars</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;wind10_u&quot;</span><span class="p">)</span>
         <span class="n">climate_vars</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;wind10_v&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="s2">&quot;wind&quot;</span> <span class="ow">in</span> <span class="n">climate_vars</span><span class="p">:</span>
-        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;wind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">workflows</span><span class="o">.</span><span class="n">forcing</span><span class="o">.</span><span class="n">wind</span><span class="p">(</span>
+        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;wind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">meteo</span><span class="o">.</span><span class="n">wind</span><span class="p">(</span>
             <span class="n">ds_model</span><span class="p">,</span>
             <span class="n">wind</span><span class="o">=</span><span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;wind&quot;</span><span class="p">],</span>
             <span class="n">altitude_correction</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -884,12 +873,11 @@
     <span class="n">temp_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">climate_vars</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;temp&quot;</span><span class="p">)]</span>
     <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">climate_vars</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">temp_vars</span><span class="p">:</span>
-            <span class="n">temp_v</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">workflows</span><span class="o">.</span><span class="n">forcing</span><span class="o">.</span><span class="n">temp</span><span class="p">(</span>
+            <span class="n">temp_v</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">meteo</span><span class="o">.</span><span class="n">temp</span><span class="p">(</span>
                 <span class="n">ds</span><span class="p">[</span><span class="n">v</span><span class="p">],</span>
                 <span class="n">dem_model</span><span class="o">=</span><span class="n">ds_model</span><span class="p">[</span><span class="s2">&quot;elevtn&quot;</span><span class="p">],</span>
                 <span class="n">dem_forcing</span><span class="o">=</span><span class="n">dem_forcing</span><span class="p">,</span>
                 <span class="n">lapse_correction</span><span class="o">=</span><span class="n">temp_correction</span><span class="p">,</span>
-                <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
                 <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span>
                 <span class="n">reproj_method</span><span class="o">=</span><span class="s2">&quot;nearest_index&quot;</span><span class="p">,</span>
                 <span class="n">lapse_rate</span><span class="o">=-</span><span class="mf">0.0065</span><span class="p">,</span>
@@ -898,13 +886,12 @@
             <span class="n">ds_out</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_v</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">da_out</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">reproject_like</span><span class="p">(</span><span class="n">ds_model</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest_index&quot;</span><span class="p">)</span>
-            <span class="n">da_out</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">workflows</span><span class="o">.</span><span class="n">forcing</span><span class="o">.</span><span class="n">resample_time</span><span class="p">(</span>
+            <span class="n">da_out</span> <span class="o">=</span> <span class="n">hydromt</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">meteo</span><span class="o">.</span><span class="n">resample_time</span><span class="p">(</span>
                 <span class="n">da_out</span><span class="p">,</span>
                 <span class="n">freq</span><span class="p">,</span>
                 <span class="n">upsampling</span><span class="o">=</span><span class="s2">&quot;bfill&quot;</span><span class="p">,</span>  <span class="c1"># we assume right labeled original data</span>
                 <span class="n">downsampling</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
                 <span class="n">conserve_mass</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">ds_out</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">da_out</span>
     <span class="c1"># Add basin mask</span>
@@ -912,7 +899,6 @@
         <span class="n">dims</span><span class="o">=</span><span class="n">ds_out</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
         <span class="n">coords</span><span class="o">=</span><span class="n">ds_out</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span>
         <span class="n">data</span><span class="o">=</span><span class="n">ds_model</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-        <span class="n">attrs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">_FillValue</span><span class="o">=</span><span class="n">ds_model</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="c1"># Add _FillValue to the data attributes</span>
     <span class="k">for</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">data_vars</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>

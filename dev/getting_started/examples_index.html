@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -48,7 +48,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/examples_index';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="User’s stories" href="user_stories.html" />
+    <link rel="next" title="Build an emission model" href="../_examples/build_EM_model.html" />
     <link rel="prev" title="Installation guide" href="installation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -149,8 +149,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
   </a>
 </li>
 
@@ -285,8 +285,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
   </a>
 </li>
 
@@ -363,8 +363,16 @@
   <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation guide</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_stories.html">User’s stories</a></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/build_EM_model.html">Build an emission model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/build_WQ_model.html">Build a water quality model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/adding_global_emission.html">Add (global) emission data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/adding_local_emission.html">Add (local) emission data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/update_model_monitoring.html">Update monitoring locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/update_model_forcing.html">Update forcing data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/plot_delwaq.html">Plot DELWAQ data</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -429,46 +437,110 @@
 <span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/Deltares/hydromt_delwaq/main?urlpath=lab/tree/examples"><img alt="https://mybinder.org/badge_logo.svg" src="https://mybinder.org/badge_logo.svg" />
 </a>
-<p>Several iPython notebook examples have been prepared for <strong>HydroMT-delwaq</strong> which you can
-use as a HydroMT-delwaq tutorial.</p>
+<p>Several iPython notebook examples have been prepared for <strong>HydroMT-DELWAQ</strong> which you can
+use as a HydroMT-DELWAQ tutorial.</p>
 <p>These examples can be run online or on your local machine.
 To run these examples online press the <strong>binder</strong> badge above.</p>
-<p>To run these examples on your local machine you need a copy of the repository and an installation
-of HydroMT-delwaq. Please refer to the online <a class="reference internal" href="installation.html#installation-guide"><span class="std std-ref">installation guide</span></a>
-for more information about installing HydroMT-delwaq.</p>
-<p>First, clone the HydroMT-delwaq github repository, this creates a local copy of the repository on your local machine.</p>
+<p>To run these examples on your local machine you need a copy of the examples folder
+of the repository and an installation of HydroMT-DELWAQ including some additional
+packages required to run the notebooks.</p>
+<section id="install-hydromt-delwaq">
+<h2>1 - Install HydroMT-DELWAQ<a class="headerlink" href="#install-hydromt-delwaq" title="Link to this heading">#</a></h2>
+<p>The first step is to install HydroMT-DELWAQ and the other Python dependencies in a separate environment,
+see the <strong>Install HydroMT-DELWAQ in a new environment</strong> section in the <a class="reference internal" href="installation.html#installation-guide"><span class="std std-ref">installation guide</span></a>.</p>
+<p>To run the notebooks, you need to install additional dependencies that are jupyterlab to
+run the notebooks and cartopy for some plots. To install these packages in your existing
+hydromt-delwaq environment, do (these packages are also available in conda-forge):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>hydromt-delwaq
+<span class="gp">$</span><span class="o">(</span>hydromt-delwaq<span class="o">)</span><span class="w"> </span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;hydromt_delwaq[examples]&quot;</span>
+</pre></div>
+</div>
+<section id="download-the-content-of-the-examples-and-notebooks">
+<h3>2 - Download the content of the examples and notebooks<a class="headerlink" href="#download-the-content-of-the-examples-and-notebooks" title="Link to this heading">#</a></h3>
+<p>To run the examples locally, you will need to download the content of the hydromt_delwaq repository.
+You have two options:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Download and unzip the examples manually</p></li>
+<li><p>Clone the hydromt_delwaq GitHub repository</p></li>
+</ol>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Depending on your installed version of hydromt and hydromt_delwaq, you will need to download the correct versions of the examples.
+To check the version of hydromt_delwaq that you have installed, do:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span><span class="o">(</span>hydromt-delwaq<span class="o">)</span><span class="w"> </span>hydromt<span class="w"> </span>--models
+<span class="go">    Model plugins:</span>
+<span class="go">      - model (hydromt 1.3.0)</span>
+<span class="go">      - delwaq (hydromt_delwaq 0.4.0)</span>
+<span class="go">      - demission (hydromt_delwaq 0.4.0)</span>
+<span class="go">      ...</span>
+</pre></div>
+</div>
+</div>
+<p>In the examples above, we see version 0.4.0 of hydromt_delwaq is installed and version 1.3.0 of hydromt.</p>
+<p><strong>Option 1: manual download and unzip</strong></p>
+<p>To manually download the examples on Windows, do (!replace with your own hydromt_delwaq version!):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>https://github.com/Deltares/hydromt_delwaq/archive/refs/tags/v0.4.0.zip<span class="w"> </span>-O<span class="w"> </span>-L
+<span class="gp">$ </span>tar<span class="w"> </span>-xf<span class="w"> </span>v0.4.0.zip
+<span class="gp">$ </span>ren<span class="w"> </span>hydromt_delwaq-0.4.0<span class="w"> </span>hydromt_delwaq
+</pre></div>
+</div>
+<p>You can also download, unzip and rename manually if you prefer, rather than using the windows command prompt.</p>
+<p><strong>Option 2: cloning the hydromt_delwaq repository</strong>
+For git users, you can also get the examples by cloning the hydromt_delwaq github repository and checkout the version
+you have installed:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Deltares/hydromt_delwaq.git
+<span class="gp">$ </span>git<span class="w"> </span>checkout<span class="w"> </span>v0.4.0
 </pre></div>
 </div>
-<p>Create a conda environment based on the <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> in the root of this repository and activate this environment:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>environment.yml
-<span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>hydromt-delwaq
+</section>
+<section id="running-the-examples">
+<h3>3 - Running the examples<a class="headerlink" href="#running-the-examples" title="Link to this heading">#</a></h3>
+<p>Finally, start a jupyter lab server inside the <strong>examples</strong> folder
+after activating the <strong>hydromt-delwaq</strong> environment, see below.</p>
+<p>Alternatively, you can run the notebooks from <a class="reference external" href="https://code.visualstudio.com/download">Visual Studio Code</a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>hydromt-delwaq
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>hydromt_delwaq/examples
+<span class="gp">$ </span>jupyter<span class="w"> </span>lab
 </pre></div>
 </div>
-<p>Next, start a jupyter notebook inside the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder and activated <code class="docutils literal notranslate"><span class="pre">hydromt-delwaq</span></code> environment.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>examples
-<span class="gp">$ </span>jupyter<span class="w"> </span>notebook
-</pre></div>
-</div>
+</section>
+</section>
 <section id="list-of-examples">
 <h2>List of examples<a class="headerlink" href="#list-of-examples" title="Link to this heading">#</a></h2>
 <p>For a static (non-interactive) view of the examples follow one of the links below:</p>
-<p><strong>Building a model (CLI usage)</strong></p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text"><strong>Build model from command line interface</strong></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <ul class="simple">
-<li><p><a class="reference internal" href="../_examples/build_EM_model.html"><span class="doc">Building a D-Emissions model</span></a></p></li>
-<li><p><a class="reference internal" href="../_examples/build_WQ_model.html"><span class="doc">Building a D-Water Quality model</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="../_examples/build_EM_model.html"><span class="doc">Building a D-Emissions model</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="../_examples/build_WQ_model.html"><span class="doc">Building a D-Water Quality model</span></a></p></li>
 </ul>
-<p><strong>Updating your model (CLI usage)</strong></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text"><strong>Update model from command line interface</strong></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <ul class="simple">
-<li><p><a class="reference internal" href="../_examples/adding_global_emission.html"><span class="doc">Updating emission from a global data source</span></a></p></li>
-<li><p><a class="reference internal" href="../_examples/adding_local_emission.html"><span class="doc">Updating emission from a local data source</span></a></p></li>
-<li><p><a class="reference internal" href="../_examples/update_model_monitoring.html"><span class="doc">Updating the monitoring areas</span></a></p></li>
-<li><p><a class="reference internal" href="../_examples/update_model_forcing.html"><span class="doc">Updating the hydrological forcing</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="../_examples/adding_global_emission.html"><span class="doc">Updating emission from a global data source</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="../_examples/adding_local_emission.html"><span class="doc">Updating emission from a local data source</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="../_examples/update_model_monitoring.html"><span class="doc">Updating the monitoring areas</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="../_examples/update_model_forcing.html"><span class="doc">Updating the hydrological forcing</span></a></p></li>
 </ul>
-<p><strong>Visualizing results (Python interface)</strong></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text"><strong>Pre-, Post-processing and visualization</strong></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <ul class="simple">
-<li><p><a class="reference internal" href="../_examples/plot_delwaq.html"><span class="doc">Visualizing the model</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="../_examples/plot_delwaq.html"><span class="doc">Visualizing the model</span></a></p></li>
 </ul>
+</div>
+</details><div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 </section>
 
@@ -492,11 +564,11 @@ for more information about installing HydroMT-delwaq.</p>
       </div>
     </a>
     <a class="right-next"
-       href="user_stories.html"
+       href="../_examples/build_EM_model.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">User’s stories</p>
+        <p class="prev-next-title">Build an emission model</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -519,34 +591,16 @@ for more information about installing HydroMT-delwaq.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-examples">List of examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-hydromt-delwaq">1 - Install HydroMT-DELWAQ</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#download-the-content-of-the-examples-and-notebooks">2 - Download the content of the examples and notebooks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-examples">3 - Running the examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-examples">List of examples</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
 </ul>
   </nav></div>
-
-  <div class="sidebar-secondary-item">
-
-  
-  <div class="tocsection editthispage">
-    <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/getting_started/examples_index.rst">
-      <i class="fa-solid fa-pencil"></i>
-      
-      
-        
-          Edit on GitHub
-        
-      
-    </a>
-  </div>
-</div>
-
-  <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/getting_started/examples_index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
 
 </div></div>
               

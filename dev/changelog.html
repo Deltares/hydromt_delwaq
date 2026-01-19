@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/theme-deltares.css?v=d8b05058" />
+    <link rel="stylesheet" type="text/css" href="_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -149,8 +149,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="api.html">
-    API reference
+  <a class="nav-link nav-internal" href="api/index.html">
+    API
   </a>
 </li>
 
@@ -285,8 +285,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="api.html">
-    API reference
+  <a class="nav-link nav-internal" href="api/index.html">
+    API
   </a>
 </li>
 
@@ -364,7 +364,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">What’s new</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev/roadmap.html">Roadmap</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://deltares.github.io/hydromt/latest/dev/contributing">Developer's guide</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://deltares.github.io/hydromt/latest/dev/core_dev/index.html">Developer's guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev/dev_install.html">Developer’s environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev/team.html">Contributors</a></li>
 </ul>
@@ -434,14 +434,36 @@
 <a class="reference external" href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
 <section id="unreleased">
 <h2>Unreleased<a class="headerlink" href="#unreleased" title="Link to this heading">#</a></h2>
+<p>Update for HydroMT v1.3.0 and HydroMT-Wflow v1.0.0 compatibility. The main changes is that
+the <code class="docutils literal notranslate"><span class="pre">DelwaqModel</span></code> and <code class="docutils literal notranslate"><span class="pre">DEmissionModel</span></code> are now separated and have a component structure.
+HydroMT data catalog format and workflow YAML were also  updated. The codes was also adapted
+to support Wflow.jl models v1.0.0.</p>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DelwaqConfigComponent</span></code> and <code class="docutils literal notranslate"><span class="pre">DEmissionConfigComponent</span></code> to handle the configuration files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DelwaqStaticdataComponent</span></code> to handle gridded static data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DelwaqHydromapsComponent</span></code> to handle hydromaps from hydromodel needed for processing by HydroMT.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DelwaqPointerComponent</span></code> to handle pointer properties of the delwaq model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DEmissionGeometryComponent</span></code> to handle geometry properties of the demission model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DelwaqForcingComponent</span></code> and <code class="docutils literal notranslate"><span class="pre">DEmissionForcingComponent</span></code> to handle hydrological, sediment and climate forcing data.</p></li>
+<li><p>Readers for <code class="docutils literal notranslate"><span class="pre">pointer</span></code>, <code class="docutils literal notranslate"><span class="pre">forcing</span></code> (netcdf copy) and <code class="docutils literal notranslate"><span class="pre">geometry</span></code> components.</p></li>
+</ul>
 </section>
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DelwaqModel</span></code> and <code class="docutils literal notranslate"><span class="pre">DEmissionModel</span></code> are now separated classes with a component structure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grid</span></code> is now <code class="docutils literal notranslate"><span class="pre">staticdata</span></code>.</p></li>
+<li><p>All <code class="docutils literal notranslate"><span class="pre">setup_emission_*</span></code> methods are now in the <code class="docutils literal notranslate"><span class="pre">DEmissionModel</span></code> class.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup_sediment_forcing</span></code> is now in the <code class="docutils literal notranslate"><span class="pre">DelwaqModel</span></code> class only.</p></li>
+</ul>
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Integration tests for all components (not just geoms and staticdata).</p></li>
+</ul>
 </section>
 </section>
 <section id="v0-3-1-16-january-2026">
@@ -708,31 +730,6 @@ Different particles size can be taken into account.</p></li>
 </li>
 </ul>
   </nav></div>
-
-  <div class="sidebar-secondary-item">
-
-  
-  <div class="tocsection editthispage">
-    <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/changelog.rst">
-      <i class="fa-solid fa-pencil"></i>
-      
-      
-        
-          Edit on GitHub
-        
-      
-    </a>
-  </div>
-</div>
-
-  <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/changelog.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
 
 </div></div>
               

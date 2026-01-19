@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=d8b05058" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -146,8 +146,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API
   </a>
 </li>
 
@@ -280,8 +280,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API
   </a>
 </li>
 
@@ -413,7 +413,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hydromt</span><span class="w"> </span><span class="kn">import</span> <span class="n">gis_utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hydromt.gis</span><span class="w"> </span><span class="kn">import</span> <span class="n">gis_utils</span><span class="p">,</span> <span class="n">raster_utils</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.enums</span><span class="w"> </span><span class="kn">import</span> <span class="n">MergeAlg</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -426,7 +426,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gridarea</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a DataArray cointaining the area in m2 of the reference grid ds.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a DataArray containing the area in m2 of the reference grid ds.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -439,7 +439,7 @@
 <span class="sd">        DataArray containing area in m2 of the reference grid.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">realarea</span> <span class="o">=</span> <span class="n">gis_utils</span><span class="o">.</span><span class="n">reggrid_area</span><span class="p">(</span>
+    <span class="n">realarea</span> <span class="o">=</span> <span class="n">raster_utils</span><span class="o">.</span><span class="n">_reggrid_area</span><span class="p">(</span>
         <span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">ycoords</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">xcoords</span><span class="o">.</span><span class="n">values</span>
     <span class="p">)</span>
     <span class="n">da_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
@@ -459,7 +459,7 @@
     <span class="n">yres</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">lats</span><span class="p">)))</span>
     <span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">lats</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">lons</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">lats</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-    <span class="n">w</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">gis_utils</span><span class="o">.</span><span class="n">cellres</span><span class="p">(</span><span class="n">lats</span><span class="p">,</span> <span class="n">xres</span><span class="p">,</span> <span class="n">yres</span><span class="p">)</span>
+    <span class="n">w</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">raster_utils</span><span class="o">.</span><span class="n">cellres</span><span class="p">(</span><span class="n">lats</span><span class="p">,</span> <span class="n">xres</span><span class="p">,</span> <span class="n">yres</span><span class="p">)</span>
     <span class="n">width</span> <span class="o">=</span> <span class="n">w</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">ones</span>
     <span class="n">length</span> <span class="o">=</span> <span class="n">l</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">ones</span>
 
@@ -484,7 +484,7 @@
 
 
 <div class="viewcode-block" id="emission_raster">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.emissions.emission_raster.html#hydromt_delwaq.workflows.emissions.emission_raster">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.emissions.emission_raster.html#hydromt_delwaq.workflows.emissions.emission_raster">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">emission_raster</span><span class="p">(</span>
     <span class="n">da</span><span class="p">,</span>
     <span class="n">ds_like</span><span class="p">,</span>
@@ -492,7 +492,6 @@
     <span class="n">fillna_method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
     <span class="n">fillna_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
     <span class="n">area_division</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return emission map.</span>
 
@@ -555,14 +554,13 @@
 
 
 <div class="viewcode-block" id="emission_vector">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.emissions.emission_vector.html#hydromt_delwaq.workflows.emissions.emission_vector">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.emissions.emission_vector.html#hydromt_delwaq.workflows.emissions.emission_vector">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">emission_vector</span><span class="p">(</span>
     <span class="n">gdf</span><span class="p">,</span>
     <span class="n">ds_like</span><span class="p">,</span>
     <span class="n">col_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
     <span class="n">mask_name</span><span class="o">=</span><span class="s2">&quot;basmsk&quot;</span><span class="p">,</span>
-    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return gridded emission data from vector.</span>
 
@@ -582,6 +580,7 @@
 <span class="sd">    da_out : xarray.Dataarray</span>
 <span class="sd">        Dataarray containing gridded emission map at model resolution.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span>
         <span class="n">da_out</span> <span class="o">=</span> <span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">rasterize</span><span class="p">(</span>
             <span class="n">gdf</span><span class="p">,</span>
@@ -650,8 +649,8 @@
 
 
 <div class="viewcode-block" id="admin">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.emissions.admin.html#hydromt_delwaq.workflows.emissions.admin">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">admin</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">ds_like</span><span class="p">,</span> <span class="n">source_name</span><span class="p">,</span> <span class="n">fn_map</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.emissions.admin.html#hydromt_delwaq.workflows.emissions.admin">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">admin</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">ds_like</span><span class="p">,</span> <span class="n">source_name</span><span class="p">,</span> <span class="n">fn_map</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return administrative boundaries map and related parameter maps.</span>
 
 <span class="sd">    The parameter maps are prepared based on administrative boundaries and</span>

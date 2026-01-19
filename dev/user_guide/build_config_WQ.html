@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -48,7 +48,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/build_config_WQ';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Build a water quality model" href="../_examples/build_WQ_model.html" />
+    <link rel="next" title="Updating a model" href="update_config_WQ.html" />
     <link rel="prev" title="Selection of substance(s) and processes" href="generic_delwaq_WQ_substances.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -149,8 +149,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
   </a>
 </li>
 
@@ -285,8 +285,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
   </a>
 </li>
 
@@ -360,47 +360,40 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="generic_delwaq_EM.html">Working with the D-Emissions model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="EM_model.html">D-Emission model components</a></li>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="1_getting_started_hydromt/index.html">Getting started with HydroMT</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/overview/hydromt_cli.html">Command Line Interface</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="1_getting_started_hydromt/data_catalog.html">Data Catalog</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data_catalog/data_prepare_cat.html">Preparing a data catalog</a></li>
+<li class="toctree-l3"><a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data_catalog/data_types.html">Supported data types</a></li>
+<li class="toctree-l3"><a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data_catalog/data_existing_cat.html">Predefined catalogs</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/models/model_region.html">Model Region</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="generic_delwaq_EM.html">Working with D-Emissions models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="EM_model.html">D-Emissions model components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generic_delwaq_EM_substances.html">Selection of substance(s) and sources</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="build_config_EM.html">Building a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../_examples/build_EM_model.html">Example: Build D-Emission model</a></li>
-</ul>
-</details></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="update_config_EM.html">Updating a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../_examples/adding_global_emission.html">Example: Add (global) emission data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../_examples/adding_local_emission.html">Example: Add (local) emission data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../_examples/update_model_forcing.html">Example: Update forcing data</a></li>
-</ul>
-</details></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="generic_delwaq_EM_prepare.html">Editing the EM run information</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="EM_functional_description.html">Further reading: Detailed functional description</a></li>
-</ul>
-</details></li>
+<li class="toctree-l2"><a class="reference internal" href="build_config_EM.html">Building a model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="update_config_EM.html">Updating a model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generic_delwaq_EM_prepare.html">Editing the EM run information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generic_delwaq_EM_run.html">Running D-Emissions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EM_functional_description.html">Further reading: Detailed functional description</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="generic_delwaq_WQ.html">Working with the D-Water Quality model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="WQ_model.html">D-Water Quality model components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_substances.html">Selection of substance(s) and processes</a></li>
-<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">Building a model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../_examples/build_WQ_model.html">Example: Build D-Water Quality model</a></li>
-</ul>
-</details></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="update_config_WQ.html">Updating a model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../_examples/update_model_monitoring.html">Example: Update monitoring data</a></li>
-</ul>
-</details></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Building a model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="update_config_WQ.html">Updating a model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_prepare.html">Editing the WQ run information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generic_delwaq_WQ_run.html">Running D-Water Quality</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="process_analyze.html">Postprocessing and visualization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../_examples/plot_delwaq.html">Example: Plot DELWAQ grid</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="coupling_main.html">Reading more about coupling the individual modules</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1"><a class="reference internal" href="process_analyze.html">Postprocessing and visualization</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="coupling_main.html">Reading more about coupling the individual modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="coupling_wflow.html">Explaining the Wflow - DELWAQ coupling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coupling_delwaq.html">Explaining the D-Emission - D-Water Quality coupling</a></li>
 </ul>
@@ -473,10 +466,10 @@
 <p>This plugin allows to build a complete D-Water Quality model from available data. Once the configuration and
 data libraries are set, you can build a model by using:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">activate hydromt-delwaq</span>
-<span class="go">hydromt build delwaq path/to/built_model &quot;{&#39;wflow&#39;: path/to/wflow_model}&quot; -i delwaq_build.yml -d data_sources.yml -vv</span>
+<span class="go">hydromt build delwaq path/to/built_model -i delwaq_build.yml -d data_sources.yml -vv</span>
 </pre></div>
 </div>
-<p>The recommended <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/cli.html#region-options">region options</a>
+<p>The recommended <a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/models/model_region.html">region options</a>
 for a proper implementation of this model are:</p>
 <ul class="simple">
 <li><p>model</p></li>
@@ -498,38 +491,41 @@ for modelling <strong>Total Nitrogen (TN)</strong> released by <strong>household
 <span class="w">  </span><span class="na">data_libs</span><span class="o">:</span>
 <span class="w">    </span><span class="na">- local_sources.yml</span>
 
-<span class="na">setup_basemaps</span><span class="o">:</span>
-<span class="w">  </span><span class="na">mask</span><span class="o">:</span><span class="w"> </span><span class="s">rivers</span>
-<span class="w">  </span><span class="na">surface_water</span><span class="o">:</span><span class="w"> </span><span class="s">sfw</span>
-<span class="w">  </span><span class="na">boundaries</span><span class="o">:</span>
-<span class="w">    </span><span class="na">- land</span>
-<span class="w">    </span><span class="na">- soil</span>
-<span class="w">    </span><span class="na">- sett</span>
-<span class="w">  </span><span class="na">fluxes</span><span class="o">:</span>
-<span class="w">    </span><span class="na">- sfw&gt;sfw</span>
-<span class="w">    </span><span class="na">- land&gt;sfw</span>
-<span class="w">    </span><span class="na">- soil&gt;sfw</span>
-<span class="w">    </span><span class="na">- sfw&gt;sett</span>
-<span class="w">  </span><span class="na">maps</span><span class="o">:</span>
-<span class="w">    </span><span class="na">- rivmsk</span>
-<span class="w">    </span><span class="na">- lndslp</span>
-<span class="w">    </span><span class="na">- strord</span>
-<span class="w">    </span><span class="na">- N</span>
-<span class="w">    </span><span class="na">- SoilThickness</span>
-<span class="w">    </span><span class="na">- thetaS</span>
+<span class="na">steps</span><span class="o">:</span>
+<span class="w">  </span><span class="na">- setup_basemaps</span><span class="o">:</span>
+<span class="w">      </span><span class="na">region</span><span class="o">:</span>
+<span class="w">        </span><span class="na">wflow_sbm</span><span class="o">:</span><span class="w"> </span><span class="s">wflow_piave</span>
+<span class="w">      </span><span class="na">mask</span><span class="o">:</span><span class="w"> </span><span class="s">rivers</span>
+<span class="w">      </span><span class="na">surface_water</span><span class="o">:</span><span class="w"> </span><span class="s">sfw</span>
+<span class="w">      </span><span class="na">boundaries</span><span class="o">:</span>
+<span class="w">        </span><span class="na">- land</span>
+<span class="w">        </span><span class="na">- soil</span>
+<span class="w">        </span><span class="na">- sett</span>
+<span class="w">      </span><span class="na">fluxes</span><span class="o">:</span>
+<span class="w">        </span><span class="na">- sfw&gt;sfw</span>
+<span class="w">        </span><span class="na">- land&gt;sfw</span>
+<span class="w">        </span><span class="na">- soil&gt;sfw</span>
+<span class="w">        </span><span class="na">- sfw&gt;sett</span>
+<span class="w">      </span><span class="na">maps</span><span class="o">:</span>
+<span class="w">        </span><span class="na">- rivmsk</span>
+<span class="w">        </span><span class="na">- lndslp</span>
+<span class="w">        </span><span class="na">- strord</span>
+<span class="w">        </span><span class="na">- river_manning_n</span>
+<span class="w">        </span><span class="na">- soil_thickness</span>
+<span class="w">        </span><span class="na">- soil_theta_s</span>
 
-<span class="na">setup_monitoring</span><span class="o">:</span>
-<span class="w">  </span><span class="na">mon_points</span><span class="o">:</span><span class="w"> </span><span class="s">segments</span>
-<span class="w">  </span><span class="na">mon_areas</span><span class="o">:</span><span class="w"> </span><span class="s">subcatch</span>
+<span class="w">  </span><span class="na">- setup_monitoring</span><span class="o">:</span>
+<span class="w">      </span><span class="na">mon_points</span><span class="o">:</span><span class="w"> </span><span class="s">segments</span>
+<span class="w">      </span><span class="na">mon_areas</span><span class="o">:</span><span class="w"> </span><span class="s">subcatch</span>
 
-<span class="na">setup_hydrology_forcing</span><span class="o">:</span>
-<span class="w">  </span><span class="na">hydro_forcing_fn</span><span class="o">:</span><span class="w"> </span><span class="s">wflow_output_wq</span>
-<span class="w">  </span><span class="na">starttime</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;2010-02-04 00:00:00&quot;</span>
-<span class="w">  </span><span class="na">endtime</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;2010-02-10 00:00:00&quot;</span>
-<span class="w">  </span><span class="na">timestepsecs</span><span class="o">:</span><span class="w"> </span><span class="s">86400</span>
-<span class="w">  </span><span class="na">add_volume_offset</span><span class="o">:</span><span class="w"> </span><span class="s">True</span>
-<span class="w">  </span><span class="na">override</span><span class="o">:</span>
-<span class="w">    </span><span class="na">- sfw&gt;sfw</span>
+<span class="w">  </span><span class="na">- setup_hydrology_forcing</span><span class="o">:</span>
+<span class="w">      </span><span class="na">hydro_forcing_fn</span><span class="o">:</span><span class="w"> </span><span class="s">wflow_output_wq</span>
+<span class="w">      </span><span class="na">starttime</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;2010-02-03 00:00:00&quot;</span>
+<span class="w">      </span><span class="na">endtime</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;2010-02-10 00:00:00&quot;</span>
+<span class="w">      </span><span class="na">timestepsecs</span><span class="o">:</span><span class="w"> </span><span class="s">86400</span>
+<span class="w">      </span><span class="na">add_volume_offset</span><span class="o">:</span><span class="w"> </span><span class="s">true</span>
+<span class="w">      </span><span class="na">override</span><span class="o">:</span>
+<span class="w">        </span><span class="na">- sfw&gt;sfw</span>
 </pre></div>
 </div>
 </section>
@@ -538,7 +534,7 @@ for modelling <strong>Total Nitrogen (TN)</strong> released by <strong>household
 <p>Data sources in HydroMT are provided in one of several yaml libraries. These libraries contain required
 information on the different data sources so that HydroMT can process them for the different models. There
 are three ways for the user to select which data libraries to use:</p>
-<ul>
+<ul class="simple">
 <li><p>If no yaml file is selected, HydroMT will use the data stored in the
 <a class="reference external" href="https://github.com/DirkEilander/hydromt-artifacts">hydromt-artifacts</a>
 which contains an extract of global data for a small region around the Piave river in Northern Italy.</p></li>
@@ -546,12 +542,9 @@ which contains an extract of global data for a small region around the Piave riv
 P-drive). In the command lines examples below, this is done by adding <strong>–deltares-data</strong>
 to the build / update command line.</p></li>
 <li><p>Finally, the user can prepare its own yaml library (or libraries) (see
-<a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data.html">HydroMT documentation</a> to check the guidelines).
+<a class="reference external" href="https://deltares.github.io/hydromt/latest/user_guide/data_catalog/data_prepare_cat.html">HydroMT documentation</a> to check the guidelines).
 These user libraries can be added either in the command line using the <strong>-d</strong> option and path/to/yaml or in the <strong>ini file</strong>
-with the <strong>data_libs</strong> option in the [global] sections.</p>
-<div class="toctree-wrapper compound">
-</div>
-</li>
+with the <strong>data_libs</strong> option in the [global] sections.</p></li>
 </ul>
 </section>
 </section>
@@ -576,11 +569,11 @@ with the <strong>data_libs</strong> option in the [global] sections.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../_examples/build_WQ_model.html"
+       href="update_config_WQ.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Build a water quality model</p>
+        <p class="prev-next-title">Updating a model</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -607,31 +600,6 @@ with the <strong>data_libs</strong> option in the [global] sections.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-data">Selecting data</a></li>
 </ul>
   </nav></div>
-
-  <div class="sidebar-secondary-item">
-
-  
-  <div class="tocsection editthispage">
-    <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/user_guide/build_config_WQ.rst">
-      <i class="fa-solid fa-pencil"></i>
-      
-      
-        
-          Edit on GitHub
-        
-      
-    </a>
-  </div>
-</div>
-
-  <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/user_guide/build_config_WQ.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
 
 </div></div>
               

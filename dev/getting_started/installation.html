@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -149,8 +149,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
   </a>
 </li>
 
@@ -285,8 +285,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
   </a>
 </li>
 
@@ -363,8 +363,16 @@
   <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Installation guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples_index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_stories.html">User’s stories</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="examples_index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/build_EM_model.html">Build an emission model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/build_WQ_model.html">Build a water quality model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/adding_global_emission.html">Add (global) emission data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/adding_local_emission.html">Add (local) emission data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/update_model_monitoring.html">Update monitoring locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/update_model_forcing.html">Update forcing data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_examples/plot_delwaq.html">Plot DELWAQ data</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -427,57 +435,78 @@
                   
   <section id="installation-guide">
 <span id="id1"></span><h1>Installation guide<a class="headerlink" href="#installation-guide" title="Link to this heading">#</a></h1>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
-<p>For the necessary prerequisites, see <a class="reference external" href="https://deltares.github.io/hydromt/latest/getting_started/installation.html#prerequisites">HydroMT core prerequisites</a>.</p>
-<p><strong>Additional dependencies</strong></p>
-<p>The HydroMT-delwaq Python package makes use of the HydroMT core.
-For a complete list of dependencies, see the pyproject.toml file.</p>
-<p>DELWAQ models are built on top of existing hydrology/hydrodynamic models.
-To build a DELWAQ model, the plugin of the corresponding hydrology/hydrodynamic model
-also needs to be installed (example HydroMT-Wflow).</p>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
+<p>HydroMT-DELWAQ is a model plugin for <a class="reference external" href="https://deltares.github.io/hydromt">HydroMT</a>, extending its core functionalities with DELWAQ-specific components and workflows.
+It can be installed as a standalone package or alongside other HydroMT model plugins (e.g. HydroMT-SFINCS, HydroMT-Fiat).
+We recommend installing HydroMT-DELWAQ in a dedicated Python environment to ensure dependency consistency.</p>
 </section>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<p>HydroMT-delwaq is available from pypi and conda-forge. We recommend installing using mamba from conda-forge in a new environment.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>In the commands below you can exchange <cite>mamba</cite> for <cite>conda</cite>, see
-<a class="reference external" href="https://deltares.github.io/hydromt/latest/getting_started/installation.html#installation-guide">here</a>
-for the difference between both.</p>
-</div>
-<section id="install-hydromt-delwaq-in-a-new-environment">
-<h3>Install HydroMT-delwaq in a new environment<a class="headerlink" href="#install-hydromt-delwaq-in-a-new-environment" title="Link to this heading">#</a></h3>
-<p>You can install HydroMT-delwaq in a new environment called <cite>hydromt-delwaq</cite>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mamba<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>hydromt-delwaq<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>hydromt_delwaq
+<section id="prerequisite-python-installation">
+<h2>Prerequisite: Python installation<a class="headerlink" href="#prerequisite-python-installation" title="Link to this heading">#</a></h2>
+<p>You will need <strong>Python 3.11 or newer</strong> and a package/environment manager such as pip, conda, mamba or uv.
+These tools simplify installing packages and managing isolated environments.</p>
+<p>If you do not yet have one installed, we recommend either:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a></p></li>
+<li><p><a class="reference external" href="https://conda-forge.org/docs/">Miniforge (Mambaforge)</a></p></li>
+<li><p><a class="reference external" href="https://docs.astral.sh/uv/">uv</a></p></li>
+</ul>
+<p>Both conda variants come preconfigured with the <strong>conda-forge</strong> channel, which provides free and open packages used by HydroMT.</p>
+</section>
+<section id="installing-hydromt-delwaq">
+<h2>Installing HydroMT-DELWAQ<a class="headerlink" href="#installing-hydromt-delwaq" title="Link to this heading">#</a></h2>
+<p>HydroMT-DELWAQ is available from both <strong>PyPI</strong> and <strong>conda-forge</strong>.
+The simplest and most flexible approach is to install it using <strong>pip</strong> inside a new environment.</p>
+<section id="installation-in-a-conda-environment-using-uv-pip">
+<h3>Installation in a conda environment using uv / pip<a class="headerlink" href="#installation-in-a-conda-environment-using-uv-pip" title="Link to this heading">#</a></h3>
+<p>We recommend creating a clean environment to avoid dependency conflicts. For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>hydromt-delwaq<span class="w"> </span>uv<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.13
+<span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>hydromt-delwaq
+<span class="gp">$ </span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>hydromt_delwaq
 </pre></div>
 </div>
-<p>Then, activate the environment (as stated by mamba/conda) to start making use of HydroMT-Delwaq:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda activate hydromt-delwaq</span>
-</pre></div>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>If you already have this environment with this name either remove it with
-<cite>conda env remove -n hydromt-delwaq</cite> <strong>or</strong> set a new name for the environment
-by adding <cite>-n &lt;name&gt;</cite> to the line below.</p>
-</div>
-</section>
-<section id="install-hydromt-delwaq-in-an-existing-environment">
-<h3>Install HydroMT-delwaq in an existing environment<a class="headerlink" href="#install-hydromt-delwaq-in-an-existing-environment" title="Link to this heading">#</a></h3>
-<p>To install HydroMT-delwaq in an existing environment execute the command below
-where you replace <cite>&lt;environment_name&gt;</cite> with the name of the existing environment.
-Note that if some dependencies are not installed from conda-forge but from other
-channels the installation may fail.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mamba<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>hydromt_delwaq<span class="w"> </span>-n<span class="w"> </span>&lt;environment_name&gt;
+<p>This will install HydroMT-DELWAQ along with HydroMT core, HydroMT-Wflow and all required dependencies.</p>
+<p>To verify the installation, you can list the installed HydroMT plugins:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span><span class="o">(</span>hydromt-delwaq<span class="o">)</span><span class="w"> </span>hydromt<span class="w"> </span>--models
+<span class="go">    Model plugins:</span>
+<span class="go">        - model (hydromt 1.3.0)</span>
+<span class="go">        - example_model (hydromt 1.3.0)</span>
+<span class="go">        - delwaq (hydromt_delwaq 0.4.0)</span>
+<span class="go">        - demission (hydromt_delwaq 0.4.0)</span>
+<span class="go">        - wflow_sbm (hydromt_wflow 1.0.0)</span>
+<span class="go">        - wflow_sediment (hydromt_wflow 1.0.0)</span>
 </pre></div>
 </div>
 </section>
-<section id="developer-install">
-<h3>Developer install<a class="headerlink" href="#developer-install" title="Link to this heading">#</a></h3>
-<p>To be able to test and develop the HydroMT-delwaq package see instructions in the <a class="reference internal" href="../dev/dev_install.html#dev-env"><span class="std std-ref">Developer installation guide</span></a>.</p>
-<p>For more information about how to contribute, see <a class="reference external" href="https://hydromt.readthedocs.io/en/latest/contributing.html">HydroMT contributing guidelines</a>.</p>
+<section id="installing-optional-dependencies">
+<h3>Installing optional dependencies<a class="headerlink" href="#installing-optional-dependencies" title="Link to this heading">#</a></h3>
+<p>HydroMT-DELWAQ provides several optional dependencies that extend its capabilities, such as running JUpyter Notebook and plotting maps.
+You can install these easily using pip’s extras syntax:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span><span class="o">(</span>hydromt-delwaq<span class="o">)</span><span class="w"> </span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;hydromt_delwaq[examples]&quot;</span>
+</pre></div>
+</div>
+<p>This will install optional packages such as:</p>
+<ul class="simple">
+<li><p><strong>jupyterlab</strong> - enables running Jupyter Notebooks for examples and tutorials.</p></li>
+<li><p><strong>cartopy</strong> - enables advanced geospatial plotting capabilities.</p></li>
+</ul>
+<p>For a list of all the optional dependency groups and their contents, have a look at the
+<cite>pyproject.toml</cite> file. Use <cite>hydromt_delwaq[full]</cite> to install all optional dependencies
+(including developer’s dependencies).</p>
 </section>
+<section id="installing-via-conda">
+<h3>Installing via conda<a class="headerlink" href="#installing-via-conda" title="Link to this heading">#</a></h3>
+<p>HydroMT-DELWAQ is also available through the conda-forge channel. You can install it directly with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>hydromt-delwaq<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>hydromt_delwaq
+<span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>hydromt-delwaq
+</pre></div>
+</div>
+</section>
+</section>
+<section id="developer-installation">
+<h2>Developer installation<a class="headerlink" href="#developer-installation" title="Link to this heading">#</a></h2>
+<p>If you want to contribute to HydroMT-DELWAQ or modify its source code, see the
+<a class="reference internal" href="../dev/dev_install.html#dev-env"><span class="std std-ref">Developer installation guide</span></a>.</p>
 </section>
 </section>
 
@@ -528,40 +557,17 @@ channels the installation may fail.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install-hydromt-delwaq-in-a-new-environment">Install HydroMT-delwaq in a new environment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install-hydromt-delwaq-in-an-existing-environment">Install HydroMT-delwaq in an existing environment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-install">Developer install</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting started</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisite-python-installation">Prerequisite: Python installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-hydromt-delwaq">Installing HydroMT-DELWAQ</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-in-a-conda-environment-using-uv-pip">Installation in a conda environment using uv / pip</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-optional-dependencies">Installing optional dependencies</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-via-conda">Installing via conda</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-installation">Developer installation</a></li>
 </ul>
   </nav></div>
-
-  <div class="sidebar-secondary-item">
-
-  
-  <div class="tocsection editthispage">
-    <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/getting_started/installation.rst">
-      <i class="fa-solid fa-pencil"></i>
-      
-      
-        
-          Edit on GitHub
-        
-      
-    </a>
-  </div>
-</div>
-
-  <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/getting_started/installation.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
 
 </div></div>
               

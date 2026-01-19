@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=d8b05058" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -146,8 +146,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API
   </a>
 </li>
 
@@ -280,8 +280,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API
   </a>
 </li>
 
@@ -422,10 +422,12 @@
 
 
 <div class="viewcode-block" id="compute_geometry">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.geometry.compute_geometry.html#hydromt_delwaq.workflows.geometry.compute_geometry">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.geometry.compute_geometry.html#hydromt_delwaq.workflows.geometry.compute_geometry">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_geometry</span><span class="p">(</span>
     <span class="n">ds</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">mask</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span>
+    <span class="n">fpaved_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;soil_compacted_fraction&quot;</span><span class="p">,</span>
+    <span class="n">fopenwater_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;land_water_fraction&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute geometry data for demission.</span>
 
@@ -434,10 +436,17 @@
 <span class="sd">    ds : xr.Dataset</span>
 <span class="sd">        Dataset containing the geometry data.</span>
 
-<span class="sd">        * Required variables: fraction of paved area &quot;PathFrac&quot;, fraction of open water</span>
-<span class="sd">            &quot;WaterFrac&quot;</span>
+<span class="sd">        * Required variables: fraction of paved area &quot;soil_compacted_fraction&quot;, fraction</span>
+<span class="sd">          of open water &quot;land_water_fraction&quot;</span>
+
 <span class="sd">    mask : xr.DataArray</span>
-<span class="sd">        Mask to select the gactive cells (segments) in ds.</span>
+<span class="sd">        Mask to select the active cells (segments) in ds.</span>
+<span class="sd">    fpaved_name : str</span>
+<span class="sd">        Name of the variable in ds representing the fraction of paved area.</span>
+<span class="sd">        By default &#39;soil_compacted_fraction&#39;.</span>
+<span class="sd">    fopenwater_name : str</span>
+<span class="sd">        Name of the variable in ds representing the fraction of open water area.</span>
+<span class="sd">        By default &#39;land_water_fraction&#39;.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -448,8 +457,8 @@
     <span class="n">surface</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">set_nodata</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     <span class="n">geom</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;surface&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">()</span>
     <span class="c1"># For EM type build a pointer like object and add to self.geometry</span>
-    <span class="n">geom</span><span class="p">[</span><span class="s2">&quot;fPaved&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;PathFrac&quot;</span><span class="p">]</span>
-    <span class="n">geom</span><span class="p">[</span><span class="s2">&quot;fOpenWater&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;WaterFrac&quot;</span><span class="p">]</span>
+    <span class="n">geom</span><span class="p">[</span><span class="s2">&quot;fPaved&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">fpaved_name</span><span class="p">]</span>
+    <span class="n">geom</span><span class="p">[</span><span class="s2">&quot;fOpenWater&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">fopenwater_name</span><span class="p">]</span>
     <span class="n">geom</span><span class="p">[</span><span class="s2">&quot;fUnpaved&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">(</span><span class="n">geom</span><span class="p">[</span><span class="s2">&quot;fPaved&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.0</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-</span> <span class="n">geom</span><span class="p">[</span><span class="s2">&quot;fPaved&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">geom</span><span class="p">[</span><span class="s2">&quot;fOpenWater&quot;</span><span class="p">]</span>
     <span class="p">)</span>

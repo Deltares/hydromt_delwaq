@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=d8b05058" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -149,8 +149,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
   </a>
 </li>
 
@@ -240,10 +240,6 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -285,8 +281,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
   </a>
 </li>
 
@@ -364,7 +360,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">What’s new</a></li>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://deltares.github.io/hydromt/latest/dev/contributing">Developer's guide</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://deltares.github.io/hydromt/latest/dev/core_dev/index.html">Developer's guide</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Developer’s environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="team.html">Contributors</a></li>
 </ul>
@@ -429,22 +425,23 @@
                   
   <section id="developer-s-environment">
 <span id="dev-env"></span><h1>Developer’s environment<a class="headerlink" href="#developer-s-environment" title="Link to this heading">#</a></h1>
-<p>If you want to download the HydroMT-delwaq plugin directly from git to easily have access to the latest developments or make
+<p>If you want to download the HydroMT-DELWAQ plugin directly from git to easily have access to the latest developments or make
 changes to the code you can use the following steps.</p>
-<p>First, clone the HydroMT-delwaq plugin <code class="docutils literal notranslate"><span class="pre">git</span></code> repo from <a class="reference external" href="https://github.com/Deltares/hydromt_delwaq.git">github</a>.
+<p>First, clone the HydroMT-DELWAQ plugin <code class="docutils literal notranslate"><span class="pre">git</span></code> repo from <a class="reference external" href="https://github.com/Deltares/hydromt_delwaq.git">github</a>.
 If you need a github authentification key, you can use <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account">ssh</a></p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:Deltares/hydromt_delwaq.git
 </pre></div>
 </div>
-<p>Then, navigate into the code folder (where the envs folder and pyproject.toml are located):
-Make and activate a new Hydromt-delwaq conda environment based on the envs/hydromt-delwaq.yml
-file contained in the repository:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>hydromt_delwaq
-<span class="gp">$ </span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>envs/hydromt-delwaq.yml
+<p>Then, navigate into the code folder (where the envs folder and pyproject.toml are located).
+Make and activate a new hydromt-delwaq conda environment based on a “full” installation
+including all optional and developer dependencies as specified in the <cite>pyproject.toml</cite> and
+available in PyPI. This will ensure you have all necessary packages to run examples and tests.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>hydromt-delwaq<span class="w"> </span>uv<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.13
 <span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>hydromt-delwaq
+<span class="gp">$ </span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;hydromt_delwaq[full]&quot;</span>
 </pre></div>
 </div>
-<p>Finally, create a developer installation of HydroMT-delwaq.
+<p>Finally, create a developer installation of hydromt_delwaq.
 This can be done with:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </pre></div>
@@ -485,37 +482,6 @@ This can be done with:</p>
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-
-  
-  <div class="tocsection editthispage">
-    <a href="https://github.com/Deltares/hydromt_delwaq/edit/main/docs/dev/dev_install.rst">
-      <i class="fa-solid fa-pencil"></i>
-      
-      
-        
-          Edit on GitHub
-        
-      
-    </a>
-  </div>
-</div>
-
-  <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/dev/dev_install.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
-
-</div></div>
               
             
           </div>

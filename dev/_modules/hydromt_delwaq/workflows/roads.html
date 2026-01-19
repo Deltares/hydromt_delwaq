@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=d8b05058" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -146,8 +146,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API
   </a>
 </li>
 
@@ -280,8 +280,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API
   </a>
 </li>
 
@@ -491,7 +491,7 @@
 
     <span class="c1"># Spatial join of gdf and zones</span>
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;sjoin&quot;</span><span class="p">:</span>
-        <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">zones</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;within&quot;</span><span class="p">)</span>
+        <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">zones</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="s2">&quot;within&quot;</span><span class="p">)</span>
     <span class="c1"># Overlay with the zones</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;overlay&quot;</span><span class="p">:</span>
         <span class="n">gdf</span> <span class="o">=</span> <span class="p">(</span>
@@ -666,14 +666,13 @@
 
 
 <div class="viewcode-block" id="roads_emissions_country">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.roads.roads_emissions_country.html#hydromt_delwaq.workflows.roads.roads_emissions_country">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.roads.roads_emissions_country.html#hydromt_delwaq.workflows.roads.roads_emissions_country">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">roads_emissions_country</span><span class="p">(</span>
     <span class="n">gdf_roads</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
     <span class="n">gdf_country</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
     <span class="n">ds_like</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">highway_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">non_highway_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute roads statistics per country of interest.</span>
@@ -705,6 +704,9 @@
 <span class="sd">        * ``hwy_length_sum_country``: highway road length per country of interest.</span>
 <span class="sd">        * ``nnhwy_length_sum_country``: non-highway road length per country of interest.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># To ds_like crs</span>
+    <span class="n">gdf_roads</span> <span class="o">=</span> <span class="n">gdf_roads</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+    <span class="n">gdf_country</span> <span class="o">=</span> <span class="n">gdf_country</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
     <span class="c1"># Common preprocessing of arguments with segments</span>
     <span class="n">feature_filter</span> <span class="o">=</span> <span class="n">_preprocess_roads_emissions</span><span class="p">(</span>
         <span class="n">gdf_roads</span><span class="o">=</span><span class="n">gdf_roads</span><span class="p">,</span>
@@ -738,7 +740,6 @@
             <span class="n">col_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length_sum&quot;</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
             <span class="n">mask_name</span><span class="o">=</span><span class="s2">&quot;mask&quot;</span><span class="p">,</span>
-            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">ds_country</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_length_sum_country&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">da_emi</span>
 
@@ -747,13 +748,12 @@
 
 
 <div class="viewcode-block" id="roads_emissions_segments">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.roads.roads_emissions_segments.html#hydromt_delwaq.workflows.roads.roads_emissions_segments">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.roads.roads_emissions_segments.html#hydromt_delwaq.workflows.roads.roads_emissions_segments">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">roads_emissions_segments</span><span class="p">(</span>
     <span class="n">gdf_roads</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
     <span class="n">ds_like</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">highway_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">non_highway_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute roads statistics per segment/grid cell.</span>
@@ -784,6 +784,8 @@
 <span class="sd">        * ``nnhwy_length``: non-highway road length per segment/grid cell.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># To ds_like crs</span>
+    <span class="n">gdf_roads</span> <span class="o">=</span> <span class="n">gdf_roads</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">ds_like</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
     <span class="c1"># Common preprocessing of arguments with country</span>
     <span class="n">feature_filter</span> <span class="o">=</span> <span class="n">_preprocess_roads_emissions</span><span class="p">(</span>
         <span class="n">gdf_roads</span><span class="o">=</span><span class="n">gdf_roads</span><span class="p">,</span>

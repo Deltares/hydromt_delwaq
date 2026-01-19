@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=d8b05058" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -146,8 +146,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API
   </a>
 </li>
 
@@ -280,8 +280,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../api.html">
-    API reference
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API
   </a>
 </li>
 
@@ -406,14 +406,13 @@
                 <article class="bd-article">
                   
   <h1>Source code for hydromt_delwaq.workflows.segments</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Worflows dealing with pointer and Delwaq segments.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Workflows dealing with pointer and Delwaq segments.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hydromt</span><span class="w"> </span><span class="kn">import</span> <span class="n">flw</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hydromt.gis</span><span class="w"> </span><span class="kn">import</span> <span class="n">flw</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.emissions</span><span class="w"> </span><span class="kn">import</span> <span class="n">gridarea</span><span class="p">,</span> <span class="n">gridlength_gridwidth</span>
 
@@ -422,13 +421,14 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;hydromaps&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;maps_from_hydromodel&quot;</span><span class="p">,</span>
     <span class="s2">&quot;geometrymaps&quot;</span><span class="p">,</span>
     <span class="s2">&quot;pointer&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 
 <div class="viewcode-block" id="hydromaps">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.segments.hydromaps.html#hydromt_delwaq.workflows.segments.hydromaps">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.segments.hydromaps.html#hydromt_delwaq.workflows.segments.hydromaps">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">hydromaps</span><span class="p">(</span>
     <span class="n">hydromodel</span><span class="p">,</span>
     <span class="n">mask</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;basins&quot;</span><span class="p">,</span>
@@ -454,20 +454,20 @@
 <span class="sd">    ds_out : xarray.Dataset</span>
 <span class="sd">        Dataset containing gridded emission map at model resolution.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;flwdir&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;flwdir&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">()</span>
-    <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;basins&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;basins&quot;</span><span class="p">]]</span>
-    <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;river&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivmsk&quot;</span><span class="p">]]</span>
-    <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;rivlen&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivlen&quot;</span><span class="p">]]</span>
-    <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;rivwth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivwth&quot;</span><span class="p">]]</span>
-    <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;elevtn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;elevtn&quot;</span><span class="p">]]</span>
+    <span class="n">hydromodel_grid</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_region_component_name</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;flwdir&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;flwdir&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">()</span>
+    <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;basins&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;basins&quot;</span><span class="p">]]</span>
+    <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;river&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivmsk&quot;</span><span class="p">]]</span>
+    <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;rivlen&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivlen&quot;</span><span class="p">]]</span>
+    <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;rivwth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivwth&quot;</span><span class="p">]]</span>
+    <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;elevtn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;elevtn&quot;</span><span class="p">]]</span>
 
     <span class="c1"># Surface area maps</span>
     <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;rivarea&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;rivlen&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;rivwth&quot;</span><span class="p">]</span>
     <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;rivarea&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">set_nodata</span><span class="p">(</span><span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;rivlen&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s2">&quot;LakeArea&quot;</span> <span class="ow">in</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span>
-        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;lakearea&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;LakeArea&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="s2">&quot;ResSimpleArea&quot;</span> <span class="ow">in</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span>
-        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;resarea&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;ResSimpleArea&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;reservoir_area&quot;</span> <span class="ow">in</span> <span class="n">hydromodel_grid</span><span class="p">:</span>
+        <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;resarea&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="s2">&quot;reservoir_area&quot;</span><span class="p">]</span>
 
     <span class="n">basins_mv</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;basins&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span>
     <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;basmsk&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span>
@@ -496,10 +496,11 @@
 
 
 
+<div class="viewcode-block" id="maps_from_hydromodel">
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.segments.maps_from_hydromodel.html#hydromt_delwaq.workflows.segments.maps_from_hydromodel">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">maps_from_hydromodel</span><span class="p">(</span>
     <span class="n">hydromodel</span><span class="p">,</span>
-    <span class="n">maps</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rivmsk&quot;</span><span class="p">,</span> <span class="s2">&quot;lndslp&quot;</span><span class="p">,</span> <span class="s2">&quot;strord&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;SoilThickness&quot;</span><span class="p">,</span> <span class="s2">&quot;thetaS&quot;</span><span class="p">],</span>
-    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+    <span class="n">maps</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rivmsk&quot;</span><span class="p">,</span> <span class="s2">&quot;lndslp&quot;</span><span class="p">,</span> <span class="s2">&quot;strord&quot;</span><span class="p">],</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return maps from hydromodel.</span>
 
@@ -509,25 +510,22 @@
 <span class="sd">        HydroMT Model class containing the hydromodel to get geometry data from from.</span>
 <span class="sd">    maps: list of str</span>
 <span class="sd">        List of variables from hydromodel to extract and extend.</span>
-<span class="sd">        By default [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;, &#39;N&#39;, &#39;SoilThickness&#39;, &#39;thetaS&#39;].</span>
+<span class="sd">        By default [&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;].</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    ds_out : xarray.Dataset</span>
 <span class="sd">        Dataset containing gridded maps at model resolution.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hydromodel_grid</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_region_component_name</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
     <span class="n">ds_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">maps</span><span class="p">:</span>
-        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">_River&quot;</span> <span class="ow">in</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span>
-            <span class="n">ds_out</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">_River&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivmsk&quot;</span><span class="p">]],</span>
-                <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">m</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span>
-                <span class="n">ds_out</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span>
-        <span class="k">elif</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span>
-            <span class="n">ds_out</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hydromodel_grid</span><span class="p">:</span>
+                <span class="n">ds_out</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span>
+        <span class="k">elif</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">hydromodel_grid</span><span class="p">:</span>
+            <span class="n">ds_out</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Map </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2"> not found in hydromodel, skipping.&quot;</span><span class="p">)</span>
         <span class="c1"># Check if m is 3D and split into several variables</span>
@@ -539,11 +537,12 @@
                 <span class="n">ds_out</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">dim0</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">dim0_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
             <span class="n">ds_out</span> <span class="o">=</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">([</span><span class="n">m</span><span class="p">,</span> <span class="n">dim0</span><span class="p">])</span>
 
-    <span class="k">return</span> <span class="n">ds_out</span>
+    <span class="k">return</span> <span class="n">ds_out</span></div>
+
 
 
 <div class="viewcode-block" id="geometrymaps">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.segments.geometrymaps.html#hydromt_delwaq.workflows.segments.geometrymaps">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.segments.geometrymaps.html#hydromt_delwaq.workflows.segments.geometrymaps">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">geometrymaps</span><span class="p">(</span>
     <span class="n">hydromodel</span><span class="p">,</span>
 <span class="p">):</span>
@@ -566,22 +565,24 @@
 <span class="sd">    ds_out : xarray.Dataset</span>
 <span class="sd">        Dataset containing gridded geometry map at model resolution.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hydromodel_grid</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_region_component_name</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
     <span class="c1">### Geometry data ###</span>
-    <span class="n">surface</span> <span class="o">=</span> <span class="n">gridarea</span><span class="p">(</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
+    <span class="n">surface</span> <span class="o">=</span> <span class="n">gridarea</span><span class="p">(</span><span class="n">hydromodel_grid</span><span class="p">)</span>
     <span class="n">surface</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">set_nodata</span><span class="p">(</span><span class="o">-</span><span class="mf">9999.0</span><span class="p">)</span>
     <span class="n">surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;surface&quot;</span><span class="p">)</span>
-    <span class="n">length</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">gridlength_gridwidth</span><span class="p">(</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
+    <span class="n">length</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">gridlength_gridwidth</span><span class="p">(</span><span class="n">hydromodel_grid</span><span class="p">)</span>
 
-    <span class="n">rivlen</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivlen&quot;</span><span class="p">]]</span>
-    <span class="n">rivwth</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivwth&quot;</span><span class="p">]]</span>
-    <span class="n">rivmsk</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivmsk&quot;</span><span class="p">]]</span>
+    <span class="n">rivlen</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivlen&quot;</span><span class="p">]]</span>
+    <span class="n">rivwth</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivwth&quot;</span><span class="p">]]</span>
+    <span class="n">rivmsk</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivmsk&quot;</span><span class="p">]]</span>
     <span class="c1"># surface</span>
     <span class="n">surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rivmsk</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">rivlen</span> <span class="o">*</span> <span class="n">rivwth</span><span class="p">)</span>
     <span class="n">surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;surface&quot;</span><span class="p">)</span>
     <span class="c1"># Add waterbodies to surface</span>
-    <span class="k">for</span> <span class="n">wb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;LakeArea&quot;</span><span class="p">,</span> <span class="s2">&quot;ResSimpleArea&quot;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">wb</span> <span class="ow">in</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span>
-            <span class="n">wb_surface</span> <span class="o">=</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">wb</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">wb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reservoir_area&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">wb</span> <span class="ow">in</span> <span class="n">hydromodel_grid</span><span class="p">:</span>
+            <span class="n">wb_surface</span> <span class="o">=</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">wb</span><span class="p">]</span>
             <span class="n">surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">wb_surface</span> <span class="o">==</span> <span class="n">wb_surface</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">,</span> <span class="n">wb_surface</span><span class="p">)</span>
     <span class="c1"># length</span>
     <span class="n">length</span> <span class="o">=</span> <span class="n">rivlen</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rivmsk</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
@@ -606,9 +607,9 @@
     <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;latitude_grid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">set_nodata</span><span class="p">(</span><span class="o">-</span><span class="mf">9999.0</span><span class="p">)</span>
 
     <span class="c1"># Bankfull volume</span>
-    <span class="k">if</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivdph&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivdph&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hydromodel_grid</span><span class="p">:</span>
         <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;bankfull_volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">rivlen</span> <span class="o">*</span> <span class="n">rivwth</span> <span class="o">*</span> <span class="n">hydromodel</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivdph&quot;</span><span class="p">]]</span>
+            <span class="n">rivlen</span> <span class="o">*</span> <span class="n">rivwth</span> <span class="o">*</span> <span class="n">hydromodel_grid</span><span class="p">[</span><span class="n">hydromodel</span><span class="o">.</span><span class="n">_MAPS</span><span class="p">[</span><span class="s2">&quot;rivdph&quot;</span><span class="p">]]</span>
         <span class="p">)</span>
         <span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;bankfull_volume&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">set_nodata</span><span class="p">(</span><span class="n">ds_out</span><span class="p">[</span><span class="s2">&quot;length&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">raster</span><span class="o">.</span><span class="n">nodata</span><span class="p">)</span>
 
@@ -617,14 +618,13 @@
 
 
 <div class="viewcode-block" id="pointer">
-<a class="viewcode-back" href="../../../_generated/hydromt_delwaq.workflows.segments.pointer.html#hydromt_delwaq.workflows.segments.pointer">[docs]</a>
+<a class="viewcode-back" href="../../../api/advanced/_generated/hydromt_delwaq.workflows.segments.pointer.html#hydromt_delwaq.workflows.segments.pointer">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">pointer</span><span class="p">(</span>
     <span class="n">ds_hydro</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
     <span class="n">build_pointer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">surface_water</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sfw&quot;</span><span class="p">,</span>
-    <span class="n">boundaries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;bd&quot;</span><span class="p">],</span>
-    <span class="n">fluxes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sfw&gt;sfw&quot;</span><span class="p">,</span> <span class="s2">&quot;bd&gt;sfw&quot;</span><span class="p">],</span>
-    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+    <span class="n">boundaries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;bd&quot;</span><span class="p">],</span>
+    <span class="n">fluxes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sfw&gt;sfw&quot;</span><span class="p">,</span> <span class="s2">&quot;bd&gt;sfw&quot;</span><span class="p">],</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return map with Delwaq segment ID and pointer.</span>
 

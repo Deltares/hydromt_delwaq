@@ -1,0 +1,780 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>hydromt_delwaq.DelwaqModel &#8212; HydroMT delwaq  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-deltares.css?v=a47b69cb" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/_generated/hydromt_delwaq.DelwaqModel';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="hydromt_delwaq.DelwaqModel.setup_config" href="hydromt_delwaq.DelwaqModel.setup_config.html" />
+    <link rel="prev" title="DelwaqModel" href="../delwaq-model.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.2.dev0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../../_static/hydromt-icon.svg" class="logo__image only-light" alt=""/>
+    <img src="../../_static/hydromt-icon.svg" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">HydroMT DELWAQ</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/intro.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/intro.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev/intro.html">
+    Developments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://deltares.github.io/hydromt/latest/index.html">
+    HydroMT core
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/Deltares/hydromt_delwaq" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="icon-link-image" alt="GitHub"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.deltares.nl/en/software-and-data/products/delft3d-fm-suite/modules/d-water-quality" title="DELWAQ" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/delwaq_logo.png" class="icon-link-image" alt="DELWAQ"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://deltares.nl/en/" title="Deltares" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/deltares-blue.svg" class="icon-link-image" alt="Deltares"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../demission-model.html">DemissionModel</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.html">hydromt_delwaq.DemissionModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_config.html">hydromt_delwaq.DemissionModel.setup_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_basemaps.html">hydromt_delwaq.DemissionModel.setup_basemaps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_monitoring.html">hydromt_delwaq.DemissionModel.setup_monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_emission_raster.html">hydromt_delwaq.DemissionModel.setup_emission_raster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_emission_vector.html">hydromt_delwaq.DemissionModel.setup_emission_vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_emission_mapping.html">hydromt_delwaq.DemissionModel.setup_emission_mapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_roads.html">hydromt_delwaq.DemissionModel.setup_roads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_hydrology_forcing.html">hydromt_delwaq.DemissionModel.setup_hydrology_forcing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.setup_climate_forcing.html">hydromt_delwaq.DemissionModel.setup_climate_forcing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.build.html">hydromt_delwaq.DelwaqModel.build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.update.html">hydromt_delwaq.DelwaqModel.update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.read.html">hydromt_delwaq.DemissionModel.read</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.write.html">hydromt_delwaq.DemissionModel.write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.write_waqgeom.html">hydromt_delwaq.DemissionModel.write_waqgeom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.crs.html">hydromt_delwaq.DemissionModel.crs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.root.html">hydromt_delwaq.DemissionModel.root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.basins.html">hydromt_delwaq.DemissionModel.basins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.nrofseg.html">hydromt_delwaq.DemissionModel.nrofseg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.nrofexch.html">hydromt_delwaq.DemissionModel.nrofexch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DemissionModel.fluxes.html">hydromt_delwaq.DemissionModel.fluxes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../delwaq-model.html">DelwaqModel</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">hydromt_delwaq.DelwaqModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_config.html">hydromt_delwaq.DelwaqModel.setup_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_basemaps.html">hydromt_delwaq.DelwaqModel.setup_basemaps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_monitoring.html">hydromt_delwaq.DelwaqModel.setup_monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_staticdata_from_rasterdataset.html">hydromt_delwaq.DelwaqModel.setup_staticdata_from_rasterdataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_hydrology_forcing.html">hydromt_delwaq.DelwaqModel.setup_hydrology_forcing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_sediment_forcing.html">hydromt_delwaq.DelwaqModel.setup_sediment_forcing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_climate_forcing.html">hydromt_delwaq.DelwaqModel.setup_climate_forcing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.build.html">hydromt_delwaq.DelwaqModel.build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.update.html">hydromt_delwaq.DelwaqModel.update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read.html">hydromt_delwaq.DelwaqModel.read</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write.html">hydromt_delwaq.DelwaqModel.write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_waqgeom.html">hydromt_delwaq.DelwaqModel.write_waqgeom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.crs.html">hydromt_delwaq.DelwaqModel.crs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.root.html">hydromt_delwaq.DelwaqModel.root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.basins.html">hydromt_delwaq.DelwaqModel.basins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.nrofseg.html">hydromt_delwaq.DelwaqModel.nrofseg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.nrofexch.html">hydromt_delwaq.DelwaqModel.nrofexch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.surface_water.html">hydromt_delwaq.DelwaqModel.surface_water</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hydromt_delwaq.DelwaqModel.fluxes.html">hydromt_delwaq.DelwaqModel.fluxes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../advanced/index.html">Advanced API reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../advanced/model-components.html">Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.components.DelwaqConfigComponent.html">hydromt_delwaq.components.DelwaqConfigComponent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.components.DemissionConfigComponent.html">hydromt_delwaq.components.DemissionConfigComponent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.components.DelwaqStaticdataComponent.html">hydromt_delwaq.components.DelwaqStaticdataComponent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.components.DelwaqPointerComponent.html">hydromt_delwaq.components.DelwaqPointerComponent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.components.DemissionGeometryComponent.html">hydromt_delwaq.components.DemissionGeometryComponent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.components.DelwaqForcingComponent.html">hydromt_delwaq.components.DelwaqForcingComponent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.components.DemissionForcingComponent.html">hydromt_delwaq.components.DemissionForcingComponent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.components.DelwaqHydromapsComponent.html">hydromt_delwaq.components.DelwaqHydromapsComponent</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../advanced/workflows.html">Workflows</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.config.base_config.html">hydromt_delwaq.workflows.config.base_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.config.time_config.html">hydromt_delwaq.workflows.config.time_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.emissions.emission_raster.html">hydromt_delwaq.workflows.emissions.emission_raster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.emissions.emission_vector.html">hydromt_delwaq.workflows.emissions.emission_vector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.emissions.admin.html">hydromt_delwaq.workflows.emissions.admin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.forcing.hydrology_forcing.html">hydromt_delwaq.workflows.forcing.hydrology_forcing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.forcing.hydrology_forcing_em.html">hydromt_delwaq.workflows.forcing.hydrology_forcing_em</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.forcing.sediment_forcing.html">hydromt_delwaq.workflows.forcing.sediment_forcing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.forcing.climate_forcing.html">hydromt_delwaq.workflows.forcing.climate_forcing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.geometry.compute_geometry.html">hydromt_delwaq.workflows.geometry.compute_geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.monitoring.monitoring_points_from_dataarray.html">hydromt_delwaq.workflows.monitoring.monitoring_points_from_dataarray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.monitoring.monitoring_points_from_geodataframe.html">hydromt_delwaq.workflows.monitoring.monitoring_points_from_geodataframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.monitoring.monitoring_areas.html">hydromt_delwaq.workflows.monitoring.monitoring_areas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.roads.roads_emissions_country.html">hydromt_delwaq.workflows.roads.roads_emissions_country</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.roads.roads_emissions_segments.html">hydromt_delwaq.workflows.roads.roads_emissions_segments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.segments.hydromaps.html">hydromt_delwaq.workflows.segments.hydromaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.segments.maps_from_hydromodel.html">hydromt_delwaq.workflows.segments.maps_from_hydromodel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.segments.geometrymaps.html">hydromt_delwaq.workflows.segments.geometrymaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/_generated/hydromt_delwaq.workflows.segments.pointer.html">hydromt_delwaq.workflows.segments.pointer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../delwaq-model.html" class="nav-link">DelwaqModel</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">hydromt_delwaq.DelwaqModel</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="hydromt-delwaq-delwaqmodel">
+<h1>hydromt_delwaq.DelwaqModel<a class="headerlink" href="#hydromt-delwaq-delwaqmodel" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="hydromt_delwaq.DelwaqModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hydromt_delwaq.</span></span><span class="sig-name descname"><span class="pre">DelwaqModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'w'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_libs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><span class="pre">Path</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydromt_delwaq/delwaq.html#DelwaqModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.DelwaqModel" title="Link to this definition">#</a></dt>
+<dd><p>Delwaq model class.</p>
+<p>Initialize a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Model root, by default None</p></li>
+<li><p><strong>mode</strong> (<em>{'r'</em><em>,</em><em>'r+'</em><em>,</em><em>'w'</em><em>, </em><em>'w+'}</em><em>, </em><em>optional</em>) – read/append/write mode, by default “w”</p></li>
+<li><p><strong>config_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Model simulation configuration file, by default None.
+Note that this is not the HydroMT model setup configuration file!</p></li>
+<li><p><strong>data_libs</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Path</em><em>]</em><em>, </em><em>optional</em>) – List of data catalog configuration files, by default None</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="hydromt_delwaq.DelwaqModel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'w'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_libs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><span class="pre">Path</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydromt_delwaq/delwaq.html#DelwaqModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydromt_delwaq.DelwaqModel.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Initialize a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Model root, by default None</p></li>
+<li><p><strong>mode</strong> (<em>{'r'</em><em>,</em><em>'r+'</em><em>,</em><em>'w'</em><em>, </em><em>'w+'}</em><em>, </em><em>optional</em>) – read/append/write mode, by default “w”</p></li>
+<li><p><strong>config_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Model simulation configuration file, by default None.
+Note that this is not the HydroMT model setup configuration file!</p></li>
+<li><p><strong>data_libs</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Path</em><em>]</em><em>, </em><em>optional</em>) – List of data catalog configuration files, by default None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hydromt_delwaq.DelwaqModel.__init__" title="hydromt_delwaq.DelwaqModel.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([root, mode, config_filename, ...])</p></td>
+<td><p>Initialize a model.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_component</span></code>(name, component)</p></td>
+<td><p>Add a component to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.build.html#hydromt_delwaq.DelwaqModel.build" title="hydromt_delwaq.DelwaqModel.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>(*[, write])</p></td>
+<td><p>Single method to build a model from scratch based on settings in <cite>steps</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code>()</p></td>
+<td><p>Close all components by closing their open files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dict</span></code>(model_dict)</p></td>
+<td><p>Construct a model with the components and other init arguments in the yaml file located at <cite>path</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_yml</span></code>(path)</p></td>
+<td><p>Construct a model with the components and other init arguments in the yaml file located at <cite>path</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_component</span></code>(name)</p></td>
+<td><p>Get a component from the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.read.html#hydromt_delwaq.DelwaqModel.read" title="hydromt_delwaq.DelwaqModel.read"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read</span></code></a>()</p></td>
+<td><p>Read the complete model schematization and configuration from file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_basemaps.html#hydromt_delwaq.DelwaqModel.setup_basemaps" title="hydromt_delwaq.DelwaqModel.setup_basemaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_basemaps</span></code></a>(region[, mask, ...])</p></td>
+<td><p>Prepare delwaq schematization using the hydromodel region and resolution.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_climate_forcing.html#hydromt_delwaq.DelwaqModel.setup_climate_forcing" title="hydromt_delwaq.DelwaqModel.setup_climate_forcing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_climate_forcing</span></code></a>(climate_fn, starttime, ...)</p></td>
+<td><p>Prepare Delwaq climate fluxes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_config.html#hydromt_delwaq.DelwaqModel.setup_config" title="hydromt_delwaq.DelwaqModel.setup_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_config</span></code></a>(data)</p></td>
+<td><p>Set the config dictionary at key(s) with values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_hydrology_forcing.html#hydromt_delwaq.DelwaqModel.setup_hydrology_forcing" title="hydromt_delwaq.DelwaqModel.setup_hydrology_forcing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_hydrology_forcing</span></code></a>(hydro_forcing_fn, ...)</p></td>
+<td><p>Prepare Delwaq hydrological fluxes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_monitoring.html#hydromt_delwaq.DelwaqModel.setup_monitoring" title="hydromt_delwaq.DelwaqModel.setup_monitoring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_monitoring</span></code></a>([mon_points, mon_areas])</p></td>
+<td><p>Prepare Delwaq monitoring points and areas options.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_sediment_forcing.html#hydromt_delwaq.DelwaqModel.setup_sediment_forcing" title="hydromt_delwaq.DelwaqModel.setup_sediment_forcing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_sediment_forcing</span></code></a>(sediment_fn, ...[, ...])</p></td>
+<td><p>Prepare Delwaq sediment fluxes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.setup_staticdata_from_rasterdataset.html#hydromt_delwaq.DelwaqModel.setup_staticdata_from_rasterdataset" title="hydromt_delwaq.DelwaqModel.setup_staticdata_from_rasterdataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_staticdata_from_rasterdataset</span></code></a>(raster_data)</p></td>
+<td><p>Add data variable(s) from <code class="docutils literal notranslate"><span class="pre">raster_data</span></code> to grid component.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_equal</span></code>(other)</p></td>
+<td><p>Test if two models are equal, based on their components.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.update.html#hydromt_delwaq.DelwaqModel.update" title="hydromt_delwaq.DelwaqModel.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(*[, model_out, write, steps, ...])</p></td>
+<td><p>Single method to update a model based the settings in <cite>steps</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write.html#hydromt_delwaq.DelwaqModel.write" title="hydromt_delwaq.DelwaqModel.write"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write</span></code></a>()</p></td>
+<td><p>Write the complete model schematization and configuration to file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_data_catalog</span></code>([root, data_lib_path, ...])</p></td>
+<td><p>Write the data catalog to data_lib_path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.write_waqgeom.html#hydromt_delwaq.DelwaqModel.write_waqgeom" title="hydromt_delwaq.DelwaqModel.write_waqgeom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_waqgeom</span></code></a>()</p></td>
+<td><p>Write Delwaq netCDF geometry file (config/B3_waqgeom.nc).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.basins.html#hydromt_delwaq.DelwaqModel.basins" title="hydromt_delwaq.DelwaqModel.basins"><code class="xref py py-obj docutils literal notranslate"><span class="pre">basins</span></code></a></p></td>
+<td><p>Derive basins from geoms or hydromaps.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">config</span></code></p></td>
+<td><p>Return the config component.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.crs.html#hydromt_delwaq.DelwaqModel.crs" title="hydromt_delwaq.DelwaqModel.crs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crs</span></code></a></p></td>
+<td><p>Returns coordinate reference system embedded in region.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.fluxes.html#hydromt_delwaq.DelwaqModel.fluxes" title="hydromt_delwaq.DelwaqModel.fluxes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fluxes</span></code></a></p></td>
+<td><p>Fast accessor to fluxes property of pointer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">forcing</span></code></p></td>
+<td><p>Return the forcing component.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">geoms</span></code></p></td>
+<td><p>Return the geoms component.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hydromaps</span></code></p></td>
+<td><p>Return the hydromaps component.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.nrofexch.html#hydromt_delwaq.DelwaqModel.nrofexch" title="hydromt_delwaq.DelwaqModel.nrofexch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nrofexch</span></code></a></p></td>
+<td><p>Fast accessor to nrofexch property of pointer.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.nrofseg.html#hydromt_delwaq.DelwaqModel.nrofseg" title="hydromt_delwaq.DelwaqModel.nrofseg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nrofseg</span></code></a></p></td>
+<td><p>Fast accessor to nrofseg property of pointer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointer</span></code></p></td>
+<td><p>Return the pointer component.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">region</span></code></p></td>
+<td><p>Return the model's region component.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">staticdata</span></code></p></td>
+<td><p>Return the staticdata component.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.surface_water.html#hydromt_delwaq.DelwaqModel.surface_water" title="hydromt_delwaq.DelwaqModel.surface_water"><code class="xref py py-obj docutils literal notranslate"><span class="pre">surface_water</span></code></a></p></td>
+<td><p>Fast accessor to surface_water name property of pointer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_catalog</span></code></p></td>
+<td><p>DataCatalog for data access</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hydromt_delwaq.DelwaqModel.root.html#hydromt_delwaq.DelwaqModel.root" title="hydromt_delwaq.DelwaqModel.root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root</span></code></a></p></td>
+<td><p>Model root</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../delwaq-model.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">DelwaqModel</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="hydromt_delwaq.DelwaqModel.setup_config.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">hydromt_delwaq.DelwaqModel.setup_config</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hydromt_delwaq.DelwaqModel"><code class="docutils literal notranslate"><span class="pre">DelwaqModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hydromt_delwaq.DelwaqModel.__init__"><code class="docutils literal notranslate"><span class="pre">DelwaqModel.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Deltares.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
