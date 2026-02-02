@@ -160,7 +160,8 @@ def emission_raster(
         # Calculate fraction per (vector) grid cell
         # Looping over each vector shape
         for i in range(len(gdf)):
-            print("calculating "+str(i)+" of "+str(len(gdf))+" ({:.2f}".format(i/len(gdf)*100)+"%)")
+            print("calculating "+str(i)+" of "+str(len(gdf))+
+                    " ({:.2f}".format(i/len(gdf)*100)+"%)")
             shape = gdf.iloc[i]
             gridded_shape = gdf_grid.intersection(shape.geometry)
             gridded_shape = gridded_shape.loc[~gridded_shape.is_empty]
@@ -186,7 +187,7 @@ def emission_raster(
             da_out = da_out * da_area * 0.000001 # km2
         
     else: #method is 'average', 'nearest' or 'mode'
-	    da_out = da.raster.reproject_like(ds_like, method=method)
+        da_out = da.raster.reproject_like(ds_like, method=method)
     if area_division:
         da_area = gridarea(da_out)
         da_out = da_out * da_area
