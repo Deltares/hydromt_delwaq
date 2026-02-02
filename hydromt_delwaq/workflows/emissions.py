@@ -79,6 +79,7 @@ def emission_raster(
     da,
     ds_like,
     method="average",
+    classnumber=0.0,
     fillna_method="nearest",
     fillna_value=0.0,
     area_division=False,
@@ -94,8 +95,10 @@ def emission_raster(
         DataArray containing emission map.
     ds_like : xarray.DataArray
         Dataset at model resolution.
-    method : str {'average', 'nearest', 'mode'}
+    method : str {'average', 'nearest', 'mode', 'classfraction', 'classarea'}
         Method for resampling.
+    classnumber : float
+        Class number used for resampling methods 'classfraction' or 'classarea'.
     fillna_method : str {'nearest', 'zero', 'value'}
         Method to fill NaN values.
     fillna_value : float
@@ -131,9 +134,59 @@ def emission_raster(
         da = da / da_area
 
     logger.info(f"Deriving {da.name} using {method} resampling (nodata={nodata}).")
-    # da = da.astype(np.float32)
 
-    da_out = da.raster.reproject_like(ds_like, method=method)
+    if method == "classfraction" or method == "classarea" :
+        da = da.astype('int32')
+        # return 1 for classnumber, 0 for all other classes
+        da_boolean = da.where(da.values == classnumber) / classnumber
+        gdf = da_boolean.raster.vectorize() #gis.DataArray.raster.vectorize
+        # remove classes (all other classes) assigned value zero
+        gdf = gdf[gdf.value.notnull()]
+        #gdf.to_file("output.gpkg", driver="GPKG")
+        # Using the vectors directly (long computation time but most accurate)
+        # Create vector grid (for calculating fraction and storage per grid cell)
+        logger.debug(
+            "Creating vector grid for calculating coverage fraction per grid cell"
+        )
+        gdf["geometry"] = gdf.geometry.buffer(0)  # fix potential geometry errors
+        msktn = ds_like["mask"]
+        idx_valid = np.where(msktn.values.flatten() != msktn.raster.nodata)[0]
+        gdf_grid = ds_like.raster.vector_grid().loc[idx_valid]
+        gdf_grid["coverfrac"] = np.zeros(len(idx_valid))
+        gdf_grid["area"] = gdf_grid.to_crs(
+            3857
+        ).area  # area calculation in projected crs
+
+        # Calculate fraction per (vector) grid cell
+        # Looping over each vector shape
+        for i in range(len(gdf)):
+            print("calculating "+str(i)+" of "+str(len(gdf))+" ({:.2f}".format(i/len(gdf)*100)+"%)")
+            shape = gdf.iloc[i]
+            gridded_shape = gdf_grid.intersection(shape.geometry)
+            gridded_shape = gridded_shape.loc[~gridded_shape.is_empty]
+            idxs = gridded_shape.index
+            if np.any(idxs):
+                # area calculation needs projected crs
+                sharea_cell = gridded_shape.to_crs(3857).area
+                gdf_grid.loc[idxs, "coverfrac"] += (
+                    sharea_cell / gdf_grid.loc[idxs, "area"]
+                )
+        # Create the rasterized coverage fraction map
+        da_out = ds_like.raster.rasterize(
+            gdf_grid,
+            col_name="coverfrac",
+            nodata=0,
+            all_touched=False,
+            dtype=None,
+            sindex=False,
+        )
+        if method == "classarea" :
+            # Create the rasterized coverage area map (coverage fraction * area in km2)
+            da_area = gridarea(da_out)
+            da_out = da_out * da_area * 0.000001 # km2
+        
+    else: #method is 'average', 'nearest' or 'mode'
+	    da_out = da.raster.reproject_like(ds_like, method=method)
     if area_division:
         da_area = gridarea(da_out)
         da_out = da_out * da_area

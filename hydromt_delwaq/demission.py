@@ -357,6 +357,7 @@ class DemissionModel(Model):
         self,
         emission_fn: str | Path | xr.DataArray,
         scale_method: str = "average",
+        classnumber=0.0,
         fillna_method: str = "zero",
         fillna_value: int = 0.0,
         area_division: bool = False,
@@ -373,6 +374,8 @@ class DemissionModel(Model):
             Name of raster emission map source.
         scale_method : str {'nearest', 'average', 'mode'}
             Method for resampling
+        classnumber : float
+            Class number used for resampling methods 'classfraction' or 'classarea'.
         fillna_method : str {'nearest', 'zero', 'value'}
             Method to fill NaN values. Either nearest neighbour, zeros or user defined
             value.
@@ -391,6 +394,7 @@ class DemissionModel(Model):
             da=da,
             ds_like=self.staticdata.data,
             method=scale_method,
+            classnumber=classnumber,
             fillna_method=fillna_method,
             fillna_value=fillna_value,
             area_division=area_division,
