@@ -144,16 +144,25 @@ def emission_raster(
         da = da.astype("int32")
         # return 1 for classnumber, NULL for all other classes
         da_boolean = da.where(da.values == classnumber, 0) / classnumber
-        # convert to area
-        da_area = da_boolean * gridarea(da)
-        # Reproject using sum
-        da_out = da_area.raster.reproject_like(ds_like, method="sum")
-        if method == "classfraction":
-            # convert to fraction using area at model resolution
-            da_area_model = gridarea(ds_like)
-            da_out = da_out / da_area_model
-            # Max at 1 (avoid rounding errors)
-            da_out = da_out.where(da_out.values <= 1.0, 1.0)
+        # High resolution raster
+        if da.raster.res[0] < ds_like.raster.res[0]:
+            # convert to area
+            da_area = da_boolean * gridarea(da)
+            # Reproject using sum
+            da_out = da_area.raster.reproject_like(ds_like, method="sum")
+            if method == "classfraction":
+                # convert to fraction using area at model resolution
+                da_area_model = gridarea(ds_like)
+                da_out = da_out / da_area_model
+                # Max at 1 (avoid rounding errors)
+                da_out = da_out.where(da_out.values <= 1.0, 1.0)
+        else:
+            # Reproject using average
+            da_out = da_boolean.raster.reproject_like(ds_like, method="average")
+            if method == "classarea":
+                # convert to area using area at model resolution
+                da_area_model = gridarea(ds_like)
+                da_out = da_out * da_area_model
         # Change dtype now to float32
         da_out = da_out.astype("float32")
 
