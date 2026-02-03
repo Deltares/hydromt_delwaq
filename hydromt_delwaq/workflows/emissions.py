@@ -76,13 +76,13 @@ def gridlength_gridwidth(ds):
 
 
 def emission_raster(
-    da,
-    ds_like,
-    method="average",
-    classnumber=0.0,
-    fillna_method="nearest",
-    fillna_value=0.0,
-    area_division=False,
+    da: xr.DataArray,
+    ds_like: xr.Dataset,
+    method: str = "average",
+    fillna_method: str = "nearest",
+    classnumber: int | float = 0.0,
+    fillna_value: int | float = 0.0,
+    area_division: bool = False,
 ):
     """Return emission map.
 
@@ -97,11 +97,11 @@ def emission_raster(
         Dataset at model resolution.
     method : str {'average', 'nearest', 'mode', 'classfraction', 'classarea'}
         Method for resampling.
-    classnumber : float
+    classnumber : int | float
         Class number used for resampling methods 'classfraction' or 'classarea'.
     fillna_method : str {'nearest', 'zero', 'value'}
         Method to fill NaN values.
-    fillna_value : float
+    fillna_value : int | float
         If fillna_method is set to 'value', NaNs in the emission maps will be replaced
         by this value.
     area_division : boolean
@@ -131,6 +131,8 @@ def emission_raster(
 
     if method == "classfraction" or method == "classarea":
         area_division = False
+        # Final nodata for classfraction and classarea is -9999
+        nodata = -9999.0
 
     if area_division:
         da_area = gridarea(da)
@@ -141,29 +143,28 @@ def emission_raster(
     if method == "classfraction" or method == "classarea":
         da = da.astype("int32")
         # return 1 for classnumber, NULL for all other classes
-        da_boolean = da.where(da.values == classnumber) / classnumber
-        gdf = da_boolean.raster.vectorize()  # gis.DataArray.raster.vectorize
-        # remove classes (all other classes) assigned value null
-        gdf = gdf[gdf.value.notnull()]
-        # gdf.to_file("output.gpkg", driver="GPKG")
-
+        da_boolean = da.where(da.values == classnumber, 0) / classnumber
+        # convert to area
+        da_area = da_boolean * gridarea(da)
+        # Reproject using sum
+        da_out = da_area.raster.reproject_like(ds_like, method="sum")
         if method == "classfraction":
-            # Creating rasterized coverage fraction map (fraction per grid cell)
-            rasterize_method = "fraction"
-        elif method == "classarea":
-            # Create the rasterized coverage area map
-            # (coverage fraction * area in m2 per gridcell)
-            rasterize_method = "area"
-        col2raster = "value"
-        da_out = emission_vector(
-            gdf=gdf,
-            ds_like=ds_like,
-            col_name=col2raster,
-            method=rasterize_method,
-            mask_name="mask",
-        )
-    else:  # method is 'average', 'nearest' or 'mode'
+            # convert to fraction using area at model resolution
+            da_area_model = gridarea(ds_like)
+            da_out = da_out / da_area_model
+            # Max at 1 (avoid rounding errors)
+            da_out = da_out.where(da_out.values <= 1.0, 1.0)
+        # Change dtype now to float32
+        da_out = da_out.astype("float32")
+
+    # method is 'average', 'nearest' or 'mode'
+    elif method in ["average", "nearest", "mode"]:
         da_out = da.raster.reproject_like(ds_like, method=method)
+    else:
+        raise ValueError(
+            f"Resampling method {method} not recognized. "
+            "Choose from 'average', 'nearest', 'mode', 'classfraction', 'classarea'."
+        )
 
     if area_division:
         da_area = gridarea(da_out)
