@@ -128,10 +128,10 @@ def emission_raster(
         else:
             nodata = -999.0
         da.raster.set_nodata(nodata)
-        
+
     if method == "classfraction" or method == "classarea":
         area_division = False
-        
+
     if area_division:
         da_area = gridarea(da)
         da = da / da_area
@@ -139,19 +139,20 @@ def emission_raster(
     logger.info(f"Deriving {da.name} using {method} resampling (nodata={nodata}).")
 
     if method == "classfraction" or method == "classarea":
-        da = da.astype('int32')
+        da = da.astype("int32")
         # return 1 for classnumber, NULL for all other classes
         da_boolean = da.where(da.values == classnumber) / classnumber
-        gdf = da_boolean.raster.vectorize() #gis.DataArray.raster.vectorize
+        gdf = da_boolean.raster.vectorize()  # gis.DataArray.raster.vectorize
         # remove classes (all other classes) assigned value null
         gdf = gdf[gdf.value.notnull()]
-        #gdf.to_file("output.gpkg", driver="GPKG")
-        
+        # gdf.to_file("output.gpkg", driver="GPKG")
+
         if method == "classfraction":
             # Creating rasterized coverage fraction map (fraction per grid cell)
             rasterize_method = "fraction"
         elif method == "classarea":
-            # Create the rasterized coverage area map (coverage fraction * area in m2 per gridcell)
+            # Create the rasterized coverage area map
+            # (coverage fraction * area in m2 per gridcell)
             rasterize_method = "area"
         col2raster = "value"
         da_out = emission_vector(
@@ -161,9 +162,9 @@ def emission_raster(
             method=rasterize_method,
             mask_name="mask",
         )
-    else: #method is 'average', 'nearest' or 'mode'
+    else:  # method is 'average', 'nearest' or 'mode'
         da_out = da.raster.reproject_like(ds_like, method=method)
-    
+
     if area_division:
         da_area = gridarea(da_out)
         da_out = da_out * da_area
