@@ -357,9 +357,11 @@ class DemissionModel(Model):
         self,
         emission_fn: str | Path | xr.DataArray,
         scale_method: str = "average",
+        classnumber: int | float = 0.0,
         fillna_method: str = "zero",
-        fillna_value: int = 0.0,
+        fillna_value: int | float = 0.0,
         area_division: bool = False,
+        output_name: str | None = None,
     ):
         """Prepare one or several emission map from raster data.
 
@@ -371,16 +373,21 @@ class DemissionModel(Model):
         ----------
         emission_fn : {'GHS-POP_2015'...}
             Name of raster emission map source.
-        scale_method : str {'nearest', 'average', 'mode'}
-            Method for resampling
+        scale_method : str {'nearest', 'average', 'mode', 'classfraction', 'classarea'}
+            Method for resampling. Either nearest neighbour, average, mode, or class
+            fraction/area [m2] for categorical data.
+        classnumber : int | float
+            Class number used for resampling methods 'classfraction' or 'classarea'.
         fillna_method : str {'nearest', 'zero', 'value'}
             Method to fill NaN values. Either nearest neighbour, zeros or user defined
             value.
-        fillna_value : float
+        fillna_value : int | float
             If fillna_method is set to 'value', NaNs in the emission maps will be
             replaced by this value.
         area_division : boolean
             If needed do the resampling in cap/m2 (True) instead of cap (False)
+        output_name : str, optional
+            Name of the output variable. If None, use emission_fn name.
         """
         logger.info(f"Preparing '{emission_fn}' map.")
         # process raster emission maps
@@ -391,11 +398,12 @@ class DemissionModel(Model):
             da=da,
             ds_like=self.staticdata.data,
             method=scale_method,
+            classnumber=classnumber,
             fillna_method=fillna_method,
             fillna_value=fillna_value,
             area_division=area_division,
         )
-        ds_emi = ds_emi.to_dataset(name=emission_fn)
+        ds_emi = ds_emi.to_dataset(name=output_name or emission_fn)
         self.staticdata.set(ds_emi)
 
     @hydromt_step
@@ -404,6 +412,7 @@ class DemissionModel(Model):
         emission_fn: str | xr.DataArray,
         col2raster: str = "",
         rasterize_method: str = "value",
+        output_name: str | None = None,
     ):
         """Prepare emission map from vector data.
 
@@ -423,7 +432,10 @@ class DemissionModel(Model):
             If "value", the value from the col2raster is used directly in the raster.
             If "fraction", the fraction of the grid cell covered by the vector file is
             returned.
-            If "area", the area of the grid cell covered by the vector file is returned.
+            If "area", the area of the grid cell covered by the vector file is returned
+            [m2].
+        output_name : str, optional
+            Name of the output variable. If None, use emission_fn name.
         """
         logger.info(f"Preparing '{emission_fn}' map.")
         gdf_org = self.data_catalog.get_geodataframe(
@@ -445,7 +457,7 @@ class DemissionModel(Model):
                 method=rasterize_method,
                 mask_name="mask",
             )
-        ds_emi = ds_emi.to_dataset(name=emission_fn)
+        ds_emi = ds_emi.to_dataset(name=output_name or emission_fn)
         self.staticdata.set(ds_emi)
 
     @hydromt_step

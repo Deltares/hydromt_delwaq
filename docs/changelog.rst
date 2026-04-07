@@ -22,6 +22,8 @@ Added
 - ``DEmissionGeometryComponent`` to handle geometry properties of the demission model.
 - ``DelwaqForcingComponent`` and ``DEmissionForcingComponent`` to handle hydrological, sediment and climate forcing data.
 - Readers for ``pointer``, ``forcing`` (netcdf copy) and ``geometry`` components.
+- New methods ``classarea`` and ``classfraction`` for emission raster resampling in ``setup_emission_raster``.
+- Flexible output variable name in ``setup_emission_vector`` and ``setup_emission_mapping``.
 
 Changed
 -------
