@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this page.
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
-v0.4.0 (19 January 2026)
+v0.4.0 (15 April 2026)
 ========================
 Update for HydroMT v1.3.0 and HydroMT-Wflow v1.0.0 compatibility. The main change is that
 the ``DelwaqModel`` and ``DEmissionModel`` are now separated and have a component structure.
