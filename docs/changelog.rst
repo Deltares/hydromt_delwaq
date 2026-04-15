@@ -6,6 +6,18 @@ All notable changes to this project will be documented in this page.
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
+Unreleased
+==========
+
+Added
+-----
+
+Changed
+-------
+
+Fixed
+-----
+
 v0.4.0 (15 April 2026)
 ========================
 Update for HydroMT v1.3.0 and HydroMT-Wflow v1.0.0 compatibility. The main change is that
