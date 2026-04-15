@@ -6,6 +6,8 @@ import hydromt
 import numpy as np
 import xarray as xr
 
+from hydromt_delwaq.workflows.emissions import gridarea
+
 TESTDATADIR = join(dirname(abspath(__file__)), "data")
 
 
@@ -93,3 +95,33 @@ def test_setup_roads(example_demission_model):
     assert len(np.unique(ds["hwy_length_sum_country"].values)) == 2
     assert np.isclose(ds["hwy_length_sum_country"].values.max(), 1247.7513, atol=1e-4)
     assert np.isclose(ds["hwy_length"].values.max(), 7.6356, atol=1e-4)
+
+
+def test_setup_emission_raster(example_demission_model):
+    # Initialize model and read results
+    mod = example_demission_model
+
+    # Tests on setup_emission_raster with classfraction
+    mod.setup_emission_raster(
+        emission_fn="vito_2015",
+        scale_method="classfraction",
+        classnumber=40,  # agriculture
+    )
+    assert "vito_2015" in mod.staticdata.data
+    da = mod.staticdata.data["vito_2015"]
+    assert da.values.max() <= 1.0
+    assert np.isclose(da.values.mean(), 0.1458, atol=1e-4)
+    assert da.raster.nodata == -9999.0
+    assert da.dtype == "float32"
+
+    # Tests on setup_emission_raster with classarea
+    mod.setup_emission_raster(
+        emission_fn="vito_2015",
+        scale_method="classarea",
+        classnumber=40,
+        output_name="agriculture_area",
+    )
+    assert "agriculture_area" in mod.staticdata.data
+    da = mod.staticdata.data["agriculture_area"]
+    assert np.isclose(da.values.mean(), 348199.78, atol=1e-4)
+    assert da.values.max() <= gridarea(mod.staticdata.data).values.max()
