@@ -56,7 +56,7 @@
     <link rel="prev" title="Update monitoring locations" href="update_model_monitoring.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.3.2.dev0" />
+  <meta name="docsearch:version" content="0.4.0.dev0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -479,12 +479,12 @@
 <h2>Hydrological forcing data from Wflow<a class="headerlink" href="#Hydrological-forcing-data-from-Wflow" title="Link to this heading">#</a></h2>
 <p>D-Emissions or D-Water Quality models can use meteo/hydrological input data from <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/">Wflow</a>. The steps to get these data available for your model are:</p>
 <ul class="simple">
-<li><p>List the required meteo/hydro fluxes in the <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/structure/#Config-and-TOML">Wflow TOML configuration file</a> in order to save them.</p></li>
+<li><p>List the required meteo/hydro fluxes in the <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/user_guide/required_files.html#the-configuration-file-settings.toml">Wflow TOML configuration file</a> in order to save them.</p></li>
 <li><p>Run the Wflow model.</p></li>
 <li><p>Add the outputs of the Wflow model as a new data source for HydroMT.</p></li>
-<li><p>Run HydroMT (specifically the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_hydrology_forcing.html">setup_hydrology_forcing component</a>) to convert the wflow output to DELWAQ dynamic input.</p></li>
+<li><p>Run HydroMT (specifically the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/api/_generated/hydromt_delwaq.DelwaqModel.setup_hydrology_forcing.html">setup_hydrology_forcing component</a>) to convert the wflow output to DELWAQ dynamic input.</p></li>
 </ul>
-<p>More information on the meteo/hydrological forcing link between Wflow and DELWAQ is available in <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/advanced/coupling_wflow.html#hydrological-forcing-from-wflow">docs (Wflow_outputs)</a>.</p>
+<p>More information on the meteo/hydrological forcing link between Wflow and DELWAQ is available in <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/coupling_wflow.html#hydrological-forcing-from-wflow">docs (Wflow_outputs)</a>.</p>
 <section id="Selection-of-the-Wfow-outputs">
 <h3>Selection of the Wfow outputs<a class="headerlink" href="#Selection-of-the-Wfow-outputs" title="Link to this heading">#</a></h3>
 <p>For our D-Emissions model, we will use hydrological data from the <strong>wflow_piave</strong> hydrologic model. For a D-Emissions model, the required meteo/hydrological inputs are:</p>
@@ -501,7 +501,7 @@
 <li><p><strong>overland flow</strong></p></li>
 <li><p><strong>subsurface flow</strong></p></li>
 </ul>
-<p>In order to get these data from Wflow, you need to save these fluxes after the model run. These output fluxes are specified in the <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/structure/#Config-and-TOML">Wflow TOML configuration file</a>.</p>
+<p>In order to get these data from Wflow, you need to save these fluxes after the model run. These output fluxes are specified in the <a class="reference external" href="https://deltares.github.io/Wflow.jl/stable/user_guide/required_files.html#the-configuration-file-settings.toml">Wflow TOML configuration file</a>.</p>
 <p>To set these options, you can either edit the TOML file manually or use HydroMT to help you do the trick using the <code class="docutils literal notranslate"><span class="pre">hydromt</span> <span class="pre">update</span></code> CLI API!</p>
 <p>Here is the HydroMT <strong>configuration file</strong> needed to update the <strong>Wflow</strong> model (note in that file both fluxes for demission and for delwaq models are listed):</p>
 <div class="nbinput docutils container">
@@ -564,19 +564,19 @@ steps:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2026-04-15 01:54:25,703 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-15 01:54:25,728 - hydromt.model.model - model - INFO - Initializing wflow_sbm model from hydromt_wflow (v1.0.2).
-2026-04-15 01:54:25,728 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
-2026-04-15 01:54:25,753 - hydromt.hydromt_wflow.wflow_base - wflow_base - INFO - Supported Wflow.jl version v1+
-2026-04-15 01:54:25,753 - hydromt.hydromt_wflow.components.config - config - INFO - Reading model config file from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml.
-2026-04-15 01:54:25,754 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-15 01:54:25,754 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-15 01:54:25,989 - hydromt.model.model - model - INFO - update: setup_config
-2026-04-15 01:54:25,989 - hydromt.model.model - model - INFO - setup_config.data={&#39;time.starttime&#39;: &#39;2010-02-02T00:00:00&#39;, &#39;time.endtime&#39;: &#39;2010-02-10T00:00:00&#39;, &#39;time.timestepsecs&#39;: 86400, &#39;output.netcdf_grid.variables.atmosphere_water__precipitation_volume_flux&#39;: &#39;precip&#39;, &#39;output.netcdf_grid.variables.land_surface__evapotranspiration_volume_flux&#39;: &#39;infilt&#39;, &#39;output.netcdf_grid.variables.compacted_soil_surface_water__excess_volume_flux&#39;: &#39;runUnp&#39;, &#39;output.netcdf_grid.variables.non_compacted_soil_surface_water__excess_volume_flux&#39;: &#39;runPav&#39;, &#39;output.netcdf_grid.variables.soil_surface_water_unsaturated_zone__exfiltration_volume_flux&#39;: &#39;exfiltustore&#39;, &#39;output.netcdf_grid.variables.soil_surface_water_saturated_zone__exfiltration_volume_flux&#39;: &#39;exfiltsatstore&#39;, &#39;output.netcdf_grid.variables.soil_water_root_zone__volume_percentage&#39;: &#39;vwcproot&#39;, &#39;output.netcdf_grid.variables.river_water__volume_flow_rate&#39;: &#39;q_river&#39;, &#39;output.netcdf_grid.variables.river_water__volume&#39;: &#39;vol_river&#39;, &#39;output.netcdf_grid.variables.land_surface_water__volume_flow_rate&#39;: &#39;q_land&#39;, &#39;output.netcdf_grid.variables.land_surface_water__to_river_volume_flow_rate&#39;: &#39;land_to_river&#39;, &#39;output.netcdf_grid.variables.subsurface_water__volume_flow_rate&#39;: &#39;q_ssf&#39;, &#39;output.netcdf_grid.variables.subsurface_water__to_river_volume_flow_rate&#39;: &#39;ssf_to_river&#39;, &#39;output.netcdf_grid.variables.reservoir_water__volume&#39;: &#39;vol_reservoir&#39;, &#39;output.netcdf_grid.variables.reservoir_water__outgoing_volume_flow_rate&#39;: &#39;q_reservoir&#39;}
-2026-04-15 01:54:25,989 - hydromt.model.model - model - INFO - update: config.write
-2026-04-15 01:54:25,989 - hydromt.model.model - model - INFO - config.write.filename=None
-2026-04-15 01:54:25,989 - hydromt.model.model - model - INFO - config.write.config_root=None
-2026-04-15 01:54:25,989 - hydromt.hydromt_wflow.components.config - config - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml.
+2026-04-15 06:19:38,403 - hydromt - log - INFO - HydroMT version: 1.3.1
+2026-04-15 06:19:38,431 - hydromt.model.model - model - INFO - Initializing wflow_sbm model from hydromt_wflow (v1.0.2).
+2026-04-15 06:19:38,431 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
+2026-04-15 06:19:38,462 - hydromt.hydromt_wflow.wflow_base - wflow_base - INFO - Supported Wflow.jl version v1+
+2026-04-15 06:19:38,462 - hydromt.hydromt_wflow.components.config - config - INFO - Reading model config file from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml.
+2026-04-15 06:19:38,463 - hydromt - log - INFO - HydroMT version: 1.3.1
+2026-04-15 06:19:38,463 - hydromt - log - INFO - HydroMT version: 1.3.1
+2026-04-15 06:19:38,717 - hydromt.model.model - model - INFO - update: setup_config
+2026-04-15 06:19:38,717 - hydromt.model.model - model - INFO - setup_config.data={&#39;time.starttime&#39;: &#39;2010-02-02T00:00:00&#39;, &#39;time.endtime&#39;: &#39;2010-02-10T00:00:00&#39;, &#39;time.timestepsecs&#39;: 86400, &#39;output.netcdf_grid.variables.atmosphere_water__precipitation_volume_flux&#39;: &#39;precip&#39;, &#39;output.netcdf_grid.variables.land_surface__evapotranspiration_volume_flux&#39;: &#39;infilt&#39;, &#39;output.netcdf_grid.variables.compacted_soil_surface_water__excess_volume_flux&#39;: &#39;runUnp&#39;, &#39;output.netcdf_grid.variables.non_compacted_soil_surface_water__excess_volume_flux&#39;: &#39;runPav&#39;, &#39;output.netcdf_grid.variables.soil_surface_water_unsaturated_zone__exfiltration_volume_flux&#39;: &#39;exfiltustore&#39;, &#39;output.netcdf_grid.variables.soil_surface_water_saturated_zone__exfiltration_volume_flux&#39;: &#39;exfiltsatstore&#39;, &#39;output.netcdf_grid.variables.soil_water_root_zone__volume_percentage&#39;: &#39;vwcproot&#39;, &#39;output.netcdf_grid.variables.river_water__volume_flow_rate&#39;: &#39;q_river&#39;, &#39;output.netcdf_grid.variables.river_water__volume&#39;: &#39;vol_river&#39;, &#39;output.netcdf_grid.variables.land_surface_water__volume_flow_rate&#39;: &#39;q_land&#39;, &#39;output.netcdf_grid.variables.land_surface_water__to_river_volume_flow_rate&#39;: &#39;land_to_river&#39;, &#39;output.netcdf_grid.variables.subsurface_water__volume_flow_rate&#39;: &#39;q_ssf&#39;, &#39;output.netcdf_grid.variables.subsurface_water__to_river_volume_flow_rate&#39;: &#39;ssf_to_river&#39;, &#39;output.netcdf_grid.variables.reservoir_water__volume&#39;: &#39;vol_reservoir&#39;, &#39;output.netcdf_grid.variables.reservoir_water__outgoing_volume_flow_rate&#39;: &#39;q_reservoir&#39;}
+2026-04-15 06:19:38,718 - hydromt.model.model - model - INFO - update: config.write
+2026-04-15 06:19:38,718 - hydromt.model.model - model - INFO - config.write.filename=None
+2026-04-15 06:19:38,718 - hydromt.model.model - model - INFO - config.write.config_root=None
+2026-04-15 06:19:38,718 - hydromt.hydromt_wflow.components.config - config - INFO - Writing model config to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml.
 </pre></div></div>
 </div>
 <p>The example above means the following: run <strong>hydromt</strong> with:</p>
@@ -754,7 +754,7 @@ wflow_output_wq:
 <h2>Model setup configuration<a class="headerlink" href="#Model-setup-configuration" title="Link to this heading">#</a></h2>
 <p>As with building, you can prepare a HydroMT <strong>configuration file</strong> that includes every components and settings that you want to run during your update.</p>
 <p>The configuratio file (yml) contains the model setup configuration and determines which components are updated and in which sequence and sets optional arguments for each component. This configuration is passed to hydromt using <code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path_to_configuration_file&gt;</span></code>.</p>
-<p>Each header as shown between <code class="docutils literal notranslate"><span class="pre">[...]</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">[setup_hydrology_forcing]</span></code>) corresponds with a model component which are explained in the <a class="reference external" href="https://deltares.github.io/hydromt_wflow/latest/user_guide/wflow/components.html">docs(model_components)</a>.</p>
+<p>Each header as shown between <code class="docutils literal notranslate"><span class="pre">[...]</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">[setup_hydrology_forcing]</span></code>) corresponds with a model component which are explained in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/EM_model.html">docs(model_components)</a>.</p>
 <p>Let’s open the example configuration file <strong>delwaq_update_EM_forcing.yml</strong> from the model repository [examples folder] and have a look at the settings.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -789,8 +789,6 @@ steps:
 </pre></div></div>
 </div>
 <p>Here we can see that we will run <strong>setup_hydrology_forcing</strong> component to prepare daily hydrological forcing for 8 days in February 2010 using our <strong>wflow_output</strong>.</p>
-<p>Note that the <strong>add_volume_offset</strong> function is set to <em>True</em>. This is because Delwaq needs water volumes at the beginning of the timestep. In some models, like wflow, volumes are written at the end of the timestep and therefore an offset of one timestep needs to be added for consistency.</p>
-<p>You can find more information on the different components and their options in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/user_guide/components.html">docs (model_components)</a>.</p>
 </section>
 <section id="HydroMT-CLI-update-interface">
 <h2>HydroMT CLI update interface<a class="headerlink" href="#HydroMT-CLI-update-interface" title="Link to this heading">#</a></h2>
@@ -855,28 +853,28 @@ Options:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2026-04-15 01:54:32,671 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-15 01:54:32,694 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from local_sources.yml
-2026-04-15 01:54:32,711 - hydromt.model.model - model - INFO - Initializing demission model from hydromt_delwaq (v0.3.2.dev0).
-2026-04-15 01:54:32,711 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-15 01:54:32,711 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-15 01:54:32,734 - hydromt.model.model - model - INFO - update: setup_hydrology_forcing
-2026-04-15 01:54:32,734 - hydromt.model.model - model - INFO - setup_hydrology_forcing.include_transport=True
-2026-04-15 01:54:32,734 - hydromt.model.model - model - INFO - setup_hydrology_forcing.hydro_forcing_fn=wflow_output_em
-2026-04-15 01:54:32,734 - hydromt.model.model - model - INFO - setup_hydrology_forcing.starttime=2010-02-04 00:00:00
-2026-04-15 01:54:32,734 - hydromt.model.model - model - INFO - setup_hydrology_forcing.endtime=2010-02-10 00:00:00
-2026-04-15 01:54:32,735 - hydromt.model.model - model - INFO - setup_hydrology_forcing.timestepsecs=86400
-2026-04-15 01:54:32,737 - hydromt.data_catalog.sources.data_source - data_source - INFO - Reading wflow_output_em RasterDataset data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
-2026-04-15 01:54:32,926 - hydromt.gis.raster - raster - WARNING - No numerical nodata value found, skipping set_nodata
-2026-04-15 01:54:32,932 - hydromt.hydromt_delwaq.components.forcing - forcing - INFO - NetCDF copy of the forcing file dynamicdata/dynamicdata.nc not found in model root, skip reading.
-2026-04-15 01:54:32,934 - hydromt.model.components.config - config - WARNING - No default model config was found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test/emission.inp. It wil be initialized as empty dictionary
-2026-04-15 01:54:32,934 - hydromt.model.model - model - INFO - update: config.write
-2026-04-15 01:54:32,934 - hydromt.hydromt_delwaq.components.config - config - INFO - Writing model config to file.
-2026-04-15 01:54:32,936 - hydromt.model.model - model - INFO - update: forcing.write
-2026-04-15 01:54:32,936 - hydromt.model.model - model - INFO - forcing.write.filename=dynamicdata/{name}.dat
-2026-04-15 01:54:32,936 - hydromt.model.model - model - INFO - forcing.write.write_nc=False
-Writing dynamic data: 100%|███████████████████████| 7/7 [00:00&lt;00:00, 29.46it/s]
-2026-04-15 01:54:33,189 - hydromt.model.model - model - INFO - update: write_waqgeom
+2026-04-15 06:19:45,242 - hydromt - log - INFO - HydroMT version: 1.3.1
+2026-04-15 06:19:45,270 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from local_sources.yml
+2026-04-15 06:19:45,290 - hydromt.model.model - model - INFO - Initializing demission model from hydromt_delwaq (v0.4.0.dev0).
+2026-04-15 06:19:45,290 - hydromt - log - INFO - HydroMT version: 1.3.1
+2026-04-15 06:19:45,291 - hydromt - log - INFO - HydroMT version: 1.3.1
+2026-04-15 06:19:45,317 - hydromt.model.model - model - INFO - update: setup_hydrology_forcing
+2026-04-15 06:19:45,317 - hydromt.model.model - model - INFO - setup_hydrology_forcing.include_transport=True
+2026-04-15 06:19:45,317 - hydromt.model.model - model - INFO - setup_hydrology_forcing.hydro_forcing_fn=wflow_output_em
+2026-04-15 06:19:45,317 - hydromt.model.model - model - INFO - setup_hydrology_forcing.starttime=2010-02-04 00:00:00
+2026-04-15 06:19:45,317 - hydromt.model.model - model - INFO - setup_hydrology_forcing.endtime=2010-02-10 00:00:00
+2026-04-15 06:19:45,317 - hydromt.model.model - model - INFO - setup_hydrology_forcing.timestepsecs=86400
+2026-04-15 06:19:45,320 - hydromt.data_catalog.sources.data_source - data_source - INFO - Reading wflow_output_em RasterDataset data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
+2026-04-15 06:19:45,528 - hydromt.gis.raster - raster - WARNING - No numerical nodata value found, skipping set_nodata
+2026-04-15 06:19:45,536 - hydromt.hydromt_delwaq.components.forcing - forcing - INFO - NetCDF copy of the forcing file dynamicdata/dynamicdata.nc not found in model root, skip reading.
+2026-04-15 06:19:45,538 - hydromt.model.components.config - config - WARNING - No default model config was found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_test/emission.inp. It wil be initialized as empty dictionary
+2026-04-15 06:19:45,538 - hydromt.model.model - model - INFO - update: config.write
+2026-04-15 06:19:45,539 - hydromt.hydromt_delwaq.components.config - config - INFO - Writing model config to file.
+2026-04-15 06:19:45,540 - hydromt.model.model - model - INFO - update: forcing.write
+2026-04-15 06:19:45,540 - hydromt.model.model - model - INFO - forcing.write.filename=dynamicdata/{name}.dat
+2026-04-15 06:19:45,540 - hydromt.model.model - model - INFO - forcing.write.write_nc=False
+Writing dynamic data: 100%|███████████████████████| 7/7 [00:00&lt;00:00, 26.70it/s]
+2026-04-15 06:19:45,819 - hydromt.model.model - model - INFO - update: write_waqgeom
 </pre></div></div>
 </div>
 <p>The example above means the following: run <strong>hydromt</strong> with:</p>

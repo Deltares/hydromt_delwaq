@@ -56,7 +56,7 @@
     <link rel="prev" title="Add (global) emission data" href="adding_global_emission.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.3.2.dev0" />
+  <meta name="docsearch:version" content="0.4.0.dev0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -800,7 +800,7 @@ EF_local:
 <section id="Preparing-the-configuration-file">
 <h2>Preparing the configuration file<a class="headerlink" href="#Preparing-the-configuration-file" title="Link to this heading">#</a></h2>
 <p>As our new <strong>EF_local</strong> data is a <strong>vector</strong> data, we will add it to our model using the <code class="docutils literal notranslate"><span class="pre">[setup_emission_vector]</span></code> component of HydroMT Delwaq.</p>
-<p>Let’s prepare a <strong>HydroMT configuration file</strong> with our options for preparing the EF_local grid. All available options are available in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/generated/hydromt_delwaq.delwaq.DelwaqModel.setup_emission_vector.html">docs(setup_emission_vector)</a>.</p>
+<p>Let’s prepare a <strong>HydroMT configuration file</strong> with our options for preparing the EF_local grid. All available options are available in the <a class="reference external" href="https://deltares.github.io/hydromt_delwaq/latest/api/_generated/hydromt_delwaq.DemissionModel.setup_emission_vector.html">docs(setup_emission_vector)</a>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -846,35 +846,35 @@ Writing delwaq_update_emission_local.yml
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2026-04-15 01:53:44,663 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-15 01:53:44,685 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from local_emission_sources.yml
-2026-04-15 01:53:44,700 - hydromt.model.model - model - INFO - Initializing demission model from hydromt_delwaq (v0.3.2.dev0).
-2026-04-15 01:53:44,700 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-15 01:53:44,700 - hydromt.model.components.config - config - WARNING - No default model config was found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/emission.inp. It wil be initialized as empty dictionary
-2026-04-15 01:53:44,845 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: river
-2026-04-15 01:53:44,846 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: slope
-2026-04-15 01:53:44,847 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: streamorder
-2026-04-15 01:53:44,848 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: soil_thickness
-2026-04-15 01:53:44,849 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: porosity
-2026-04-15 01:53:44,849 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: ptiddown
-2026-04-15 01:53:44,850 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: monareas
-2026-04-15 01:53:44,851 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: ghs_pop_2015
-2026-04-15 01:53:44,852 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: gdp_world
-2026-04-15 01:53:44,852 - hydromt.hydromt_delwaq.components.geometry - geometry - INFO - Reading geometry data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/config/B7_geometry.inc.
-2026-04-15 01:53:44,863 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-15 01:53:44,865 - hydromt.model.model - model - INFO - update: setup_emission_vector
-2026-04-15 01:53:44,865 - hydromt.model.model - model - INFO - setup_emission_vector.col2raster=EF
-2026-04-15 01:53:44,865 - hydromt.model.model - model - INFO - setup_emission_vector.rasterize_method=value
-2026-04-15 01:53:44,865 - hydromt.model.model - model - INFO - setup_emission_vector.output_name=None
-2026-04-15 01:53:44,865 - hydromt.model.model - model - INFO - setup_emission_vector.emission_fn=EF_local
-2026-04-15 01:53:44,866 - hydromt.data_catalog.sources.data_source - data_source - INFO - Reading EF_local GeoDataFrame data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/emission_factor.gpkg
-2026-04-15 01:53:44,993 - hydromt.hydromt_delwaq.components.staticdata - staticdata - INFO - Writing staticdata files.
-2026-04-15 01:53:45,011 - hydromt.model.components.geoms - geoms - INFO - demission.geoms: Writing geoms to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended_local/geoms/monareas.geojson.
-2026-04-15 01:53:45,016 - hydromt.model.components.geoms - geoms - INFO - demission.geoms: Writing geoms to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended_local/geoms/basins.geojson.
-2026-04-15 01:53:45,018 - hydromt.hydromt_delwaq.components.config - config - INFO - Writing model config to file.
-2026-04-15 01:53:45,019 - hydromt.hydromt_delwaq.components.hydromaps - hydromaps - INFO - Writing hydromap files.
-2026-04-15 01:53:45,139 - hydromt.hydromt_delwaq.components.geometry - geometry - INFO - Writing geometry file in root/config
-Writing dynamic data: 100%|██████████████████████| 8/8 [00:00&lt;00:00, 381.30it/s]
+2026-04-15 06:18:57,351 - hydromt - log - INFO - HydroMT version: 1.3.1
+2026-04-15 06:18:57,377 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from local_emission_sources.yml
+2026-04-15 06:18:57,394 - hydromt.model.model - model - INFO - Initializing demission model from hydromt_delwaq (v0.4.0.dev0).
+2026-04-15 06:18:57,394 - hydromt - log - INFO - HydroMT version: 1.3.1
+2026-04-15 06:18:57,394 - hydromt.model.components.config - config - WARNING - No default model config was found at /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/emission.inp. It wil be initialized as empty dictionary
+2026-04-15 06:18:57,549 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: river
+2026-04-15 06:18:57,550 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: slope
+2026-04-15 06:18:57,551 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: streamorder
+2026-04-15 06:18:57,551 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: soil_thickness
+2026-04-15 06:18:57,552 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: porosity
+2026-04-15 06:18:57,553 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: ptiddown
+2026-04-15 06:18:57,554 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: monareas
+2026-04-15 06:18:57,555 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: ghs_pop_2015
+2026-04-15 06:18:57,555 - hydromt.model.components.grid - grid - WARNING - Replacing grid map: gdp_world
+2026-04-15 06:18:57,556 - hydromt.hydromt_delwaq.components.geometry - geometry - INFO - Reading geometry data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave/config/B7_geometry.inc.
+2026-04-15 06:18:57,568 - hydromt - log - INFO - HydroMT version: 1.3.1
+2026-04-15 06:18:57,570 - hydromt.model.model - model - INFO - update: setup_emission_vector
+2026-04-15 06:18:57,570 - hydromt.model.model - model - INFO - setup_emission_vector.col2raster=EF
+2026-04-15 06:18:57,570 - hydromt.model.model - model - INFO - setup_emission_vector.rasterize_method=value
+2026-04-15 06:18:57,570 - hydromt.model.model - model - INFO - setup_emission_vector.output_name=None
+2026-04-15 06:18:57,570 - hydromt.model.model - model - INFO - setup_emission_vector.emission_fn=EF_local
+2026-04-15 06:18:57,571 - hydromt.data_catalog.sources.data_source - data_source - INFO - Reading EF_local GeoDataFrame data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/examples_data/emission_factor.gpkg
+2026-04-15 06:18:57,702 - hydromt.hydromt_delwaq.components.staticdata - staticdata - INFO - Writing staticdata files.
+2026-04-15 06:18:57,720 - hydromt.model.components.geoms - geoms - INFO - demission.geoms: Writing geoms to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended_local/geoms/monareas.geojson.
+2026-04-15 06:18:57,725 - hydromt.model.components.geoms - geoms - INFO - demission.geoms: Writing geoms to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/EM_piave_extended_local/geoms/basins.geojson.
+2026-04-15 06:18:57,727 - hydromt.hydromt_delwaq.components.config - config - INFO - Writing model config to file.
+2026-04-15 06:18:57,728 - hydromt.hydromt_delwaq.components.hydromaps - hydromaps - INFO - Writing hydromap files.
+2026-04-15 06:18:57,839 - hydromt.hydromt_delwaq.components.geometry - geometry - INFO - Writing geometry file in root/config
+Writing dynamic data: 100%|██████████████████████| 8/8 [00:00&lt;00:00, 321.11it/s]
 </pre></div></div>
 </div>
 <p>The example above means the following: run <strong>hydromt</strong> with:</p>
@@ -904,7 +904,7 @@ Writing dynamic data: 100%|█████████████████�
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2026-04-15 01:53:45,774 - hydromt.model.model - model - INFO - Initializing demission model from hydromt_delwaq (v0.3.2.dev0).
+2026-04-15 06:18:58,350 - hydromt.model.model - model - INFO - Initializing demission model from hydromt_delwaq (v0.4.0.dev0).
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
