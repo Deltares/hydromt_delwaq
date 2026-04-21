@@ -493,9 +493,7 @@ class DemissionModel(Model):
             logger.warning("Using default mapping file.")
             mapping_fn = join(DATADIR, "admin_bound", f"{region_fn}_mapping.csv")
         # process emission factor maps
-        gdf_org = self.data_catalog.get_geodataframe(
-            region_fn, geom=self.basins, dst_crs=self.crs
-        )
+        gdf_org = self.data_catalog.get_geodataframe(region_fn, geom=self.basins)
         # Rasterize the GeoDataFrame to get the areas mask of
         # administrative boundaries with their ids
         gdf_org["ID"] = gdf_org["ID"].astype(np.int32)
