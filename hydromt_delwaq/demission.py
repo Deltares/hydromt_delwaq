@@ -3,7 +3,7 @@
 import logging
 from os.path import isfile, join
 from pathlib import Path
-from typing import Any
+from typing import Any, List
 
 import geopandas as gpd
 import numpy as np
@@ -356,6 +356,7 @@ class DemissionModel(Model):
     def setup_emission_raster(
         self,
         emission_fn: str | Path | xr.DataArray,
+        multiple_var: List = [],
         scale_method: str = "average",
         classnumber: int | float = 0.0,
         fillna_method: str = "zero",
@@ -373,6 +374,9 @@ class DemissionModel(Model):
         ----------
         emission_fn : {'GHS-POP_2015'...}
             Name of raster emission map source.
+        multiple_var : boolean
+            If dataset contains multiple variables set to True else raster contains
+            single variable (default: False)
         scale_method : str {'nearest', 'average', 'mode', 'classfraction', 'classarea'}
             Method for resampling. Either nearest neighbour, average, mode, or class
             fraction/area [m2] for categorical data.
@@ -390,21 +394,49 @@ class DemissionModel(Model):
             Name of the output variable. If None, use emission_fn name.
         """
         logger.info(f"Preparing '{emission_fn}' map.")
-        # process raster emission maps
-        da = self.data_catalog.get_rasterdataset(
-            emission_fn, geom=self.region, buffer=2
-        )
-        ds_emi = emissions.emission_raster(
-            da=da,
-            ds_like=self.staticdata.data,
-            method=scale_method,
-            classnumber=classnumber,
-            fillna_method=fillna_method,
-            fillna_value=fillna_value,
-            area_division=area_division,
-        )
-        ds_emi = ds_emi.to_dataset(name=output_name or emission_fn)
-        self.staticdata.set(ds_emi)
+
+        if len(multiple_var) > 0:
+            variables = multiple_var
+            ds = self.data_catalog.get_rasterdataset(
+                emission_fn,
+                geom=self.region,
+                buffer=2,
+                variables=variables,
+                single_var_as_array=False,
+            )
+            # Select variables
+            i = 0
+            for dvar in ds.data_vars.keys():
+                da = ds[dvar]
+                varname = variables[i]
+                i = i + 1
+                ds_emi = emissions.emission_raster(
+                    da=da,
+                    ds_like=self.staticdata.data,
+                    method=scale_method,
+                    classnumber=classnumber,
+                    fillna_method=fillna_method,
+                    fillna_value=fillna_value,
+                    area_division=area_division,
+                )
+                ds_emi = ds_emi.to_dataset(name=varname)
+                self.staticdata.set(ds_emi)
+        else:
+            # process raster emission maps
+            da = self.data_catalog.get_rasterdataset(
+                emission_fn, geom=self.region, buffer=2
+            )
+            ds_emi = emissions.emission_raster(
+                da=da,
+                ds_like=self.staticdata.data,
+                method=scale_method,
+                classnumber=classnumber,
+                fillna_method=fillna_method,
+                fillna_value=fillna_value,
+                area_division=area_division,
+            )
+            ds_emi = ds_emi.to_dataset(name=output_name or emission_fn)
+            self.staticdata.set(ds_emi)
 
     @hydromt_step
     def setup_emission_vector(

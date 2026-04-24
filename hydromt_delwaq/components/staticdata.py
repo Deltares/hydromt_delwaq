@@ -125,8 +125,8 @@ class DelwaqStaticdataComponent(GridComponent):
         for dvar in ds_out.data_vars:
             if dvar == "monpoints" or dvar == "monareas":
                 continue
-            # Check if data is 3D
-            if len(ds_out[dvar].shape) == 3:
+            # Check if data is 3D and has more than 1 timestep
+            if len(ds_out[dvar].shape) == 3 and ds_out[dvar].shape[0] > 1:
                 dim0 = ds_out[dvar].raster.dim0
                 for i in range(len(ds_out[dim0])):
                     dim0_val = ds_out[dim0][i].item()
