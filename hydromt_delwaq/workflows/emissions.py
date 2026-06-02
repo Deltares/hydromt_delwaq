@@ -20,27 +20,36 @@ DTYPES = {"EM_level1": np.int16, "EM_fact_X": np.float32}
 def gridarea(ds):
     """Return a DataArray containing the area in m2 of the reference grid ds.
 
+    Works for both geographic (lat/lon degrees) and projected (metres) CRS.
+    The previous implementation called ``_reggrid_area`` unconditionally,
+    which treats x/y as lat/lon in degrees — fine for global hydromt setups,
+    but for projected CRS (e.g. SVY21 EPSG:3414, Easting/Northing in metres)
+    it computes ``sin(radians(Easting))`` and returns periodic, partly-negative
+    garbage. Delegating to ``ds.raster.area_grid()`` switches on
+    ``crs.is_projected`` and uses ``res_x * res_y * unit_factor**2`` instead.
+
     Parameters
     ----------
-    da : xarray.DataArray or xarray.DataSet
-        DataArray containing reference grid.
+    ds : xarray.DataArray or xarray.DataSet
+        Reference grid; must have a CRS set on the raster accessor.
 
     Returns
     -------
     da_out : xarray.DataArray
-        DataArray containing area in m2 of the reference grid.
-
+        Cell area in m2.
     """
+    crs = ds.raster.crs
+    if crs is not None and crs.is_projected:
+        return ds.raster.area_grid().astype("float32")
+
     realarea = raster_utils._reggrid_area(
         ds.raster.ycoords.values, ds.raster.xcoords.values
     )
-    da_out = xr.DataArray(
+    return xr.DataArray(
         data=realarea.astype("float32"),
         coords=ds.raster.coords,
         dims=ds.raster.dims,
     )
-
-    return da_out
 
 
 def gridlength_gridwidth(ds):
