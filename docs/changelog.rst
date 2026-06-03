@@ -17,6 +17,13 @@ Changed
 
 Fixed
 -----
+- ``workflows.emissions.gridarea`` now branches on ``crs.is_projected`` and
+  delegates to ``ds.raster.area_grid()`` for projected-CRS inputs. The previous
+  implementation called ``raster_utils._reggrid_area`` unconditionally, which
+  assumes lat/lon in degrees and returns partly-negative cell areas when given
+  projected coordinates in metres — silently corrupting downstream mm->m3/s
+  hydrology forcing conversion and ``setup_emission_raster`` with
+  ``area_division=True``.
 
 v0.4.0 (15 April 2026)
 ========================

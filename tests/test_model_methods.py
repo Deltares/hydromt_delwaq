@@ -11,6 +11,52 @@ from hydromt_delwaq.workflows.emissions import gridarea
 TESTDATADIR = join(dirname(abspath(__file__)), "data")
 
 
+def _make_grid(crs, x0, y0, res, nx=4, ny=3):
+    x = x0 + (np.arange(nx) + 0.5) * res
+    y = y0 - (np.arange(ny) + 0.5) * res  # N -> S
+    da = xr.DataArray(
+        np.ones((ny, nx), dtype="float32"),
+        coords={"y": y, "x": x},
+        dims=("y", "x"),
+        name="dummy",
+    )
+    da.raster.set_crs(crs)
+    return da
+
+
+def test_gridarea_projected_returns_uniform_positive_area():
+    """Projected CRS (e.g. SVY21 / EPSG:3414) must produce uniform positive areas.
+
+    Regression test for the gridarea bug that fed SVY21 Easting metres into
+    ``_reggrid_area`` (which interprets them as longitude degrees). At
+    Easting=10500-18000 m, ``sin(radians(Easting))`` is a periodic function
+    of large angles and produces partly-negative garbage, which propagated
+    through the mm -> m3/s unit conversion and yielded negative precip values
+    in dynamicdata.nc. The patched gridarea delegates to
+    ``ds.raster.area_grid()`` for projected CRS, which uses res*res*ucf**2.
+    """
+    res = 30.0
+    da = _make_grid("EPSG:3414", x0=10490.0, y0=39280.0, res=res)
+
+    area = gridarea(da)
+
+    assert area.shape == da.shape
+    assert float(area.min()) > 0, "projected cell area must be strictly positive"
+    expected = res * res  # SVY21 linear unit factor is 1.0 (metres)
+    np.testing.assert_allclose(area.values, expected, rtol=1e-6)
+
+
+def test_gridarea_geographic_path_unchanged():
+    """Geographic CRS path must still go through _reggrid_area (spherical cap)."""
+    da = _make_grid("EPSG:4326", x0=4.0, y0=52.0, res=0.01)
+
+    area = gridarea(da)
+
+    assert float(area.min()) > 0
+    # At ~52N, 0.01deg cells are ~700-800 m on a side -> ~5-7e5 m2.
+    assert 4e5 < float(area.mean()) < 9e5
+
+
 def test_setup_grid(example_demission_model):
     # Initialize model and read results
     mod = example_demission_model
