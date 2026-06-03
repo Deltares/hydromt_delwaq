@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -36,10 +36,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/theme-deltares.css?v=a47b69cb" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -482,12 +482,12 @@
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Model plugins:
-        - wflow_sbm (hydromt_wflow 1.0.2)
-        - wflow_sediment (hydromt_wflow 1.0.2)
-        - model (hydromt 1.3.1)
-        - example_model (hydromt 1.3.1)
         - delwaq (hydromt_delwaq 0.4.0.dev0)
         - demission (hydromt_delwaq 0.4.0.dev0)
+        - model (hydromt 1.4.0)
+        - example_model (hydromt 1.4.0)
+        - wflow_sbm (hydromt_wflow 1.0.2)
+        - wflow_sediment (hydromt_wflow 1.0.2)
 </pre></div></div>
 </div>
 <p>Using the <strong>hydromt build</strong> API we can setup a complete model from scratch. Let’s get an overview of all the available options:</p>
@@ -630,54 +630,168 @@ steps:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2026-04-23 07:02:12,954 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-23 07:02:13,053 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Reading data catalog artifact_data latest
-2026-04-23 07:02:13,053 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt/artifact_data/v1.0.0/data_catalog.yml
-2026-04-23 07:02:13,764 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from local_sources.yml
-2026-04-23 07:02:13,768 - hydromt.model.model - model - INFO - Initializing delwaq model from hydromt_delwaq (v0.4.0.dev0).
-2026-04-23 07:02:13,768 - hydromt - log - INFO - HydroMT version: 1.3.1
-2026-04-23 07:02:13,768 - hydromt.model.model - model - INFO - build: setup_basemaps
-2026-04-23 07:02:13,768 - hydromt.model.model - model - INFO - setup_basemaps.mask=rivers
-2026-04-23 07:02:13,768 - hydromt.model.model - model - INFO - setup_basemaps.surface_water=sfw
-2026-04-23 07:02:13,768 - hydromt.model.model - model - INFO - setup_basemaps.boundaries=[&#39;land&#39;, &#39;soil&#39;, &#39;sett&#39;]
-2026-04-23 07:02:13,768 - hydromt.model.model - model - INFO - setup_basemaps.fluxes=[&#39;sfw&gt;sfw&#39;, &#39;land&gt;sfw&#39;, &#39;soil&gt;sfw&#39;, &#39;sfw&gt;sett&#39;]
-2026-04-23 07:02:13,768 - hydromt.model.model - model - INFO - setup_basemaps.maps=[&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;, &#39;river_manning_n&#39;, &#39;soil_thickness&#39;, &#39;soil_theta_s&#39;]
-2026-04-23 07:02:13,769 - hydromt.model.model - model - INFO - setup_basemaps.region={&#39;wflow_sbm&#39;: PosixPath(&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave&#39;)}
-2026-04-23 07:02:13,769 - hydromt.model.model - model - INFO - Initializing wflow_sbm model from hydromt_wflow (v1.0.2).
-2026-04-23 07:02:13,769 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
-2026-04-23 07:02:13,783 - hydromt.hydromt_wflow.wflow_base - wflow_base - INFO - Supported Wflow.jl version v1+
-2026-04-23 07:02:13,783 - hydromt.hydromt_wflow.components.config - config - INFO - Reading model config file from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml.
-2026-04-23 07:02:13,783 - hydromt.hydromt_delwaq.delwaq - delwaq - INFO - Preparing WQ basemaps from hydromodel.
-2026-04-23 07:02:14,031 - hydromt.hydromt_delwaq.components.pointer - pointer - WARNING - nrofseg object in self.pointer should be an integer.
-2026-04-23 07:02:14,031 - hydromt.hydromt_delwaq.components.pointer - pointer - WARNING - boundaries object in self.pointer should be a list of names.
-2026-04-23 07:02:14,054 - hydromt.model.model - model - INFO - build: setup_monitoring
-2026-04-23 07:02:14,054 - hydromt.model.model - model - INFO - setup_monitoring.mon_points=/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/outlets.geojson
-2026-04-23 07:02:14,054 - hydromt.model.model - model - INFO - setup_monitoring.mon_areas=subcatch
-2026-04-23 07:02:14,054 - hydromt.hydromt_delwaq.delwaq - delwaq - INFO - Setting monitoring points and areas
-2026-04-23 07:02:14,054 - hydromt.hydromt_delwaq.delwaq - delwaq - INFO - Reading monitoring points from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/outlets.geojson
-2026-04-23 07:02:14,075 - hydromt.data_catalog.sources.data_source - data_source - INFO - Reading outlets.geojson GeoDataFrame data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/outlets.geojson
-2026-04-23 07:02:14,100 - hydromt.model.model - model - INFO - build: setup_hydrology_forcing
-2026-04-23 07:02:14,100 - hydromt.model.model - model - INFO - setup_hydrology_forcing.timestepsecs=86400
-2026-04-23 07:02:14,100 - hydromt.model.model - model - INFO - setup_hydrology_forcing.add_volume_offset=True
-2026-04-23 07:02:14,100 - hydromt.model.model - model - INFO - setup_hydrology_forcing.min_volume=0.1
-2026-04-23 07:02:14,100 - hydromt.model.model - model - INFO - setup_hydrology_forcing.override=[&#39;sfw&gt;sfw&#39;]
-2026-04-23 07:02:14,100 - hydromt.model.model - model - INFO - setup_hydrology_forcing.hydro_forcing_fn=wflow_output_wq
-2026-04-23 07:02:14,100 - hydromt.model.model - model - INFO - setup_hydrology_forcing.starttime=2010-02-03 00:00:00
-2026-04-23 07:02:14,100 - hydromt.model.model - model - INFO - setup_hydrology_forcing.endtime=2010-02-10 00:00:00
-2026-04-23 07:02:14,100 - hydromt.hydromt_delwaq.delwaq - delwaq - INFO - Setting dynamic data from hydrology source wflow_output_wq.
-2026-04-23 07:02:14,102 - hydromt.data_catalog.sources.data_source - data_source - INFO - Reading wflow_output_wq RasterDataset data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
+2026-06-03 13:52:56,654 - hydromt - log - INFO - HydroMT version: 1.4.0
+2026-06-03 13:52:56,759 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Reading data catalog artifact_data latest
+2026-06-03 13:52:56,759 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from /home/runner/.hydromt/artifact_data/v1.0.0/data_catalog.yml
+2026-06-03 13:52:57,441 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,443 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,443 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,443 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,443 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,444 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,444 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,444 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,444 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,444 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,445 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,445 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,445 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,445 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,445 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,445 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,446 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,446 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,446 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,465 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,465 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,465 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,465 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,466 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,466 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,466 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,466 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,466 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,466 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,467 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,467 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,467 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,467 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,467 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,467 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,475 - hydromt.data_catalog.uri_resolvers.uri_resolver - uri_resolver - DEBUG - loaded URIResolver plugins: azure_blob, convention, raster_tindex
+2026-06-03 13:52:57,475 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,476 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,476 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,476 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,476 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,476 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,476 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,477 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,477 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,477 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,477 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,477 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,477 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,477 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,478 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,478 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,478 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,478 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,478 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,478 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,479 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from local_sources.yml
+2026-06-03 13:52:57,482 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,483 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded RasterDatasetDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,483 - hydromt.model.model - model - INFO - Initializing delwaq model from hydromt_delwaq (v0.4.0.dev0).
+2026-06-03 13:52:57,483 - hydromt - log - DEBUG - Appending log messages to file /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test/hydromt.log.
+2026-06-03 13:52:57,483 - hydromt - log - INFO - HydroMT version: 1.4.0
+2026-06-03 13:52:57,484 - hydromt.model.model - model - INFO - build: setup_basemaps
+2026-06-03 13:52:57,484 - hydromt.model.model - model - INFO - setup_basemaps.mask=rivers
+2026-06-03 13:52:57,484 - hydromt.model.model - model - INFO - setup_basemaps.surface_water=sfw
+2026-06-03 13:52:57,484 - hydromt.model.model - model - INFO - setup_basemaps.boundaries=[&#39;land&#39;, &#39;soil&#39;, &#39;sett&#39;]
+2026-06-03 13:52:57,484 - hydromt.model.model - model - INFO - setup_basemaps.fluxes=[&#39;sfw&gt;sfw&#39;, &#39;land&gt;sfw&#39;, &#39;soil&gt;sfw&#39;, &#39;sfw&gt;sett&#39;]
+2026-06-03 13:52:57,484 - hydromt.model.model - model - INFO - setup_basemaps.maps=[&#39;rivmsk&#39;, &#39;lndslp&#39;, &#39;strord&#39;, &#39;river_manning_n&#39;, &#39;soil_thickness&#39;, &#39;soil_theta_s&#39;]
+2026-06-03 13:52:57,484 - hydromt.model.model - model - INFO - setup_basemaps.region={&#39;wflow_sbm&#39;: PosixPath(&#39;/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave&#39;)}
+2026-06-03 13:52:57,484 - hydromt.model.processes.region - region - DEBUG - Parsed region (kind=wflow_sbm):
+2026-06-03 13:52:57,484 - hydromt.model.model - model - INFO - Initializing wflow_sbm model from hydromt_wflow (v1.0.2).
+2026-06-03 13:52:57,484 - hydromt.data_catalog.data_catalog - data_catalog - INFO - Parsing data catalog from /home/runner/miniconda3/envs/hydromt_delwaq/lib/python3.11/site-packages/hydromt_wflow/data/parameters_data.yml
+2026-06-03 13:52:57,497 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,497 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,497 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,498 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,498 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,498 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,498 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,498 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,498 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,498 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,499 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,499 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,499 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,499 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,499 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,499 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded DataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,499 - hydromt.hydromt_wflow.wflow_base - wflow_base - INFO - Supported Wflow.jl version v1+
+2026-06-03 13:52:57,500 - hydromt.hydromt_wflow.components.config - config - INFO - Reading model config file from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/wflow_sbm.toml.
+2026-06-03 13:52:57,500 - hydromt.hydromt_delwaq.delwaq - delwaq - INFO - Preparing WQ basemaps from hydromodel.
+2026-06-03 13:52:57,738 - hydromt.gis.flw - flw - DEBUG - Initializing flwdir with geographic CRS with unit degree.
+2026-06-03 13:52:57,752 - hydromt.hydromt_delwaq.components.pointer - pointer - WARNING - nrofseg object in self.pointer should be an integer.
+2026-06-03 13:52:57,752 - hydromt.hydromt_delwaq.components.pointer - pointer - WARNING - boundaries object in self.pointer should be a list of names.
+2026-06-03 13:52:57,775 - hydromt.model.components.config - config - DEBUG - Setting model config options.
+2026-06-03 13:52:57,775 - hydromt.model.model - model - INFO - build: setup_monitoring
+2026-06-03 13:52:57,776 - hydromt.model.model - model - INFO - setup_monitoring.mon_points=/home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/outlets.geojson
+2026-06-03 13:52:57,776 - hydromt.model.model - model - INFO - setup_monitoring.mon_areas=subcatch
+2026-06-03 13:52:57,776 - hydromt.hydromt_delwaq.delwaq - delwaq - INFO - Setting monitoring points and areas
+2026-06-03 13:52:57,776 - hydromt.hydromt_delwaq.delwaq - delwaq - INFO - Reading monitoring points from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/outlets.geojson
+2026-06-03 13:52:57,796 - hydromt.data_catalog.drivers.base_driver - base_driver - DEBUG - loaded GeoDataFrameDriver plugins: dataset_xarray, geodataframe_table, geodataset_vector, geodataset_xarray, pandas, pyogrio, raster_xarray, rasterio, slippy_tile
+2026-06-03 13:52:57,796 - hydromt.data_catalog.sources.data_source - data_source - INFO - Reading outlets.geojson GeoDataFrame data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/outlets.geojson
+2026-06-03 13:52:57,796 - hydromt.data_catalog.uri_resolvers.convention_resolver - convention_resolver - DEBUG - attempting to resolve uri: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/staticgeoms/outlets.geojson
+2026-06-03 13:52:57,797 - hydromt._utils.unused_kwargs - unused_kwargs - DEBUG - object: PyogrioDriver does not use kwarg metadata with value crs=&lt;Geographic 2D CRS: EPSG:4326&gt;
+Name: WGS 84
+Axis Info [ellipsoidal]:
+- Lat[north]: Geodetic latitude (degree)
+- Lon[east]: Geodetic longitude (degree)
+Area of Use:
+- name: World.
+- bounds: (-180.0, -90.0, 180.0, 90.0)
+Datum: World Geodetic System 1984 ensemble
+- Ellipsoid: WGS 84
+- Prime Meridian: Greenwich
+ unit=None extent={} nodata=None attrs={} category=None.
+2026-06-03 13:52:57,801 - hydromt.data_catalog.adapters.geodataframe - geodataframe - DEBUG - Clip intersects [11.775, 45.808, 12.742, 46.692] (EPSG:4326)
+2026-06-03 13:52:57,823 - hydromt.model.model - model - INFO - build: setup_hydrology_forcing
+2026-06-03 13:52:57,823 - hydromt.model.model - model - INFO - setup_hydrology_forcing.timestepsecs=86400
+2026-06-03 13:52:57,823 - hydromt.model.model - model - INFO - setup_hydrology_forcing.add_volume_offset=True
+2026-06-03 13:52:57,823 - hydromt.model.model - model - INFO - setup_hydrology_forcing.min_volume=0.1
+2026-06-03 13:52:57,823 - hydromt.model.model - model - INFO - setup_hydrology_forcing.override=[&#39;sfw&gt;sfw&#39;]
+2026-06-03 13:52:57,823 - hydromt.model.model - model - INFO - setup_hydrology_forcing.hydro_forcing_fn=wflow_output_wq
+2026-06-03 13:52:57,823 - hydromt.model.model - model - INFO - setup_hydrology_forcing.starttime=2010-02-03 00:00:00
+2026-06-03 13:52:57,823 - hydromt.model.model - model - INFO - setup_hydrology_forcing.endtime=2010-02-10 00:00:00
+2026-06-03 13:52:57,823 - hydromt.hydromt_delwaq.delwaq - delwaq - INFO - Setting dynamic data from hydrology source wflow_output_wq.
+2026-06-03 13:52:57,825 - hydromt.data_catalog.sources.data_source - data_source - INFO - Reading wflow_output_wq RasterDataset data from /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
+2026-06-03 13:52:57,825 - hydromt.data_catalog.uri_resolvers.convention_resolver - convention_resolver - DEBUG - attempting to resolve uri: /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/wflow_piave/run_default/output.nc
+2026-06-03 13:52:57,828 - hydromt._utils.unused_kwargs - unused_kwargs - DEBUG - object: RasterDatasetXarrayDriver does not use kwarg mask with value                                             geometry
+0  POLYGON ((12.74167 45.80833, 12.74167 46.69167....
+2026-06-03 13:52:57,828 - hydromt._utils.unused_kwargs - unused_kwargs - DEBUG - object: RasterDatasetXarrayDriver does not use kwarg metadata with value crs=&lt;Geographic 2D CRS: EPSG:4326&gt;
+Name: WGS 84
+Axis Info [ellipsoidal]:
+- Lat[north]: Geodetic latitude (degree)
+- Lon[east]: Geodetic longitude (degree)
+Area of Use:
+- name: World.
+- bounds: (-180.0, -90.0, 180.0, 90.0)
+Datum: World Geodetic System 1984 ensemble
+- Ellipsoid: WGS 84
+- Prime Meridian: Greenwich
+ unit=None extent={} nodata=None attrs={&#39;land&gt;sfw&#39;: {&#39;unit&#39;: &#39;m3/s&#39;}, &#39;sfw&gt;sfw_1&#39;: {&#39;unit&#39;: &#39;m3/s&#39;}, &#39;sfw&gt;sfw_2&#39;: {&#39;unit&#39;: &#39;m3/s&#39;}, &#39;sfw_1&#39;: {&#39;unit&#39;: &#39;m3&#39;}, &#39;sfw_2&#39;: {&#39;unit&#39;: &#39;m3&#39;}, &#39;soil&gt;sfw&#39;: {&#39;unit&#39;: &#39;m3/s&#39;}} category=&#39;hydro&#39;.
+2026-06-03 13:52:57,858 - hydromt.data_catalog.adapters.rasterdataset - rasterdataset - DEBUG - Clip to [11.775, 45.808, 12.742, 46.692] (epsg:4326))
+2026-06-03 13:52:57,860 - hydromt.data_catalog.adapters.rasterdataset - rasterdataset - DEBUG - Convert units for 1 variables.
 Flux sfw&gt;sett not found in hydro_forcing_fn. Using zeros.
-2026-04-23 07:02:14,218 - hydromt.model.model - model - INFO - build: write
-2026-04-23 07:02:14,218 - hydromt.hydromt_delwaq.delwaq - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test
-2026-04-23 07:02:14,235 - hydromt.hydromt_delwaq.components.staticdata - staticdata - INFO - Writing staticdata files.
-2026-04-23 07:02:14,250 - hydromt.hydromt_delwaq.components.hydromaps - hydromaps - INFO - Writing hydromap files.
-2026-04-23 07:02:14,300 - hydromt.model.components.geoms - geoms - INFO - delwaq.geoms: Writing geoms to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test/geoms/basins.geojson.
-2026-04-23 07:02:14,303 - hydromt.model.components.geoms - geoms - INFO - delwaq.geoms: Writing geoms to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test/geoms/monpoints.geojson.
-2026-04-23 07:02:14,305 - hydromt.model.components.geoms - geoms - INFO - delwaq.geoms: Writing geoms to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test/geoms/monareas.geojson.
-2026-04-23 07:02:14,307 - hydromt.hydromt_delwaq.components.pointer - pointer - INFO - Writing pointer file in root/config
-Writing dynamic data: 100%|███████████████████████| 9/9 [00:00&lt;00:00, 44.80it/s]
-2026-04-23 07:02:14,523 - hydromt.hydromt_delwaq.components.config - config - INFO - Writing model config to file.
-2026-04-23 07:02:14,524 - hydromt.model.model - model - INFO - build: write_waqgeom
+2026-06-03 13:52:57,946 - hydromt.model.components.config - config - DEBUG - Setting model config options.
+2026-06-03 13:52:57,946 - hydromt.model.model - model - INFO - build: write
+2026-06-03 13:52:57,947 - hydromt.hydromt_delwaq.delwaq - delwaq - INFO - Write model data to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test
+2026-06-03 13:52:57,964 - hydromt.hydromt_delwaq.components.staticdata - staticdata - INFO - Writing staticdata files.
+2026-06-03 13:52:57,979 - hydromt.hydromt_delwaq.components.hydromaps - hydromaps - INFO - Writing hydromap files.
+2026-06-03 13:52:58,030 - hydromt.model.components.geoms - geoms - INFO - delwaq.geoms: Writing geoms to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test/geoms/basins.geojson.
+2026-06-03 13:52:58,030 - hydromt.model.components.geoms - geoms - DEBUG - Writing geom basins with precision 6 decimals.
+2026-06-03 13:52:58,035 - hydromt.model.components.geoms - geoms - INFO - delwaq.geoms: Writing geoms to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test/geoms/monpoints.geojson.
+2026-06-03 13:52:58,035 - hydromt.model.components.geoms - geoms - DEBUG - Writing geom monpoints with precision 6 decimals.
+2026-06-03 13:52:58,037 - hydromt.model.components.geoms - geoms - INFO - delwaq.geoms: Writing geoms to /home/runner/work/hydromt_delwaq/hydromt_delwaq/docs/_examples/WQ_test/geoms/monareas.geojson.
+2026-06-03 13:52:58,038 - hydromt.model.components.geoms - geoms - DEBUG - Writing geom monareas with precision 6 decimals.
+2026-06-03 13:52:58,040 - hydromt.hydromt_delwaq.components.pointer - pointer - INFO - Writing pointer file in root/config
+Writing dynamic data: 100%|███████████████████████| 9/9 [00:00&lt;00:00, 43.78it/s]
+2026-06-03 13:52:58,261 - hydromt.hydromt_delwaq.components.config - config - INFO - Writing model config to file.
+2026-06-03 13:52:58,262 - hydromt.model.model - model - INFO - build: write_waqgeom
 </pre></div></div>
 </div>
 <p>The example above means the following: run <strong>hydromt build</strong> with:</p>
@@ -722,57 +836,57 @@ Writing dynamic data: 100%|█████████████████�
 WQ_test
  - hydromt.log
  - hydromt_data.yml
-WQ_test/dynamicdata
- - flow.dat
- - volume.dat
-WQ_test/staticdata
- - slope.dat
- - staticdata.nc
- - manning.dat
- - porosity.dat
- - surface.dat
- - latitude_grid.dat
- - width.dat
- - bankfull_volume.dat
- - river.dat
- - streamorder.dat
- - length.dat
- - soil_thickness.dat
-WQ_test/config
- - B2_nrofmon.inc
- - B2_stations-balance.inc
- - B7_flow.inc
- - B2_outputtimes.inc
- - B2_monareas.inc
- - B5_boundlist.inc
- - B2_timers.inc
- - B4_pointer.inc
- - B2_timers_only.inc
- - B2_sysclock.inc
- - B7_volume.inc
- - B3_nrofseg.inc
- - B2_stations.inc
- - B3_waqgeom.nc
- - B4_pointer.poi
- - B4_nrofexch.inc
- - B1_timestamp.inc
- - B3_attributes.inc
 WQ_test/geoms
- - monareas.geojson
  - basins.geojson
+ - monareas.geojson
  - monpoints.geojson
 WQ_test/hydromodel
- - modelmap.tif
- - ldd.tif
- - ptid.tif
- - rivwth.tif
+ - resarea.tif
+ - river.tif
  - rivarea.tif
  - ptiddown.tif
- - elevtn.tif
- - river.tif
+ - ptid.tif
  - basins.tif
- - resarea.tif
+ - ldd.tif
+ - rivwth.tif
+ - modelmap.tif
+ - elevtn.tif
  - rivlen.tif
+WQ_test/staticdata
+ - bankfull_volume.dat
+ - staticdata.nc
+ - manning.dat
+ - surface.dat
+ - soil_thickness.dat
+ - width.dat
+ - river.dat
+ - porosity.dat
+ - slope.dat
+ - streamorder.dat
+ - length.dat
+ - latitude_grid.dat
+WQ_test/config
+ - B2_outputtimes.inc
+ - B3_attributes.inc
+ - B2_sysclock.inc
+ - B4_nrofexch.inc
+ - B3_waqgeom.nc
+ - B3_nrofseg.inc
+ - B2_stations-balance.inc
+ - B5_boundlist.inc
+ - B2_timers_only.inc
+ - B4_pointer.poi
+ - B7_volume.inc
+ - B4_pointer.inc
+ - B2_stations.inc
+ - B7_flow.inc
+ - B2_nrofmon.inc
+ - B2_timers.inc
+ - B2_monareas.inc
+ - B1_timestamp.inc
+WQ_test/dynamicdata
+ - volume.dat
+ - flow.dat
 </pre></div></div>
 </div>
 <p>You can see that we didn’t create any emission data here. In some cases, you may require some additional GIS data in order to run a D-Water Quality model, for example, when you do not need to run the D-Emissions model beforehand, but include point sources that emit pollutants into the surface water directly. When this is the case, you can still use the various [setup_emission_*] components of hydromt_delwaq.</p>
@@ -882,8 +996,8 @@ WQ_test/hydromodel
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -917,7 +1031,7 @@ WQ_test/hydromodel
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
 </p></div>
       
     </div>
