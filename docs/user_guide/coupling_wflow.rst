@@ -70,9 +70,9 @@ while D-Water Quality handles processes occurring in the river surface water.
 In order to prepare hydrological fluxes for DELWAQ from Wflow, Wflow should be run and the required fluxes saved (same order as above):
 
 - atmosphere_water__precipitation_volume_flux (precipitation input)
-- land_surface__evapotranspiration_volume_flux (infiltration in the soil)
-- non_compacted_soil_surface_water__excess_volume_flux (infiltration excess runoff on paved areas)
-- compacted_soil_surface_water__excess_volume_flux (infiltration excess runoff on unpaved areas)
+- soil_water__infiltration_volume_flux (infiltration in the soil)
+- non_compacted_soil_surface_water__excess_volume_flux (infiltration excess runoff on unpaved (non-compacted) areas)
+- compacted_soil_surface_water__excess_volume_flux (infiltration excess runoff on paved (compacted) areas)
 - soil_surface_water_unsaturated_zone__exfiltration_volume_flux (exfiltration from unsaturated zone)
 - soil_surface_water_saturated_zone__exfiltration_volume_flux (exfiltration from saturated zone)
 - land_surface_water__volume_flow_rate (overland flow)
@@ -81,3 +81,25 @@ In order to prepare hydrological fluxes for DELWAQ from Wflow, Wflow should be r
 - river_water__volume_flow_rate (runoff in the river kinematic wave)
 - river_water__volume (kinematic wave volume in the river and on the land)
 - land_surface_water__to_river_volume_flow_rate and subsurface_water__to_river_volume_flow_rate (inflows to the river from overland flow and subsurface flow).
+
+An example of the data catalog file for the required wflow fluxes is provided below.
+
+:download:`hydrology data catalog yml file <../_static/hydrology_sources.yml>`
+
+This should be used in combination with the **output.netcdf_grid.variables** section in the wflow toml file:
+
+.. code-block:: console
+
+    [output.netcdf_grid.variables]
+    atmosphere_water__precipitation_volume_flux = "precip"
+    soil_water__infiltration_volume_flux = "infilt"
+    non_compacted_soil_surface_water__excess_volume_flux = "runUnp"
+    compacted_soil_surface_water__excess_volume_flux = "runPav"
+    soil_surface_water_unsaturated_zone__exfiltration_volume_flux = "exfiltustore"
+    soil_surface_water_saturated_zone__exfiltration_volume_flux = "exfiltsatstore"
+    land_surface_water__to_river_volume_flow_rate = "land_to_river"
+    subsurface_water__to_river_volume_flow_rate = "ssf_to_river"
+    soil_water_root_zone__volume_percentage = "vwcproot"
+    river_water__volume_flow_rate = "q_river"
+    river_water__volume = "vol_river"
+    subsurface_water__volume_flow_rate = "q_ss"
